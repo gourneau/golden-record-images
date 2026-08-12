@@ -241,13 +241,14 @@ function render(){
         ${REF[im.n]?'<span class="tag cmp">compare</span>':''}</div>
       ${REF[im.n]?(()=>{const r=REF[im.n];
          const src=r.book||r.file;
-         const src2=(r.book&&r.file)?r.file:null;
+         const src2=(r.book&&r.file&&!r.mislabelled)?r.file:null;
          const cap=r.book
            ? `ORIGINAL SLIDE · Ozma Records book, page ${r.bookPage} · <a href="https://archive.org/details/voyager-golden-record-book-ozma" target="_blank" rel="noopener">Internet Archive</a>`
            : `ORIGINAL SLIDE · <a href="${r.commons}" target="_blank" rel="noopener">Wikimedia Commons</a>${r.licence?' · '+r.licence:''}`;
+         const warn=r.mislabelled?`<div class="cap" style="color:#e6b0a2">The Wikimedia file numbered ${im.n} is mislabelled — it is image 43. The Ozma book is authoritative here.</div>`:'';
          return `<div class="ref"><img loading="lazy" src="${src}" alt="original slide">
            ${src2?`<img loading="lazy" src="${src2}" alt="original slide, Commons scan">`:''}
-           <div class="cap">${cap}${r.ozma?' · '+r.ozma.replace(/</g,'&lt;'):''}</div></div>`;})():''}
+           <div class="cap">${cap}${r.ozma?' · '+r.ozma.replace(/</g,'&lt;'):''}</div>${warn}</div>`;})():''}
       <figcaption><div class="ttl">${im.title??'—'}</div>
         <div class="sub">${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'}</div>
       </figcaption>`;
@@ -273,9 +274,9 @@ document.getElementById('ord').onclick=()=>{
 };
 
 let REF={};
-fetch('docs/reference/map.json').then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
+fetch('docs/reference/map.json?v=3').then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
  .catch(()=>{})
- .then(()=>fetch('web/public/data/catalog.json'))
+ .then(()=>fetch('web/public/data/catalog.json?v=3'))
  .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
  .then(cat=>{
   const orient={}; for(const fr of cat.frames) orient[fr.id]=fr.orientation??0;
