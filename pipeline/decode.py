@@ -27,17 +27,21 @@ This is one digitisation of a 1977 analog chain, so the defects are the ones
 analog tape and disc always have. Each is measured and either corrected or
 reported:
 
-  parity-locked     The sync/blanking pulse alternates width between traces. This is by
-  sync alternation  design: Colorado Video's Model 262 scan converter used two sync widths to
-                    identify which interlace field a line belonged to. It is NOT 60 Hz mains
-                    hum -- measured over the whole record the component sits at 60.0436 Hz,
-                    2.5 FFT bins from half the line rate (60.0488) and 20.6 bins from mains
-                    (60.000). An earlier docstring here claimed mains hum at ~70% of picture
-                    amplitude; that figure was measured inside the sync burst, which was
-                    leaking into the picture window through a coordinate-convention bug. The
-                    genuine picture-domain component is 0.0016-0.0031, i.e. 5-30% of picture
-                    RMS. It is mainly a TIMING effect, not an amplitude one, which is why one
-                    matched template cannot fit both parities.
+  60 Hz amplitude   A genuine mains-frequency hum in the picture, 5-30% of picture RMS.
+  hum               It is scan-locked rather than grid-locked: its frequency tracks the
+                    drifting line rate (60.036 -> 60.173 Hz across the record), because the
+                    1977 scan start was itself mains-synchronised. Odd/even median
+                    subtraction removes it exactly.
+  parity-locked     Separately, the sync burst's LEADING edge alternates ~100 samples
+  sync alternation  between traces. This is by design: Colorado Video's converter coded the
+                    source field parity into the blanking width (US3950607). It is a TIMING
+                    effect, not amplitude, so one matched template cannot fit both parities.
+                    The picture itself does not alternate -- adjacent picture columns agree
+                    to ~0.12 samples on a purely linear clock -- so this parity component is
+                    estimated and DISCARDED from the timebase, never tracked.
+                    NOTE: an earlier docstring conflated these two and quoted "~70% of
+                    picture amplitude". That figure was measured inside the sync burst,
+                    which was leaking into the picture window through a geometry bug.
   wow and flutter   Tape speed wanders. Every trace is located independently and
                     the picture is resampled onto corrected timing.
   AC-coupling droop Nothing in the chain passed DC, so brightness decays across
@@ -56,18 +60,29 @@ from dataclasses import dataclass, field, replace
 
 import numpy as np
 
+from . import dotclock as dot_mod
 from . import sync as sync_mod
 
 # --- geometry, measured (see pipeline/README.md for the derivation) ---------
 # Fractions of a trace period, so they hold at any sample rate.
+#
+# These are expressed against the trace start that sync.recover returns, which
+# is the LEADING EDGE OF THE BLANKING BURST. An earlier revision anchored on a
+# notch that sits inside the picture; the constants below were converted when
+# that changed, and any value here must be re-derived if the landmark moves
+# again. Getting this wrong is not subtle -- under the old constants the porch
+# window landed on picture content, so dc_restore subtracted a per-trace
+# picture-dependent offset which _uncouple_rows then integrated along the
+# trace, producing the vertical streaking that was visible on all 156 frames.
 _P = 3197.4
-PICTURE_START = -310.4 / _P  # picture begins before the detected trace start
-PICTURE_SPAN = 2873.0 / _P
-BLANK_START = 2563.0 / _P
-BLANK_END = 2887.0 / _P
-# The flat part of blanking, used as the DC reference.
-PORCH_START = 2620.0 / _P
-PORCH_END = 2860.0 / _P
+BLANK_START = 0.0
+BLANK_END = 347.0 / _P          # burst occupies the first ~347 samples
+PICTURE_START = 347.0 / _P      # picture runs from the end of blanking...
+PICTURE_SPAN = 2850.0 / _P      # ...to the next burst. It does NOT wrap.
+# The content-free shelf inside blanking: across-trace spread here is 0.001-0.003
+# against ~0.02 in picture, which is how it was located.
+PORCH_START = 200.0 / _P
+PORCH_END = 400.0 / _P
 
 TRACES_PER_FRAME = 512
 FRAME_ASPECT = 4.0 / 3.0  # from the cover; 512 traces wide => 384 px tall
@@ -83,8 +98,19 @@ class Settings:
     picture_start: float = PICTURE_START
     picture_span: float = PICTURE_SPAN
 
-    resample: str = "lanczos3"  # peak | box | area | lanczos3
+    resample: str = "lanczos3"  # peak | box | area | lanczos3 | dots
     lanczos_a: int = 3
+
+    # Sample on the scan converter's own dot clock rather than an arbitrary
+    # bin grid. The trace is 262.5 sample-and-hold plateaus (one NTSC field,
+    # one sample per line), so integrating each dot over its own plateau is the
+    # matched filter; any other grid mixes adjacent dots. Falls back to
+    # `resample` when the clock cannot be measured on a given frame.
+    dot_lock: bool = True
+    # Output height. 0 means "use the true dot count", which is the honest
+    # resolution: ~234 dots across the active window. Larger values upscale
+    # from the dot samples rather than pretending to resolve more.
+    dot_native: bool = True
 
     dehum: bool = True  # remove the parity-locked 60 Hz fixed pattern
     dc_restore: bool = True  # clamp each trace on its back porch
@@ -373,10 +399,26 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
 
     # --- sample the picture ------------------------------------------------
     span = cfg.picture_span * period
-    pic = np.empty((n_tr, cfg.height))
-    for i in range(n_tr):
-        s = starts[i] + cfg.picture_start * period
-        pic[i] = _sample_trace(x, s, span, cfg.height, cfg.resample, cfg.lanczos_a)
+
+    clock = None
+    if cfg.dot_lock:
+        try:
+            clock = dot_mod.measure(x, tb)
+        except ValueError:
+            clock = None
+
+    if clock is not None and clock.measured:
+        n_dots = dot_mod.active_dots(span, clock)
+        pic = np.empty((n_tr, n_dots))
+        for i in range(n_tr):
+            s0 = starts[i] + cfg.picture_start * period
+            pic[i] = dot_mod.sample_dots(x, s0, span, clock, n_dots)
+    else:
+        n_dots = cfg.height
+        pic = np.empty((n_tr, cfg.height))
+        for i in range(n_tr):
+            s0 = starts[i] + cfg.picture_start * period
+            pic[i] = _sample_trace(x, s0, span, cfg.height, cfg.resample, cfg.lanczos_a)
 
     if cfg.dc_restore:
         pic -= porch_level[:, None]
@@ -454,6 +496,11 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
         levels=(lo, hi),
         diagnostics={
             "period": period,
+            "dots_per_trace": (clock.dots_per_trace if clock else None),
+            "samples_per_dot": (clock.samples_per_dot if clock else None),
+            "dot_clock_strength": (clock.strength if clock else None),
+            "dot_locked": bool(clock and clock.measured),
+            "n_dots": int(pic.shape[1]),
             "n_traces": n_tr,
             "dropouts": int(dropouts.sum()),
             "hum_amplitude": hum_amp,

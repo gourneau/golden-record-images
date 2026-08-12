@@ -40,6 +40,18 @@ be hard to game:
 The composite score multiplies per-failure factors, so a decoder cannot buy
 back a staircase by over-sharpening, and prints in [0, 100].
 
+KNOWN GAP, measured and reported rather than papered over: frames destroyed by
+rank-1 smear (every column a scaled copy of one profile -- L040, L075 in the
+baseline) are NOT caught by any of these, and score mid-range. Candidate
+detectors were measured on the real baseline decodes and all failed to
+separate damage from legitimate content: high-pass column-mean energy (0.11 on
+good L000 vs 0.13 on good R056 vs 0.28 on destroyed L040), flat-column
+fraction (7.1% on good L000 vs 14.1% on L040), vertical-detail energy, and
+SVD rank-1 energy fraction (0.90 on good L000 vs 0.91 on destroyed R070 --
+the calibration circle is legitimately near rank-1). Judge smear-type damage
+by eye or by the circle reference until someone finds a content-free
+discriminator.
+
 The reference metric (`circle_metrics`) runs on the decode of L000, the
 calibration circle, which is ground truth by design: fit an ellipse to the
 ring and report axis ratio (1.000 when the geometry is right), RMS radial
@@ -327,11 +339,21 @@ def composite_score(m: dict) -> float:
     """One number in [0, 100]. Multiplicative: each detected failure scales the
     whole score down, so no metric can buy back another's damage.
 
-    Factor calibration (from the baseline run on the real master):
-      clean line-art frames measure shift_rms ~0.1-0.3 px, drift_span < 8 px,
-      stair_support ~< 0.12 (chance level of the Hough vote), parity_db < 0,
-      accept_frac > 0.9. Staircased photographs measure shift_rms 1-4 px,
-      drift_span 20-200 px, stair_support 0.3-0.9, accept_frac < 0.5.
+    Factor calibration, measured on the 2026-08 baseline run of the test set
+    against the real master (not guessed):
+      the least-damaged frame (L055) measures shift_rms 0.53 px, drift_span
+      13.4 px, stair_support 0.22; the staircased frames measure drift_span
+      50-100+ px with stair_support up to 0.30 and shift_rms 0.9-1.6 px; the
+      Hough vote's support on real, non-staircased content measured 0.09-0.22,
+      so the staircase factor pivots at 0.25. A geometrically correct decode
+      (shift_rms ~0.1, drift ~3 px, parity <= 0, full lock) scores ~90, so
+      there is headroom above today's baseline, whose mean is the number to
+      beat.
+
+    accept_frac alone is gameable -- a sync that coasts everything on its own
+    prediction agrees with itself perfectly -- but the image-domain factors
+    (shift, drift, staircase) then record the resulting misalignment, which is
+    why the score is a product and not a weighted sum.
     """
     def get(k, default=np.nan):
         v = m.get(k, default)
@@ -344,12 +366,15 @@ def composite_score(m: dict) -> float:
     ratio = get("coh_ratio")
     accept = get("accept_frac")
 
-    f_shift = np.exp(-max(shift_rms - 0.15, 0.0) / 1.0) if np.isfinite(shift_rms) else 0.0
-    f_drift = np.exp(-max(drift - 4.0, 0.0) / 30.0) if np.isfinite(drift) else 0.0
-    f_stair = 1.0 - 0.9 * min(max(stair - 0.12, 0.0) / 0.6, 1.0) if np.isfinite(stair) else 0.1
+    f_shift = np.exp(-max(shift_rms - 0.10, 0.0) / 1.2) if np.isfinite(shift_rms) else 0.0
+    f_drift = np.exp(-drift / 40.0) if np.isfinite(drift) else 0.0
+    f_stair = 1.0 - 0.9 * min(max(stair - 0.25, 0.0) / 0.5, 1.0) if np.isfinite(stair) else 0.1
     f_parity = 1.0 / (1.0 + max(parity, 0.0) / 6.0) if np.isfinite(parity) else 0.5
-    f_coh = min(max(ratio, 0.0), 1.0) ** 2 if np.isfinite(ratio) else 0.0
-    f_sync = min(max(accept, 0.0), 1.0) if np.isfinite(accept) else 0.0
+    f_coh = min(max(ratio, 0.0), 1.0) if np.isfinite(ratio) else 0.0
+    # No timebase supplied (image-only scoring) -> neutral, not zero. The
+    # testset runner always supplies one, so a decoder cannot dodge the lock
+    # factor there by withholding it.
+    f_sync = min(max(accept, 0.0), 1.0) if np.isfinite(accept) else 1.0
 
     return float(100.0 * f_shift * f_drift * f_stair * f_parity * f_coh * f_sync)
 

@@ -44,25 +44,26 @@ PRE_384 = int(round(1.5 * sync_mod.NOMINAL_PERIOD))
 
 # (frame_id, kind, expectation-under-the-CURRENT-decoder)
 # kind: what the picture is; expect: how the current decoder does on it,
-# from visual inspection of the last full build. The metric is validated by
-# agreeing with this column, not by defining it.
+# assigned by full-resolution inspection of fresh decodes (2026-08 baseline),
+# not of the stale thumbnail build. The metric is validated by agreeing with
+# this column, not by defining it. Labels are FROZEN with the set.
 TEST_FRAMES: list[tuple[str, str, str]] = [
-    ("L000", "calibration", "good"),   # the circle; also gets the ellipse fit
-    ("L002", "line-art", "good"),      # mathematical definitions
-    ("L020", "line-art", "good"),      # DNA structure diagram
-    ("L034", "line-art", "good"),      # diagram of conception
-    ("L040", "photo", "bad"),          # birth
-    ("L055", "photo", "bad"),          # seashore, Cape Neddick
-    ("L075", "line-art", "bad"),       # vertebrate evolution (dense halftone)
-    ("L077", "photo", "bad"),          # dolphins, end of left channel
-    ("R000", "photo", "bad"),          # school of fish (red separation)
-    ("R010", "line-art", "good"),      # sketch of bushmen
-    ("R022", "photo", "bad"),          # schoolroom, Japan
-    ("R040", "photo", "good"),         # house interior (red separation)
-    ("R056", "photo", "bad"),          # X-ray of hand
-    ("R068", "line-art", "good"),      # page of Newton, late right channel
-    ("R070", "photo", "bad"),          # astronaut (green separation)
-    ("R077", "photo", "bad"),          # violin, very end of the record
+    ("L000", "calibration", "good"),   # circle visible; also gets ellipse fit
+    ("L002", "line-art", "good"),      # math definitions: readable, striped
+    ("L020", "line-art", "bad"),       # DNA: right half has a ~90 px staircase ramp
+    ("L034", "line-art", "good"),      # conception diagram: left clean
+    ("L040", "photo", "bad"),          # birth: destroyed by rank-1 smear
+    ("L055", "photo", "good"),         # seashore: least-damaged photo decode
+    ("L075", "line-art", "bad"),       # vertebrate evolution: smeared
+    ("L077", "photo", "bad"),          # dolphins: destroyed, end of left ch.
+    ("R000", "photo", "bad"),          # school of fish: partial, sync losses
+    ("R010", "line-art", "bad"),       # bushmen sketch: heavy streaking
+    ("R022", "photo", "bad"),          # schoolroom: smeared
+    ("R040", "photo", "good"),         # house interior: recognisable
+    ("R056", "photo", "good"),         # X-ray: structure intact, striped
+    ("R068", "line-art", "bad"),       # Newton page: left third streak-destroyed
+    ("R070", "photo", "bad"),          # astronaut: smeared
+    ("R077", "photo", "bad"),          # violin: streaked, very end of record
 ]
 
 

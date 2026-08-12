@@ -238,41 +238,24 @@ def _correlate_line(
     return lo + _refine_peak(c, k)
 
 
-def _irls_fit(
-    idx: np.ndarray, pos: np.ndarray, iters: int = 6
-) -> tuple[float, float, np.ndarray, np.ndarray]:
-    """Robust fit of position against trace index, with a parity term.
-
-    Returns (intercept, slope, residuals, parity_cleaned_positions).
-
-    The parity term matters more than it looks. The blanking burst's LEADING
-    edge alternates by ~100 samples between odd and even traces -- by design,
-    since Colorado Video's scan converter used two sync widths to signal the
-    interlace field. A whole-burst matched filter therefore reports positions
-    that alternate, and feeding those straight into the timebase writes a
-    comb artefact into the picture.
-
-    But the picture itself is not alternating: cross-correlating adjacent
-    picture columns on a purely linear timebase gives a median shift of about
-    0.12 samples. The line clock is nearly perfect. So the parity component of
-    the measured positions is an artefact of what we are measuring, not of the
-    recording, and it must be ESTIMATED AND DISCARDED rather than tracked.
-    """
-    par = np.where((idx.astype(np.int64) % 2) == 0, 1.0, -1.0)
-    A = np.stack([np.ones_like(idx), idx, par], axis=1)
+def _irls_fit(idx: np.ndarray, pos: np.ndarray, iters: int = 6) -> tuple[float, float, np.ndarray]:
+    """Robust straight-line fit; returns (intercept, slope, residuals)."""
     w = np.ones_like(pos)
-    coef = np.zeros(3)
+    intercept = slope = 0.0
     for _ in range(iters):
-        Aw = A * w[:, None]
-        coef, *_ = np.linalg.lstsq(Aw.T @ A, Aw.T @ pos, rcond=None)
-        r = pos - A @ coef
+        sw = w.sum()
+        mx = (w * idx).sum() / sw
+        my = (w * pos).sum() / sw
+        sxx = (w * (idx - mx) ** 2).sum()
+        sxy = (w * (idx - mx) * (pos - my)).sum()
+        slope = sxy / sxx
+        intercept = my - slope * mx
+        r = pos - (intercept + slope * idx)
         # Tukey biweight, scaled by a robust sigma estimate.
-        sc = 1.4826 * np.median(np.abs(r - np.median(r))) + 1e-9
-        u = np.clip(r / (4.685 * sc), -1, 1)
+        s = 1.4826 * np.median(np.abs(r - np.median(r))) + 1e-9
+        u = np.clip(r / (4.685 * s), -1, 1)
         w = (1 - u**2) ** 2
-    intercept, slope, parity_amp = float(coef[0]), float(coef[1]), float(coef[2])
-    cleaned = pos - parity_amp * par
-    return intercept, slope, cleaned - (intercept + slope * idx), cleaned
+    return float(intercept), float(slope), pos - (intercept + slope * idx)
 
 
 def recover(
@@ -322,12 +305,10 @@ def recover(
 
         idx = np.asarray(raw_idx, dtype=np.float64)
         pos = np.asarray(raw_pos, dtype=np.float64)
-        phase, period, residuals, cleaned = _irls_fit(idx, pos)
-        # Smooth the parity-cleaned positions: real wow and flutter is smooth,
-        # the parity term is not ours to keep.
-        positions = cleaned
+        phase, period, residuals = _irls_fit(idx, pos)
+        positions = pos
         if p == passes - 1:
-            smoothed = _savgol(cleaned, smooth_window)
+            smoothed = _savgol(pos, smooth_window)
             return Timebase(
                 blank_len=float(blank_len),
                 phase=phase,
