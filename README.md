@@ -112,16 +112,33 @@ plateau, which is the matched filter for sample-and-hold. Any other bin grid mix
 together. Native output is now **234 × 512** — the true dot count — rather than an invented 384
 rows.
 
-It also settles the geometry. Because a trace is one *field* rather than a full frame, it carries
-half a frame's vertical lines, so the dots are not square: each is 384/234 = 1.641 times taller
-than a trace is wide. Fit an ellipse to the calibration ring on the native dot grid and it comes
-out at 1.6373 against that predicted 1.6410 — **round to 0.23%**, with 185 inliers over 320° of
-arc. 512 traces, a 4:3 frame and 234 active dots are all mutually consistent after all.
+It also settles the geometry — though not in the way we first thought.
 
-(An earlier revision of this README claimed those three could *not* all be true, citing a ring
-axis ratio of 1.1159. That number came from thresholding the ring's bounding box in a resampled
-display image, which is a poor estimator — a proper ellipse fit on the native grid disagrees. The
-contradiction was mine, not the record's.)
+Because a trace is one *field* rather than a full frame, it carries half a frame's vertical
+lines, so the dots are not square. Measured against the sync falling edge, the picture gate runs
+from bin 232 to bin 3040 of a 3200-bin period, giving **~231 active dots**, and the isotropy —
+the amount of trace-time that equals one trace of width — is
+
+```
+7.4406 ± 0.0033 bins per trace   ->   dots are 1.638x taller than a trace is wide
+```
+
+So a square-pixel render of 512 traces is **512 × 377**, an aspect of 1.357. Which means the
+cover's "512" is *not* the width of the 4:3 picture: an exactly-4:3 area is **503 ± 4 traces**,
+and the converter actually scans ~535 traces in total. Barry's 540 is that scan plus a 22-trace
+hatch marker.
+
+Checked on seven circles across five frames — the calibration ring, both rings of the solar
+system diagram, all three Earth separations, and the limb of Mars — the residual stretch is
+0.981–1.001. The competing "512 traces is exactly 4:3" hypothesis predicts 1.018 on every one of
+them, and is refuted with breadth rather than on the calibration frame alone.
+
+*Two corrections are folded in here.* An earlier revision of this README claimed 512 traces, 4:3
+and the dot count were mutually **inconsistent**, citing a ring axis ratio of 1.1159 — that came
+from thresholding a thin ring's bounding box in a resampled display image, which is a poor
+estimator, and the contradiction was mine, not the record's. A second revision then claimed all
+three were consistent, which was closer but still wrong: with 512 traces the aspect is 1.357, not
+1.333. The isotropy figure is the durable number; the trace count was the loose assumption.
 
 **It also dissolves a 2017 mystery.** Barry hardcoded "−12 samples on even traces" and called it
 a brainless heuristic. Twelve samples is *one dot*: one NTSC line period at the 2× tape speed.

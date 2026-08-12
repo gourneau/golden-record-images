@@ -78,8 +78,59 @@ NEGATIVE RESULTS (measured, do not re-ship)
 * 60 Hz mains-hum subtraction beyond the existing parity-median removal:
   nothing left to remove above the stripe floor.
 
+DOT-DOMAIN DEFECTS (second pass, same session; drivers in scratchpad enh2/)
+---------------------------------------------------------------------------
+With the dot clock resolved, a plateau's interior is content-free by
+construction (sample-and-hold), which gives a defect statistic with a
+measured noise floor of 0.0005-0.0010 signal units (~2-3% of picture RMS):
+the within-dot max residual after linear detrend of the guard-trimmed
+interior. Whole-record census (156 frames, 18.4M dots, absolute plateau grid):
+
+  * outliers >8x frame floor: 0.21% of dots -- but ~90% of those sit ON
+    strong dot-to-dot transitions (median along-trace gradient 30-40x the
+    frame background): edge-curvature residue and the converter's own
+    half-dot sampling alternation, NOT defects. Gradient-gated isolated
+    candidates: 3,700 dots = 0.020% record-wide, plus a trace-0 population
+    that is frame-boundary sync leakage, not damage.
+  * the genuine clicks (inspected raw): damped ~1-cycle ~64 kHz
+    oscillations, amplitude <= ~27x floor (<= 0.016), occasionally
+    clustered (R001 traces 399-403 is a multi-trace event).
+
+CLICK REPAIR IS A MEASURED NEGATIVE. Real clicks are AC-coupled and
+zero-mean, and the plateau integral is their matched suppressor: injecting
+the measured morphology (300 clicks, 5-40x floor) biases the plain plateau
+integral by mean 0.00015, max 0.0007 (2% of picture RMS -- invisible).
+Every repair tried made it worse: within-dot inlier substitution raised the
+error 6-15x (substitution noise ~0.005; edge false-positives up to 1.0x
+picture RMS on R040), and Hampel-10MAD doubled it. Unipolar spikes would
+bias the integral (up to 20% RMS visible) but the census found no such
+population; sub-trace dropouts (15-60 samples) defeat every estimator tried
+(~80% of hits visible after "repair") -- only across-trace concealment at
+detection time could help, and none were observed below the per-trace scale
+decode already flags via the porch. So: DETECT and report, do not repair.
+scan_dot_defects() ships the detector (false-positive rate measured on
+clean audio: 3-20 dots per frame, 0.003-0.02%).
+
+DOT-GRID PARITY, CORROBORATED INDEPENDENTLY of dotclock's 2026-08 rebuild:
+the dot-rate component measured per trace parity is 175-195 deg apart
+(0.486-0.539 dots, 9 of 10 frames tried) with full-stack phase coherence
+<= 0.03 but per-parity coherence 0.24-0.57 -- the parities cancel, which is
+why a whole-frame fold could never see the clock line on many frames (e.g.
+R040: spectral excess 1.22, yet per-parity coherence 0.57 over ~250 traces
+where chance is ~0.06). A coherence test at the PREDICTED rate would detect
+the clock on frames where the power-excess test fails. Content parity lag
+in the current sample_plateaus matrix measured 0.00-0.25 dots median with
+no systematic one-dot misassignment; the retired start-anchored comb
+produced one-dot checkerboard zippers at strong horizontal edges.
+
 POSITIVE, SHIPPED
 -----------------
+* scan_dot_defects(): within-dot impulse detector + per-dot confidence
+  (see above; detector only, repair measured harmful).
+* sample_interior(): guard-trimmed plateau interior mean. Excluding the
+  ~3-sample chain transitions narrows the across-dot edge response by
+  6-11% (10-90: L000 2.25 -> 2.00, R040 2.88 -> 2.75, L020 2.00 -> 1.88
+  dots) for a 1-4% trace-to-trace noise cost.
 * wiener_sharpen(): capped-inverse deconvolution of the measured full-chain
   LSF, along-trace, band-limited to f < 0.11 c/sample. Measured on L000 ring
   (the filter's own source): lead/trail 10-90 17.7/12.6 -> 12.4/4.2 samples
@@ -127,7 +178,14 @@ EDGE_1090_ALONG = 17.7        # samples, leading edge, full chain
 EDGE_1090_ACROSS = 3.25       # traces, outer ring edge
 F_STOP_DEFAULT = 0.11         # c/sample; ring MTF ~5 % here, only hiss beyond
 
-# Active window relative to the sync falling edge crossing Z (384 kHz samples)
+# Active window relative to the sync falling edge crossing Z (384 kHz samples).
+# CAUTION: these were measured against the pre-re-anchor sync.recover origin,
+# which geometry.py later showed drifts up to 220 samples from the true
+# zero-crossing landmark on some frames (L000). geometry.py's settled window
+# (picture bins [232, 3040] of the period, i.e. fractions 0.0725-0.9500
+# against the zero-crossing) supersedes these for any new work; they are kept
+# because corrected_porch()'s measured gains were established with them and
+# its correlation gate makes it robust to the exact band.
 PIC_ON, PIC_OFF = 180, 2960
 PORCH_ON, PORCH_OFF = 2965, 3040
 
@@ -338,4 +396,130 @@ def despike(pic: np.ndarray, n_mad: float = 10.0, halfwin: int = 6) -> np.ndarra
     out = pic.copy()
     bad = np.abs(r) > n_mad * mad
     out[bad] = med[bad]
+    return out
+
+
+# ---------------------------------------------------------------------------
+# dot-domain defect scan (detector ONLY -- repair measured harmful, see
+# docstring). Operates on the plateau grid the decoder used.
+# ---------------------------------------------------------------------------
+
+
+def plateau_edges(starts: np.ndarray, period: float, phase: np.ndarray,
+                  spd: float, lo_f: float, hi_f: float) -> np.ndarray:
+    """(n_traces, n_dots) LEFT edge of each plateau in the picture window.
+
+    `starts` are the timebase trace starts, `phase` the per-trace absolute
+    plateau-edge offsets from dotclock.track_phase (meaningful mod spd).
+    Mirrors sample_plateaus' containing-plateau convention so row j here is
+    the same plateau row j of the decoded matrix.
+    """
+    starts = np.asarray(starts, dtype=np.float64)
+    n_dots = int(round((hi_f - lo_f) * period / spd)) - 1
+    mid = starts + 0.5 * (lo_f + hi_f) * period
+    c0 = mid - (n_dots - 1) / 2.0 * spd
+    k0 = np.floor((c0 - phase) / spd)
+    return (np.asarray(phase, dtype=np.float64)[:, None]
+            + k0[:, None] * spd + np.arange(n_dots)[None, :] * spd)
+
+
+def scan_dot_defects(
+    x: np.ndarray,
+    edges: np.ndarray,
+    spd: float,
+    guard: int = 3,
+    k_flag: float = 8.0,
+    k_grad: float = 8.0,
+) -> dict:
+    """Within-dot impulse detector on the plateau grid.
+
+    For each dot, the guard-trimmed interior is linearly detrended; the max
+    |residual| is the defect statistic (a plateau interior is content-free by
+    construction, so anything above the frame floor is noise or damage).
+    Flags are gated on the along-trace gradient so the converter's own
+    half-dot edge alternation cannot flag (90% of raw outliers are edges).
+
+    Returns dict with:
+      res        (n_traces, n_dots) within-dot max residual, NaN off-signal
+      sigma      frame floor (median of res) -- 0.0005-0.0010 on the master
+      impulse    bool mask: isolated impulsive hits (real clicks; ~0.02% of
+                 dots record-wide, false-positive rate 0.003-0.02%)
+      edge_hit   bool mask: residual outliers ON strong transitions (not
+                 defects; reported so nobody re-discovers them as damage)
+      confidence (n_traces, n_dots) 0..1 per-dot: 1 at the floor, falling to
+                 0 at k_flag x floor. Multiplies into per-trace confidence
+                 for display; do NOT use it to alter pixel values.
+
+    Detection only. Concealment was measured and rejected: real clicks are
+    zero-mean so the plateau integral already suppresses them to ~2% of
+    picture RMS; every substitution scheme tried did worse (see docstring).
+    """
+    x = np.asarray(x, dtype=np.float64)
+    n_tr, n_dots = edges.shape
+    w = int(np.floor(spd)) - 2 * guard
+    if w < 4:
+        raise ValueError(f"plateau too narrow for guard={guard}: interior {w}")
+    t = np.arange(w) - (w - 1) / 2.0
+    tt = float(t @ t)
+    lo = np.round(edges).astype(np.int64) + guard
+
+    res = np.full((n_tr, n_dots), np.nan)
+    val = np.full((n_tr, n_dots), np.nan)
+    ok = (lo[:, 0] >= 0) & (lo[:, -1] + w <= len(x))
+    for i in np.flatnonzero(ok):
+        seg = x[lo[i][:, None] + np.arange(w)[None, :]]
+        mu = seg.mean(axis=1, keepdims=True)
+        b1 = ((seg - mu) @ t) / tt
+        r = seg - mu - b1[:, None] * t[None, :]
+        res[i] = np.abs(r).max(axis=1)
+        val[i] = mu[:, 0]
+
+    finite = np.isfinite(res)
+    sigma = float(np.nanmedian(res[finite])) if finite.any() else float("nan")
+
+    grad = np.full((n_tr, n_dots), np.inf)
+    grad[:, 1:-1] = np.abs(val[:, 2:] - val[:, :-2]) / 2.0
+    gfloor = float(np.nanmedian(np.abs(np.diff(val, axis=1)))) + 1e-12
+
+    hot = finite & (res > k_flag * sigma)
+    edge_hit = hot & ~(grad < k_grad * gfloor)
+    impulse = hot & (grad < k_grad * gfloor)
+
+    # Full confidence up to 3x the floor (the bulk of honest dots live at
+    # 1-3x), then a linear ramp to 0 at the flag threshold.
+    confidence = np.ones((n_tr, n_dots))
+    with np.errstate(invalid="ignore"):
+        c = 1.0 - (res / sigma - 3.0) / (k_flag - 3.0)
+    confidence[finite] = np.clip(c[finite], 0.0, 1.0)
+    # edges are not damage: do not let the converter's own sampling
+    # alternation read as low confidence
+    confidence[edge_hit] = 1.0
+
+    return {"res": res, "sigma": sigma, "impulse": impulse,
+            "edge_hit": edge_hit, "confidence": confidence}
+
+
+def sample_interior(x: np.ndarray, edges: np.ndarray, spd: float,
+                    guard: int = 3) -> np.ndarray:
+    """Guard-trimmed plateau interior mean -- sample_plateaus minus the
+    transition zones.
+
+    The chain smears each plateau boundary over ~3 samples, so the full
+    integral mixes ~12% of the neighbouring scene lines back in. Trimming
+    `guard` samples off each end removes that: measured across-dot edge
+    response narrows 6-11% (10-90: L000 2.25 -> 2.00, R040 2.88 -> 2.75,
+    L020 2.00 -> 1.88 dots) for a 1-4% trace-to-trace noise cost (the
+    additive noise floor is far below picture contrast, so the shorter
+    window costs almost nothing).
+    """
+    x = np.asarray(x, dtype=np.float64)
+    n_tr, n_dots = edges.shape
+    w = int(np.floor(spd)) - 2 * guard
+    if w < 3:
+        raise ValueError(f"plateau too narrow for guard={guard}: interior {w}")
+    lo = np.round(edges).astype(np.int64) + guard
+    out = np.full((n_tr, n_dots), np.nan)
+    ok = (lo[:, 0] >= 0) & (lo[:, -1] + w <= len(x))
+    for i in np.flatnonzero(ok):
+        out[i] = x[lo[i][:, None] + np.arange(w)[None, :]].mean(axis=1)
     return out

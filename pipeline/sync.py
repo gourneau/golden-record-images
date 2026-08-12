@@ -60,13 +60,32 @@ px) on frames spanning the record, photographs included. A parity-split
 template correlator measured the same (0.39-0.70), so the simpler half-cross
 is used. v1 measured 0.5-2.5 on line art and 2-6 on photographs.
 
-The trace-start convention is the half-amplitude downward crossing of the sync
-falling edge ("the crossing"). Relative to it, measured on sub-sample-aligned
-folds of eight frames spanning both channels and the whole record (96 kHz
-samples, period ~799.35): trough at +1..+3, picture from about +6 to about
-+716, content-free shelf from ~+717, next pulse's high plateau ending at the
-next crossing one period later. decode.py's window constants are expressed in
-this convention.
+THE ORIGIN IS RE-ANCHORED TO THE RAW ZERO CROSSING (2026-08). The half-cross
+detector above tracks the frame reliably, but the feature it latches is NOT
+the same on every frame: on 14 of the 16 test-set frames its origin sits
++1..+5 samples (384 kHz) from the sync trailing edge's raw downward ZERO
+crossing, but on L000 it is -289 and on L075 -247 -- those frames' strongest
+drop-score feature is picture structure, not the sync fall. pipeline/geometry
+measured all its window constants relative to the zero crossing (the most
+frame-invariant landmark: consecutive-spacing std 5.6-5.9 samples at 384 kHz
+on every frame tried), so recover() finishes by folding the signal on its own
+smoothed grid, locating the steepest fall of the fold, refining to the
+fold's nearest downward zero crossing, and shifting the whole timebase by
+that single per-frame constant. Tracking (period, wow, parity) is untouched
+-- only the origin moves. After this step the trace-start convention IS the
+zero-crossing convention of pipeline/geometry.py, and decode.py's window
+constants are expressed in it.
+
+THE PICTURE SITS ON A UNIFORM GRID -- the parity alternation of the landmark
+must be REMOVED from the timebase, not followed. Re-measured 2026-08 against
+the opposite claim (that the picture rides the alternating crossing): fine
+box decode of L055/R040/R056/L020 at 936 rows, adjacent-column NCC shift
+split by pair parity: uniform grid leaves 0.17-0.20 samples (96 kHz) of
+alternation; following the measured parity offset creates 1.70-1.82; putting
+each trace on its own raw crossing creates 1.55-1.63. (geometry.py's
+measure_parity_independence reported the opposite at 377-row resolution; its
++-8 px integer search cannot resolve a 0.2-px effect. The fine-grid
+measurement stands.)
 """
 
 from __future__ import annotations
@@ -302,6 +321,86 @@ def _fold_template(
     return acc / used, back
 
 
+def _zero_cross_offset(x: np.ndarray, smoothed: np.ndarray, period: float) -> float | None:
+    """Signed offset (samples) from the current origin to the sync trailing
+    edge's raw downward zero crossing, measured on the frame's own fold.
+
+    Fold up to 256 traces on the smoothed grid (median, so picture content
+    and dropouts drop out), find the steepest fall of the lightly smoothed
+    fold over the WHOLE period -- the sync edge is the steepest fall of the
+    fold on every frame measured, even L000 whose drop-score detector latched
+    picture structure -- then refine to the fold's nearest downward zero
+    crossing. Returns None if no usable fold or no crossing (the caller then
+    keeps the un-anchored origin rather than inventing one).
+    """
+    W = int(period)
+    step = max(1, len(smoothed) // 256)
+    anchors = [float(s) for s in smoothed[::step] if 0 <= int(round(s)) < len(x) - W - 2]
+    if len(anchors) < 16:
+        return None
+
+    # 1. Per-trace steepest fall of the lightly smoothed signal. This is the
+    #    discriminator pipeline/geometry.py validated per trace on every frame
+    #    tried (99.6-100% lock, L000 included): the sync edge is the steepest
+    #    fall of nearly every trace. A fold-level drop score was tried here
+    #    first and FAILED on L000/L075/R010 -- it reproduces exactly the
+    #    feature preference of the drop detector whose mistake it is meant to
+    #    correct, and the fold blurs the sync edge by the landmark spread.
+    k = max(3, int(round(0.003 * period))) | 1
+    g = np.convolve(np.asarray(x, dtype=np.float64), np.ones(k) / k, mode="same")
+    d = np.diff(g)
+    votes = []
+    for s in anchors:
+        a = int(round(s))
+        votes.append(int(np.argmin(d[a : a + W])))
+    votes = np.asarray(votes, dtype=np.float64)
+
+    # 2. Circular mode of the votes (bin ~0.005P, 2-bin smoothing) -- a plain
+    #    median is meaningless on a circle and a mean is wrecked by the
+    #    minority of traces whose picture out-drops the sync.
+    nb = 200
+    h = np.histogram(votes, bins=nb, range=(0, W))[0]
+    h2 = h + np.roll(h, 1)
+    bm = int(np.argmax(h2))
+    centre = bm * (W / nb)  # boundary between the two winning bins
+    dev = (votes - centre + W / 2.0) % W - W / 2.0
+    memb = np.abs(dev) <= max(6.0, 0.01 * period)
+    if memb.sum() < 8:
+        return None
+    coarse = centre + float(np.median(dev[memb]))
+    coarse = (coarse + W / 2.0) % W - W / 2.0  # signed, relative to the origin
+
+    # 3. Refine each member trace to the raw downward zero crossing nearest
+    #    the coarse estimate; the median over traces centres the +-half-dot
+    #    parity alternation of the crossing. Falls back to the half-amplitude
+    #    level on shallow-trough frames whose signal never crosses zero.
+    r = max(3, int(round(0.0125 * period)))
+    for lvl_mode in ("zero", "half"):
+        offs = []
+        for s in anchors:
+            i0 = int(round(s + coarse))
+            lo = i0 - r
+            if lo < 1 or i0 + r + 2 > len(x):
+                continue
+            seg = x[lo : i0 + r + 2]
+            if lvl_mode == "zero":
+                lvl = 0.0
+            else:
+                lvl = 0.5 * (
+                    float(np.max(seg[: r + 1])) + float(np.min(seg[r:]))
+                )
+            cr = np.where((seg[:-1] >= lvl) & (seg[1:] < lvl))[0]
+            if len(cr) == 0:
+                continue
+            j = cr[np.argmin(np.abs(cr - r))]
+            p = lo + j + (seg[j] - lvl) / (seg[j] - seg[j + 1])
+            offs.append(p - s)
+        if len(offs) >= 16:
+            med = float(np.median(offs))
+            return (med + W / 2.0) % W - W / 2.0
+    return float(coarse)
+
+
 def recover(
     x: np.ndarray,
     *,
@@ -394,6 +493,14 @@ def recover(
     noise_rms = float(np.sqrt(np.mean(noise**2))) if gate.any() else float("inf")
     lock = float(gate.mean()) / (1.0 + noise_rms / (0.002 * period))
 
+    # Re-anchor the whole timebase to the zero-crossing convention (see the
+    # module docstring). One constant per frame; tracking is untouched.
+    off = _zero_cross_offset(x, smoothed, period)
+    if off is not None:
+        smoothed = smoothed + off
+        pos = pos + off
+        intercept += off
+
     template, origin = _fold_template(x, pos, gate, period)
 
     return Timebase(
@@ -405,7 +512,7 @@ def recover(
         template=template,
         template_origin=origin,
         n_traces=int(n_traces),
-        blank_len=0.104 * period,  # shelf start to crossing, measured fraction
+        blank_len=0.05 * period,  # picture end (0.95) to crossing, geometry.py
         located=gate.copy(),
         parity_offset=alt,
         lock_quality=lock,

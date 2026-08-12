@@ -120,14 +120,21 @@ an ocean dark, which is exactly the kind of Earth-specific reasoning the exercis
 absorption wavelengths, rather than relying on a photograph of a real spectrum, would have fixed
 this.
 
-### The aspect ratio may be less settled than anyone thought
+### The circle nails the shape, but not the frame
 
-The circle is supposed to nail the geometry. But with the dot clock resolved we now measure
-roughly 234 active dots per trace, and *"512 traces", "4:3", and "the circle is round" cannot all
-be true at once*. Something in that trio is wrong, and we are still working out which.
+The circle does its job: measured against it, the isotropy — how much trace-time equals one trace
+of width — comes out at 7.4406 ± 0.0033 bins per trace, consistent across seven circles in five
+different images.
 
-The circle remains the right idea. It is just carrying more assumptions than it can support
-alone.
+What it cannot tell you is where the frame *ends*. It turns out the cover's "512" is the
+converter's nominal trace count, not the width of the 4:3 picture: an exactly-4:3 area is about
+503 traces, and the hardware scans roughly 535. A recipient trusting "512 traces, 4:3" would
+render every image about 1.8% too wide — a small error, but one the circle alone will not reveal,
+because the circle is not centred in the frame and does not touch its edges.
+
+**A frame marker — anything that says "the picture stops here" — would have closed this.** As it
+is, you have to infer the frame edge from the scan converter's own behaviour, which is exactly
+the Earth-specific knowledge a recipient does not have.
 
 ## Tier 4 — Not decodable, and not meant to be
 
