@@ -42,6 +42,7 @@ from scipy.signal import resample_poly
 
 from . import catalog as catalog_mod
 from . import decode as decode_mod
+from . import quality as quality_mod
 from . import sync as sync_mod
 from . import wav
 
@@ -328,6 +329,9 @@ def process_frame(frame: catalog_mod.Frame, opts: Options) -> dict:
     tau = 0.0
     quality = float("nan")
     reread_period = float("nan")
+    composite = float("nan")
+    qmetrics: dict = {}
+    diag: dict = {}
     if opts.thumbs or opts.verify:
         tb96 = sync_mod.recover(xs, period_guess=period96, n_traces=n_traces + TAIL_TRACES)
         reread_period = tb96.period
@@ -341,6 +345,27 @@ def process_frame(frame: catalog_mod.Frame, opts: Options) -> dict:
             dec = decode_mod.decode(xs, cfg, tb96)
             tau = dec.tau
             quality = dec.quality.score
+            # quality.py composite on the decode the browser will reproduce,
+            # scored pre-orientation (its axes are height x traces) and WITH
+            # the timebase so the sync-lock factor cannot be dodged.
+            fs = quality_mod.frame_report(dec.image, tb96, frame.id)
+            composite = fs.composite
+            qmetrics = {
+                k: (round(float(v), 4) if np.isfinite(v) else None)
+                for k, v in fs.metrics.items()
+                if k in ("shift_rms", "drift_span", "step_frac", "stair_support",
+                         "parity_db", "coh_ratio", "accept_frac", "sharpness")
+            }
+            d = dec.diagnostics
+            diag = {
+                "dot_locked": bool(d.get("dot_locked")),
+                "dot_clock_strength": (round(float(d["dot_clock_strength"]), 3)
+                                       if d.get("dot_clock_strength") is not None else None),
+                "dot_phase_coherence": round(float(d.get("dot_phase_coherence", 0.0)), 3),
+                "levels_mode": d.get("levels_mode"),
+                "snr_db": round(float(d.get("snr_db", float("nan"))), 2),
+                "dropouts": int(d.get("dropouts", 0)),
+            }
             opts.thumb_dir.mkdir(parents=True, exist_ok=True)
             thumb_path = opts.thumb_dir / f"{frame.id}.png"
             to_png(orient(dec.image, cfg.rotate), thumb_path)
@@ -362,6 +387,9 @@ def process_frame(frame: catalog_mod.Frame, opts: Options) -> dict:
         "templatePP": round(float(tb96w.template.max() - tb96w.template.min()), 4),
         "lowConfidence": bool(tb96w.measurement_noise > NOISE_LIMIT),
         "quality": round(quality, 4),
+        "composite": round(composite, 2) if math.isfinite(composite) else None,
+        "qmetrics": qmetrics,
+        "decode": diag,
         "jitter_rms384": round(tb384.jitter_rms, 3) if tb384 else float("nan"),
         "measurement_noise384": round(tb384.measurement_noise, 3) if tb384 else float("nan"),
         "traces_located": tb96w.n_traces,
@@ -449,16 +477,20 @@ def print_report(rows: list[dict]) -> None:
     bad = [r for r in rows if "error" in r]
 
     hdr = (f"{'id':6}{'seed':>11} {'detected':>13} {'delta':>9} {'period96':>9} "
-           f"{'jit96':>6} {'noise':>6} {'alt96':>6} {'trace0':>9} {'qual':>5} {'peak':>7} "
-           f"{'KiB':>6} {'s':>5}")
+           f"{'jit96':>6} {'noise':>6} {'alt96':>6} {'trace0':>9} {'qual':>5} {'comp':>6} "
+           f"{'dot':>4} {'peak':>7} {'KiB':>6} {'s':>5}")
     print(hdr)
     print("-" * len(hdr))
     for r in ok:
         flag = "!" if r["lowConfidence"] else " "
+        comp = r.get("composite")
+        dot = r.get("decode", {}).get("dot_locked")
         print(f"{r['id']:5}{flag}{r['seed']:>11} {r['detected']:>13.1f} {r['delta']:>+9.1f} "
               f"{r['period96']:>9.3f} {r['jitter_rms96']:>6.2f} "
               f"{r['measurement_noise96']:>6.2f} {r['alternation96']:>+6.1f} "
               f"{r['trace0_offset96']:>9.3f} {r['quality']:>5.2f} "
+              f"{comp if comp is not None else float('nan'):>6.1f} "
+              f"{('yes' if dot else ' no') if dot is not None else '  ?':>4} "
               f"{r['peak']:>7.4f} {r['flac_bytes'] / 1024:>6.0f} {r['seconds']:>5.1f}")
     for r in bad:
         print(f"{r['id']:5} ERROR {r['error']}")
@@ -508,6 +540,17 @@ def print_report(rows: list[dict]) -> None:
           f"(96 kHz) worst case over the {int(good.sum())} confident frames"
           + (f", {off.max():.2f} including the {int((~good).sum())} flagged" if not good.all() else ""))
     print(f"flac total {total / 1e6:.1f} MB, mean {total / len(ok) / 1024:.0f} KiB/frame")
+    comps = np.array([r["composite"] for r in ok
+                      if r.get("composite") is not None], dtype=np.float64)
+    if len(comps):
+        print(f"quality.py composite over {len(comps)} scored frames: "
+              f"mean {comps.mean():.1f}  median {np.median(comps):.1f}  "
+              f"min {comps.min():.1f}  max {comps.max():.1f}")
+    locks = [r.get("decode", {}).get("dot_locked") for r in ok]
+    known = [v for v in locks if v is not None]
+    if known:
+        print(f"dot clock locked on {sum(known)}/{len(known)} frames "
+              f"(fallback binning on {len(known) - sum(known)})")
 
 
 # --------------------------------------------------------------------------

@@ -10,15 +10,15 @@
    "index": 0,
    "file": "frames/L000.flac",
    "leadIn": 2000,
-   "startSample": 6000013,
-   "periodGuess": 799.35528,
+   "startSample": 5997139,
+   "periodGuess": 799.33838,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414468,
-   "peak": 0.250042,
-   "imageNumber": null,
-   "title": null
+   "durationSamples": 414459,
+   "peak": 0.299162,
+   "imageNumber": 1,
+   "title": "Calibration circle"
   },
   {
    "id": "L001",
@@ -26,15 +26,15 @@
    "index": 1,
    "file": "frames/L001.flac",
    "leadIn": 2000,
-   "startSample": 8309399,
-   "periodGuess": 799.24087,
+   "startSample": 8306576,
+   "periodGuess": 799.24139,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414409,
-   "peak": 0.305544,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.307794,
+   "imageNumber": 2,
+   "title": "Solar location map"
   },
   {
    "id": "L002",
@@ -42,15 +42,15 @@
    "index": 2,
    "file": "frames/L002.flac",
    "leadIn": 2000,
-   "startSample": 10667394,
-   "periodGuess": 799.23044,
+   "startSample": 10664536,
+   "periodGuess": 799.23016,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414403,
-   "peak": 0.237259,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.257323,
+   "imageNumber": 3,
+   "title": "Mathematical definitions"
   },
   {
    "id": "L003",
@@ -58,15 +58,15 @@
    "index": 3,
    "file": "frames/L003.flac",
    "leadIn": 2000,
-   "startSample": 12939593,
-   "periodGuess": 799.20092,
+   "startSample": 12936723,
+   "periodGuess": 799.20079,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414388,
-   "peak": 0.252469,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.312044,
+   "imageNumber": 4,
+   "title": "Physical unit definitions"
   },
   {
    "id": "L004",
@@ -74,15 +74,15 @@
    "index": 4,
    "file": "frames/L004.flac",
    "leadIn": 2000,
-   "startSample": 15185253,
-   "periodGuess": 799.18546,
+   "startSample": 15182363,
+   "periodGuess": 799.1834,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414380,
+   "durationSamples": 414379,
    "peak": 0.293011,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 5,
+   "title": "Solar System parameters"
   },
   {
    "id": "L005",
@@ -90,15 +90,15 @@
    "index": 5,
    "file": "frames/L005.flac",
    "leadIn": 2000,
-   "startSample": 17427778,
-   "periodGuess": 799.11747,
+   "startSample": 17424923,
+   "periodGuess": 799.10207,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414345,
+   "durationSamples": 414337,
    "peak": 0.246804,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 6,
+   "title": "Solar System parameters"
   },
   {
    "id": "L006",
@@ -106,15 +106,15 @@
    "index": 6,
    "file": "frames/L006.flac",
    "leadIn": 2000,
-   "startSample": 19610634,
-   "periodGuess": 799.11505,
+   "startSample": 19607590,
+   "periodGuess": 799.11515,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414344,
-   "peak": 0.234202,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.312666,
+   "imageNumber": 7,
+   "title": "The Sun"
   },
   {
    "id": "L007",
@@ -122,15 +122,15 @@
    "index": 7,
    "file": "frames/L007.flac",
    "leadIn": 2000,
-   "startSample": 21715089,
-   "periodGuess": 799.24686,
+   "startSample": 21712037,
+   "periodGuess": 799.24814,
    "color": "r",
    "tripletId": "T01",
    "orientation": 0,
-   "durationSamples": 414412,
+   "durationSamples": 414413,
    "peak": 0.311736,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 8,
+   "title": "Solar spectrum"
   },
   {
    "id": "L008",
@@ -138,15 +138,15 @@
    "index": 8,
    "file": "frames/L008.flac",
    "leadIn": 2000,
-   "startSample": 23821153,
-   "periodGuess": 799.22485,
+   "startSample": 23818090,
+   "periodGuess": 799.22554,
    "color": "g",
    "tripletId": "T01",
    "orientation": 0,
    "durationSamples": 414401,
    "peak": 0.322813,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 8,
+   "title": "Solar spectrum"
   },
   {
    "id": "L009",
@@ -154,15 +154,15 @@
    "index": 9,
    "file": "frames/L009.flac",
    "leadIn": 2000,
-   "startSample": 25944166,
-   "periodGuess": 799.14979,
+   "startSample": 25941110,
+   "periodGuess": 799.14987,
    "color": "b",
    "tripletId": "T01",
    "orientation": 0,
    "durationSamples": 414362,
    "peak": 0.271137,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 8,
+   "title": "Solar spectrum"
   },
   {
    "id": "L010",
@@ -170,15 +170,15 @@
    "index": 10,
    "file": "frames/L010.flac",
    "leadIn": 2000,
-   "startSample": 28672474,
-   "periodGuess": 799.0195,
+   "startSample": 28669438,
+   "periodGuess": 799.01993,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414295,
    "peak": 0.304015,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 9,
+   "title": "Mercury"
   },
   {
    "id": "L011",
@@ -186,15 +186,15 @@
    "index": 11,
    "file": "frames/L011.flac",
    "leadIn": 2000,
-   "startSample": 30893115,
-   "periodGuess": 799.06597,
+   "startSample": 30890050,
+   "periodGuess": 799.06733,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414319,
    "peak": 0.309171,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 10,
+   "title": "Mars"
   },
   {
    "id": "L012",
@@ -202,15 +202,15 @@
    "index": 12,
    "file": "frames/L012.flac",
    "leadIn": 2000,
-   "startSample": 33172603,
-   "periodGuess": 799.01945,
+   "startSample": 33169556,
+   "periodGuess": 799.01905,
    "color": "mono",
    "tripletId": null,
    "orientation": 2,
-   "durationSamples": 414295,
+   "durationSamples": 414294,
    "peak": 0.295694,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 11,
+   "title": "Jupiter"
   },
   {
    "id": "L013",
@@ -218,15 +218,15 @@
    "index": 13,
    "file": "frames/L013.flac",
    "leadIn": 2000,
-   "startSample": 35444810,
-   "periodGuess": 798.97404,
+   "startSample": 35441751,
+   "periodGuess": 798.97415,
    "color": "r",
    "tripletId": "T02",
    "orientation": 2,
    "durationSamples": 414271,
    "peak": 0.314516,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 12,
+   "title": "Earth"
   },
   {
    "id": "L014",
@@ -234,15 +234,15 @@
    "index": 14,
    "file": "frames/L014.flac",
    "leadIn": 2000,
-   "startSample": 37614100,
-   "periodGuess": 799.01584,
+   "startSample": 37611038,
+   "periodGuess": 799.01594,
    "color": "g",
    "tripletId": "T02",
    "orientation": 2,
    "durationSamples": 414293,
    "peak": 0.29958,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 12,
+   "title": "Earth"
   },
   {
    "id": "L015",
@@ -250,15 +250,15 @@
    "index": 15,
    "file": "frames/L015.flac",
    "leadIn": 2000,
-   "startSample": 39821803,
-   "periodGuess": 799.05305,
+   "startSample": 39818742,
+   "periodGuess": 799.05313,
    "color": "b",
    "tripletId": "T02",
    "orientation": 2,
    "durationSamples": 414312,
-   "peak": 0.239042,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.307494,
+   "imageNumber": 12,
+   "title": "Earth"
   },
   {
    "id": "L016",
@@ -266,15 +266,15 @@
    "index": 16,
    "file": "frames/L016.flac",
    "leadIn": 2000,
-   "startSample": 41971948,
-   "periodGuess": 799.03824,
+   "startSample": 41968904,
+   "periodGuess": 799.03813,
    "color": "r",
    "tripletId": "T03",
    "orientation": 0,
    "durationSamples": 414304,
    "peak": 0.292702,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 13,
+   "title": "Egypt, Red Sea, Sinai Peninsula, and the Nile"
   },
   {
    "id": "L017",
@@ -282,15 +282,15 @@
    "index": 17,
    "file": "frames/L017.flac",
    "leadIn": 2000,
-   "startSample": 44045435,
-   "periodGuess": 799.08216,
+   "startSample": 44042383,
+   "periodGuess": 799.08207,
    "color": "g",
    "tripletId": "T03",
    "orientation": 0,
    "durationSamples": 414327,
-   "peak": 0.233249,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.266838,
+   "imageNumber": 13,
+   "title": "Egypt, Red Sea, Sinai Peninsula, and the Nile"
   },
   {
    "id": "L018",
@@ -298,15 +298,15 @@
    "index": 18,
    "file": "frames/L018.flac",
    "leadIn": 2000,
-   "startSample": 46234784,
-   "periodGuess": 799.15845,
+   "startSample": 46231743,
+   "periodGuess": 799.15859,
    "color": "b",
    "tripletId": "T03",
    "orientation": 0,
    "durationSamples": 414366,
    "peak": 0.327017,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 13,
+   "title": "Egypt, Red Sea, Sinai Peninsula, and the Nile"
   },
   {
    "id": "L019",
@@ -314,15 +314,15 @@
    "index": 19,
    "file": "frames/L019.flac",
    "leadIn": 2000,
-   "startSample": 48474744,
-   "periodGuess": 798.90333,
+   "startSample": 48471856,
+   "periodGuess": 798.90215,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414235,
-   "peak": 0.253936,
-   "imageNumber": null,
-   "title": null
+   "durationSamples": 414234,
+   "peak": 0.259808,
+   "imageNumber": 14,
+   "title": "Chemical definitions"
   },
   {
    "id": "L020",
@@ -330,15 +330,15 @@
    "index": 20,
    "file": "frames/L020.flac",
    "leadIn": 2000,
-   "startSample": 50572605,
-   "periodGuess": 798.89017,
+   "startSample": 50569717,
+   "periodGuess": 798.88983,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414228,
    "peak": 0.258053,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 15,
+   "title": "DNA Structure"
   },
   {
    "id": "L021",
@@ -346,15 +346,15 @@
    "index": 21,
    "file": "frames/L021.flac",
    "leadIn": 2000,
-   "startSample": 52749886,
-   "periodGuess": 798.90006,
+   "startSample": 52747013,
+   "periodGuess": 798.88794,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414233,
+   "durationSamples": 414227,
    "peak": 0.306457,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 16,
+   "title": "DNA Structure magnified, light hit"
   },
   {
    "id": "L022",
@@ -362,15 +362,15 @@
    "index": 22,
    "file": "frames/L022.flac",
    "leadIn": 2000,
-   "startSample": 54952747,
-   "periodGuess": 798.83497,
+   "startSample": 54949725,
+   "periodGuess": 798.83514,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414199,
    "peak": 0.273416,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 17,
+   "title": "Cells and cell division"
   },
   {
    "id": "L023",
@@ -378,15 +378,15 @@
    "index": 23,
    "file": "frames/L023.flac",
    "leadIn": 2000,
-   "startSample": 57295047,
-   "periodGuess": 798.82497,
+   "startSample": 57292850,
+   "periodGuess": 798.82453,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414194,
-   "peak": 0.242022,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.298085,
+   "imageNumber": 18,
+   "title": "Anatomy 1 (Skeleton front)"
   },
   {
    "id": "L024",
@@ -394,15 +394,15 @@
    "index": 24,
    "file": "frames/L024.flac",
    "leadIn": 2000,
-   "startSample": 59524289,
-   "periodGuess": 798.8435,
+   "startSample": 59521230,
+   "periodGuess": 798.84366,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414204,
-   "peak": 0.21488,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.287575,
+   "imageNumber": 19,
+   "title": "Anatomy 2 (Skeleton and muscles back)"
   },
   {
    "id": "L025",
@@ -410,15 +410,15 @@
    "index": 25,
    "file": "frames/L025.flac",
    "leadIn": 2000,
-   "startSample": 61705779,
-   "periodGuess": 798.81805,
+   "startSample": 61702720,
+   "periodGuess": 798.81813,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414191,
-   "peak": 0.234204,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.325557,
+   "imageNumber": 20,
+   "title": "Anatomy 3 (Heart, lungs, kidneys and main blood vessels back)"
   },
   {
    "id": "L026",
@@ -426,15 +426,15 @@
    "index": 26,
    "file": "frames/L026.flac",
    "leadIn": 2000,
-   "startSample": 63892643,
-   "periodGuess": 798.8453,
+   "startSample": 63889584,
+   "periodGuess": 798.84535,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414205,
    "peak": 0.309972,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 21,
+   "title": "Anatomy 4 (Heart, lungs, kidneys and main blood vessels front)"
   },
   {
    "id": "L027",
@@ -442,15 +442,15 @@
    "index": 27,
    "file": "frames/L027.flac",
    "leadIn": 2000,
-   "startSample": 66132444,
-   "periodGuess": 798.77779,
+   "startSample": 66129398,
+   "periodGuess": 798.77788,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414170,
-   "peak": 0.264943,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.27038,
+   "imageNumber": 22,
+   "title": "Anatomy 5 (Internal organs back)"
   },
   {
    "id": "L028",
@@ -458,15 +458,15 @@
    "index": 28,
    "file": "frames/L028.flac",
    "leadIn": 2000,
-   "startSample": 68277890,
-   "periodGuess": 798.88172,
+   "startSample": 68275996,
+   "periodGuess": 798.81743,
    "color": "r",
    "tripletId": "T04",
    "orientation": 1,
-   "durationSamples": 414223,
+   "durationSamples": 414190,
    "peak": 0.326627,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 23,
+   "title": "Anatomy 6 (Internal organs front)"
   },
   {
    "id": "L029",
@@ -474,15 +474,15 @@
    "index": 29,
    "file": "frames/L029.flac",
    "leadIn": 2000,
-   "startSample": 70507044,
-   "periodGuess": 798.86395,
+   "startSample": 70503985,
+   "periodGuess": 798.86406,
    "color": "g",
    "tripletId": "T04",
    "orientation": 1,
    "durationSamples": 414214,
-   "peak": 0.217916,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.30634,
+   "imageNumber": 23,
+   "title": "Anatomy 6 (Internal organs front)"
   },
   {
    "id": "L030",
@@ -490,15 +490,15 @@
    "index": 30,
    "file": "frames/L030.flac",
    "leadIn": 2000,
-   "startSample": 72751100,
-   "periodGuess": 798.83078,
+   "startSample": 72748046,
+   "periodGuess": 798.83071,
    "color": "b",
    "tripletId": "T04",
    "orientation": 1,
    "durationSamples": 414197,
-   "peak": 0.239826,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.283704,
+   "imageNumber": 23,
+   "title": "Anatomy 6 (Internal organs front)"
   },
   {
    "id": "L031",
@@ -506,15 +506,15 @@
    "index": 31,
    "file": "frames/L031.flac",
    "leadIn": 2000,
-   "startSample": 74854053,
-   "periodGuess": 798.77513,
+   "startSample": 74850994,
+   "periodGuess": 798.77485,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414168,
-   "peak": 0.305408,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.317044,
+   "imageNumber": 24,
+   "title": "Anatomy 7 (Ribcage)"
   },
   {
    "id": "L032",
@@ -522,15 +522,15 @@
    "index": 32,
    "file": "frames/L032.flac",
    "leadIn": 2000,
-   "startSample": 77243938,
-   "periodGuess": 798.78692,
+   "startSample": 77241219,
+   "periodGuess": 798.77423,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
-   "durationSamples": 414175,
+   "durationSamples": 414168,
    "peak": 0.325972,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 25,
+   "title": "Anatomy 8 (Muscles front)"
   },
   {
    "id": "L033",
@@ -538,15 +538,15 @@
    "index": 33,
    "file": "frames/L033.flac",
    "leadIn": 2000,
-   "startSample": 79503877,
-   "periodGuess": 798.78216,
+   "startSample": 79501002,
+   "periodGuess": 798.78213,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414172,
-   "peak": 0.255973,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.294914,
+   "imageNumber": 26,
+   "title": "Human sex organs"
   },
   {
    "id": "L034",
@@ -554,15 +554,15 @@
    "index": 34,
    "file": "frames/L034.flac",
    "leadIn": 2000,
-   "startSample": 81716114,
-   "periodGuess": 798.75961,
+   "startSample": 81713086,
+   "periodGuess": 798.75967,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414160,
    "peak": 0.3279,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 27,
+   "title": "Diagram of conception"
   },
   {
    "id": "L035",
@@ -570,15 +570,15 @@
    "index": 35,
    "file": "frames/L035.flac",
    "leadIn": 2000,
-   "startSample": 83948672,
-   "periodGuess": 798.78723,
+   "startSample": 83945635,
+   "periodGuess": 798.78735,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414175,
-   "peak": 0.300364,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.328925,
+   "imageNumber": 28,
+   "title": "Conception"
   },
   {
    "id": "L036",
@@ -586,15 +586,15 @@
    "index": 36,
    "file": "frames/L036.flac",
    "leadIn": 2000,
-   "startSample": 86171012,
-   "periodGuess": 798.76386,
+   "startSample": 86168106,
+   "periodGuess": 798.76413,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414163,
    "peak": 0.271738,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 29,
+   "title": "Fertilized ovum"
   },
   {
    "id": "L037",
@@ -602,15 +602,15 @@
    "index": 37,
    "file": "frames/L037.flac",
    "leadIn": 2000,
-   "startSample": 88362228,
-   "periodGuess": 798.80243,
+   "startSample": 88359369,
+   "periodGuess": 798.78943,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414183,
-   "peak": 0.274354,
-   "imageNumber": null,
-   "title": null
+   "durationSamples": 414176,
+   "peak": 0.332628,
+   "imageNumber": 30,
+   "title": "Fetus diagram"
   },
   {
    "id": "L038",
@@ -618,15 +618,15 @@
    "index": 38,
    "file": "frames/L038.flac",
    "leadIn": 2000,
-   "startSample": 90737156,
-   "periodGuess": 798.7949,
+   "startSample": 90734101,
+   "periodGuess": 798.79501,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414179,
-   "peak": 0.310546,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.31093,
+   "imageNumber": 31,
+   "title": "Fetus"
   },
   {
    "id": "L039",
@@ -634,15 +634,15 @@
    "index": 39,
    "file": "frames/L039.flac",
    "leadIn": 2000,
-   "startSample": 92910523,
-   "periodGuess": 798.74036,
+   "startSample": 92907614,
+   "periodGuess": 798.74068,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414151,
    "peak": 0.308946,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 32,
+   "title": "Diagram of male and female"
   },
   {
    "id": "L040",
@@ -650,15 +650,15 @@
    "index": 40,
    "file": "frames/L040.flac",
    "leadIn": 2000,
-   "startSample": 95162794,
-   "periodGuess": 798.76318,
+   "startSample": 95159770,
+   "periodGuess": 798.76296,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414162,
-   "peak": 0.251899,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.320098,
+   "imageNumber": 33,
+   "title": "Birth"
   },
   {
    "id": "L041",
@@ -666,15 +666,15 @@
    "index": 41,
    "file": "frames/L041.flac",
    "leadIn": 2000,
-   "startSample": 97391899,
-   "periodGuess": 798.72848,
+   "startSample": 97388856,
+   "periodGuess": 798.7286,
    "color": "r",
    "tripletId": "T05",
    "orientation": 1,
    "durationSamples": 414144,
-   "peak": 0.293144,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.295826,
+   "imageNumber": 34,
+   "title": "Nursing mother (Philippines)"
   },
   {
    "id": "L042",
@@ -682,15 +682,15 @@
    "index": 42,
    "file": "frames/L042.flac",
    "leadIn": 2000,
-   "startSample": 99629798,
-   "periodGuess": 798.75319,
+   "startSample": 99626750,
+   "periodGuess": 798.75329,
    "color": "g",
    "tripletId": "T05",
    "orientation": 1,
    "durationSamples": 414157,
-   "peak": 0.287842,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.30606,
+   "imageNumber": 34,
+   "title": "Nursing mother (Philippines)"
   },
   {
    "id": "L043",
@@ -698,15 +698,15 @@
    "index": 43,
    "file": "frames/L043.flac",
    "leadIn": 2000,
-   "startSample": 101881189,
-   "periodGuess": 798.72051,
+   "startSample": 101878148,
+   "periodGuess": 798.7199,
    "color": "b",
    "tripletId": "T05",
    "orientation": 1,
    "durationSamples": 414140,
    "peak": 0.305378,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 34,
+   "title": "Nursing mother (Philippines)"
   },
   {
    "id": "L044",
@@ -714,15 +714,15 @@
    "index": 44,
    "file": "frames/L044.flac",
    "leadIn": 2000,
-   "startSample": 104133883,
-   "periodGuess": 798.75761,
+   "startSample": 104130851,
+   "periodGuess": 798.75758,
    "color": "r",
    "tripletId": "T06",
    "orientation": 1,
    "durationSamples": 414159,
    "peak": 0.329667,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 35,
+   "title": "Father and daughter (Malaysia)"
   },
   {
    "id": "L045",
@@ -730,15 +730,15 @@
    "index": 45,
    "file": "frames/L045.flac",
    "leadIn": 2000,
-   "startSample": 106391138,
-   "periodGuess": 798.70372,
+   "startSample": 106388096,
+   "periodGuess": 798.70385,
    "color": "g",
    "tripletId": "T06",
    "orientation": 1,
    "durationSamples": 414132,
    "peak": 0.288525,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 35,
+   "title": "Father and daughter (Malaysia)"
   },
   {
    "id": "L046",
@@ -746,15 +746,15 @@
    "index": 46,
    "file": "frames/L046.flac",
    "leadIn": 2000,
-   "startSample": 108652874,
-   "periodGuess": 798.67831,
+   "startSample": 108649827,
+   "periodGuess": 798.67845,
    "color": "b",
    "tripletId": "T06",
    "orientation": 1,
    "durationSamples": 414119,
    "peak": 0.325179,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 35,
+   "title": "Father and daughter (Malaysia)"
   },
   {
    "id": "L047",
@@ -762,15 +762,15 @@
    "index": 47,
    "file": "frames/L047.flac",
    "leadIn": 2000,
-   "startSample": 110785673,
-   "periodGuess": 798.71273,
+   "startSample": 110782633,
+   "periodGuess": 798.71282,
    "color": "r",
    "tripletId": "T07",
    "orientation": 0,
    "durationSamples": 414136,
    "peak": 0.282703,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 36,
+   "title": "Group of children"
   },
   {
    "id": "L048",
@@ -778,15 +778,15 @@
    "index": 48,
    "file": "frames/L048.flac",
    "leadIn": 2000,
-   "startSample": 112989521,
-   "periodGuess": 798.66767,
+   "startSample": 112986480,
+   "periodGuess": 798.66769,
    "color": "g",
    "tripletId": "T07",
    "orientation": 0,
    "durationSamples": 414113,
    "peak": 0.327298,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 36,
+   "title": "Group of children"
   },
   {
    "id": "L049",
@@ -794,15 +794,15 @@
    "index": 49,
    "file": "frames/L049.flac",
    "leadIn": 2000,
-   "startSample": 115213998,
-   "periodGuess": 798.65963,
+   "startSample": 115210954,
+   "periodGuess": 798.65975,
    "color": "b",
    "tripletId": "T07",
    "orientation": 0,
    "durationSamples": 414109,
    "peak": 0.326419,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 36,
+   "title": "Group of children"
   },
   {
    "id": "L050",
@@ -810,15 +810,15 @@
    "index": 50,
    "file": "frames/L050.flac",
    "leadIn": 2000,
-   "startSample": 117465907,
-   "periodGuess": 798.66223,
+   "startSample": 117463010,
+   "periodGuess": 798.66248,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414110,
    "peak": 0.303721,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 37,
+   "title": "Diagram of family ages"
   },
   {
    "id": "L051",
@@ -826,15 +826,15 @@
    "index": 51,
    "file": "frames/L051.flac",
    "leadIn": 2000,
-   "startSample": 119731395,
-   "periodGuess": 798.66008,
+   "startSample": 119728356,
+   "periodGuess": 798.66015,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414109,
-   "peak": 0.318591,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.333335,
+   "imageNumber": 38,
+   "title": "Family portrait"
   },
   {
    "id": "L052",
@@ -842,15 +842,15 @@
    "index": 52,
    "file": "frames/L052.flac",
    "leadIn": 2000,
-   "startSample": 121874816,
-   "periodGuess": 798.64341,
+   "startSample": 121872010,
+   "periodGuess": 798.64339,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
-   "durationSamples": 414101,
-   "peak": 0.307076,
-   "imageNumber": null,
-   "title": null
+   "durationSamples": 414100,
+   "peak": 0.335385,
+   "imageNumber": 39,
+   "title": "Diagram of continental drift (derived from LAGEOS plaque)"
   },
   {
    "id": "L053",
@@ -858,15 +858,15 @@
    "index": 53,
    "file": "frames/L053.flac",
    "leadIn": 2000,
-   "startSample": 124059120,
-   "periodGuess": 798.64409,
+   "startSample": 124056246,
+   "periodGuess": 798.64456,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414101,
-   "peak": 0.257761,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.320732,
+   "imageNumber": 40,
+   "title": "Structure of the Earth"
   },
   {
    "id": "L054",
@@ -874,15 +874,15 @@
    "index": 54,
    "file": "frames/L054.flac",
    "leadIn": 2000,
-   "startSample": 126206145,
-   "periodGuess": 798.57311,
+   "startSample": 126203090,
+   "periodGuess": 798.57312,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414064,
    "peak": 0.222742,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 41,
+   "title": "Heron Island (Great Barrier Reef of Australia)"
   },
   {
    "id": "L055",
@@ -890,15 +890,15 @@
    "index": 55,
    "file": "frames/L055.flac",
    "leadIn": 2000,
-   "startSample": 128382553,
-   "periodGuess": 798.58115,
+   "startSample": 128379500,
+   "periodGuess": 798.5812,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414068,
    "peak": 0.309465,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 42,
+   "title": "Seashore (Cape Neddick, Maine)"
   },
   {
    "id": "L056",
@@ -906,15 +906,15 @@
    "index": 56,
    "file": "frames/L056.flac",
    "leadIn": 2000,
-   "startSample": 130596738,
-   "periodGuess": 798.58993,
+   "startSample": 130593685,
+   "periodGuess": 798.59003,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414073,
    "peak": 0.295722,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 43,
+   "title": "Snake River and Grand Tetons"
   },
   {
    "id": "L057",
@@ -922,15 +922,15 @@
    "index": 57,
    "file": "frames/L057.flac",
    "leadIn": 2000,
-   "startSample": 132766212,
-   "periodGuess": 798.57609,
+   "startSample": 132763174,
+   "periodGuess": 798.57628,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414066,
    "peak": 0.229996,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 44,
+   "title": "Sand dunes"
   },
   {
    "id": "L058",
@@ -938,15 +938,15 @@
    "index": 58,
    "file": "frames/L058.flac",
    "leadIn": 2000,
-   "startSample": 134947949,
-   "periodGuess": 798.57828,
+   "startSample": 134944920,
+   "periodGuess": 798.57842,
    "color": "r",
    "tripletId": "T08",
    "orientation": 0,
    "durationSamples": 414067,
-   "peak": 0.245555,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.290593,
+   "imageNumber": 45,
+   "title": "Monument Valley"
   },
   {
    "id": "L059",
@@ -954,15 +954,15 @@
    "index": 59,
    "file": "frames/L059.flac",
    "leadIn": 2000,
-   "startSample": 137166049,
-   "periodGuess": 798.54823,
+   "startSample": 137163002,
+   "periodGuess": 798.54832,
    "color": "g",
    "tripletId": "T08",
    "orientation": 0,
    "durationSamples": 414051,
    "peak": 0.290818,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 45,
+   "title": "Monument Valley"
   },
   {
    "id": "L060",
@@ -970,15 +970,15 @@
    "index": 60,
    "file": "frames/L060.flac",
    "leadIn": 2000,
-   "startSample": 139271753,
-   "periodGuess": 798.53877,
+   "startSample": 139268702,
+   "periodGuess": 798.53889,
    "color": "b",
    "tripletId": "T08",
    "orientation": 0,
    "durationSamples": 414047,
-   "peak": 0.307674,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.309617,
+   "imageNumber": 45,
+   "title": "Monument Valley"
   },
   {
    "id": "L061",
@@ -986,15 +986,15 @@
    "index": 61,
    "file": "frames/L061.flac",
    "leadIn": 2000,
-   "startSample": 141461894,
-   "periodGuess": 798.56202,
+   "startSample": 141458855,
+   "periodGuess": 798.56209,
    "color": "r",
    "tripletId": "T09",
    "orientation": 1,
    "durationSamples": 414059,
-   "peak": 0.239249,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.310615,
+   "imageNumber": 46,
+   "title": "Forest scene with mushrooms"
   },
   {
    "id": "L062",
@@ -1002,15 +1002,15 @@
    "index": 62,
    "file": "frames/L062.flac",
    "leadIn": 2000,
-   "startSample": 143599610,
-   "periodGuess": 798.55352,
+   "startSample": 143596560,
+   "periodGuess": 798.55355,
    "color": "g",
    "tripletId": "T09",
    "orientation": 1,
    "durationSamples": 414054,
-   "peak": 0.223743,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.270571,
+   "imageNumber": 46,
+   "title": "Forest scene with mushrooms"
   },
   {
    "id": "L063",
@@ -1018,15 +1018,15 @@
    "index": 63,
    "file": "frames/L063.flac",
    "leadIn": 2000,
-   "startSample": 145823637,
-   "periodGuess": 798.5622,
+   "startSample": 145820588,
+   "periodGuess": 798.56233,
    "color": "b",
    "tripletId": "T09",
    "orientation": 1,
    "durationSamples": 414059,
    "peak": 0.316491,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 46,
+   "title": "Forest scene with mushrooms"
   },
   {
    "id": "L064",
@@ -1034,15 +1034,15 @@
    "index": 64,
    "file": "frames/L064.flac",
    "leadIn": 2000,
-   "startSample": 148070430,
-   "periodGuess": 798.52828,
+   "startSample": 148067408,
+   "periodGuess": 798.52837,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414041,
-   "peak": 0.264947,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.328786,
+   "imageNumber": 47,
+   "title": "Leaf (Fragaria)"
   },
   {
    "id": "L065",
@@ -1050,15 +1050,15 @@
    "index": 65,
    "file": "frames/L065.flac",
    "leadIn": 2000,
-   "startSample": 150320664,
-   "periodGuess": 798.50586,
+   "startSample": 150317639,
+   "periodGuess": 798.50583,
    "color": "r",
    "tripletId": "T10",
    "orientation": 1,
    "durationSamples": 414030,
    "peak": 0.334163,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 48,
+   "title": "Autumn Fallen leaves"
   },
   {
    "id": "L066",
@@ -1066,15 +1066,15 @@
    "index": 66,
    "file": "frames/L066.flac",
    "leadIn": 2000,
-   "startSample": 152463911,
-   "periodGuess": 798.48751,
+   "startSample": 152460864,
+   "periodGuess": 798.48761,
    "color": "g",
    "tripletId": "T10",
    "orientation": 1,
    "durationSamples": 414020,
    "peak": 0.330129,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 48,
+   "title": "Autumn Fallen leaves"
   },
   {
    "id": "L067",
@@ -1082,15 +1082,15 @@
    "index": 67,
    "file": "frames/L067.flac",
    "leadIn": 2000,
-   "startSample": 154736829,
-   "periodGuess": 798.45395,
+   "startSample": 154733783,
+   "periodGuess": 798.45359,
    "color": "b",
    "tripletId": "T10",
    "orientation": 1,
    "durationSamples": 414003,
-   "peak": 0.246558,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.312633,
+   "imageNumber": 48,
+   "title": "Autumn Fallen leaves"
   },
   {
    "id": "L068",
@@ -1098,15 +1098,15 @@
    "index": 68,
    "file": "frames/L068.flac",
    "leadIn": 2000,
-   "startSample": 156851520,
-   "periodGuess": 798.44875,
+   "startSample": 156848488,
+   "periodGuess": 798.44886,
    "color": "r",
    "tripletId": "T11",
    "orientation": 1,
    "durationSamples": 414000,
-   "peak": 0.300578,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.303511,
+   "imageNumber": 49,
+   "title": "Snowflakes over Sequoia"
   },
   {
    "id": "L069",
@@ -1114,15 +1114,15 @@
    "index": 69,
    "file": "frames/L069.flac",
    "leadIn": 2000,
-   "startSample": 159135672,
-   "periodGuess": 798.42788,
+   "startSample": 159132633,
+   "periodGuess": 798.42694,
    "color": "g",
    "tripletId": "T11",
    "orientation": 1,
    "durationSamples": 413989,
-   "peak": 0.251966,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.295917,
+   "imageNumber": 49,
+   "title": "Snowflakes over Sequoia"
   },
   {
    "id": "L070",
@@ -1130,15 +1130,15 @@
    "index": 70,
    "file": "frames/L070.flac",
    "leadIn": 2000,
-   "startSample": 161438122,
-   "periodGuess": 798.38808,
+   "startSample": 161435083,
+   "periodGuess": 798.38803,
    "color": "b",
    "tripletId": "T11",
    "orientation": 1,
    "durationSamples": 413969,
    "peak": 0.317789,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 49,
+   "title": "Snowflakes over Sequoia"
   },
   {
    "id": "L071",
@@ -1146,15 +1146,15 @@
    "index": 71,
    "file": "frames/L071.flac",
    "leadIn": 2000,
-   "startSample": 164019023,
-   "periodGuess": 798.38307,
+   "startSample": 164015974,
+   "periodGuess": 798.38309,
    "color": "r",
    "tripletId": "T12",
    "orientation": 1,
    "durationSamples": 413966,
-   "peak": 0.26262,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.30679,
+   "imageNumber": 50,
+   "title": "Tree with daffodils"
   },
   {
    "id": "L072",
@@ -1162,15 +1162,15 @@
    "index": 72,
    "file": "frames/L072.flac",
    "leadIn": 2000,
-   "startSample": 166138109,
-   "periodGuess": 798.39826,
+   "startSample": 166135058,
+   "periodGuess": 798.39838,
    "color": "g",
    "tripletId": "T12",
    "orientation": 1,
    "durationSamples": 413974,
-   "peak": 0.261416,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.298399,
+   "imageNumber": 50,
+   "title": "Tree with daffodils"
   },
   {
    "id": "L073",
@@ -1178,15 +1178,15 @@
    "index": 73,
    "file": "frames/L073.flac",
    "leadIn": 2000,
-   "startSample": 168366069,
-   "periodGuess": 798.37324,
+   "startSample": 168363020,
+   "periodGuess": 798.37318,
    "color": "b",
    "tripletId": "T12",
    "orientation": 1,
    "durationSamples": 413961,
-   "peak": 0.245888,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.319687,
+   "imageNumber": 50,
+   "title": "Tree with daffodils"
   },
   {
    "id": "L074",
@@ -1194,15 +1194,15 @@
    "index": 74,
    "file": "frames/L074.flac",
    "leadIn": 2000,
-   "startSample": 170490575,
-   "periodGuess": 798.33294,
+   "startSample": 170487543,
+   "periodGuess": 798.33292,
    "color": "mono",
    "tripletId": null,
    "orientation": 2,
    "durationSamples": 413940,
-   "peak": 0.245338,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.297034,
+   "imageNumber": 51,
+   "title": "Flying insect with flowers (Ichneumonidae)"
   },
   {
    "id": "L075",
@@ -1210,15 +1210,15 @@
    "index": 75,
    "file": "frames/L075.flac",
    "leadIn": 2000,
-   "startSample": 172652630,
-   "periodGuess": 798.29466,
+   "startSample": 172649788,
+   "periodGuess": 798.27376,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
-   "durationSamples": 413921,
-   "peak": 0.251539,
-   "imageNumber": null,
-   "title": null
+   "durationSamples": 413910,
+   "peak": 0.300333,
+   "imageNumber": 52,
+   "title": "Diagram of vertebrate evolution"
   },
   {
    "id": "L076",
@@ -1226,15 +1226,15 @@
    "index": 76,
    "file": "frames/L076.flac",
    "leadIn": 2000,
-   "startSample": 174814743,
-   "periodGuess": 798.29971,
+   "startSample": 174811685,
+   "periodGuess": 798.29984,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 413923,
-   "peak": 0.28385,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.315152,
+   "imageNumber": 53,
+   "title": "Seashell (Xancidae)"
   },
   {
    "id": "L077",
@@ -1242,15 +1242,15 @@
    "index": 77,
    "file": "frames/L077.flac",
    "leadIn": 2000,
-   "startSample": 177225477,
-   "periodGuess": 798.31666,
+   "startSample": 177222442,
+   "periodGuess": 798.31749,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 413932,
    "peak": 0.323185,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 54,
+   "title": "Dolphins"
   },
   {
    "id": "R000",
@@ -1258,15 +1258,15 @@
    "index": 0,
    "file": "frames/R000.flac",
    "leadIn": 2000,
-   "startSample": 6506397,
-   "periodGuess": 799.45568,
+   "startSample": 6503347,
+   "periodGuess": 799.45561,
    "color": "r",
    "tripletId": "T13",
    "orientation": 1,
    "durationSamples": 414520,
-   "peak": 0.395668,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.433393,
+   "imageNumber": 55,
+   "title": "School of fish"
   },
   {
    "id": "R001",
@@ -1274,15 +1274,15 @@
    "index": 1,
    "file": "frames/R001.flac",
    "leadIn": 2000,
-   "startSample": 8657187,
-   "periodGuess": 799.37669,
+   "startSample": 8654129,
+   "periodGuess": 799.37664,
    "color": "g",
    "tripletId": "T13",
    "orientation": 1,
    "durationSamples": 414479,
-   "peak": 0.316586,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.361027,
+   "imageNumber": 55,
+   "title": "School of fish"
   },
   {
    "id": "R002",
@@ -1290,15 +1290,15 @@
    "index": 2,
    "file": "frames/R002.flac",
    "leadIn": 2000,
-   "startSample": 10925181,
-   "periodGuess": 799.36234,
+   "startSample": 10922121,
+   "periodGuess": 799.36251,
    "color": "b",
    "tripletId": "T13",
    "orientation": 1,
-   "durationSamples": 414471,
-   "peak": 0.279699,
-   "imageNumber": null,
-   "title": null
+   "durationSamples": 414472,
+   "peak": 0.393837,
+   "imageNumber": 55,
+   "title": "School of fish"
   },
   {
    "id": "R003",
@@ -1306,15 +1306,15 @@
    "index": 3,
    "file": "frames/R003.flac",
    "leadIn": 2000,
-   "startSample": 13220757,
+   "startSample": 13217719,
    "periodGuess": 799.33028,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414455,
    "peak": 0.313346,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 56,
+   "title": "Tree toad"
   },
   {
    "id": "R004",
@@ -1322,15 +1322,15 @@
    "index": 4,
    "file": "frames/R004.flac",
    "leadIn": 2000,
-   "startSample": 15458025,
-   "periodGuess": 799.34432,
+   "startSample": 15454969,
+   "periodGuess": 799.34442,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414462,
-   "peak": 0.34126,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.391343,
+   "imageNumber": 57,
+   "title": "Crocodile"
   },
   {
    "id": "R005",
@@ -1338,15 +1338,15 @@
    "index": 5,
    "file": "frames/R005.flac",
    "leadIn": 2000,
-   "startSample": 17655982,
-   "periodGuess": 799.28136,
+   "startSample": 17652935,
+   "periodGuess": 799.28147,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414430,
-   "peak": 0.283646,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.380367,
+   "imageNumber": 58,
+   "title": "Eagle"
   },
   {
    "id": "R006",
@@ -1354,15 +1354,15 @@
    "index": 6,
    "file": "frames/R006.flac",
    "leadIn": 2000,
-   "startSample": 19802473,
-   "periodGuess": 799.23101,
+   "startSample": 19799444,
+   "periodGuess": 799.23099,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414404,
-   "peak": 0.403383,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.432212,
+   "imageNumber": 59,
+   "title": "Waterhole"
   },
   {
    "id": "R007",
@@ -1370,15 +1370,15 @@
    "index": 7,
    "file": "frames/R007.flac",
    "leadIn": 2000,
-   "startSample": 21940693,
-   "periodGuess": 799.21582,
+   "startSample": 21937661,
+   "periodGuess": 799.21613,
    "color": "r",
    "tripletId": "T14",
    "orientation": 1,
    "durationSamples": 414396,
    "peak": 0.323704,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 60,
+   "title": "Jane Goodall and chimps"
   },
   {
    "id": "R008",
@@ -1386,15 +1386,15 @@
    "index": 8,
    "file": "frames/R008.flac",
    "leadIn": 2000,
-   "startSample": 24148585,
-   "periodGuess": 799.21348,
+   "startSample": 24145559,
+   "periodGuess": 799.21401,
    "color": "g",
    "tripletId": "T14",
    "orientation": 1,
    "durationSamples": 414395,
-   "peak": 0.391054,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.428895,
+   "imageNumber": 60,
+   "title": "Jane Goodall and chimps"
   },
   {
    "id": "R009",
@@ -1402,15 +1402,15 @@
    "index": 9,
    "file": "frames/R009.flac",
    "leadIn": 2000,
-   "startSample": 26315147,
-   "periodGuess": 799.15268,
+   "startSample": 26312096,
+   "periodGuess": 799.15277,
    "color": "b",
    "tripletId": "T14",
    "orientation": 1,
    "durationSamples": 414363,
    "peak": 0.351426,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 60,
+   "title": "Jane Goodall and chimps"
   },
   {
    "id": "R010",
@@ -1418,15 +1418,15 @@
    "index": 10,
    "file": "frames/R010.flac",
    "leadIn": 2000,
-   "startSample": 28621224,
-   "periodGuess": 799.11007,
+   "startSample": 28618349,
+   "periodGuess": 799.11024,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414341,
-   "peak": 0.339138,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.35681,
+   "imageNumber": 61,
+   "title": "Sketch of bushmen"
   },
   {
    "id": "R011",
@@ -1434,15 +1434,15 @@
    "index": 11,
    "file": "frames/R011.flac",
    "leadIn": 2000,
-   "startSample": 30789603,
-   "periodGuess": 799.15162,
+   "startSample": 30786572,
+   "periodGuess": 799.15181,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414363,
-   "peak": 0.283579,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.365895,
+   "imageNumber": 62,
+   "title": "Bushmen hunters"
   },
   {
    "id": "R012",
@@ -1450,15 +1450,15 @@
    "index": 12,
    "file": "frames/R012.flac",
    "leadIn": 2000,
-   "startSample": 32986719,
-   "periodGuess": 799.13149,
+   "startSample": 32983675,
+   "periodGuess": 799.13162,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414352,
    "peak": 0.422801,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 63,
+   "title": "Man from Guatemala"
   },
   {
    "id": "R013",
@@ -1466,15 +1466,15 @@
    "index": 13,
    "file": "frames/R013.flac",
    "leadIn": 2000,
-   "startSample": 35224085,
-   "periodGuess": 799.0846,
+   "startSample": 35221032,
+   "periodGuess": 799.08471,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414328,
-   "peak": 0.302066,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.343984,
+   "imageNumber": 64,
+   "title": "Dancer from Bali"
   },
   {
    "id": "R014",
@@ -1482,15 +1482,15 @@
    "index": 14,
    "file": "frames/R014.flac",
    "leadIn": 2000,
-   "startSample": 37420754,
-   "periodGuess": 799.08928,
+   "startSample": 37417709,
+   "periodGuess": 799.0893,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414331,
    "peak": 0.421815,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 65,
+   "title": "Andean girls"
   },
   {
    "id": "R015",
@@ -1498,15 +1498,15 @@
    "index": 15,
    "file": "frames/R015.flac",
    "leadIn": 2000,
-   "startSample": 39586481,
-   "periodGuess": 799.0893,
+   "startSample": 39583435,
+   "periodGuess": 799.08942,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414331,
    "peak": 0.419941,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 66,
+   "title": "Thailand master craftsman"
   },
   {
    "id": "R016",
@@ -1514,15 +1514,15 @@
    "index": 16,
    "file": "frames/R016.flac",
    "leadIn": 2000,
-   "startSample": 41813026,
-   "periodGuess": 799.06458,
+   "startSample": 41809991,
+   "periodGuess": 799.06481,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414318,
-   "peak": 0.294046,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.415256,
+   "imageNumber": 67,
+   "title": "Elephant"
   },
   {
    "id": "R017",
@@ -1530,15 +1530,15 @@
    "index": 17,
    "file": "frames/R017.flac",
    "leadIn": 2000,
-   "startSample": 44002647,
-   "periodGuess": 799.07529,
+   "startSample": 43999616,
+   "periodGuess": 799.07547,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414323,
    "peak": 0.394153,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 68,
+   "title": "Old man with beard and glasses (Turkey)"
   },
   {
    "id": "R018",
@@ -1546,15 +1546,15 @@
    "index": 18,
    "file": "frames/R018.flac",
    "leadIn": 2000,
-   "startSample": 46219632,
-   "periodGuess": 799.20187,
+   "startSample": 46216573,
+   "periodGuess": 799.20202,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414389,
    "peak": 0.440066,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 69,
+   "title": "Old man with dog and flowers"
   },
   {
    "id": "R019",
@@ -1562,15 +1562,15 @@
    "index": 19,
    "file": "frames/R019.flac",
    "leadIn": 2000,
-   "startSample": 48448901,
-   "periodGuess": 798.9791,
+   "startSample": 48445891,
+   "periodGuess": 798.97843,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414274,
+   "durationSamples": 414273,
    "peak": 0.42938,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 70,
+   "title": "Mountain climber"
   },
   {
    "id": "R020",
@@ -1578,15 +1578,15 @@
    "index": 20,
    "file": "frames/R020.flac",
    "leadIn": 2000,
-   "startSample": 50655188,
-   "periodGuess": 798.96024,
+   "startSample": 50652131,
+   "periodGuess": 798.96028,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414264,
    "peak": 0.440316,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 71,
+   "title": "Gymnast (Cathy Rigby)"
   },
   {
    "id": "R021",
@@ -1594,15 +1594,15 @@
    "index": 21,
    "file": "frames/R021.flac",
    "leadIn": 2000,
-   "startSample": 52835513,
-   "periodGuess": 798.93946,
+   "startSample": 52832462,
+   "periodGuess": 798.93962,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414253,
-   "peak": 0.287207,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.422253,
+   "imageNumber": 72,
+   "title": "Sprinters \"Valeriy Borzov of the U.S.S.R. in lead\""
   },
   {
    "id": "R022",
@@ -1610,15 +1610,15 @@
    "index": 22,
    "file": "frames/R022.flac",
    "leadIn": 2000,
-   "startSample": 55058780,
-   "periodGuess": 798.90188,
+   "startSample": 55055739,
+   "periodGuess": 798.90203,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414234,
    "peak": 0.42739,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 73,
+   "title": "Schoolroom (Japan)"
   },
   {
    "id": "R023",
@@ -1626,15 +1626,15 @@
    "index": 23,
    "file": "frames/R023.flac",
    "leadIn": 2000,
-   "startSample": 57304869,
-   "periodGuess": 798.80778,
+   "startSample": 57301820,
+   "periodGuess": 798.80786,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414185,
-   "peak": 0.280761,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.304115,
+   "imageNumber": 74,
+   "title": "Children with globe (United Nations International School)"
   },
   {
    "id": "R024",
@@ -1642,15 +1642,15 @@
    "index": 24,
    "file": "frames/R024.flac",
    "leadIn": 2000,
-   "startSample": 59510267,
-   "periodGuess": 798.83251,
+   "startSample": 59507230,
+   "periodGuess": 798.83259,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414198,
-   "peak": 0.286892,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.353864,
+   "imageNumber": 75,
+   "title": "Cotton harvest"
   },
   {
    "id": "R025",
@@ -1658,15 +1658,15 @@
    "index": 25,
    "file": "frames/R025.flac",
    "leadIn": 2000,
-   "startSample": 61744884,
-   "periodGuess": 798.85311,
+   "startSample": 61741857,
+   "periodGuess": 798.85308,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414209,
-   "peak": 0.358246,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.414013,
+   "imageNumber": 76,
+   "title": "Grape picker"
   },
   {
    "id": "R026",
@@ -1674,15 +1674,15 @@
    "index": 26,
    "file": "frames/R026.flac",
    "leadIn": 2000,
-   "startSample": 63989402,
-   "periodGuess": 798.85542,
+   "startSample": 63986345,
+   "periodGuess": 798.85572,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414210,
    "peak": 0.355703,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 77,
+   "title": "Supermarket"
   },
   {
    "id": "R027",
@@ -1690,15 +1690,15 @@
    "index": 27,
    "file": "frames/R027.flac",
    "leadIn": 2000,
-   "startSample": 66160873,
-   "periodGuess": 798.79099,
+   "startSample": 66157816,
+   "periodGuess": 798.79153,
    "color": "r",
    "tripletId": "T15",
    "orientation": 0,
    "durationSamples": 414177,
    "peak": 0.391916,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 78,
+   "title": "Underwater scene with diver and fish"
   },
   {
    "id": "R028",
@@ -1706,15 +1706,15 @@
    "index": 28,
    "file": "frames/R028.flac",
    "leadIn": 2000,
-   "startSample": 68338960,
-   "periodGuess": 798.82706,
+   "startSample": 68335911,
+   "periodGuess": 798.82712,
    "color": "g",
    "tripletId": "T15",
    "orientation": 0,
    "durationSamples": 414195,
-   "peak": 0.27764,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.322101,
+   "imageNumber": 78,
+   "title": "Underwater scene with diver and fish"
   },
   {
    "id": "R029",
@@ -1722,15 +1722,15 @@
    "index": 29,
    "file": "frames/R029.flac",
    "leadIn": 2000,
-   "startSample": 70653233,
-   "periodGuess": 798.83699,
+   "startSample": 70650187,
+   "periodGuess": 798.83639,
    "color": "b",
    "tripletId": "T15",
    "orientation": 0,
    "durationSamples": 414200,
    "peak": 0.381168,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 78,
+   "title": "Underwater scene with diver and fish"
   },
   {
    "id": "R030",
@@ -1738,15 +1738,15 @@
    "index": 30,
    "file": "frames/R030.flac",
    "leadIn": 2000,
-   "startSample": 72829670,
-   "periodGuess": 798.81811,
+   "startSample": 72826620,
+   "periodGuess": 798.81825,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414191,
    "peak": 0.404555,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 79,
+   "title": "Fishing boat with nets (Greece)"
   },
   {
    "id": "R031",
@@ -1754,15 +1754,15 @@
    "index": 31,
    "file": "frames/R031.flac",
    "leadIn": 2000,
-   "startSample": 75080100,
-   "periodGuess": 798.78575,
+   "startSample": 75077047,
+   "periodGuess": 798.78584,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414174,
    "peak": 0.43315,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 80,
+   "title": "Cooking fish"
   },
   {
    "id": "R032",
@@ -1770,15 +1770,15 @@
    "index": 32,
    "file": "frames/R032.flac",
    "leadIn": 2000,
-   "startSample": 77282068,
-   "periodGuess": 798.81073,
+   "startSample": 77279020,
+   "periodGuess": 798.81074,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414187,
-   "peak": 0.361152,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.444212,
+   "imageNumber": 81,
+   "title": "Chinese dinner party"
   },
   {
    "id": "R033",
@@ -1786,15 +1786,15 @@
    "index": 33,
    "file": "frames/R033.flac",
    "leadIn": 2000,
-   "startSample": 79470652,
-   "periodGuess": 798.78789,
+   "startSample": 79467618,
+   "periodGuess": 798.78791,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414175,
-   "peak": 0.405958,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.419111,
+   "imageNumber": 82,
+   "title": "Demonstration of licking, eating and drinking"
   },
   {
    "id": "R034",
@@ -1802,15 +1802,15 @@
    "index": 34,
    "file": "frames/R034.flac",
    "leadIn": 2000,
-   "startSample": 81632534,
-   "periodGuess": 798.78924,
+   "startSample": 81629492,
+   "periodGuess": 798.78925,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414176,
-   "peak": 0.421014,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.454128,
+   "imageNumber": 83,
+   "title": "Great Wall of China"
   },
   {
    "id": "R035",
@@ -1818,15 +1818,15 @@
    "index": 35,
    "file": "frames/R035.flac",
    "leadIn": 2000,
-   "startSample": 83797262,
-   "periodGuess": 798.79548,
+   "startSample": 83794219,
+   "periodGuess": 798.7957,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414179,
    "peak": 0.426565,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 84,
+   "title": "House construction (Cameroon)"
   },
   {
    "id": "R036",
@@ -1834,15 +1834,15 @@
    "index": 36,
    "file": "frames/R036.flac",
    "leadIn": 2000,
-   "startSample": 85981007,
-   "periodGuess": 798.7783,
+   "startSample": 85977965,
+   "periodGuess": 798.7781,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414170,
-   "peak": 0.310957,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.333136,
+   "imageNumber": 85,
+   "title": "Construction scene (Amish country)"
   },
   {
    "id": "R037",
@@ -1850,15 +1850,15 @@
    "index": 37,
    "file": "frames/R037.flac",
    "leadIn": 2000,
-   "startSample": 88183802,
-   "periodGuess": 798.7892,
+   "startSample": 88180776,
+   "periodGuess": 798.78923,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414176,
    "peak": 0.414147,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 86,
+   "title": "House (Ethiopia)"
   },
   {
    "id": "R038",
@@ -1866,15 +1866,15 @@
    "index": 38,
    "file": "frames/R038.flac",
    "leadIn": 2000,
-   "startSample": 90371461,
-   "periodGuess": 798.76899,
+   "startSample": 90368687,
+   "periodGuess": 798.76939,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414165,
-   "peak": 0.274656,
-   "imageNumber": null,
-   "title": null
+   "durationSamples": 414166,
+   "peak": 0.315515,
+   "imageNumber": 87,
+   "title": "House (New England)"
   },
   {
    "id": "R039",
@@ -1882,15 +1882,15 @@
    "index": 39,
    "file": "frames/R039.flac",
    "leadIn": 2000,
-   "startSample": 92626673,
-   "periodGuess": 798.71064,
+   "startSample": 92622186,
+   "periodGuess": 798.73737,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414135,
+   "durationSamples": 414149,
    "peak": 0.407347,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 88,
+   "title": "Modern house (Cloudcroft, New Mexico)"
   },
   {
    "id": "R040",
@@ -1898,15 +1898,15 @@
    "index": 40,
    "file": "frames/R040.flac",
    "leadIn": 2000,
-   "startSample": 94800620,
-   "periodGuess": 798.72755,
+   "startSample": 94797585,
+   "periodGuess": 798.72757,
    "color": "r",
    "tripletId": "T16",
    "orientation": 0,
    "durationSamples": 414144,
    "peak": 0.410444,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 89,
+   "title": "House interior with artist and fire"
   },
   {
    "id": "R041",
@@ -1914,15 +1914,15 @@
    "index": 41,
    "file": "frames/R041.flac",
    "leadIn": 2000,
-   "startSample": 96981202,
-   "periodGuess": 798.71558,
+   "startSample": 96978154,
+   "periodGuess": 798.71569,
    "color": "g",
    "tripletId": "T16",
    "orientation": 0,
    "durationSamples": 414138,
    "peak": 0.349456,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 89,
+   "title": "House interior with artist and fire"
   },
   {
    "id": "R042",
@@ -1930,15 +1930,15 @@
    "index": 42,
    "file": "frames/R042.flac",
    "leadIn": 2000,
-   "startSample": 99211272,
-   "periodGuess": 798.72898,
+   "startSample": 99208219,
+   "periodGuess": 798.72902,
    "color": "b",
    "tripletId": "T16",
    "orientation": 0,
    "durationSamples": 414145,
    "peak": 0.374866,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 89,
+   "title": "House interior with artist and fire"
   },
   {
    "id": "R043",
@@ -1946,15 +1946,15 @@
    "index": 43,
    "file": "frames/R043.flac",
    "leadIn": 2000,
-   "startSample": 101344464,
-   "periodGuess": 798.67069,
+   "startSample": 101341436,
+   "periodGuess": 798.67115,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414115,
-   "peak": 0.295736,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.421344,
+   "imageNumber": 90,
+   "title": "Taj Mahal"
   },
   {
    "id": "R044",
@@ -1962,15 +1962,15 @@
    "index": 44,
    "file": "frames/R044.flac",
    "leadIn": 2000,
-   "startSample": 103603291,
-   "periodGuess": 798.68591,
+   "startSample": 103599118,
+   "periodGuess": 798.70227,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414122,
-   "peak": 0.315288,
-   "imageNumber": null,
-   "title": null
+   "durationSamples": 414131,
+   "peak": 0.415261,
+   "imageNumber": 91,
+   "title": "English city (Oxford)"
   },
   {
    "id": "R045",
@@ -1978,15 +1978,15 @@
    "index": 45,
    "file": "frames/R045.flac",
    "leadIn": 2000,
-   "startSample": 105727926,
-   "periodGuess": 798.70843,
+   "startSample": 105724873,
+   "periodGuess": 798.7086,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414134,
    "peak": 0.403377,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 92,
+   "title": "Boston"
   },
   {
    "id": "R046",
@@ -1994,15 +1994,15 @@
    "index": 46,
    "file": "frames/R046.flac",
    "leadIn": 2000,
-   "startSample": 107935429,
-   "periodGuess": 798.68313,
+   "startSample": 107932393,
+   "periodGuess": 798.68332,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414121,
    "peak": 0.417784,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 93,
+   "title": "UN Building Day"
   },
   {
    "id": "R047",
@@ -2010,15 +2010,15 @@
    "index": 47,
    "file": "frames/R047.flac",
    "leadIn": 2000,
-   "startSample": 110167425,
-   "periodGuess": 798.66893,
+   "startSample": 110164386,
+   "periodGuess": 798.66902,
    "color": "r",
    "tripletId": "T17",
    "orientation": 1,
    "durationSamples": 414114,
-   "peak": 0.357211,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.41978,
+   "imageNumber": 94,
+   "title": "UN Building Night"
   },
   {
    "id": "R048",
@@ -2026,15 +2026,15 @@
    "index": 48,
    "file": "frames/R048.flac",
    "leadIn": 2000,
-   "startSample": 112409852,
-   "periodGuess": 798.66254,
+   "startSample": 112406807,
+   "periodGuess": 798.66269,
    "color": "g",
    "tripletId": "T17",
    "orientation": 1,
    "durationSamples": 414110,
-   "peak": 0.271422,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.335575,
+   "imageNumber": 94,
+   "title": "UN Building Night"
   },
   {
    "id": "R049",
@@ -2042,15 +2042,15 @@
    "index": 49,
    "file": "frames/R049.flac",
    "leadIn": 2000,
-   "startSample": 114663896,
-   "periodGuess": 798.63354,
+   "startSample": 114660850,
+   "periodGuess": 798.63362,
    "color": "b",
    "tripletId": "T17",
    "orientation": 1,
    "durationSamples": 414095,
    "peak": 0.389458,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 94,
+   "title": "UN Building Night"
   },
   {
    "id": "R050",
@@ -2058,15 +2058,15 @@
    "index": 50,
    "file": "frames/R050.flac",
    "leadIn": 2000,
-   "startSample": 116902310,
-   "periodGuess": 798.6318,
+   "startSample": 116899263,
+   "periodGuess": 798.63192,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414095,
    "peak": 0.440858,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 95,
+   "title": "Sydney Opera House"
   },
   {
    "id": "R051",
@@ -2074,15 +2074,15 @@
    "index": 51,
    "file": "frames/R051.flac",
    "leadIn": 2000,
-   "startSample": 119209106,
-   "periodGuess": 798.62577,
+   "startSample": 119206067,
+   "periodGuess": 798.62562,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414091,
    "peak": 0.407129,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 96,
+   "title": "Artisan with drill"
   },
   {
    "id": "R052",
@@ -2090,15 +2090,15 @@
    "index": 52,
    "file": "frames/R052.flac",
    "leadIn": 2000,
-   "startSample": 121419979,
-   "periodGuess": 798.64101,
+   "startSample": 121416929,
+   "periodGuess": 798.6411,
    "color": "r",
    "tripletId": "T18",
    "orientation": 0,
    "durationSamples": 414099,
-   "peak": 0.326421,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.3809,
+   "imageNumber": 97,
+   "title": "Factory interior"
   },
   {
    "id": "R053",
@@ -2106,15 +2106,15 @@
    "index": 53,
    "file": "frames/R053.flac",
    "leadIn": 2000,
-   "startSample": 123683729,
-   "periodGuess": 798.61844,
+   "startSample": 123680676,
+   "periodGuess": 798.61853,
    "color": "g",
    "tripletId": "T18",
    "orientation": 0,
    "durationSamples": 414088,
-   "peak": 0.340571,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.410422,
+   "imageNumber": 97,
+   "title": "Factory interior"
   },
   {
    "id": "R054",
@@ -2122,15 +2122,15 @@
    "index": 54,
    "file": "frames/R054.flac",
    "leadIn": 2000,
-   "startSample": 125969987,
-   "periodGuess": 798.56135,
+   "startSample": 125966935,
+   "periodGuess": 798.5614,
    "color": "b",
    "tripletId": "T18",
    "orientation": 0,
    "durationSamples": 414058,
-   "peak": 0.420898,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.448585,
+   "imageNumber": 97,
+   "title": "Factory interior"
   },
   {
    "id": "R055",
@@ -2138,15 +2138,15 @@
    "index": 55,
    "file": "frames/R055.flac",
    "leadIn": 2000,
-   "startSample": 128152130,
-   "periodGuess": 798.56321,
+   "startSample": 128149076,
+   "periodGuess": 798.56322,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414059,
    "peak": 0.333975,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 98,
+   "title": "Museum"
   },
   {
    "id": "R056",
@@ -2154,15 +2154,15 @@
    "index": 56,
    "file": "frames/R056.flac",
    "leadIn": 2000,
-   "startSample": 130242643,
-   "periodGuess": 798.572,
+   "startSample": 130239600,
+   "periodGuess": 798.57205,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414064,
-   "peak": 0.31032,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.412989,
+   "imageNumber": 99,
+   "title": "X-ray of hand"
   },
   {
    "id": "R057",
@@ -2170,15 +2170,15 @@
    "index": 57,
    "file": "frames/R057.flac",
    "leadIn": 2000,
-   "startSample": 132459521,
-   "periodGuess": 798.54488,
+   "startSample": 132456462,
+   "periodGuess": 798.545,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414050,
-   "peak": 0.350583,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.410656,
+   "imageNumber": 100,
+   "title": "Woman with microscope (Somalia)"
   },
   {
    "id": "R058",
@@ -2186,15 +2186,15 @@
    "index": 58,
    "file": "frames/R058.flac",
    "leadIn": 2000,
-   "startSample": 134681889,
-   "periodGuess": 798.55175,
+   "startSample": 134678842,
+   "periodGuess": 798.55187,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414053,
-   "peak": 0.290681,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.405904,
+   "imageNumber": 101,
+   "title": "Street scene (Pakistan)"
   },
   {
    "id": "R059",
@@ -2202,15 +2202,15 @@
    "index": 59,
    "file": "frames/R059.flac",
    "leadIn": 2000,
-   "startSample": 136893254,
-   "periodGuess": 798.54367,
+   "startSample": 136890218,
+   "periodGuess": 798.54387,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 414049,
    "peak": 0.3752,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 102,
+   "title": "Rush hour traffic (Thailand)"
   },
   {
    "id": "R060",
@@ -2218,15 +2218,15 @@
    "index": 60,
    "file": "frames/R060.flac",
    "leadIn": 2000,
-   "startSample": 139075917,
-   "periodGuess": 798.51899,
+   "startSample": 139072867,
+   "periodGuess": 798.5191,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414036,
    "peak": 0.377622,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 103,
+   "title": "Modern highway (Ithaca, New York)"
   },
   {
    "id": "R061",
@@ -2234,15 +2234,15 @@
    "index": 61,
    "file": "frames/R061.flac",
    "leadIn": 2000,
-   "startSample": 141252507,
-   "periodGuess": 798.5144,
+   "startSample": 141250817,
+   "periodGuess": 798.52589,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414034,
-   "peak": 0.291039,
-   "imageNumber": null,
-   "title": null
+   "durationSamples": 414040,
+   "peak": 0.374657,
+   "imageNumber": 104,
+   "title": "Golden Gate Bridge"
   },
   {
    "id": "R062",
@@ -2250,15 +2250,15 @@
    "index": 62,
    "file": "frames/R062.flac",
    "leadIn": 2000,
-   "startSample": 143451485,
-   "periodGuess": 798.52379,
+   "startSample": 143448435,
+   "periodGuess": 798.52386,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414039,
-   "peak": 0.287511,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.326986,
+   "imageNumber": 105,
+   "title": "Train (United Aircraft Corporation Turbotrain)"
   },
   {
    "id": "R063",
@@ -2266,15 +2266,15 @@
    "index": 63,
    "file": "frames/R063.flac",
    "leadIn": 2000,
-   "startSample": 145732258,
-   "periodGuess": 798.53889,
+   "startSample": 145729838,
+   "periodGuess": 798.53489,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
-   "durationSamples": 414047,
-   "peak": 0.285951,
-   "imageNumber": null,
-   "title": null
+   "durationSamples": 414045,
+   "peak": 0.361228,
+   "imageNumber": 106,
+   "title": "Airplane in flight"
   },
   {
    "id": "R064",
@@ -2282,15 +2282,15 @@
    "index": 64,
    "file": "frames/R064.flac",
    "leadIn": 2000,
-   "startSample": 147973528,
-   "periodGuess": 798.49195,
+   "startSample": 147970507,
+   "periodGuess": 798.492,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414022,
    "peak": 0.424558,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 107,
+   "title": "Airport (Toronto)"
   },
   {
    "id": "R065",
@@ -2298,15 +2298,15 @@
    "index": 65,
    "file": "frames/R065.flac",
    "leadIn": 2000,
-   "startSample": 150181760,
-   "periodGuess": 798.48619,
+   "startSample": 150178720,
+   "periodGuess": 798.4862,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414019,
    "peak": 0.417001,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 108,
+   "title": "Antarctic expedition (Commonwealth Trans-Antarctic Expedition)"
   },
   {
    "id": "R066",
@@ -2314,15 +2314,15 @@
    "index": 66,
    "file": "frames/R066.flac",
    "leadIn": 2000,
-   "startSample": 152394976,
-   "periodGuess": 798.47447,
+   "startSample": 152391928,
+   "periodGuess": 798.47464,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 414013,
    "peak": 0.37679,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 109,
+   "title": "Radio telescope (Westerbork)"
   },
   {
    "id": "R067",
@@ -2330,15 +2330,15 @@
    "index": 67,
    "file": "frames/R067.flac",
    "leadIn": 2000,
-   "startSample": 154660998,
-   "periodGuess": 798.43549,
+   "startSample": 154657948,
+   "periodGuess": 798.43574,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 413993,
-   "peak": 0.366319,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.400557,
+   "imageNumber": 110,
+   "title": "Radio telescope (Arecibo)"
   },
   {
    "id": "R068",
@@ -2346,15 +2346,15 @@
    "index": 68,
    "file": "frames/R068.flac",
    "leadIn": 2000,
-   "startSample": 156922394,
-   "periodGuess": 798.44391,
+   "startSample": 156919551,
+   "periodGuess": 798.44397,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 413998,
-   "peak": 0.404279,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.416566,
+   "imageNumber": 111,
+   "title": "Page of book (Newton, On the System of the World)"
   },
   {
    "id": "R069",
@@ -2362,15 +2362,15 @@
    "index": 69,
    "file": "frames/R069.flac",
    "leadIn": 2000,
-   "startSample": 159285979,
-   "periodGuess": 798.41606,
+   "startSample": 159282948,
+   "periodGuess": 798.41627,
    "color": "r",
    "tripletId": "T19",
    "orientation": 0,
    "durationSamples": 413983,
-   "peak": 0.317255,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.429724,
+   "imageNumber": 112,
+   "title": "Astronaut in space (Ed White)"
   },
   {
    "id": "R070",
@@ -2378,15 +2378,15 @@
    "index": 70,
    "file": "frames/R070.flac",
    "leadIn": 2000,
-   "startSample": 161513239,
-   "periodGuess": 798.38601,
+   "startSample": 161510194,
+   "periodGuess": 798.38615,
    "color": "g",
    "tripletId": "T19",
    "orientation": 0,
    "durationSamples": 413968,
    "peak": 0.393762,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 112,
+   "title": "Astronaut in space (Ed White)"
   },
   {
    "id": "R071",
@@ -2394,15 +2394,15 @@
    "index": 71,
    "file": "frames/R071.flac",
    "leadIn": 2000,
-   "startSample": 163950549,
-   "periodGuess": 798.39135,
+   "startSample": 163947504,
+   "periodGuess": 798.3914,
    "color": "b",
    "tripletId": "T19",
    "orientation": 0,
    "durationSamples": 413970,
-   "peak": 0.391143,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.421662,
+   "imageNumber": 112,
+   "title": "Astronaut in space (Ed White)"
   },
   {
    "id": "R072",
@@ -2410,15 +2410,15 @@
    "index": 72,
    "file": "frames/R072.flac",
    "leadIn": 2000,
-   "startSample": 166117306,
-   "periodGuess": 798.39118,
+   "startSample": 166114253,
+   "periodGuess": 798.39141,
    "color": "mono",
    "tripletId": null,
    "orientation": 1,
    "durationSamples": 413970,
-   "peak": 0.280674,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.417781,
+   "imageNumber": 113,
+   "title": "Titan Centaur launch"
   },
   {
    "id": "R073",
@@ -2426,15 +2426,15 @@
    "index": 73,
    "file": "frames/R073.flac",
    "leadIn": 2000,
-   "startSample": 168312466,
-   "periodGuess": 798.35496,
+   "startSample": 168309413,
+   "periodGuess": 798.3551,
    "color": "r",
    "tripletId": "T20",
    "orientation": 0,
    "durationSamples": 413952,
-   "peak": 0.267338,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.417336,
+   "imageNumber": 114,
+   "title": "Sunset with birds"
   },
   {
    "id": "R074",
@@ -2442,15 +2442,15 @@
    "index": 74,
    "file": "frames/R074.flac",
    "leadIn": 2000,
-   "startSample": 170581924,
-   "periodGuess": 798.32097,
+   "startSample": 170578872,
+   "periodGuess": 798.32265,
    "color": "g",
    "tripletId": "T20",
    "orientation": 0,
-   "durationSamples": 413934,
+   "durationSamples": 413935,
    "peak": 0.419054,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 114,
+   "title": "Sunset with birds"
   },
   {
    "id": "R075",
@@ -2458,15 +2458,15 @@
    "index": 75,
    "file": "frames/R075.flac",
    "leadIn": 2000,
-   "startSample": 172735398,
-   "periodGuess": 798.31389,
+   "startSample": 172732341,
+   "periodGuess": 798.31362,
    "color": "b",
    "tripletId": "T20",
    "orientation": 0,
    "durationSamples": 413930,
-   "peak": 0.298823,
-   "imageNumber": null,
-   "title": null
+   "peak": 0.411858,
+   "imageNumber": 114,
+   "title": "Sunset with birds"
   },
   {
    "id": "R076",
@@ -2474,15 +2474,15 @@
    "index": 76,
    "file": "frames/R076.flac",
    "leadIn": 2000,
-   "startSample": 174907665,
-   "periodGuess": 798.31865,
+   "startSample": 174904613,
+   "periodGuess": 798.31879,
    "color": "mono",
    "tripletId": null,
    "orientation": 0,
    "durationSamples": 413933,
    "peak": 0.431391,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 115,
+   "title": "String Quartet (Quartetto Italiano)"
   },
   {
    "id": "R077",
@@ -2490,77 +2490,77 @@
    "index": 77,
    "file": "frames/R077.flac",
    "leadIn": 2000,
-   "startSample": 177084578,
-   "periodGuess": 798.33756,
+   "startSample": 177081681,
+   "periodGuess": 798.33751,
    "color": "mono",
    "tripletId": null,
    "orientation": 2,
    "durationSamples": 413943,
    "peak": 0.435855,
-   "imageNumber": null,
-   "title": null
+   "imageNumber": 116,
+   "title": "Violin with music score (Cavatina)"
   }
  ],
  "images": [
   {
-   "n": null,
-   "title": null,
+   "n": 1,
+   "title": "Calibration circle",
    "frames": [
     "L000"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 2,
+   "title": "Solar location map",
    "frames": [
     "L001"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 3,
+   "title": "Mathematical definitions",
    "frames": [
     "L002"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 4,
+   "title": "Physical unit definitions",
    "frames": [
     "L003"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 5,
+   "title": "Solar System parameters",
    "frames": [
     "L004"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 6,
+   "title": "Solar System parameters",
    "frames": [
     "L005"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 7,
+   "title": "The Sun",
    "frames": [
     "L006"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 8,
+   "title": "Solar spectrum",
    "frames": [
     "L007",
     "L008",
@@ -2569,32 +2569,32 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 9,
+   "title": "Mercury",
    "frames": [
     "L010"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 10,
+   "title": "Mars",
    "frames": [
     "L011"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 11,
+   "title": "Jupiter",
    "frames": [
     "L012"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 12,
+   "title": "Earth",
    "frames": [
     "L013",
     "L014",
@@ -2603,8 +2603,8 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 13,
+   "title": "Egypt, Red Sea, Sinai Peninsula, and the Nile",
    "frames": [
     "L016",
     "L017",
@@ -2613,80 +2613,80 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 14,
+   "title": "Chemical definitions",
    "frames": [
     "L019"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 15,
+   "title": "DNA Structure",
    "frames": [
     "L020"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 16,
+   "title": "DNA Structure magnified, light hit",
    "frames": [
     "L021"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 17,
+   "title": "Cells and cell division",
    "frames": [
     "L022"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 18,
+   "title": "Anatomy 1 (Skeleton front)",
    "frames": [
     "L023"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 19,
+   "title": "Anatomy 2 (Skeleton and muscles back)",
    "frames": [
     "L024"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 20,
+   "title": "Anatomy 3 (Heart, lungs, kidneys and main blood vessels back)",
    "frames": [
     "L025"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 21,
+   "title": "Anatomy 4 (Heart, lungs, kidneys and main blood vessels front)",
    "frames": [
     "L026"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 22,
+   "title": "Anatomy 5 (Internal organs back)",
    "frames": [
     "L027"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 23,
+   "title": "Anatomy 6 (Internal organs front)",
    "frames": [
     "L028",
     "L029",
@@ -2695,88 +2695,88 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 24,
+   "title": "Anatomy 7 (Ribcage)",
    "frames": [
     "L031"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 25,
+   "title": "Anatomy 8 (Muscles front)",
    "frames": [
     "L032"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 26,
+   "title": "Human sex organs",
    "frames": [
     "L033"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 27,
+   "title": "Diagram of conception",
    "frames": [
     "L034"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 28,
+   "title": "Conception",
    "frames": [
     "L035"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 29,
+   "title": "Fertilized ovum",
    "frames": [
     "L036"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 30,
+   "title": "Fetus diagram",
    "frames": [
     "L037"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 31,
+   "title": "Fetus",
    "frames": [
     "L038"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 32,
+   "title": "Diagram of male and female",
    "frames": [
     "L039"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 33,
+   "title": "Birth",
    "frames": [
     "L040"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 34,
+   "title": "Nursing mother (Philippines)",
    "frames": [
     "L041",
     "L042",
@@ -2785,8 +2785,8 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 35,
+   "title": "Father and daughter (Malaysia)",
    "frames": [
     "L044",
     "L045",
@@ -2795,8 +2795,8 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 36,
+   "title": "Group of children",
    "frames": [
     "L047",
     "L048",
@@ -2805,72 +2805,72 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 37,
+   "title": "Diagram of family ages",
    "frames": [
     "L050"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 38,
+   "title": "Family portrait",
    "frames": [
     "L051"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 39,
+   "title": "Diagram of continental drift (derived from LAGEOS plaque)",
    "frames": [
     "L052"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 40,
+   "title": "Structure of the Earth",
    "frames": [
     "L053"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 41,
+   "title": "Heron Island (Great Barrier Reef of Australia)",
    "frames": [
     "L054"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 42,
+   "title": "Seashore (Cape Neddick, Maine)",
    "frames": [
     "L055"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 43,
+   "title": "Snake River and Grand Tetons",
    "frames": [
     "L056"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 44,
+   "title": "Sand dunes",
    "frames": [
     "L057"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 45,
+   "title": "Monument Valley",
    "frames": [
     "L058",
     "L059",
@@ -2879,8 +2879,8 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 46,
+   "title": "Forest scene with mushrooms",
    "frames": [
     "L061",
     "L062",
@@ -2889,16 +2889,16 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 47,
+   "title": "Leaf (Fragaria)",
    "frames": [
     "L064"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 48,
+   "title": "Autumn Fallen leaves",
    "frames": [
     "L065",
     "L066",
@@ -2907,8 +2907,8 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 49,
+   "title": "Snowflakes over Sequoia",
    "frames": [
     "L068",
     "L069",
@@ -2917,8 +2917,8 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 50,
+   "title": "Tree with daffodils",
    "frames": [
     "L071",
     "L072",
@@ -2927,40 +2927,40 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 51,
+   "title": "Flying insect with flowers (Ichneumonidae)",
    "frames": [
     "L074"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 52,
+   "title": "Diagram of vertebrate evolution",
    "frames": [
     "L075"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 53,
+   "title": "Seashell (Xancidae)",
    "frames": [
     "L076"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 54,
+   "title": "Dolphins",
    "frames": [
     "L077"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 55,
+   "title": "School of fish",
    "frames": [
     "R000",
     "R001",
@@ -2969,40 +2969,40 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 56,
+   "title": "Tree toad",
    "frames": [
     "R003"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 57,
+   "title": "Crocodile",
    "frames": [
     "R004"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 58,
+   "title": "Eagle",
    "frames": [
     "R005"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 59,
+   "title": "Waterhole",
    "frames": [
     "R006"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 60,
+   "title": "Jane Goodall and chimps",
    "frames": [
     "R007",
     "R008",
@@ -3011,144 +3011,144 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 61,
+   "title": "Sketch of bushmen",
    "frames": [
     "R010"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 62,
+   "title": "Bushmen hunters",
    "frames": [
     "R011"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 63,
+   "title": "Man from Guatemala",
    "frames": [
     "R012"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 64,
+   "title": "Dancer from Bali",
    "frames": [
     "R013"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 65,
+   "title": "Andean girls",
    "frames": [
     "R014"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 66,
+   "title": "Thailand master craftsman",
    "frames": [
     "R015"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 67,
+   "title": "Elephant",
    "frames": [
     "R016"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 68,
+   "title": "Old man with beard and glasses (Turkey)",
    "frames": [
     "R017"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 69,
+   "title": "Old man with dog and flowers",
    "frames": [
     "R018"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 70,
+   "title": "Mountain climber",
    "frames": [
     "R019"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 71,
+   "title": "Gymnast (Cathy Rigby)",
    "frames": [
     "R020"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 72,
+   "title": "Sprinters \"Valeriy Borzov of the U.S.S.R. in lead\"",
    "frames": [
     "R021"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 73,
+   "title": "Schoolroom (Japan)",
    "frames": [
     "R022"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 74,
+   "title": "Children with globe (United Nations International School)",
    "frames": [
     "R023"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 75,
+   "title": "Cotton harvest",
    "frames": [
     "R024"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 76,
+   "title": "Grape picker",
    "frames": [
     "R025"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 77,
+   "title": "Supermarket",
    "frames": [
     "R026"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 78,
+   "title": "Underwater scene with diver and fish",
    "frames": [
     "R027",
     "R028",
@@ -3157,88 +3157,88 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 79,
+   "title": "Fishing boat with nets (Greece)",
    "frames": [
     "R030"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 80,
+   "title": "Cooking fish",
    "frames": [
     "R031"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 81,
+   "title": "Chinese dinner party",
    "frames": [
     "R032"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 82,
+   "title": "Demonstration of licking, eating and drinking",
    "frames": [
     "R033"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 83,
+   "title": "Great Wall of China",
    "frames": [
     "R034"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 84,
+   "title": "House construction (Cameroon)",
    "frames": [
     "R035"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 85,
+   "title": "Construction scene (Amish country)",
    "frames": [
     "R036"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 86,
+   "title": "House (Ethiopia)",
    "frames": [
     "R037"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 87,
+   "title": "House (New England)",
    "frames": [
     "R038"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 88,
+   "title": "Modern house (Cloudcroft, New Mexico)",
    "frames": [
     "R039"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 89,
+   "title": "House interior with artist and fire",
    "frames": [
     "R040",
     "R041",
@@ -3247,40 +3247,40 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 90,
+   "title": "Taj Mahal",
    "frames": [
     "R043"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 91,
+   "title": "English city (Oxford)",
    "frames": [
     "R044"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 92,
+   "title": "Boston",
    "frames": [
     "R045"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 93,
+   "title": "UN Building Day",
    "frames": [
     "R046"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 94,
+   "title": "UN Building Night",
    "frames": [
     "R047",
     "R048",
@@ -3289,24 +3289,24 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 95,
+   "title": "Sydney Opera House",
    "frames": [
     "R050"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 96,
+   "title": "Artisan with drill",
    "frames": [
     "R051"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 97,
+   "title": "Factory interior",
    "frames": [
     "R052",
     "R053",
@@ -3315,120 +3315,120 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 98,
+   "title": "Museum",
    "frames": [
     "R055"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 99,
+   "title": "X-ray of hand",
    "frames": [
     "R056"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 100,
+   "title": "Woman with microscope (Somalia)",
    "frames": [
     "R057"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 101,
+   "title": "Street scene (Pakistan)",
    "frames": [
     "R058"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 102,
+   "title": "Rush hour traffic (Thailand)",
    "frames": [
     "R059"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 103,
+   "title": "Modern highway (Ithaca, New York)",
    "frames": [
     "R060"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 104,
+   "title": "Golden Gate Bridge",
    "frames": [
     "R061"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 105,
+   "title": "Train (United Aircraft Corporation Turbotrain)",
    "frames": [
     "R062"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 106,
+   "title": "Airplane in flight",
    "frames": [
     "R063"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 107,
+   "title": "Airport (Toronto)",
    "frames": [
     "R064"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 108,
+   "title": "Antarctic expedition (Commonwealth Trans-Antarctic Expedition)",
    "frames": [
     "R065"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 109,
+   "title": "Radio telescope (Westerbork)",
    "frames": [
     "R066"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 110,
+   "title": "Radio telescope (Arecibo)",
    "frames": [
     "R067"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 111,
+   "title": "Page of book (Newton, On the System of the World)",
    "frames": [
     "R068"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 112,
+   "title": "Astronaut in space (Ed White)",
    "frames": [
     "R069",
     "R070",
@@ -3437,16 +3437,16 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 113,
+   "title": "Titan Centaur launch",
    "frames": [
     "R072"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 114,
+   "title": "Sunset with birds",
    "frames": [
     "R073",
     "R074",
@@ -3455,16 +3455,16 @@
    "color": true
   },
   {
-   "n": null,
-   "title": null,
+   "n": 115,
+   "title": "String Quartet (Quartetto Italiano)",
    "frames": [
     "R076"
    ],
    "color": false
   },
   {
-   "n": null,
-   "title": null,
+   "n": 116,
+   "title": "Violin with music score (Cavatina)",
    "frames": [
     "R077"
    ],

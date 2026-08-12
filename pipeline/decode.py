@@ -47,10 +47,15 @@ INTENSITY
 ---------
 Levels are anchored to the signal's own references, not to percentiles: each
 trace is clamped on its back porch, and black/white sit at porch +/- 0.75 x
-the sync amplitude (short-burst plateau minus porch). On L000 -- binary by
-design -- the measured references are porch - 0.745 x amp (white) and porch +
-0.741 x amp (black), symmetric to 0.5%; across 16 frames spanning the record
-picture p1/p99 stay within these rails to ~1% tails. The transfer is LINEAR:
+the sync amplitude (short-burst plateau minus porch). Measured on 10 frames
+spanning both channels (clamped, dehummed picture samples): the rails hold
+each frame's picture to small tails -- 0-2.4% clipped below white and
+0.1-3.9% above black, the worst being dark-bordered line art -- with
+per-frame p0.5/p99.5 at -0.83..-0.36 and +0.67..+1.00 x amp. (An earlier
+claim that L000 is binary with levels symmetric at +/-0.74 x amp did not
+reproduce: its clamped picture is tri-level -- gray surround near porch
+-0.04 x amp, black elements +0.70, brightest strip -0.78.) The transfer is
+LINEAR:
 the record carries no gray-step target, so transfer curvature cannot be
 measured from the signal; any gamma or cosine shaping is taste, not
 restoration (gamma stays available as a display knob, default 1.0).
@@ -106,7 +111,7 @@ SQUARE_ROWS = 377  # square-pixel rows for the full gate (2808/7.440)
 ASPECT_43_TRACES = 503  # an exactly-4:3 frame is the first ~503 +- 4 traces
 
 BLACK_REF = +0.75  # black/white sit at porch +/- 0.75 x sync amplitude
-WHITE_REF = -0.75  # (L000, binary by design: +0.741 / -0.745)
+WHITE_REF = -0.75  # (holds picture to 0-4% tails on 10 frames measured)
 
 
 @dataclass
@@ -303,8 +308,8 @@ def measure_levels(
     Returns (porch, amp, ok...) -> (porch level, sync amplitude) as
     (porch_med, amp) with amp = short-burst plateau minus porch, or None when
     the measurement is implausible (caller falls back to percentiles).
-    Black = porch + 0.75*amp, white = porch - 0.75*amp (geometry.py, measured
-    on L000 which is binary by design, verified across 16 frames).
+    Black = porch + 0.75*amp, white = porch - 0.75*amp: rails that hold the
+    clamped picture to 0-4% tails on the 10 frames measured (module docstring).
     """
     porch, ok_p = _region(x, starts, period, PORCH_START, PORCH_END)
     test, ok_t = _region(x, starts, period, *_PARITY_TEST)

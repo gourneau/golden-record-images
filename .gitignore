@@ -1,23 +1,9 @@
 # The 384 kHz master (1.4 GB). Download it with pipeline/fetch.py -- see README.
 data/master/
 
-# Generated assets.
-#
-# These are deliberately NOT committed. The audio slices are derived from a
-# digitisation of the 1977 master tapes, and a majority of the 116 images on the
-# record are third-party photographs licensed for the record itself -- which is
-# why only a subset is publicly displayed anywhere. This repository ships the
-# code and the measurements that reproduce them, not the content.
-#
-# Run `python -m pipeline.build` to regenerate everything locally.
-web/public/data/frames/
-web/public/audio/
-data/thumbs/
-data/contact_sheet.png
-data/build_report.json
-
-# The calibration circle in docs/img/ is an exception and IS committed: it is a
-# geometric test pattern, not a photograph.
+# The generated assets ARE committed (see README): decoded images, thumbnails,
+# the contact sheet and the per-frame audio slices. Only the 1.4 GB master is
+# excluded, and only because GitHub rejects files over 100 MB.
 
 node_modules/
 dist/
