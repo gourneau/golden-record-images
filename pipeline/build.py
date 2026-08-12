@@ -341,7 +341,11 @@ def process_frame(frame: catalog_mod.Frame, opts: Options) -> dict:
         tb96 = align_timebase(tb96, LEAD_IN, n_traces)
 
         if opts.thumbs:
-            cfg = decode_mod.Settings(traces=n_traces, rotate=frame.orientation)
+            # frame.id[0] is the audio channel letter: it selects the decay-
+            # bias time constant (decode.UNCOUPLE_TAU_384), which is per
+            # channel because the two channels' poles differ by 1.8x.
+            cfg = decode_mod.Settings(traces=n_traces, rotate=frame.orientation,
+                                      channel=frame.id[0])
             dec = decode_mod.decode(xs, cfg, tb96)
             tau = dec.tau
             quality = dec.quality.score

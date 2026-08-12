@@ -46,8 +46,10 @@ the raw ~231 dot rows instead.
 INTENSITY
 ---------
 Levels are anchored to the signal's own references, not to percentiles: each
-trace is clamped on its back porch, and black/white sit at porch +/- 0.75 x
-the sync amplitude (short-burst plateau minus porch). Measured on 10 frames
+trace is clamped on its back porch, and black/white sit at porch +0.65/-0.95
+x the sync amplitude (short-burst plateau minus porch) on the default
+undrooped path, porch +/- 0.75 x amp when `uncouple` is off (the drooped
+picture spans less range; see the uncouple section below). Measured on 10 frames
 spanning both channels (clamped, dehummed picture samples): the rails hold
 each frame's picture to small tails -- 0-2.4% clipped below white and
 0.1-3.9% above black, the worst being dark-bordered line art -- with
@@ -73,12 +75,69 @@ WHAT IS WRONG WITH THE RECORDING, AND WHAT WE DO ABOUT IT
                     term is estimated and DISCARDED by sync.recover().
   wow and flutter   Every trace located independently; picture sampled on
                     the smoothed per-trace timing.
-  AC-coupling droop Each trace is clamped on its back porch. The optional
-                    along-trace pole inversion (`uncouple`) is OFF by
-                    default: its time-constant fit rails at its search
-                    bounds on most frames and destroyed R040 (tau=19 dots);
-                    when enabled, railed fits are now rejected.
+  AC-coupling droop THE DECAY BIAS (Barry 2017): a one-pole DC-blocking
+                    high-pass in the recording chain's tape electronics
+                    made every flat area decay toward porch grey and hung
+                    anti-shadows behind bright objects -- the "embossed"
+                    look. Measured content-free by pipeline/droop.py on
+                    the sync-parity pulse response (five agreeing
+                    instruments; see below): tau_L = 530 samples at
+                    384 kHz, tau_R = 295, acting in RASTER time (along
+                    the trace and straight across trace boundaries).
+                    `uncouple` (ON by default) applies the exact inverse
+                    y[n] = y[n-1] + x[n] - a*x[n-1] to the raw signal
+                    before sampling; the per-trace porch clamp pins the
+                    integrator's free DC. Needs `Settings.channel` (or an
+                    explicit `Settings.tau` in signal samples) -- with
+                    neither it is a no-op, never a guess: the old
+                    per-frame tau fitter minimised the tilt of the mean
+                    along-trace profile, an objective dominated by real
+                    scene structure; it railed at its bounds on all 156
+                    frames and once destroyed R040 (tau=19 dots). It has
+                    been REMOVED, not gated. Do not refit tau from
+                    picture statistics.
   dropouts, clicks  Flagged per trace, repaired where possible, reported.
+
+THE UNCOUPLE CORRECTION, what was actually measured (2026-08)
+-------------------------------------------------------------
+pipeline/droop.py measured the distortion on the master with a probe that
+carries no scene content: the sync pulse width alternates with trace parity,
+so the even-minus-odd trace profile is the chain's response to a known,
+deterministic excitation. On content-free gap lines it is a SINGLE
+exponential (rms residual ~2e-4 against amplitude 0.03-0.06); it continues
+across trace boundaries with the amplitude the within-trace fit predicts
+(raster order); the within-plateau slope carries the same tau (not converter
+S&H droop); the converter-generated porch moves against preceding picture
+brightness (not vidicon lag); and pipeline/droop_physical.py excluded RIAA
+by provenance (the WAV is a direct master-tape transfer -- no disc in the
+chain) and by signal (a unity-DC EQ mismatch predicts the wrong tail sign).
+tau is per channel -- L and R genuinely differ by 1.8x -- so one global
+constant is wrong by construction.
+
+Validated corrections (pipeline/droop_inverse.py, on the master): L000's
+field decay amplitude -102% -> -2.5% of black-white inside the ring; the
+inter-frame gap's mean-profile decay -13..-15% -> +/-2% of B-W on clean
+gaps; the anti-shadow behind Mars (L011) -4.9% -> +0.3% of B-W. The gap
+parity probe flattens 3-12x at the adopted taus, with an interior optimum
+(refuted alternatives: the FORWARD pole worsens it; taus 2x off worsen it).
+
+KNOWN RESIDUAL, deliberately not corrected: pipeline/droop_blind.py's
+non-parametric transfer estimate finds an extra ~15% shelving loss between
+~200 Hz and ~2.5 kHz on top of the pole, i.e. mid-scale structure stays
+~15% under-restored. Its measured-response inverse ("np-hybrid") halves
+L000's residual field ripple in signal space, but through the real decoder
+it amplified the scan-locked hum envelope faster than dehum removes it
+(parity_db 4.4 -> 14.7 dB on L034) and lowered the frozen-test-set
+composite 18.5 -> 16.2, so it is NOT integrated. The pole alone is the
+validated, artefact-free part.
+
+Because the restored picture spans more range than the drooped one it was
+calibrated on, the intensity rails move with the correction: undrooped,
+20 frames spanning the record measure p0.5/p99.5 at -1.03..-0.52 /
++0.27..+0.73 x amp, so black/white sit at porch +0.65/-0.95 x amp (tails
+past the rails on ~2 line-art frames at the ~1% level, the same class the
+old +/-0.75 rails clipped). The drooped rails +/-0.75 still apply when
+`uncouple` is off.
 
 Anything we cannot fix, we score. `Decoded.quality` carries a per-trace
 confidence so the interface can show which parts of a picture to trust.
@@ -113,6 +172,19 @@ ASPECT_43_TRACES = 503  # an exactly-4:3 frame is the first ~503 +- 4 traces
 BLACK_REF = +0.75  # black/white sit at porch +/- 0.75 x sync amplitude
 WHITE_REF = -0.75  # (holds picture to 0-4% tails on 10 frames measured)
 
+# --- decay-bias inversion (pipeline/droop.py; module docstring) -------------
+# Chain high-pass time constants, per audio channel, in samples at 384 kHz.
+# Stat spread +-50 (L) / +-10 (R) across frames; systematic band 460..740 /
+# 275..430 (hum degeneracy). Converted to signal samples via the measured
+# line period, which scales exactly with sample rate (drift of the source
+# line rate itself contributes <0.2% -- negligible against the systematic).
+UNCOUPLE_TAU_384 = {"L": 530.0, "R": 295.0}
+_NOMINAL_PERIOD_384 = sync_mod.NOMINAL_PERIOD  # 3197.4 samples at 384 kHz
+# Rails for the UNDROOPED picture (see module docstring: re-measured on 20
+# frames; the restored range is asymmetric about the porch).
+UNCOUPLE_BLACK_REF = +0.65
+UNCOUPLE_WHITE_REF = -0.95
+
 
 @dataclass
 class Settings:
@@ -139,12 +211,15 @@ class Settings:
 
     dehum: bool = True  # remove the scan-locked 60 Hz fixed pattern
     dc_restore: bool = True  # clamp each trace on its back porch
-    # Invert the chain's high-pass along the trace. OFF by default: the tau
-    # fit rails at its search bounds on most frames (it destroyed R040 with
-    # tau=19 dots before the fit was gated). Enable only with a plausible
-    # explicit tau, or accept that a railed fit now falls back to no-op.
-    uncouple: bool = False
-    tau: float = 0.0  # dots; 0 means fit it (gated)
+    # Invert the chain's one-pole high-pass (the decay bias) on the RAW
+    # signal in raster order, before sampling. ON by default, but it only
+    # acts when it knows the time constant: set `channel` ("L"/"R", per
+    # UNCOUPLE_TAU_384) or an explicit `tau` in SIGNAL SAMPLES. With
+    # neither it is a no-op -- there is deliberately no per-frame fitter
+    # (the old one's objective was degenerate and railed; module docstring).
+    uncouple: bool = True
+    channel: str = ""  # "L" | "R"; selects the measured per-channel tau
+    tau: float = 0.0  # signal samples; explicit override, 0 = use channel
 
     deconv: float = 0.0
     deconv_noise: float = 0.02
@@ -373,72 +448,38 @@ def _hampel(x: np.ndarray, k: int, n_sigmas: float) -> np.ndarray:
     return out
 
 
-def _fit_tau(pic: np.ndarray) -> float:
-    """Fit the chain's high-pass time constant along the trace, GATED.
+def undroop(x: np.ndarray, tau: float) -> np.ndarray:
+    """Invert the chain's one-pole high-pass on the RAW signal, raster order.
 
-    After clamping, the mean profile along a trace should have no systematic
-    ramp -- picture content averages out across 512 traces, but the pole's step
-    response does not. We pick the tau whose inverse filter flattens it.
+    The chain's loss is H(z) = (1 - z^-1) / (1 - a*z^-1), a = exp(-1/tau);
+    the exact inverse is its reciprocal, y[n] = y[n-1] + x[n] - a*x[n-1],
+    applied in sample order -- which IS raster order: along the trace and
+    straight across every trace boundary, because that is how time ran in
+    the recording (measured: the parity pulse response of trace i is read
+    in trace i+1's porch; droop.py Q2). Unity gain at high frequency
+    (|H_inv| = 0.999 above 10 kHz at tau=530), boost only below ~fc: this
+    is NOT a leaky integrator (1/(1-a*z^-1) is a low-pass; that bug shipped
+    once already) and it cannot be replaced by a per-trace filter (an
+    earlier bug applied the correction per trace on the dot matrix).
 
-    The raw minimiser rails at its search bounds on most real frames (the
-    mean profile's ramp is dominated by real vertical brightness structure,
-    not the pole), and a railed low tau is catastrophic: tau=19 dots on R040
-    turned the inverse filter into a huge high-boost and destroyed the frame.
-    A fit within 10% of either search bound is therefore rejected (returns 0,
-    i.e. no correction). This is also why `Settings.uncouple` now defaults to
-    False.
-    """
-    y = pic.mean(axis=0)
-    n = len(y)
-    if n < 64:
-        return 0.0
-    y = y - y.mean()
-    t = np.linspace(-1, 1, n)
-    lo_b, hi_b = 0.05 * n, 20.0 * n
-    best, best_tau = np.inf, 0.0
-    for tau in np.geomspace(lo_b, hi_b, 64):
-        alpha = float(np.exp(-1.0 / tau))
-        c = np.empty(n)
-        acc = 0.0
-        for i in range(n):
-            acc = alpha * acc + y[i]
-            c[i] = acc
-        c = c - c.mean()
-        sd = c.std()
-        if sd < 1e-12:
-            continue
-        score = abs(float(np.polyfit(t, c / sd, 1)[0]))
-        if score < best:
-            best, best_tau = score, tau
-    if best_tau <= lo_b * 1.1 or best_tau >= hi_b * 0.9:
-        return 0.0  # railed: the profile's ramp is content, not the pole
-    return best_tau
-
-
-def _uncouple_rows(pic: np.ndarray, tau: float) -> np.ndarray:
-    """Invert one pole of high-pass ALONG each trace.
-
-    The chain's loss is H(z) = (1 - z^-1) / (1 - a*z^-1), so the correction is
-    its reciprocal, y[n] = y[n-1] + x[n] - a*x[n-1]. Note that as a -> 1 this
-    telescopes to the identity, which is the behaviour we want when the fit says
-    no correction is needed. A plain leaky integrator, 1/(1 - a*z^-1), is a
-    low-pass and would smear the frame instead of flattening it.
-
-    `pic` is (traces, samples-along-trace); we integrate along axis 1, the scan
-    direction, because that is the direction time ran in the recording.
+    The inverse has a pole at DC: the output carries a free constant and
+    integrates any input offset into a ramp of offset/tau per sample. The
+    window MEAN is subtracted first (the mean, NOT the median -- the sync
+    pulses skew the median ~5e-3 and integrating that measured 16 p-p of
+    porch wander on L000), which leaves the pre-clamp porch wander at ~raw
+    level (0.165 vs 0.187 p-p measured); the per-trace porch clamp
+    downstream (`dc_restore`) pins the rest. Absolute frame-wide DC is
+    unknowable -- the chain blocked it -- so every trace is pinned to its
+    porch, the same reference the decoder already trusts.
     """
     if tau <= 0:
-        return pic
-    alpha = float(np.exp(-1.0 / tau))
-    out = np.empty_like(pic)
-    prev_in = np.zeros(pic.shape[0])
-    prev_out = np.zeros(pic.shape[0])
-    for j in range(pic.shape[1]):
-        cur = pic[:, j]
-        prev_out = prev_out + cur - alpha * prev_in
-        out[:, j] = prev_out
-        prev_in = cur
-    return out
+        return np.asarray(x, dtype=np.float64)
+    a = float(np.exp(-1.0 / tau))
+    x = np.asarray(x, dtype=np.float64)
+    x = x - x.mean()
+    d = x.copy()
+    d[1:] -= a * x[:-1]
+    return np.cumsum(d)
 
 
 def _wiener_rows(img: np.ndarray, psf: np.ndarray, strength: float, noise: float) -> np.ndarray:
@@ -491,6 +532,24 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
     clipped = float(np.mean(np.abs(x) >= 0.999 * np.max(np.abs(x)))) if len(x) else 0.0
     if cfg.despike > 0:
         x = _hampel(x, 6, cfg.despike)
+
+    # --- decay-bias inversion, on the raw signal in raster order ------------
+    # After timebase recovery (the sync edges are high-frequency; the filter
+    # is unity there, so timing is unaffected) and before every level
+    # measurement, so the porch clamp and the intensity anchors see the
+    # restored signal. tau is stated at 384 kHz and scaled by the measured
+    # line period, which tracks the sample rate exactly.
+    tau = 0.0
+    if cfg.uncouple:
+        tau = float(cfg.tau)
+        if tau <= 0 and cfg.channel:
+            ch = cfg.channel.strip().upper()[:1]
+            if ch in UNCOUPLE_TAU_384:
+                tau = UNCOUPLE_TAU_384[ch] * period / _NOMINAL_PERIOD_384
+        if tau > 0:
+            x = undroop(x, tau)
+        else:
+            tau = 0.0  # no channel, no explicit tau: no-op, never a guess
 
     n_tr = min(cfg.traces, len(tb.smoothed))
     starts = np.array([tb.trace_start(i) for i in range(n_tr)])
@@ -591,12 +650,6 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
             j = good[np.argsort(np.abs(good - i))[:2]]
             pic[i] = pic[j].mean(axis=0)
 
-    tau = cfg.tau
-    if cfg.uncouple:
-        if tau <= 0:
-            tau = _fit_tau(pic)
-        pic = _uncouple_rows(pic, tau)
-
     if not cfg.dot_native:
         pic = _rows_from_dots(pic, cfg.height, cfg.lanczos_a, delta)
 
@@ -623,13 +676,19 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
 
     # --- intensity transfer -------------------------------------------------
     # After porch clamping and inversion, img = porch - signal, so black
-    # (signal = porch + 0.75*amp) sits at -0.75*amp and white at +0.75*amp.
+    # (signal = porch + black_ref*amp) sits at -black_ref*amp and white at
+    # -white_ref*amp. The rails depend on whether the decay bias was
+    # inverted: the restored picture spans more range than the drooped one
+    # (module docstring; re-measured on 20 frames).
+    black_ref, white_ref = (
+        (UNCOUPLE_BLACK_REF, UNCOUPLE_WHITE_REF) if tau > 0 else (BLACK_REF, WHITE_REF)
+    )
     sgn = -1.0 if cfg.invert else 1.0
     if ref is not None:
         porch_med, amp, _ = ref
-        lo = sgn * BLACK_REF * amp  # black end of img's range
-        hi = sgn * WHITE_REF * amp  # white end
-        levels = (porch_med + BLACK_REF * amp, porch_med + WHITE_REF * amp)
+        lo = sgn * black_ref * amp  # black end of img's range
+        hi = sgn * white_ref * amp  # white end
+        levels = (porch_med + black_ref * amp, porch_med + white_ref * amp)
     else:
         lo = float(np.percentile(img, cfg.black_pct))
         hi = float(np.percentile(img, cfg.white_pct))
@@ -676,7 +735,8 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
             "dropouts": int(dropouts.sum()),
             "hum_amplitude": hum_amp,
             "snr_db": snr_db,
-            "tau_dots": tau,
+            "uncouple_tau": tau,  # signal samples; 0 = correction not applied
+            "channel": cfg.channel or None,
             "levels_mode": "reference" if ref is not None else "percentile",
             "black_level": levels[0],
             "white_level": levels[1],

@@ -82,7 +82,9 @@ def decode_frame(frame: catalog_mod.Frame, master: Path = MASTER):
     tb = sync_mod.recover(
         x96, period_guess=NOMINAL_96, n_traces=sync_mod.TRACES_PER_FRAME
     )
-    cfg = decode_mod.Settings()  # no rotation: metrics run in scan geometry
+    # No rotation: metrics run in scan geometry. channel selects the per-
+    # channel decay-bias tau, exactly as build.py does.
+    cfg = decode_mod.Settings(channel=frame.id[0])
     dec = decode_mod.decode(np.asarray(x96, dtype=np.float32), cfg, tb)
     return dec
 
