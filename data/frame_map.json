@@ -1,0 +1,1250 @@
+[
+ {
+  "frame": "L000",
+  "channel": 0,
+  "index": 0,
+  "imageNumber": 1,
+  "title": "Calibration circle",
+  "role": "mono"
+ },
+ {
+  "frame": "L001",
+  "channel": 0,
+  "index": 1,
+  "imageNumber": 2,
+  "title": "Solar location map",
+  "role": "mono"
+ },
+ {
+  "frame": "L002",
+  "channel": 0,
+  "index": 2,
+  "imageNumber": 3,
+  "title": "Mathematical definitions",
+  "role": "mono"
+ },
+ {
+  "frame": "L003",
+  "channel": 0,
+  "index": 3,
+  "imageNumber": 4,
+  "title": "Physical unit definitions",
+  "role": "mono"
+ },
+ {
+  "frame": "L004",
+  "channel": 0,
+  "index": 4,
+  "imageNumber": 5,
+  "title": "Solar System parameters",
+  "role": "mono"
+ },
+ {
+  "frame": "L005",
+  "channel": 0,
+  "index": 5,
+  "imageNumber": 6,
+  "title": "Solar System parameters",
+  "role": "mono"
+ },
+ {
+  "frame": "L006",
+  "channel": 0,
+  "index": 6,
+  "imageNumber": 7,
+  "title": "The Sun",
+  "role": "mono"
+ },
+ {
+  "frame": "L007",
+  "channel": 0,
+  "index": 7,
+  "imageNumber": 8,
+  "title": "Solar spectrum",
+  "role": "r"
+ },
+ {
+  "frame": "L008",
+  "channel": 0,
+  "index": 8,
+  "imageNumber": 8,
+  "title": "Solar spectrum",
+  "role": "g"
+ },
+ {
+  "frame": "L009",
+  "channel": 0,
+  "index": 9,
+  "imageNumber": 8,
+  "title": "Solar spectrum",
+  "role": "b"
+ },
+ {
+  "frame": "L010",
+  "channel": 0,
+  "index": 10,
+  "imageNumber": 9,
+  "title": "Mercury",
+  "role": "mono"
+ },
+ {
+  "frame": "L011",
+  "channel": 0,
+  "index": 11,
+  "imageNumber": 10,
+  "title": "Mars",
+  "role": "mono"
+ },
+ {
+  "frame": "L012",
+  "channel": 0,
+  "index": 12,
+  "imageNumber": 11,
+  "title": "Jupiter",
+  "role": "mono"
+ },
+ {
+  "frame": "L013",
+  "channel": 0,
+  "index": 13,
+  "imageNumber": 12,
+  "title": "Earth",
+  "role": "r"
+ },
+ {
+  "frame": "L014",
+  "channel": 0,
+  "index": 14,
+  "imageNumber": 12,
+  "title": "Earth",
+  "role": "g"
+ },
+ {
+  "frame": "L015",
+  "channel": 0,
+  "index": 15,
+  "imageNumber": 12,
+  "title": "Earth",
+  "role": "b"
+ },
+ {
+  "frame": "L016",
+  "channel": 0,
+  "index": 16,
+  "imageNumber": 13,
+  "title": "Egypt, Red Sea, Sinai Peninsula, and the Nile",
+  "role": "r"
+ },
+ {
+  "frame": "L017",
+  "channel": 0,
+  "index": 17,
+  "imageNumber": 13,
+  "title": "Egypt, Red Sea, Sinai Peninsula, and the Nile",
+  "role": "g"
+ },
+ {
+  "frame": "L018",
+  "channel": 0,
+  "index": 18,
+  "imageNumber": 13,
+  "title": "Egypt, Red Sea, Sinai Peninsula, and the Nile",
+  "role": "b"
+ },
+ {
+  "frame": "L019",
+  "channel": 0,
+  "index": 19,
+  "imageNumber": 14,
+  "title": "Chemical definitions",
+  "role": "mono"
+ },
+ {
+  "frame": "L020",
+  "channel": 0,
+  "index": 20,
+  "imageNumber": 15,
+  "title": "DNA Structure",
+  "role": "mono"
+ },
+ {
+  "frame": "L021",
+  "channel": 0,
+  "index": 21,
+  "imageNumber": 16,
+  "title": "DNA Structure magnified, light hit",
+  "role": "mono"
+ },
+ {
+  "frame": "L022",
+  "channel": 0,
+  "index": 22,
+  "imageNumber": 17,
+  "title": "Cells and cell division",
+  "role": "mono"
+ },
+ {
+  "frame": "L023",
+  "channel": 0,
+  "index": 23,
+  "imageNumber": 18,
+  "title": "Anatomy 1 (Skeleton front)",
+  "role": "mono"
+ },
+ {
+  "frame": "L024",
+  "channel": 0,
+  "index": 24,
+  "imageNumber": 19,
+  "title": "Anatomy 2 (Skeleton and muscles back)",
+  "role": "mono"
+ },
+ {
+  "frame": "L025",
+  "channel": 0,
+  "index": 25,
+  "imageNumber": 20,
+  "title": "Anatomy 3 (Heart, lungs, kidneys and main blood vessels back)",
+  "role": "mono"
+ },
+ {
+  "frame": "L026",
+  "channel": 0,
+  "index": 26,
+  "imageNumber": 21,
+  "title": "Anatomy 4 (Heart, lungs, kidneys and main blood vessels front)",
+  "role": "mono"
+ },
+ {
+  "frame": "L027",
+  "channel": 0,
+  "index": 27,
+  "imageNumber": 22,
+  "title": "Anatomy 5 (Internal organs back)",
+  "role": "mono"
+ },
+ {
+  "frame": "L028",
+  "channel": 0,
+  "index": 28,
+  "imageNumber": 23,
+  "title": "Anatomy 6 (Internal organs front)",
+  "role": "r"
+ },
+ {
+  "frame": "L029",
+  "channel": 0,
+  "index": 29,
+  "imageNumber": 23,
+  "title": "Anatomy 6 (Internal organs front)",
+  "role": "g"
+ },
+ {
+  "frame": "L030",
+  "channel": 0,
+  "index": 30,
+  "imageNumber": 23,
+  "title": "Anatomy 6 (Internal organs front)",
+  "role": "b"
+ },
+ {
+  "frame": "L031",
+  "channel": 0,
+  "index": 31,
+  "imageNumber": 24,
+  "title": "Anatomy 7 (Ribcage)",
+  "role": "mono"
+ },
+ {
+  "frame": "L032",
+  "channel": 0,
+  "index": 32,
+  "imageNumber": 25,
+  "title": "Anatomy 8 (Muscles front)",
+  "role": "mono"
+ },
+ {
+  "frame": "L033",
+  "channel": 0,
+  "index": 33,
+  "imageNumber": 26,
+  "title": "Human sex organs",
+  "role": "mono"
+ },
+ {
+  "frame": "L034",
+  "channel": 0,
+  "index": 34,
+  "imageNumber": 27,
+  "title": "Diagram of conception",
+  "role": "mono"
+ },
+ {
+  "frame": "L035",
+  "channel": 0,
+  "index": 35,
+  "imageNumber": 28,
+  "title": "Conception",
+  "role": "mono"
+ },
+ {
+  "frame": "L036",
+  "channel": 0,
+  "index": 36,
+  "imageNumber": 29,
+  "title": "Fertilized ovum",
+  "role": "mono"
+ },
+ {
+  "frame": "L037",
+  "channel": 0,
+  "index": 37,
+  "imageNumber": 30,
+  "title": "Fetus diagram",
+  "role": "mono"
+ },
+ {
+  "frame": "L038",
+  "channel": 0,
+  "index": 38,
+  "imageNumber": 31,
+  "title": "Fetus",
+  "role": "mono"
+ },
+ {
+  "frame": "L039",
+  "channel": 0,
+  "index": 39,
+  "imageNumber": 32,
+  "title": "Diagram of male and female",
+  "role": "mono"
+ },
+ {
+  "frame": "L040",
+  "channel": 0,
+  "index": 40,
+  "imageNumber": 33,
+  "title": "Birth",
+  "role": "mono"
+ },
+ {
+  "frame": "L041",
+  "channel": 0,
+  "index": 41,
+  "imageNumber": 34,
+  "title": "Nursing mother (Philippines)",
+  "role": "r"
+ },
+ {
+  "frame": "L042",
+  "channel": 0,
+  "index": 42,
+  "imageNumber": 34,
+  "title": "Nursing mother (Philippines)",
+  "role": "g"
+ },
+ {
+  "frame": "L043",
+  "channel": 0,
+  "index": 43,
+  "imageNumber": 34,
+  "title": "Nursing mother (Philippines)",
+  "role": "b"
+ },
+ {
+  "frame": "L044",
+  "channel": 0,
+  "index": 44,
+  "imageNumber": 35,
+  "title": "Father and daughter (Malaysia)",
+  "role": "r"
+ },
+ {
+  "frame": "L045",
+  "channel": 0,
+  "index": 45,
+  "imageNumber": 35,
+  "title": "Father and daughter (Malaysia)",
+  "role": "g"
+ },
+ {
+  "frame": "L046",
+  "channel": 0,
+  "index": 46,
+  "imageNumber": 35,
+  "title": "Father and daughter (Malaysia)",
+  "role": "b"
+ },
+ {
+  "frame": "L047",
+  "channel": 0,
+  "index": 47,
+  "imageNumber": 36,
+  "title": "Group of children",
+  "role": "r"
+ },
+ {
+  "frame": "L048",
+  "channel": 0,
+  "index": 48,
+  "imageNumber": 36,
+  "title": "Group of children",
+  "role": "g"
+ },
+ {
+  "frame": "L049",
+  "channel": 0,
+  "index": 49,
+  "imageNumber": 36,
+  "title": "Group of children",
+  "role": "b"
+ },
+ {
+  "frame": "L050",
+  "channel": 0,
+  "index": 50,
+  "imageNumber": 37,
+  "title": "Diagram of family ages",
+  "role": "mono"
+ },
+ {
+  "frame": "L051",
+  "channel": 0,
+  "index": 51,
+  "imageNumber": 38,
+  "title": "Family portrait",
+  "role": "mono"
+ },
+ {
+  "frame": "L052",
+  "channel": 0,
+  "index": 52,
+  "imageNumber": 39,
+  "title": "Diagram of continental drift (derived from LAGEOS plaque)",
+  "role": "mono"
+ },
+ {
+  "frame": "L053",
+  "channel": 0,
+  "index": 53,
+  "imageNumber": 40,
+  "title": "Structure of the Earth",
+  "role": "mono"
+ },
+ {
+  "frame": "L054",
+  "channel": 0,
+  "index": 54,
+  "imageNumber": 41,
+  "title": "Heron Island (Great Barrier Reef of Australia)",
+  "role": "mono"
+ },
+ {
+  "frame": "L055",
+  "channel": 0,
+  "index": 55,
+  "imageNumber": 42,
+  "title": "Seashore (Cape Neddick, Maine)",
+  "role": "mono"
+ },
+ {
+  "frame": "L056",
+  "channel": 0,
+  "index": 56,
+  "imageNumber": 43,
+  "title": "Snake River and Grand Tetons",
+  "role": "mono"
+ },
+ {
+  "frame": "L057",
+  "channel": 0,
+  "index": 57,
+  "imageNumber": 44,
+  "title": "Sand dunes",
+  "role": "mono"
+ },
+ {
+  "frame": "L058",
+  "channel": 0,
+  "index": 58,
+  "imageNumber": 45,
+  "title": "Monument Valley",
+  "role": "r"
+ },
+ {
+  "frame": "L059",
+  "channel": 0,
+  "index": 59,
+  "imageNumber": 45,
+  "title": "Monument Valley",
+  "role": "g"
+ },
+ {
+  "frame": "L060",
+  "channel": 0,
+  "index": 60,
+  "imageNumber": 45,
+  "title": "Monument Valley",
+  "role": "b"
+ },
+ {
+  "frame": "L061",
+  "channel": 0,
+  "index": 61,
+  "imageNumber": 46,
+  "title": "Forest scene with mushrooms",
+  "role": "r"
+ },
+ {
+  "frame": "L062",
+  "channel": 0,
+  "index": 62,
+  "imageNumber": 46,
+  "title": "Forest scene with mushrooms",
+  "role": "g"
+ },
+ {
+  "frame": "L063",
+  "channel": 0,
+  "index": 63,
+  "imageNumber": 46,
+  "title": "Forest scene with mushrooms",
+  "role": "b"
+ },
+ {
+  "frame": "L064",
+  "channel": 0,
+  "index": 64,
+  "imageNumber": 47,
+  "title": "Leaf (Fragaria)",
+  "role": "mono"
+ },
+ {
+  "frame": "L065",
+  "channel": 0,
+  "index": 65,
+  "imageNumber": 48,
+  "title": "Autumn Fallen leaves",
+  "role": "r"
+ },
+ {
+  "frame": "L066",
+  "channel": 0,
+  "index": 66,
+  "imageNumber": 48,
+  "title": "Autumn Fallen leaves",
+  "role": "g"
+ },
+ {
+  "frame": "L067",
+  "channel": 0,
+  "index": 67,
+  "imageNumber": 48,
+  "title": "Autumn Fallen leaves",
+  "role": "b"
+ },
+ {
+  "frame": "L068",
+  "channel": 0,
+  "index": 68,
+  "imageNumber": 49,
+  "title": "Snowflakes over Sequoia",
+  "role": "r"
+ },
+ {
+  "frame": "L069",
+  "channel": 0,
+  "index": 69,
+  "imageNumber": 49,
+  "title": "Snowflakes over Sequoia",
+  "role": "g"
+ },
+ {
+  "frame": "L070",
+  "channel": 0,
+  "index": 70,
+  "imageNumber": 49,
+  "title": "Snowflakes over Sequoia",
+  "role": "b"
+ },
+ {
+  "frame": "L071",
+  "channel": 0,
+  "index": 71,
+  "imageNumber": 50,
+  "title": "Tree with daffodils",
+  "role": "r"
+ },
+ {
+  "frame": "L072",
+  "channel": 0,
+  "index": 72,
+  "imageNumber": 50,
+  "title": "Tree with daffodils",
+  "role": "g"
+ },
+ {
+  "frame": "L073",
+  "channel": 0,
+  "index": 73,
+  "imageNumber": 50,
+  "title": "Tree with daffodils",
+  "role": "b"
+ },
+ {
+  "frame": "L074",
+  "channel": 0,
+  "index": 74,
+  "imageNumber": 51,
+  "title": "Flying insect with flowers (Ichneumonidae)",
+  "role": "mono"
+ },
+ {
+  "frame": "L075",
+  "channel": 0,
+  "index": 75,
+  "imageNumber": 52,
+  "title": "Diagram of vertebrate evolution",
+  "role": "mono"
+ },
+ {
+  "frame": "L076",
+  "channel": 0,
+  "index": 76,
+  "imageNumber": 53,
+  "title": "Seashell (Xancidae)",
+  "role": "mono"
+ },
+ {
+  "frame": "L077",
+  "channel": 0,
+  "index": 77,
+  "imageNumber": 54,
+  "title": "Dolphins",
+  "role": "mono"
+ },
+ {
+  "frame": "R000",
+  "channel": 1,
+  "index": 0,
+  "imageNumber": 55,
+  "title": "School of fish",
+  "role": "r"
+ },
+ {
+  "frame": "R001",
+  "channel": 1,
+  "index": 1,
+  "imageNumber": 55,
+  "title": "School of fish",
+  "role": "g"
+ },
+ {
+  "frame": "R002",
+  "channel": 1,
+  "index": 2,
+  "imageNumber": 55,
+  "title": "School of fish",
+  "role": "b"
+ },
+ {
+  "frame": "R003",
+  "channel": 1,
+  "index": 3,
+  "imageNumber": 56,
+  "title": "Tree toad",
+  "role": "mono"
+ },
+ {
+  "frame": "R004",
+  "channel": 1,
+  "index": 4,
+  "imageNumber": 57,
+  "title": "Crocodile",
+  "role": "mono"
+ },
+ {
+  "frame": "R005",
+  "channel": 1,
+  "index": 5,
+  "imageNumber": 58,
+  "title": "Eagle",
+  "role": "mono"
+ },
+ {
+  "frame": "R006",
+  "channel": 1,
+  "index": 6,
+  "imageNumber": 59,
+  "title": "Waterhole",
+  "role": "mono"
+ },
+ {
+  "frame": "R007",
+  "channel": 1,
+  "index": 7,
+  "imageNumber": 60,
+  "title": "Jane Goodall and chimps",
+  "role": "r"
+ },
+ {
+  "frame": "R008",
+  "channel": 1,
+  "index": 8,
+  "imageNumber": 60,
+  "title": "Jane Goodall and chimps",
+  "role": "g"
+ },
+ {
+  "frame": "R009",
+  "channel": 1,
+  "index": 9,
+  "imageNumber": 60,
+  "title": "Jane Goodall and chimps",
+  "role": "b"
+ },
+ {
+  "frame": "R010",
+  "channel": 1,
+  "index": 10,
+  "imageNumber": 61,
+  "title": "Sketch of bushmen",
+  "role": "mono"
+ },
+ {
+  "frame": "R011",
+  "channel": 1,
+  "index": 11,
+  "imageNumber": 62,
+  "title": "Bushmen hunters",
+  "role": "mono"
+ },
+ {
+  "frame": "R012",
+  "channel": 1,
+  "index": 12,
+  "imageNumber": 63,
+  "title": "Man from Guatemala",
+  "role": "mono"
+ },
+ {
+  "frame": "R013",
+  "channel": 1,
+  "index": 13,
+  "imageNumber": 64,
+  "title": "Dancer from Bali",
+  "role": "mono"
+ },
+ {
+  "frame": "R014",
+  "channel": 1,
+  "index": 14,
+  "imageNumber": 65,
+  "title": "Andean girls",
+  "role": "mono"
+ },
+ {
+  "frame": "R015",
+  "channel": 1,
+  "index": 15,
+  "imageNumber": 66,
+  "title": "Thailand master craftsman",
+  "role": "mono"
+ },
+ {
+  "frame": "R016",
+  "channel": 1,
+  "index": 16,
+  "imageNumber": 67,
+  "title": "Elephant",
+  "role": "mono"
+ },
+ {
+  "frame": "R017",
+  "channel": 1,
+  "index": 17,
+  "imageNumber": 68,
+  "title": "Old man with beard and glasses (Turkey)",
+  "role": "mono"
+ },
+ {
+  "frame": "R018",
+  "channel": 1,
+  "index": 18,
+  "imageNumber": 69,
+  "title": "Old man with dog and flowers",
+  "role": "mono"
+ },
+ {
+  "frame": "R019",
+  "channel": 1,
+  "index": 19,
+  "imageNumber": 70,
+  "title": "Mountain climber",
+  "role": "mono"
+ },
+ {
+  "frame": "R020",
+  "channel": 1,
+  "index": 20,
+  "imageNumber": 71,
+  "title": "Gymnast (Cathy Rigby)",
+  "role": "mono"
+ },
+ {
+  "frame": "R021",
+  "channel": 1,
+  "index": 21,
+  "imageNumber": 72,
+  "title": "Sprinters \"Valeriy Borzov of the U.S.S.R. in lead\"",
+  "role": "mono"
+ },
+ {
+  "frame": "R022",
+  "channel": 1,
+  "index": 22,
+  "imageNumber": 73,
+  "title": "Schoolroom (Japan)",
+  "role": "mono"
+ },
+ {
+  "frame": "R023",
+  "channel": 1,
+  "index": 23,
+  "imageNumber": 74,
+  "title": "Children with globe (United Nations International School)",
+  "role": "mono"
+ },
+ {
+  "frame": "R024",
+  "channel": 1,
+  "index": 24,
+  "imageNumber": 75,
+  "title": "Cotton harvest",
+  "role": "mono"
+ },
+ {
+  "frame": "R025",
+  "channel": 1,
+  "index": 25,
+  "imageNumber": 76,
+  "title": "Grape picker",
+  "role": "mono"
+ },
+ {
+  "frame": "R026",
+  "channel": 1,
+  "index": 26,
+  "imageNumber": 77,
+  "title": "Supermarket",
+  "role": "mono"
+ },
+ {
+  "frame": "R027",
+  "channel": 1,
+  "index": 27,
+  "imageNumber": 78,
+  "title": "Underwater scene with diver and fish",
+  "role": "r"
+ },
+ {
+  "frame": "R028",
+  "channel": 1,
+  "index": 28,
+  "imageNumber": 78,
+  "title": "Underwater scene with diver and fish",
+  "role": "g"
+ },
+ {
+  "frame": "R029",
+  "channel": 1,
+  "index": 29,
+  "imageNumber": 78,
+  "title": "Underwater scene with diver and fish",
+  "role": "b"
+ },
+ {
+  "frame": "R030",
+  "channel": 1,
+  "index": 30,
+  "imageNumber": 79,
+  "title": "Fishing boat with nets (Greece)",
+  "role": "mono"
+ },
+ {
+  "frame": "R031",
+  "channel": 1,
+  "index": 31,
+  "imageNumber": 80,
+  "title": "Cooking fish",
+  "role": "mono"
+ },
+ {
+  "frame": "R032",
+  "channel": 1,
+  "index": 32,
+  "imageNumber": 81,
+  "title": "Chinese dinner party",
+  "role": "mono"
+ },
+ {
+  "frame": "R033",
+  "channel": 1,
+  "index": 33,
+  "imageNumber": 82,
+  "title": "Demonstration of licking, eating and drinking",
+  "role": "mono"
+ },
+ {
+  "frame": "R034",
+  "channel": 1,
+  "index": 34,
+  "imageNumber": 83,
+  "title": "Great Wall of China",
+  "role": "mono"
+ },
+ {
+  "frame": "R035",
+  "channel": 1,
+  "index": 35,
+  "imageNumber": 84,
+  "title": "House construction (Cameroon)",
+  "role": "mono"
+ },
+ {
+  "frame": "R036",
+  "channel": 1,
+  "index": 36,
+  "imageNumber": 85,
+  "title": "Construction scene (Amish country)",
+  "role": "mono"
+ },
+ {
+  "frame": "R037",
+  "channel": 1,
+  "index": 37,
+  "imageNumber": 86,
+  "title": "House (Ethiopia)",
+  "role": "mono"
+ },
+ {
+  "frame": "R038",
+  "channel": 1,
+  "index": 38,
+  "imageNumber": 87,
+  "title": "House (New England)",
+  "role": "mono"
+ },
+ {
+  "frame": "R039",
+  "channel": 1,
+  "index": 39,
+  "imageNumber": 88,
+  "title": "Modern house (Cloudcroft, New Mexico)",
+  "role": "mono"
+ },
+ {
+  "frame": "R040",
+  "channel": 1,
+  "index": 40,
+  "imageNumber": 89,
+  "title": "House interior with artist and fire",
+  "role": "r"
+ },
+ {
+  "frame": "R041",
+  "channel": 1,
+  "index": 41,
+  "imageNumber": 89,
+  "title": "House interior with artist and fire",
+  "role": "g"
+ },
+ {
+  "frame": "R042",
+  "channel": 1,
+  "index": 42,
+  "imageNumber": 89,
+  "title": "House interior with artist and fire",
+  "role": "b"
+ },
+ {
+  "frame": "R043",
+  "channel": 1,
+  "index": 43,
+  "imageNumber": 90,
+  "title": "Taj Mahal",
+  "role": "mono"
+ },
+ {
+  "frame": "R044",
+  "channel": 1,
+  "index": 44,
+  "imageNumber": 91,
+  "title": "English city (Oxford)",
+  "role": "mono"
+ },
+ {
+  "frame": "R045",
+  "channel": 1,
+  "index": 45,
+  "imageNumber": 92,
+  "title": "Boston",
+  "role": "mono"
+ },
+ {
+  "frame": "R046",
+  "channel": 1,
+  "index": 46,
+  "imageNumber": 93,
+  "title": "UN Building Day",
+  "role": "mono"
+ },
+ {
+  "frame": "R047",
+  "channel": 1,
+  "index": 47,
+  "imageNumber": 94,
+  "title": "UN Building Night",
+  "role": "r"
+ },
+ {
+  "frame": "R048",
+  "channel": 1,
+  "index": 48,
+  "imageNumber": 94,
+  "title": "UN Building Night",
+  "role": "g"
+ },
+ {
+  "frame": "R049",
+  "channel": 1,
+  "index": 49,
+  "imageNumber": 94,
+  "title": "UN Building Night",
+  "role": "b"
+ },
+ {
+  "frame": "R050",
+  "channel": 1,
+  "index": 50,
+  "imageNumber": 95,
+  "title": "Sydney Opera House",
+  "role": "mono"
+ },
+ {
+  "frame": "R051",
+  "channel": 1,
+  "index": 51,
+  "imageNumber": 96,
+  "title": "Artisan with drill",
+  "role": "mono"
+ },
+ {
+  "frame": "R052",
+  "channel": 1,
+  "index": 52,
+  "imageNumber": 97,
+  "title": "Factory interior",
+  "role": "r"
+ },
+ {
+  "frame": "R053",
+  "channel": 1,
+  "index": 53,
+  "imageNumber": 97,
+  "title": "Factory interior",
+  "role": "g"
+ },
+ {
+  "frame": "R054",
+  "channel": 1,
+  "index": 54,
+  "imageNumber": 97,
+  "title": "Factory interior",
+  "role": "b"
+ },
+ {
+  "frame": "R055",
+  "channel": 1,
+  "index": 55,
+  "imageNumber": 98,
+  "title": "Museum",
+  "role": "mono"
+ },
+ {
+  "frame": "R056",
+  "channel": 1,
+  "index": 56,
+  "imageNumber": 99,
+  "title": "X-ray of hand",
+  "role": "mono"
+ },
+ {
+  "frame": "R057",
+  "channel": 1,
+  "index": 57,
+  "imageNumber": 100,
+  "title": "Woman with microscope (Somalia)",
+  "role": "mono"
+ },
+ {
+  "frame": "R058",
+  "channel": 1,
+  "index": 58,
+  "imageNumber": 101,
+  "title": "Street scene (Pakistan)",
+  "role": "mono"
+ },
+ {
+  "frame": "R059",
+  "channel": 1,
+  "index": 59,
+  "imageNumber": 102,
+  "title": "Rush hour traffic (Thailand)",
+  "role": "mono"
+ },
+ {
+  "frame": "R060",
+  "channel": 1,
+  "index": 60,
+  "imageNumber": 103,
+  "title": "Modern highway (Ithaca, New York)",
+  "role": "mono"
+ },
+ {
+  "frame": "R061",
+  "channel": 1,
+  "index": 61,
+  "imageNumber": 104,
+  "title": "Golden Gate Bridge",
+  "role": "mono"
+ },
+ {
+  "frame": "R062",
+  "channel": 1,
+  "index": 62,
+  "imageNumber": 105,
+  "title": "Train (United Aircraft Corporation Turbotrain)",
+  "role": "mono"
+ },
+ {
+  "frame": "R063",
+  "channel": 1,
+  "index": 63,
+  "imageNumber": 106,
+  "title": "Airplane in flight",
+  "role": "mono"
+ },
+ {
+  "frame": "R064",
+  "channel": 1,
+  "index": 64,
+  "imageNumber": 107,
+  "title": "Airport (Toronto)",
+  "role": "mono"
+ },
+ {
+  "frame": "R065",
+  "channel": 1,
+  "index": 65,
+  "imageNumber": 108,
+  "title": "Antarctic expedition (Commonwealth Trans-Antarctic Expedition)",
+  "role": "mono"
+ },
+ {
+  "frame": "R066",
+  "channel": 1,
+  "index": 66,
+  "imageNumber": 109,
+  "title": "Radio telescope (Westerbork)",
+  "role": "mono"
+ },
+ {
+  "frame": "R067",
+  "channel": 1,
+  "index": 67,
+  "imageNumber": 110,
+  "title": "Radio telescope (Arecibo)",
+  "role": "mono"
+ },
+ {
+  "frame": "R068",
+  "channel": 1,
+  "index": 68,
+  "imageNumber": 111,
+  "title": "Page of book (Newton, On the System of the World)",
+  "role": "mono"
+ },
+ {
+  "frame": "R069",
+  "channel": 1,
+  "index": 69,
+  "imageNumber": 112,
+  "title": "Astronaut in space (Ed White)",
+  "role": "r"
+ },
+ {
+  "frame": "R070",
+  "channel": 1,
+  "index": 70,
+  "imageNumber": 112,
+  "title": "Astronaut in space (Ed White)",
+  "role": "g"
+ },
+ {
+  "frame": "R071",
+  "channel": 1,
+  "index": 71,
+  "imageNumber": 112,
+  "title": "Astronaut in space (Ed White)",
+  "role": "b"
+ },
+ {
+  "frame": "R072",
+  "channel": 1,
+  "index": 72,
+  "imageNumber": 113,
+  "title": "Titan Centaur launch",
+  "role": "mono"
+ },
+ {
+  "frame": "R073",
+  "channel": 1,
+  "index": 73,
+  "imageNumber": 114,
+  "title": "Sunset with birds",
+  "role": "r"
+ },
+ {
+  "frame": "R074",
+  "channel": 1,
+  "index": 74,
+  "imageNumber": 114,
+  "title": "Sunset with birds",
+  "role": "g"
+ },
+ {
+  "frame": "R075",
+  "channel": 1,
+  "index": 75,
+  "imageNumber": 114,
+  "title": "Sunset with birds",
+  "role": "b"
+ },
+ {
+  "frame": "R076",
+  "channel": 1,
+  "index": 76,
+  "imageNumber": 115,
+  "title": "String Quartet (Quartetto Italiano)",
+  "role": "mono"
+ },
+ {
+  "frame": "R077",
+  "channel": 1,
+  "index": 77,
+  "imageNumber": 116,
+  "title": "Violin with music score (Cavatina)",
+  "role": "mono"
+ }
+]

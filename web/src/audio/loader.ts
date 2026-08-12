@@ -65,14 +65,15 @@ export type LoaderErrorCode =
 export class LoaderError extends Error {
   readonly code: LoaderErrorCode;
   readonly url?: string;
-  readonly cause?: unknown;
+  /** The underlying failure, if any. Not called `cause`, which lib.es2022 owns. */
+  readonly detail?: unknown;
 
-  constructor(code: LoaderErrorCode, message: string, url?: string, cause?: unknown) {
+  constructor(code: LoaderErrorCode, message: string, url?: string, detail?: unknown) {
     super(message);
     this.name = 'LoaderError';
     this.code = code;
     this.url = url;
-    this.cause = cause;
+    this.detail = detail;
   }
 }
 
@@ -339,8 +340,9 @@ export class FrameLoader {
     this.#sampleRate = opts.sampleRate ?? TARGET_SAMPLE_RATE;
     this.#channel = opts.channel ?? 0;
     this.#wavFallback = opts.wavFallback ?? defaultWavFallback;
-    // Bound, because an unbound `fetch` throws "Illegal invocation" in Chrome.
-    this.#fetch = opts.fetchImpl ?? ((...a) => globalThis.fetch(...a));
+    // Wrapped, because an unbound `fetch` throws "Illegal invocation" in Chrome.
+    this.#fetch =
+      opts.fetchImpl ?? ((...args: Parameters<typeof fetch>) => globalThis.fetch(...args));
   }
 
   get sampleRate(): number {

@@ -1,0 +1,1434 @@
+[
+ {
+  "n": 1,
+  "title": "Calibration circle",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L000"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 2,
+  "title": "Solar location map",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L001"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 3,
+  "title": "Mathematical definitions",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L002"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 4,
+  "title": "Physical unit definitions",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L003"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 5,
+  "title": "Solar System parameters",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L004"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 6,
+  "title": "Solar System parameters",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L005"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 7,
+  "title": "The Sun",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L006"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": "Hale observatories"
+ },
+ {
+  "n": 8,
+  "title": "Solar spectrum",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L007",
+   "L008",
+   "L009"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 9,
+  "title": "Mercury",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L010"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 10,
+  "title": "Mars",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L011"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 11,
+  "title": "Jupiter",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L012"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 12,
+  "title": "Earth",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L013",
+   "L014",
+   "L015"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 13,
+  "title": "Egypt, Red Sea, Sinai Peninsula, and the Nile",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L016",
+   "L017",
+   "L018"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 14,
+  "title": "Chemical definitions",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L019"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 15,
+  "title": "DNA Structure",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L020"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 16,
+  "title": "DNA Structure magnified, light hit",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L021"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 17,
+  "title": "Cells and cell division",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L022"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": "Turtox/Cambosco"
+ },
+ {
+  "n": 18,
+  "title": "Anatomy 1 (Skeleton front)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L023"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "World Book"
+ },
+ {
+  "n": 19,
+  "title": "Anatomy 2 (Skeleton and muscles back)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L024"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "World Book"
+ },
+ {
+  "n": 20,
+  "title": "Anatomy 3 (Heart, lungs, kidneys and main blood vessels back)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L025"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "World Book"
+ },
+ {
+  "n": 21,
+  "title": "Anatomy 4 (Heart, lungs, kidneys and main blood vessels front)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L026"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "World Book"
+ },
+ {
+  "n": 22,
+  "title": "Anatomy 5 (Internal organs back)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L027"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "World Book"
+ },
+ {
+  "n": 23,
+  "title": "Anatomy 6 (Internal organs front)",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L028",
+   "L029",
+   "L030"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "World Book"
+ },
+ {
+  "n": 24,
+  "title": "Anatomy 7 (Ribcage)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L031"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "World Book"
+ },
+ {
+  "n": 25,
+  "title": "Anatomy 8 (Muscles front)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L032"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "World Book"
+ },
+ {
+  "n": 26,
+  "title": "Human sex organs",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L033"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": "Sinauer Associates, Inc."
+ },
+ {
+  "n": 27,
+  "title": "Diagram of conception",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L034"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 28,
+  "title": "Conception",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L035"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Albert Bonniers; Forlag, Stockholm"
+ },
+ {
+  "n": 29,
+  "title": "Fertilized ovum",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L036"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": "Albert Bonniers; Forlag, Stockholm"
+ },
+ {
+  "n": 30,
+  "title": "Fetus diagram",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L037"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 31,
+  "title": "Fetus",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L038"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Dr. Frank Allan"
+ },
+ {
+  "n": 32,
+  "title": "Diagram of male and female",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L039"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 33,
+  "title": "Birth",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L040"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": "Wayne Miller"
+ },
+ {
+  "n": 34,
+  "title": "Nursing mother (Philippines)",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L041",
+   "L042",
+   "L043"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 35,
+  "title": "Father and daughter (Malaysia)",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L044",
+   "L045",
+   "L046"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "David Harvey"
+ },
+ {
+  "n": 36,
+  "title": "Group of children",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L047",
+   "L048",
+   "L049"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Ruby Mera, UNICEF"
+ },
+ {
+  "n": 37,
+  "title": "Diagram of family ages",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L050"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 38,
+  "title": "Family portrait",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L051"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": "by Nina Leen"
+ },
+ {
+  "n": 39,
+  "title": "Diagram of continental drift (derived from LAGEOS plaque)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L052"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 40,
+  "title": "Structure of the Earth",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L053"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 41,
+  "title": "Heron Island (Great Barrier Reef of Australia)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L054"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 42,
+  "title": "Seashore (Cape Neddick, Maine)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L055"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Dick Smith"
+ },
+ {
+  "n": 43,
+  "title": "Snake River and Grand Tetons",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L056"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": "Ansel Adams"
+ },
+ {
+  "n": 44,
+  "title": "Sand dunes",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L057"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "George Mobley"
+ },
+ {
+  "n": 45,
+  "title": "Monument Valley",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L058",
+   "L059",
+   "L060"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Shostal Associates, Inc."
+ },
+ {
+  "n": 46,
+  "title": "Forest scene with mushrooms",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L061",
+   "L062",
+   "L063"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Bruce Dale"
+ },
+ {
+  "n": 47,
+  "title": "Leaf (Fragaria)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L064"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Arthur Herrick"
+ },
+ {
+  "n": 48,
+  "title": "Autumn Fallen leaves",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L065",
+   "L066",
+   "L067"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Jodi Cobb"
+ },
+ {
+  "n": 49,
+  "title": "Snowflakes over Sequoia",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L068",
+   "L069",
+   "L070"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Josef Muench, R. Sisson"
+ },
+ {
+  "n": 50,
+  "title": "Tree with daffodils",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L071",
+   "L072",
+   "L073"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Gardens Winterthur, Winterthur Museum, Garden and Library"
+ },
+ {
+  "n": 51,
+  "title": "Flying insect with flowers (Ichneumonidae)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L074"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Borne on the Wind, Stephen Dalton"
+ },
+ {
+  "n": 52,
+  "title": "Diagram of vertebrate evolution",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L075"
+  ],
+  "channel": "L",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 53,
+  "title": "Seashell (Xancidae)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L076"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Harry N. Abrams, Inc."
+ },
+ {
+  "n": 54,
+  "title": "Dolphins",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "L077"
+  ],
+  "channel": "L",
+  "sourceMediaType": "color",
+  "credit": "Thomas Nebbia"
+ },
+ {
+  "n": 55,
+  "title": "School of fish",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R000",
+   "R001",
+   "R002"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "David Doubilet"
+ },
+ {
+  "n": 56,
+  "title": "Tree toad",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R003"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Dave Wickstrom"
+ },
+ {
+  "n": 57,
+  "title": "Crocodile",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R004"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Peter Beard"
+ },
+ {
+  "n": 58,
+  "title": "Eagle",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R005"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Donona, Taplinger Publishing Co"
+ },
+ {
+  "n": 59,
+  "title": "Waterhole",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R006"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "South African Tourist Corp."
+ },
+ {
+  "n": 60,
+  "title": "Jane Goodall and chimps",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R007",
+   "R008",
+   "R009"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Vanne Morris-Goodall"
+ },
+ {
+  "n": 61,
+  "title": "Sketch of bushmen",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R010"
+  ],
+  "channel": "R",
+  "sourceMediaType": "bw",
+  "credit": null
+ },
+ {
+  "n": 62,
+  "title": "Bushmen hunters",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R011"
+  ],
+  "channel": "R",
+  "sourceMediaType": "bw",
+  "credit": "R. Farbman"
+ },
+ {
+  "n": 63,
+  "title": "Man from Guatemala",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R012"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 64,
+  "title": "Dancer from Bali",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R013"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Donna Grosvenor"
+ },
+ {
+  "n": 65,
+  "title": "Andean girls",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R014"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Joseph Scherschel"
+ },
+ {
+  "n": 66,
+  "title": "Thailand master craftsman",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R015"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Dean Conger"
+ },
+ {
+  "n": 67,
+  "title": "Elephant",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R016"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Peter Kunstadter"
+ },
+ {
+  "n": 68,
+  "title": "Old man with beard and glasses (Turkey)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R017"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Jonathon Blair"
+ },
+ {
+  "n": 69,
+  "title": "Old man with dog and flowers",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R018"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Bruce Baumann"
+ },
+ {
+  "n": 70,
+  "title": "Mountain climber",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R019"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Gaston Rébuffat"
+ },
+ {
+  "n": 71,
+  "title": "Gymnast (Cathy Rigby)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R020"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Philip Leonian, Sports Illustrated"
+ },
+ {
+  "n": 72,
+  "title": "Sprinters \"Valeriy Borzov of the U.S.S.R. in lead\"",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R021"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 73,
+  "title": "Schoolroom (Japan)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R022"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 74,
+  "title": "Children with globe (United Nations International School)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R023"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 75,
+  "title": "Cotton harvest",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R024"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Howell Walker"
+ },
+ {
+  "n": 76,
+  "title": "Grape picker",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R025"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "David Moore"
+ },
+ {
+  "n": 77,
+  "title": "Supermarket",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R026"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Jon Lomberg"
+ },
+ {
+  "n": 78,
+  "title": "Underwater scene with diver and fish",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R027",
+   "R028",
+   "R029"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Jerry Greenberg"
+ },
+ {
+  "n": 79,
+  "title": "Fishing boat with nets (Greece)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R030"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 80,
+  "title": "Cooking fish",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R031"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 81,
+  "title": "Chinese dinner party",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R032"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 82,
+  "title": "Demonstration of licking, eating and drinking",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R033"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 83,
+  "title": "Great Wall of China",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R034"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 84,
+  "title": "House construction (Cameroon)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R035"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 85,
+  "title": "Construction scene (Amish country)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R036"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 86,
+  "title": "House (Ethiopia)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R037"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 87,
+  "title": "House (New England)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R038"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 88,
+  "title": "Modern house (Cloudcroft, New Mexico)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R039"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 89,
+  "title": "House interior with artist and fire",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R040",
+   "R041",
+   "R042"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Photo by Jim Amos of Jim Gray & his wife"
+ },
+ {
+  "n": 90,
+  "title": "Taj Mahal",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R043"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "David Carroll"
+ },
+ {
+  "n": 91,
+  "title": "English city (Oxford)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R044"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "C.S. Lewis, Images of His World, William B. Eerdmans Publishing Co."
+ },
+ {
+  "n": 92,
+  "title": "Boston",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R045"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Ted Spiegel"
+ },
+ {
+  "n": 93,
+  "title": "UN Building Day",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R046"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 94,
+  "title": "UN Building Night",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R047",
+   "R048",
+   "R049"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 95,
+  "title": "Sydney Opera House",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R050"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 96,
+  "title": "Artisan with drill",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R051"
+  ],
+  "channel": "R",
+  "sourceMediaType": "bw",
+  "credit": "Frank Hewlett"
+ },
+ {
+  "n": 97,
+  "title": "Factory interior",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R052",
+   "R053",
+   "R054"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Fred Ward"
+ },
+ {
+  "n": 98,
+  "title": "Museum",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R055"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "David Cupp"
+ },
+ {
+  "n": 99,
+  "title": "X-ray of hand",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R056"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 100,
+  "title": "Woman with microscope (Somalia)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R057"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 101,
+  "title": "Street scene (Pakistan)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R058"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 102,
+  "title": "Rush hour traffic (Thailand)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R059"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 103,
+  "title": "Modern highway (Ithaca, New York)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R060"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 104,
+  "title": "Golden Gate Bridge",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R061"
+  ],
+  "channel": "R",
+  "sourceMediaType": "bw",
+  "credit": "Ansel Adams"
+ },
+ {
+  "n": 105,
+  "title": "Train (United Aircraft Corporation Turbotrain)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R062"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Gordon Gahan"
+ },
+ {
+  "n": 106,
+  "title": "Airplane in flight",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R063"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 107,
+  "title": "Airport (Toronto)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R064"
+  ],
+  "channel": "R",
+  "sourceMediaType": "bw",
+  "credit": "George Hunter"
+ },
+ {
+  "n": 108,
+  "title": "Antarctic expedition (Commonwealth Trans-Antarctic Expedition)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R065"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Great Adventures with the National Geographic, National Geographic"
+ },
+ {
+  "n": 109,
+  "title": "Radio telescope (Westerbork)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R066"
+  ],
+  "channel": "R",
+  "sourceMediaType": "bw",
+  "credit": "James Blair"
+ },
+ {
+  "n": 110,
+  "title": "Radio telescope (Arecibo)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R067"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 111,
+  "title": "Page of book (Newton, On the System of the World)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R068"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 112,
+  "title": "Astronaut in space (Ed White)",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R069",
+   "R070",
+   "R071"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "James McDivitt"
+ },
+ {
+  "n": 113,
+  "title": "Titan Centaur launch",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R072"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ },
+ {
+  "n": 114,
+  "title": "Sunset with birds",
+  "color": true,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R073",
+   "R074",
+   "R075"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "David Harvey"
+ },
+ {
+  "n": 115,
+  "title": "String Quartet (Quartetto Italiano)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R076"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": "Phillips Recordings"
+ },
+ {
+  "n": 116,
+  "title": "Violin with music score (Cavatina)",
+  "color": false,
+  "source": "Order and title: en.wikipedia.org/wiki/Contents_of_the_Voyager_Golden_Record (cross-checked against science.nasa.gov/mission/voyager/golden-record-contents/images/). color = as ENCODED on the record (RGB triplet), from Ron Barry's color[] table in github.com/foodini/voyager/blob/master/voyager.cpp, frame assignment verified visually against our own decode.",
+  "frames": [
+   "R077"
+  ],
+  "channel": "R",
+  "sourceMediaType": "color",
+  "credit": null
+ }
+]

@@ -673,7 +673,7 @@ export function init(container: HTMLElement): void {
       </figure>
       <aside class="gr-reader" aria-label="Glyph explanation">
         <div class="gr-reader__dots" aria-hidden="true"></div>
-        <div class="gr-reader__panel" role="status" aria-live="polite">${INTRO}</div>
+        <div class="gr-reader__panel" aria-live="polite" aria-atomic="true">${INTRO}</div>
         <div class="gr-reader__nav">
           <button type="button" class="gr-btn" data-step="-1">&larr; Previous glyph</button>
           <button type="button" class="gr-btn" data-step="1">Next glyph &rarr;</button>

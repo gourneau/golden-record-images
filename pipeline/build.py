@@ -60,23 +60,23 @@ TRACES = sync_mod.TRACES_PER_FRAME  # 512
 LEAD_IN = 2000  # 96 kHz samples
 TAIL_TRACES = 4  # whole lines kept past the last trace start
 
-# sync.recover() treats "trace 0" as the sync notch roughly one period into the
-# array it is given. Starting the read 1.5 nominal periods before Barry's seed
-# therefore makes its trace 0 the true trace start *nearest* the seed, so the
-# delta we report is a genuine phase error in [-P/2, +P/2) rather than an
-# arbitrary whole-line offset.
+# sync.recover() takes "trace 0" to be the first blanking burst that sits about
+# one period into the array it is given. Starting the read 1.5 nominal periods
+# before Barry's seed therefore makes its trace 0 the true trace start *nearest*
+# the seed, so the delta we report is a genuine phase error in [-P/2, +P/2)
+# rather than an arbitrary whole-line offset.
 PRE_384 = int(round(1.5 * sync_mod.NOMINAL_PERIOD))
 
 INT16_FULL = 32767.0
 
-# Thumbnails exist to be looked at during the identification pass, so they are
-# decoded with Settings() defaults except for one deviation: `uncouple`. With
-# the tau it fits, the leaky integrator amplifies frame-scale drift into a
-# corner-to-corner ramp that swamps the picture (L000's calibration circle is
-# nearly invisible), and the fitted tau is unstable -- 7680 vs 68824 samples on
-# the same frame from a 1e-6 change in level. Flagged for whoever owns
-# decode.py; --thumb-uncouple renders with the untouched defaults instead.
-THUMB_UNCOUPLE = False
+# Per-line measurement noise above which a frame's timebase is not to be
+# trusted, so the run flags it instead of quietly shipping a soft period seed.
+# Clean frames sit near 0.6 samples at 96 kHz. An earlier build flagged 117 of
+# the 156 frames here -- all the photographs, none of the line-art diagrams --
+# which turned out to be sync.py anchoring its template on the notch inside the
+# picture region rather than on the blanking burst. That is fixed in sync.py
+# now; the threshold stays as the tripwire that caught it.
+NOISE_LIMIT = 5.0  # samples at 96 kHz
 
 # Barry's orientation table is in quarter turns, but his renderer's rotation
 # direction is not recoverable from the tables alone.
@@ -92,9 +92,9 @@ class Options:
     thumb_dir: Path
     traces: int
     compression: int
+    full_rate_check: bool
     thumbs: bool
     verify: bool
-    thumb_uncouple: bool
 
 
 # --------------------------------------------------------------------------
@@ -156,12 +156,12 @@ def read_flac(path: Path) -> np.ndarray:
 def alternation(tb: sync_mod.Timebase) -> float:
     """Amplitude of the odd/even line-position alternation, in samples.
 
-    The sync region is not identical on odd and even traces, so a template
+    If the sync region is not identical on odd and even traces, a template
     folded over both correlates slightly early on one parity and slightly late
-    on the other; it shows up as a square wave in the fit residuals, up to
-    ~60 samples peak to peak at 96 kHz on some frames. This is the artefact
-    Barry pinned down with a hardcoded "+/-12 samples on even traces, changing
-    at trace 164". Parity is relative to the recovered timebase's own trace 0.
+    on the other, and it shows up as a square wave in the fit residuals. This is
+    the artefact Barry pinned down with a hardcoded "+/-12 samples on even
+    traces, changing at trace 164", which is 3 samples at 96 kHz; we measure it
+    per frame instead. Parity is relative to the timebase's own trace 0.
     """
     r = tb.residuals
     if len(r) < 4:
@@ -250,19 +250,23 @@ def process_frame(frame: catalog_mod.Frame, opts: Options) -> dict:
     if len(wide) < head + span:
         raise ValueError(f"{frame.id}: master is short: got {len(wide)} of {head + span} samples")
 
-    # --- 1. re-detect the timebase at full rate -----------------------------
-    # Kept as the diagnostic it is: at 384 kHz the correlation runs on the
-    # derivative of a signal whose noise floor extends to 192 kHz, so the
-    # per-line measurement noise is ~10x worse than after decimation (21 vs 2.3
-    # master samples on L004). We report it, and cut on the 96 kHz measurement.
-    tb384 = sync_mod.recover(
-        wide[LEAD_IN * DECIM :],  # starts PRE_384 before the seed
-        period_guess=sync_mod.NOMINAL_PERIOD,
-        n_traces=n_traces,
-    )
-    detected384 = wide_start + LEAD_IN * DECIM + tb384.phase
+    # --- 1. optional full-rate cross-check ----------------------------------
+    # Off by default. sync.estimate_period() autocorrelates a ~80-trace segment
+    # with np.correlate(mode="full"), which is O(n^2) in the segment length, so
+    # recovering at 384 kHz costs 16x what the decimated recovery costs for a
+    # measurement we do not use: decimation removes everything above 48 kHz,
+    # which is noise as far as the sync edges are concerned.
+    detected384 = float("nan")
+    tb384 = None
+    if opts.full_rate_check:
+        tb384 = sync_mod.recover(
+            wide[LEAD_IN * DECIM :],  # starts PRE_384 before the seed
+            period_guess=sync_mod.NOMINAL_PERIOD,
+            n_traces=n_traces,
+        )
+        detected384 = wide_start + LEAD_IN * DECIM + tb384.phase
 
-    # --- 2. decimate the whole window, then re-detect on it -----------------
+    # --- 2. decimate the whole window, then detect on it --------------------
     # Decimating first lets us cut by slicing, so the emitted file needs no
     # second resampling pass and trace 0 lands within half a sample of leadIn.
     w96 = resample_poly(wide, 1, DECIM)
@@ -309,22 +313,28 @@ def process_frame(frame: catalog_mod.Frame, opts: Options) -> dict:
     # and word length the browser sees, so the thumbnail proves the shipped
     # asset decodes rather than proving the master does.
     xs = back.astype(np.float32) / INT16_FULL * peak  # restore absolute level
-    tb96 = sync_mod.recover(xs, period_guess=period96, n_traces=n_traces + TAIL_TRACES)
-    trace0_at = fitted_trace_near(tb96, LEAD_IN)  # want: LEAD_IN, to well under a sample
-    tb96 = align_timebase(tb96, LEAD_IN, n_traces)
-
+    trace0_at = float("nan")
     thumb_bytes = 0
     tau = 0.0
-    if opts.thumbs:
-        cfg = decode_mod.Settings(
-            traces=n_traces, rotate=frame.orientation, uncouple=opts.thumb_uncouple
-        )
-        dec = decode_mod.decode(xs, cfg, tb96)
-        tau = dec.tau
-        opts.thumb_dir.mkdir(parents=True, exist_ok=True)
-        thumb_path = opts.thumb_dir / f"{frame.id}.png"
-        to_png(orient(dec.image, cfg.rotate), thumb_path)
-        thumb_bytes = thumb_path.stat().st_size
+    quality = float("nan")
+    reread_period = float("nan")
+    if opts.thumbs or opts.verify:
+        tb96 = sync_mod.recover(xs, period_guess=period96, n_traces=n_traces + TAIL_TRACES)
+        reread_period = tb96.period
+        # The shipped file's own answer to "where is trace 0?", which is the
+        # question the browser asks. Want: LEAD_IN, to well under a sample.
+        trace0_at = fitted_trace_near(tb96, LEAD_IN)
+        tb96 = align_timebase(tb96, LEAD_IN, n_traces)
+
+        if opts.thumbs:
+            cfg = decode_mod.Settings(traces=n_traces, rotate=frame.orientation)
+            dec = decode_mod.decode(xs, cfg, tb96)
+            tau = dec.tau
+            quality = dec.quality.score
+            opts.thumb_dir.mkdir(parents=True, exist_ok=True)
+            thumb_path = opts.thumb_dir / f"{frame.id}.png"
+            to_png(orient(dec.image, cfg.rotate), thumb_path)
+            thumb_bytes = thumb_path.stat().st_size
 
     return {
         "id": frame.id,
@@ -334,13 +344,16 @@ def process_frame(frame: catalog_mod.Frame, opts: Options) -> dict:
         "detected384": round(detected384, 3),
         "delta384": round(detected384 - frame.seed_sample, 3),
         "period96": round(period96, 5),
-        "period384_equiv": round(tb384.period, 4),
-        "period96_reread": round(tb96.period, 5),
+        "period384_equiv": round(tb384.period, 4) if tb384 else float("nan"),
+        "period96_reread": round(reread_period, 5),
         "jitter_rms96": round(tb96w.jitter_rms, 3),
         "measurement_noise96": round(tb96w.measurement_noise, 3),
         "alternation96": round(alternation(tb96w), 3),
-        "jitter_rms384": round(tb384.jitter_rms, 3),
-        "measurement_noise384": round(tb384.measurement_noise, 3),
+        "templatePP": round(float(tb96w.template.max() - tb96w.template.min()), 4),
+        "lowConfidence": bool(tb96w.measurement_noise > NOISE_LIMIT),
+        "quality": round(quality, 4),
+        "jitter_rms384": round(tb384.jitter_rms, 3) if tb384 else float("nan"),
+        "measurement_noise384": round(tb384.measurement_noise, 3) if tb384 else float("nan"),
         "traces_located": tb96w.n_traces,
         "trace0_offset96": round(trace0_at, 3),  # should be LEAD_IN to within half a sample
         "peak": round(peak, 6),
@@ -425,17 +438,24 @@ def print_report(rows: list[dict]) -> None:
     ok = [r for r in rows if "error" not in r]
     bad = [r for r in rows if "error" in r]
 
-    hdr = (f"{'id':5} {'seed':>11} {'detected':>13} {'delta':>9} {'d384':>8} {'period96':>9} "
-           f"{'jit96':>6} {'alt96':>7} {'trace0':>9} {'peak':>7} {'KiB':>6} {'s':>5}")
+    hdr = (f"{'id':6}{'seed':>11} {'detected':>13} {'delta':>9} {'period96':>9} "
+           f"{'jit96':>6} {'noise':>6} {'alt96':>6} {'trace0':>9} {'qual':>5} {'peak':>7} "
+           f"{'KiB':>6} {'s':>5}")
     print(hdr)
     print("-" * len(hdr))
     for r in ok:
-        print(f"{r['id']:5} {r['seed']:>11} {r['detected']:>13.1f} {r['delta']:>+9.1f} "
-              f"{r['delta384']:>+8.0f} {r['period96']:>9.3f} {r['jitter_rms96']:>6.2f} "
-              f"{r['alternation96']:>+7.1f} {r['trace0_offset96']:>9.3f} "
+        flag = "!" if r["lowConfidence"] else " "
+        print(f"{r['id']:5}{flag}{r['seed']:>11} {r['detected']:>13.1f} {r['delta']:>+9.1f} "
+              f"{r['period96']:>9.3f} {r['jitter_rms96']:>6.2f} "
+              f"{r['measurement_noise96']:>6.2f} {r['alternation96']:>+6.1f} "
+              f"{r['trace0_offset96']:>9.3f} {r['quality']:>5.2f} "
               f"{r['peak']:>7.4f} {r['flac_bytes'] / 1024:>6.0f} {r['seconds']:>5.1f}")
     for r in bad:
         print(f"{r['id']:5} ERROR {r['error']}")
+    shaky = [r["id"] for r in ok if r["lowConfidence"]]
+    if shaky:
+        print(f"low-confidence timebase (measurement noise > {NOISE_LIMIT} samples at 96 kHz): "
+              f"{len(shaky)} frames {' '.join(shaky)}")
 
     if not ok:
         return
@@ -453,17 +473,30 @@ def print_report(rows: list[dict]) -> None:
           f"min {signed.min():+8.1f}   max {signed.max():+8.1f}")
     print(f"    |delta|: median {np.median(d):7.1f}   max {d.max():7.1f}   "
           f"rms {np.sqrt((d ** 2).mean()):7.1f}   ({100 * np.median(d) / sync_mod.NOMINAL_PERIOD:.1f}% of a line)")
-    for thr in (1, 8, 50, 200, 800, 1599):
-        n = int((d <= thr).sum())
-        print(f"    <= {thr:4} samples: {n:3}/{len(ok)}  ({100 * n / len(ok):.0f}%)")
+    # The bulk of the offset is a convention difference, not error: sync.py
+    # calls the leading edge of the blanking burst the trace start, and Barry's
+    # seeds sit a tenth of a line from it, consistently. A constant offset moves
+    # every trace of every frame alike and costs nothing. What is left after
+    # removing it is his hand-tuning scatter -- what the seeds actually cost us.
+    wobble = np.abs(signed - np.median(signed))
+    print("    after removing the median offset (i.e. Barry's hand-tuning scatter):")
+    print(f"        median {np.median(wobble):7.1f}   max {wobble.max():7.1f}   "
+          f"rms {np.sqrt((wobble ** 2).mean()):7.1f}")
+    for thr in (8, 50, 200, 800, 1599):
+        n = int((wobble <= thr).sum())
+        print(f"        <= {thr:4} samples: {n:3}/{len(ok)}  ({100 * n / len(ok):.0f}%)")
     alt = np.abs(np.array([r["alternation96"] for r in ok]))
-    print(f"384 kHz vs 96 kHz detection disagree by {agree.mean():.1f} samples mean, "
-          f"{agree.max():.1f} max (384 kHz samples)")
+    if np.isfinite(agree).any():
+        print(f"384 kHz vs 96 kHz detection disagree by {np.nanmean(agree):.1f} samples mean, "
+              f"{np.nanmax(agree):.1f} max (384 kHz samples)")
     print(f"odd/even trace alternation (Barry's hardcoded fudge): median {np.median(alt):.1f}, "
           f"max {alt.max():.1f} samples at 96 kHz")
     print(f"fitted line period x{DECIM}: mean {per.mean():.3f}  sd {per.std():.3f}  "
           f"min {per.min():.3f}  max {per.max():.3f}  (nominal {sync_mod.NOMINAL_PERIOD})")
-    print(f"trace 0 lands at leadIn +- {off.max():.2f} samples (96 kHz) worst case")
+    good = np.array([not r["lowConfidence"] for r in ok])
+    print(f"trace 0 lands at leadIn +- {off[good].max() if good.any() else float('nan'):.2f} samples "
+          f"(96 kHz) worst case over the {int(good.sum())} confident frames"
+          + (f", {off.max():.2f} including the {int((~good).sum())} flagged" if not good.all() else ""))
     print(f"flac total {total / 1e6:.1f} MB, mean {total / len(ok) / 1024:.0f} KiB/frame")
 
 
@@ -481,10 +514,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--frames", default="", help="comma-separated frame ids, e.g. L000,R012")
     ap.add_argument("--jobs", type=int, default=1)
     ap.add_argument("--traces", type=int, default=TRACES)
+    ap.add_argument("--full-rate-check", action="store_true",
+                    help="also recover the timebase at 384 kHz and report the disagreement")
     ap.add_argument("--compression", type=int, default=8, help="flac -0..-8")
     ap.add_argument("--no-thumbs", action="store_true")
-    ap.add_argument("--thumb-uncouple", action="store_true",
-                    help="decode thumbnails with decode.Settings() untouched (see THUMB_UNCOUPLE)")
     ap.add_argument("--no-verify", action="store_true", help="skip the FLAC read-back compare")
     ap.add_argument("--no-sheet", action="store_true")
     ap.add_argument("--sheet-only", action="store_true", help="rebuild the contact sheet and stop")
@@ -517,9 +550,9 @@ def main(argv: list[str] | None = None) -> int:
         thumb_dir=args.thumbs_dir.resolve(),
         traces=args.traces,
         compression=args.compression,
+        full_rate_check=args.full_rate_check,
         thumbs=not args.no_thumbs,
         verify=not args.no_verify,
-        thumb_uncouple=args.thumb_uncouple or THUMB_UNCOUPLE,
     )
     (opts.out_dir / "frames").mkdir(parents=True, exist_ok=True)
 

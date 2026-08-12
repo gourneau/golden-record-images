@@ -357,12 +357,13 @@ export class FramePlayer {
         this.#timerId = setTimeout(tick, this.#hiddenPollMs);
       }
     };
-    this.#onVisibility = () => {
+    const onVisibility = () => {
       this.#cancelTick();
       schedule();
     };
+    this.#onVisibility = onVisibility;
     if (typeof document !== 'undefined') {
-      document.addEventListener('visibilitychange', this.#onVisibility);
+      document.addEventListener('visibilitychange', onVisibility);
     }
     schedule();
   }

@@ -16,14 +16,15 @@
  *
  * The expected `web/src/main.ts` (owned by the DSP agent) is roughly:
  *
+ *     // styles.css is already linked from index.html; do not import it again.
  *     import { init } from './ui/panels';
  *     import { createDecoder } from './dsp/decoder';
- *     import { mountCover } from './panels/cover';
+ *     import { init as mountCover } from './panels/cover';  // cover.ts exports `init`
  *
  *     const catalog = await fetch('data/catalog.json').then((r) => r.json());
  *     const decoder = createDecoder(catalog);
  *     const ui = init(document.getElementById('app')!, { catalog, decoder, mountCover });
- *     ui.open(1);
+ *     if (ui.current() === null) ui.open(1);
  *
  * Signal facts quoted below are measured from the 384 kHz master and must not
  * be re-derived here. See pipeline/decode.py and pipeline/sync.py.
@@ -325,8 +326,9 @@ export interface TraceSnapshot {
  * Contract notes:
  *  - `attach` is called exactly once, before any other method, with the canvas
  *    the UI created and owns the CSS box of. The DSP sizes the backing store
- *    to whatever the decode produces (traces x height, after rotation); the
- *    UI's CSS letterboxes it. The oscilloscope is drawn entirely by the UI
+ *    to whatever the decode produces (traces x height, after rotation and
+ *    after `aspect`); the UI scales that box to fit the viewport without
+ *    distorting it. The oscilloscope is drawn entirely by the UI
  *    from `traceSnapshot`, so the DSP never sees that canvas.
  *  - Every setter is cheap to call at pointer-move rate. Coalesce internally.
  */
@@ -381,8 +383,18 @@ export type PanelId = 'cover' | 'lab' | 'gallery' | 'diagnostics' | 'gap';
 export interface UiHandle {
   /** Switch panels. Also updates the location hash. */
   show(panel: PanelId): void;
-  /** Open an image in the Lab and switch to it. */
+  /**
+   * Load an image and reveal the Lab. The very first call does not switch
+   * panels, so an entry point picking a default image cannot pull the visitor
+   * off the panel their link asked for.
+   */
   open(imageNumber: number): void;
+  /**
+   * The image currently open, or null if none is. `init` honours a `#lab:57`
+   * deep link, so the entry point should choose a default only when this is
+   * null:  `if (ui.current() === null) ui.open(1);`
+   */
+  current(): number | null;
   /** Current configuration of a slot, for tests and for the entry point. */
   state(slot: SettingsSlot): LabState;
   /** Force a settings patch into a slot, as a preset button would. */

@@ -90,10 +90,12 @@
         const t0 = performance.now();
         const [a, b] = await Promise.all([loader.get(frame), loader.get(frame)]);
         const dt = performance.now() - t0;
+        // Count by stem, not by full name: the fallback serves the .wav sibling.
+        const stem = frame.file.replace(/\.[^.]+$/, '');
         const fetched = performance
           .getEntriesByType('resource')
           .slice(netBefore)
-          .filter((e) => e.name.includes(frame.file)).length;
+          .filter((e) => e.name.includes(stem)).length;
 
         log('');
         log('--- decoded ---------------------------------------------');
@@ -147,7 +149,9 @@
 
         // Level restore: same asset, declared peak 0.5, must scale by exactly 0.5.
         const scaled = await loader.get({ ...frame, id: 'PROBE3', peak: 0.5 });
-        const ratio = scaled.samples[0] / a.samples[0] / (a.levelScale || 1);
+        // a.samples already carry a.levelScale, so multiply it back out to get
+        // the factor relative to the raw asset.
+        const ratio = (scaled.samples[0] / a.samples[0]) * (a.levelScale || 1);
         log('level restore with peak=0.5 scales samples by ' + ratio.toFixed(6));
         result.notes.levelRestoreRatio = ratio;
         log('loader stats: ' + JSON.stringify(loader.stats()));

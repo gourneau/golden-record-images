@@ -47,7 +47,7 @@
     Georgia, serif;
 
   /* --- metrics -------------------------------------------------------- */
-  --rack: 384px;
+  --rack: 400px;
   --rail: 52px;
   --r: 3px; /* machined parts have a small, consistent radius */
 
@@ -201,9 +201,13 @@ select {
    Shell
    =========================================================================== */
 
+/* The explicit minmax(0,1fr) column matters: an implicit grid column is
+   auto-sized, so the rail's min-content width would push the whole page wider
+   than the viewport on a narrow screen. */
 .app {
   display: grid;
   grid-template-rows: var(--rail) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   height: 100dvh;
 }
 
@@ -225,10 +229,14 @@ select {
   display: flex;
   align-items: baseline;
   gap: 10px;
-  flex: none;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .brand__mark {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 11px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -243,18 +251,41 @@ select {
   color: var(--ink-dim);
 }
 
-@media (max-width: 720px) {
+/* The rail holds brand, five tabs and the lamp. Below ~1100px the tabs are
+   what matter, so the brand sheds its subtitle and the tabs tighten up before
+   anything is allowed to clip. */
+@media (max-width: 1100px) {
   .brand__sub {
     display: none;
+  }
+
+  .nav__tab {
+    padding: 7px 10px;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (max-width: 780px) {
+  .nav__tab {
+    padding: 7px 8px;
+    letter-spacing: 0.06em;
+  }
+
+  .lamp {
+    padding-left: 8px;
   }
 }
 
 /* --- panel navigation --------------------------------------------------- */
 
+/* min-width:0 lets the tab strip scroll internally instead of forcing the rail
+   wider than the viewport, which would give the whole page a horizontal
+   scrollbar on a phone. */
 .nav {
   display: flex;
   gap: 2px;
   margin-left: auto;
+  min-width: 0;
   padding: 2px;
   background: var(--sink);
   border: 1px solid var(--line);
@@ -356,6 +387,7 @@ select {
 .stage {
   position: relative;
   min-height: 0;
+  min-width: 0;
 }
 
 .panel {
@@ -407,9 +439,17 @@ select {
   min-height: 0;
   background: radial-gradient(120% 100% at 50% 0%, #121417, var(--sink) 70%);
   display: grid;
-  place-items: center;
-  padding: 22px;
+  grid-template-rows: minmax(0, 1fr) auto;
+  padding: 20px 22px 14px;
   overflow: hidden;
+}
+
+/* The picture sits on a stage; its label sits under it, like a specimen card. */
+.view__stage {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  min-width: 0;
 }
 
 .view__mount {
@@ -423,12 +463,11 @@ select {
   background: #000;
 }
 
+/* Sized in JS so the well hugs the picture at whatever scale fits. */
 .view__canvas {
   display: block;
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   image-rendering: auto;
 }
 
@@ -514,15 +553,14 @@ select {
   left: 18px;
 }
 
-/* frame identity, engraved into the corner of the well */
+/* frame identity, on its own line beneath the plate */
 .view__slate {
-  position: absolute;
-  left: 22px;
-  bottom: 18px;
-  display: grid;
-  gap: 3px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-top: 12px;
   pointer-events: none;
-  max-width: min(46ch, 60%);
 }
 
 .view__num {
@@ -536,7 +574,7 @@ select {
   font-family: var(--face-prose);
   font-size: 17px;
   color: var(--paper);
-  text-shadow: 0 2px 8px #000;
+  flex: 1 1 auto;
 }
 
 .view__meta {
@@ -544,6 +582,7 @@ select {
   font-size: 10px;
   color: var(--ink-dim);
   letter-spacing: 0.06em;
+  margin-left: auto;
 }
 
 /* --- oscilloscope ------------------------------------------------------- */
@@ -797,6 +836,28 @@ select {
   gap: 3px;
 }
 
+.group__note {
+  font-family: var(--face-data);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  flex: none;
+}
+
+.group[hidden] {
+  display: none;
+}
+
+/* the remaining timebase controls, sharing the hero block */
+.hero__rest {
+  display: grid;
+  gap: 3px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
 /* ===========================================================================
    Dials
    =========================================================================== */
@@ -967,6 +1028,33 @@ select {
   padding: 6px 0 8px;
 }
 
+/* compact variant for the transport bar */
+.seg--inline {
+  flex: none;
+  padding: 0;
+  gap: 2px;
+  justify-items: center;
+}
+
+.seg--inline .dial__label {
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+}
+
+.seg--inline .seg__row {
+  width: max-content;
+}
+
+.seg--inline .seg__opt {
+  flex: none;
+  min-width: 34px;
+  padding: 4px 8px;
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  overflow: visible;
+  text-overflow: clip;
+}
+
 .seg__row {
   display: flex;
   gap: 1px;
@@ -1029,8 +1117,8 @@ select {
 
 .hero__body {
   display: grid;
-  grid-template-columns: 156px minmax(0, 1fr);
-  gap: 16px;
+  grid-template-columns: 172px minmax(0, 1fr);
+  gap: 14px;
   align-items: center;
 }
 
@@ -1046,8 +1134,8 @@ select {
 
 .knob {
   position: relative;
-  width: 156px;
-  height: 156px;
+  width: 172px;
+  height: 172px;
   cursor: ns-resize;
   touch-action: none;
   user-select: none;
@@ -1065,15 +1153,15 @@ select {
 
 .knob__cap {
   position: absolute;
-  inset: 26px;
+  inset: 28px;
   border-radius: 50%;
   /* knurled rim, then a domed cap: two gradients, no images */
   background: repeating-conic-gradient(
       from 0deg,
-      rgba(255, 255, 255, 0.09) 0deg 1.1deg,
-      rgba(0, 0, 0, 0.32) 1.1deg 3.4deg
+      rgba(255, 255, 255, 0.14) 0deg 1.3deg,
+      rgba(0, 0, 0, 0.4) 1.3deg 3.8deg
     ),
-    radial-gradient(circle at 50% 32%, #4a5058 0%, #2d323a 46%, #191d22 74%, #101317 100%);
+    radial-gradient(circle at 50% 30%, #5a616b 0%, #363c45 44%, #1e232a 74%, #121519 100%);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.16),
     inset 0 -8px 16px rgba(0, 0, 0, 0.55);
   rotate: var(--angle, 0deg);
@@ -1084,22 +1172,22 @@ select {
 .knob__cap::before {
   content: '';
   position: absolute;
-  inset: 16px;
+  inset: 17px;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 28%, #3b4149, #23282f 60%, #171a1f);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.13), 0 2px 6px rgba(0, 0, 0, 0.6);
+  background: radial-gradient(circle at 50% 26%, #464d57, #282d35 58%, #181c21);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 3px 8px rgba(0, 0, 0, 0.65);
 }
 
 .knob__index {
   position: absolute;
   left: 50%;
-  top: 8px;
-  width: 2px;
-  height: 26px;
-  margin-left: -1px;
-  border-radius: 1px;
-  background: linear-gradient(180deg, var(--brass-hi), var(--brass));
-  box-shadow: 0 0 5px rgba(200, 160, 82, 0.55);
+  top: 7px;
+  width: 3px;
+  height: 30px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #fbe7bb, var(--brass));
+  box-shadow: 0 0 8px rgba(200, 160, 82, 0.75);
 }
 
 .knob[data-lock='1'] .knob__cap {
@@ -1119,31 +1207,46 @@ select {
   min-width: 0;
 }
 
+.hero__readout {
+  gap: 0;
+}
+
 .hero__big {
   font-family: var(--face-data);
   font-variant-numeric: tabular-nums;
-  font-size: 25px;
-  line-height: 1;
-  letter-spacing: -0.02em;
+  font-size: 30px;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
   color: var(--paper);
-  text-shadow: 0 0 22px rgba(120, 224, 206, 0.2);
+  white-space: nowrap;
+  text-shadow: 0 0 24px rgba(120, 224, 206, 0.22);
 }
 
-.hero__big small {
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--ink-dim);
-  margin-left: 6px;
+.hero__unit {
+  font-size: 9px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  color: var(--brass-dim);
+  margin: 2px 0 10px;
 }
 
+/* Two columns so a six-figure drift never reflows the block mid-drag. */
 .hero__drift {
   font-family: var(--face-data);
   font-variant-numeric: tabular-nums;
   font-size: 11px;
   color: var(--ink-dim);
   display: grid;
-  gap: 2px;
+  grid-template-columns: auto 1fr;
+  gap: 2px 8px;
+  margin-bottom: 10px;
+}
+
+.hero__drift > span:nth-child(odd) {
+  font-family: var(--face-legend);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .hero__drift b {
@@ -1545,10 +1648,13 @@ select {
    Diagnostics
    =========================================================================== */
 
+/* Capped so four cards settle into a tidy 2x2 rather than leaving an orphan. */
 .diag {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   gap: 18px;
+  max-width: 980px;
+  align-items: start;
 }
 
 .card-panel {
@@ -1627,8 +1733,14 @@ select {
    Prose panels (The Gap, cover fallback)
    =========================================================================== */
 
+/* A px measure, not ch: `ch` here resolves against the sans UI font, not the
+   serif the paragraphs are actually set in, and comes out far too narrow. */
 .prose {
-  max-width: 62ch;
+  max-width: 620px;
+}
+
+.sheet--essay {
+  max-width: 940px;
 }
 
 .prose p {
@@ -1679,22 +1791,29 @@ select {
 
 .gap__figure {
   font-family: var(--face-data);
-  font-size: clamp(56px, 12vw, 124px);
-  line-height: 0.9;
-  letter-spacing: -0.04em;
+  font-size: clamp(64px, 13vw, 140px);
+  line-height: 0.86;
+  letter-spacing: -0.055em;
   color: var(--paper);
   font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 60px rgba(120, 224, 206, 0.14);
 }
 
-.gap__figure span {
-  color: var(--brass-dim);
+.gap__figure-unit {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin: 10px 0 4px;
 }
 
 .gap__caption {
   font-family: var(--face-prose);
-  font-size: 15px;
+  font-size: 15.5px;
+  line-height: 1.5;
   color: var(--ink-dim);
-  max-width: 46ch;
+  max-width: 44em;
+  width: min(100%, 480px);
 }
 
 .pullbtn {

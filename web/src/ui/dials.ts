@@ -520,10 +520,11 @@ export function createKnob(spec: KnobSpec): KnobHandle {
         <div class="knob__cap"><span class="knob__index"></span></div>
       </div>
       <div class="hero__readout">
-        <div class="hero__big"><span class="knob__num">—</span><small>smp / trace</small></div>
+        <div class="hero__big"><span class="knob__num">—</span></div>
+        <div class="hero__unit">samples per trace</div>
         <div class="hero__drift">
-          <span>drift <b class="knob__drift-n">—</b> smp/trace</span>
-          <span>shear <b class="knob__shear">—</b> px over the frame</span>
+          <span>drift</span><span><b class="knob__drift-n">—</b> smp/tr</span>
+          <span>shear</span><span><b class="knob__shear">—</b> px</span>
         </div>
         <div class="hero__lockrow">
           <span class="lockchip"><span class="knob__lockword">in lock</span></span>

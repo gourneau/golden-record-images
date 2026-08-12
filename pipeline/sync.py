@@ -48,6 +48,7 @@ class Timebase:
     template: np.ndarray  # the matched filter used
     template_origin: int  # index within `template` treated as the trace start
     n_traces: int
+    blank_len: float = 0.0  # measured blanking burst length, in samples
 
     @property
     def jitter_rms(self) -> float:
@@ -94,6 +95,50 @@ def _savgol(y: np.ndarray, window: int, order: int = 2) -> np.ndarray:
     return out
 
 
+def estimate_period(x: np.ndarray, guess: float, tolerance: float = 0.02) -> float:
+    """Measure the line period by autocorrelation, before any template work.
+
+    This has to happen first. The template search only looks +/- `search`
+    samples around where it predicts a trace should be, and that prediction
+    comes from the period. An error of only 0.12 samples per trace accumulates
+    to 60 samples over a 512-trace frame -- enough to walk the search window
+    clean off the sync burst and start locking onto picture content instead,
+    which decodes as a diagonal staircase sweeping across the image.
+
+    Autocorrelation has no such failure mode: successive traces of a photograph
+    resemble each other, so the correlation peaks at the line period regardless
+    of how far that is from our guess. Measuring across a ~50-trace baseline
+    then divides the timing error by 50.
+    """
+    n = len(x)
+    lag = int(guess * 50)
+    span = min(n, max(int(guess * 80), lag * 2))
+    if span < lag + 16:
+        return guess
+    seg = np.asarray(x[:span], dtype=np.float64)
+    seg = seg - seg.mean()
+    # Autocorrelation via FFT. np.correlate(mode="full") is direct O(n^2), which
+    # on a quarter-million samples is ~65 billion operations -- it hangs rather
+    # than returns, and would be equally fatal in the browser port.
+    nfft = 1 << int(np.ceil(np.log2(2 * span)))
+    F = np.fft.rfft(seg, nfft)
+    ac = np.fft.irfft(F * np.conj(F), nfft)[:span]
+    if ac[0] <= 0:
+        return guess
+    ac = ac / ac[0]
+
+    lo = int(lag * (1 - tolerance))
+    hi = min(len(ac) - 2, int(lag * (1 + tolerance)))
+    if hi <= lo:
+        return guess
+    k = lo + int(np.argmax(ac[lo:hi]))
+    y0, y1, y2 = ac[k - 1], ac[k], ac[k + 1]
+    den = y0 - 2 * y1 + y2
+    if den != 0:
+        k = k + 0.5 * (y0 - y2) / den
+    return float(k) / 50.0
+
+
 def fold(x: np.ndarray, period: float, n_lines: int, width: int) -> np.ndarray:
     """Average `n_lines` lines aligned on the nominal period."""
     acc = np.zeros(width)
@@ -110,16 +155,60 @@ def fold(x: np.ndarray, period: float, n_lines: int, width: int) -> np.ndarray:
     return acc / used
 
 
-def _template_from_fold(folded: np.ndarray, pre: int, post: int) -> tuple[np.ndarray, int]:
-    """Cut the sync region out of a folded line.
+def find_blanking(folded: np.ndarray) -> tuple[int, int]:
+    """Locate the sync/blanking burst within a folded trace.
 
-    The trace start is the deep negative notch that follows the sync plateau's
-    falling edge. We centre the template on it and keep `pre` samples before
-    (covering the plateau and edge) and `post` after.
+    This is the only stretch of a trace that carries no picture, which makes it
+    the only honest thing to build a matched filter from. It shows up in the
+    fold as a strong, sustained positive excursion.
+
+    Getting this wrong is not a subtle error. An earlier version of this file
+    anchored on the deep negative notch and cut the template from `notch +/-
+    120` samples -- but the notch sits *inside* the picture, 2563 samples before
+    the burst, so the "matched filter" was correlating against averaged picture
+    content. It held up on the line-art diagrams, whose columns all resemble
+    each other, and collapsed on the detailed photographs, which is exactly the
+    pattern of failure we saw across the frame set.
     """
-    notch = int(np.argmin(folded))
-    idx = (np.arange(notch - pre, notch + post)) % len(folded)
-    return folded[idx].copy(), pre
+    n = len(folded)
+    # Smooth over ~2% of a trace so picture detail cannot form a false peak.
+    k = max(3, (n // 50) | 1)
+    pad = np.pad(folded, k // 2, mode="wrap")
+    sm = np.convolve(pad, np.ones(k) / k, mode="valid")[:n]
+
+    thr = sm.mean() + 0.5 * (sm.max() - sm.mean())
+    on = sm > thr
+    # Longest contiguous run, treating the trace as circular.
+    best_len, best_lo, cur = 0, 0, None
+    for i in range(2 * n):
+        if on[i % n] and cur is None:
+            cur = i
+        elif not on[i % n] and cur is not None:
+            if i - cur > best_len:
+                best_len, best_lo = i - cur, cur
+            cur = None
+            if i >= n:
+                break
+    if best_len == 0 or best_len > n // 2:
+        # No clear burst; fall back to the strongest single point.
+        p = int(np.argmax(sm))
+        return p, min(n // 8, 400)
+    return best_lo % n, best_len
+
+
+def _template_from_fold(
+    folded: np.ndarray, margin: int, tail: int
+) -> tuple[np.ndarray, int]:
+    """Cut the blanking burst out of a folded trace, plus a little either side.
+
+    The returned origin is the index within the template of the burst's leading
+    edge, which we adopt as the trace start. That convention makes the picture
+    a single contiguous run from the end of blanking to the start of the next,
+    with no wrap.
+    """
+    start, length = find_blanking(folded)
+    idx = np.arange(start - margin, start + length + tail) % len(folded)
+    return folded[idx].copy(), margin
 
 
 def _refine_peak(c: np.ndarray, k: int) -> float:
@@ -175,16 +264,17 @@ def recover(
     period_guess: float = NOMINAL_PERIOD,
     n_traces: int = TRACES_PER_FRAME,
     search: int = 60,
-    pre: int = 120,
-    post: int = 40,
-    passes: int = 2,
+    margin: int = 140,
+    tail: int = 140,
+    passes: int = 3,
     smooth_window: int = 15,
 ) -> Timebase:
     """Recover the timebase of one frame from its signal.
 
     `x` must start at or slightly before the frame's first trace.
     """
-    period = period_guess
+    # Measure the period before any template work; see estimate_period.
+    period = estimate_period(x, period_guess)
     template = np.zeros(0)
     origin = 0
     positions = np.zeros(0)
@@ -195,12 +285,12 @@ def recover(
         width = int(round(period)) + 1
         n_fold = min(n_traces, max(1, (len(x) - width) // int(round(period))))
         folded = fold(x, period, n_fold, width)
-        template, origin = _template_from_fold(folded, pre, post)
+        template, origin = _template_from_fold(folded, margin, tail)
 
-        # First guess at where trace 0 sits: the notch nearest the start of x.
-        # `pre` samples of template precede the notch, so the first line we can
-        # correlate is the one whose template window fits inside x.
-        first = float(np.argmin(folded)) + period
+        # Trace 0 is the first blanking burst that leaves room for the whole
+        # template plus the search window on either side.
+        burst, blank_len = find_blanking(folded)
+        first = float(burst) + period
         raw_idx, raw_pos = [], []
         for i in range(n_traces):
             centre = first + i * period - origin
@@ -220,6 +310,7 @@ def recover(
         if p == passes - 1:
             smoothed = _savgol(pos, smooth_window)
             return Timebase(
+                blank_len=float(blank_len),
                 phase=phase,
                 period=period,
                 positions=pos,
