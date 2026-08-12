@@ -98,8 +98,8 @@ from . import sync as sync_mod
 PICTURE_START = 232.0 / 3200.0  # 0.0725
 PICTURE_END = 3040.0 / 3200.0  # 0.9500
 PICTURE_SPAN = PICTURE_END - PICTURE_START  # 0.8775
-PORCH_START = 100.0 / 3200.0  # back porch: the per-trace DC reference
-PORCH_END = 225.0 / 3200.0
+PORCH_START = 0.020   # measured content-free run is frac 0.0156..0.0741;
+PORCH_END = 0.072     # this sits safely inside it with margin either side.
 # Sync-amplitude reference windows (for the intensity transfer): the window
 # that separates the two pulse parities, and the short burst's high plateau.
 _PARITY_TEST = (3090.0 / 3200.0, 3140.0 / 3200.0)
