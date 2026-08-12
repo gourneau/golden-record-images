@@ -1,0 +1,17 @@
+{
+  "name": "golden-record-images",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Real-time browser decoder for the images encoded in the Voyager Golden Record audio",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vite": "^7.1.3"
+  }
+}

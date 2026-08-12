@@ -1,0 +1,154 @@
+{
+ "version": 1,
+ "sampleRate": 96000,
+ "nominalPeriod": 799.35,
+ "tracesPerFrame": 512,
+ "frames": [
+  {
+   "id": "L000",
+   "channel": 0,
+   "index": 0,
+   "file": "frames/L000.flac",
+   "leadIn": 2000,
+   "startSample": 6000641,
+   "periodGuess": 799.35539,
+   "color": "mono",
+   "tripletId": null,
+   "orientation": 0,
+   "durationSamples": 414468,
+   "peak": 0.250042,
+   "imageNumber": null,
+   "title": null
+  },
+  {
+   "id": "L001",
+   "channel": 0,
+   "index": 1,
+   "file": "frames/L001.flac",
+   "leadIn": 2000,
+   "startSample": 8310062,
+   "periodGuess": 799.23983,
+   "color": "mono",
+   "tripletId": null,
+   "orientation": 0,
+   "durationSamples": 414408,
+   "peak": 0.305544,
+   "imageNumber": null,
+   "title": null
+  },
+  {
+   "id": "L002",
+   "channel": 0,
+   "index": 2,
+   "file": "frames/L002.flac",
+   "leadIn": 2000,
+   "startSample": 10668007,
+   "periodGuess": 799.2517,
+   "color": "mono",
+   "tripletId": null,
+   "orientation": 0,
+   "durationSamples": 414414,
+   "peak": 0.237259,
+   "imageNumber": null,
+   "title": null
+  },
+  {
+   "id": "L003",
+   "channel": 0,
+   "index": 3,
+   "file": "frames/L003.flac",
+   "leadIn": 2000,
+   "startSample": 12940213,
+   "periodGuess": 799.20078,
+   "color": "mono",
+   "tripletId": null,
+   "orientation": 0,
+   "durationSamples": 414388,
+   "peak": 0.252469,
+   "imageNumber": null,
+   "title": null
+  },
+  {
+   "id": "L004",
+   "channel": 0,
+   "index": 4,
+   "file": "frames/L004.flac",
+   "leadIn": 2000,
+   "startSample": 15186004,
+   "periodGuess": 799.18531,
+   "color": "mono",
+   "tripletId": null,
+   "orientation": 0,
+   "durationSamples": 414380,
+   "peak": 0.293011,
+   "imageNumber": null,
+   "title": null
+  },
+  {
+   "id": "L005",
+   "channel": 0,
+   "index": 5,
+   "file": "frames/L005.flac",
+   "leadIn": 2000,
+   "startSample": 17428442,
+   "periodGuess": 799.11906,
+   "color": "mono",
+   "tripletId": null,
+   "orientation": 0,
+   "durationSamples": 414346,
+   "peak": 0.246804,
+   "imageNumber": null,
+   "title": null
+  }
+ ],
+ "images": [
+  {
+   "n": null,
+   "title": null,
+   "frames": [
+    "L000"
+   ],
+   "color": false
+  },
+  {
+   "n": null,
+   "title": null,
+   "frames": [
+    "L001"
+   ],
+   "color": false
+  },
+  {
+   "n": null,
+   "title": null,
+   "frames": [
+    "L002"
+   ],
+   "color": false
+  },
+  {
+   "n": null,
+   "title": null,
+   "frames": [
+    "L003"
+   ],
+   "color": false
+  },
+  {
+   "n": null,
+   "title": null,
+   "frames": [
+    "L004"
+   ],
+   "color": false
+  },
+  {
+   "n": null,
+   "title": null,
+   "frames": [
+    "L005"
+   ],
+   "color": false
+  }
+ ]
+}

@@ -1,0 +1,430 @@
+/* The Cover panel.
+ *
+ * Light theme reads as the artefact: a gold plate with dark engraved lines.
+ * Dark theme inverts it into gold lines on anodised charcoal, which is closer
+ * to how the plate actually looks under a raking light.
+ *
+ * Theme sources, in increasing priority: the default (light), the OS preference,
+ * and an explicit data-theme on the root element, which must win in both
+ * directions.
+ */
+
+.gr-cover {
+  --gr-plate-bg: #e9d7a4;
+  --gr-plate-bg2: #f4e8c4;
+  --gr-ink: #3b2e13;
+  --gr-ink-soft: #6d5b30;
+  --gr-accent: #8a5a12;
+  --gr-halo: rgb(255 255 255 / 0.5);
+  --gr-focus: #1f5fbf;
+  --gr-page-fg: #211d16;
+  --gr-page-fg-soft: #5e564a;
+  --gr-page-bg: transparent;
+  --gr-rule: rgb(59 46 19 / 0.18);
+  --gr-code-bg: rgb(59 46 19 / 0.07);
+  --gr-warn: #8a3a12;
+
+  color: var(--gr-page-fg);
+  background: var(--gr-page-bg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  line-height: 1.55;
+  container-type: inline-size;
+}
+
+@media (prefers-color-scheme: dark) {
+  .gr-cover {
+    --gr-plate-bg: #17161a;
+    --gr-plate-bg2: #232026;
+    --gr-ink: #e8c887;
+    --gr-ink-soft: #a58c5c;
+    --gr-accent: #ffd489;
+    --gr-halo: rgb(255 212 137 / 0.1);
+    --gr-focus: #8fc4ff;
+    --gr-page-fg: #e9e5dd;
+    --gr-page-fg-soft: #a49e93;
+    --gr-rule: rgb(233 200 135 / 0.2);
+    --gr-code-bg: rgb(233 200 135 / 0.1);
+    --gr-warn: #ff9f6e;
+  }
+}
+
+:root[data-theme="dark"] .gr-cover {
+  --gr-plate-bg: #17161a;
+  --gr-plate-bg2: #232026;
+  --gr-ink: #e8c887;
+  --gr-ink-soft: #a58c5c;
+  --gr-accent: #ffd489;
+  --gr-halo: rgb(255 212 137 / 0.1);
+  --gr-focus: #8fc4ff;
+  --gr-page-fg: #e9e5dd;
+  --gr-page-fg-soft: #a49e93;
+  --gr-rule: rgb(233 200 135 / 0.2);
+  --gr-code-bg: rgb(233 200 135 / 0.1);
+  --gr-warn: #ff9f6e;
+}
+
+:root[data-theme="light"] .gr-cover {
+  --gr-plate-bg: #e9d7a4;
+  --gr-plate-bg2: #f4e8c4;
+  --gr-ink: #3b2e13;
+  --gr-ink-soft: #6d5b30;
+  --gr-accent: #8a5a12;
+  --gr-halo: rgb(255 255 255 / 0.5);
+  --gr-focus: #1f5fbf;
+  --gr-page-fg: #211d16;
+  --gr-page-fg-soft: #5e564a;
+  --gr-rule: rgb(59 46 19 / 0.18);
+  --gr-code-bg: rgb(59 46 19 / 0.07);
+  --gr-warn: #8a3a12;
+}
+
+/* ---------------------------------------------------------------- heading */
+
+.gr-cover__head {
+  max-width: 62ch;
+  margin: 0 0 1.6rem;
+}
+
+.gr-cover__kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gr-page-fg-soft);
+}
+
+.gr-cover__title {
+  margin: 0.15rem 0 0.5rem;
+  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.4rem);
+  font-weight: 620;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.gr-cover__sub {
+  margin: 0;
+  color: var(--gr-page-fg-soft);
+  font-size: 1rem;
+}
+
+/* ------------------------------------------------------------------ layout */
+
+.gr-cover__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+@container (max-width: 860px) {
+  .gr-cover__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Fallback for browsers that lay out before container queries resolve. */
+@media (max-width: 860px) {
+  .gr-cover__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.gr-cover__figure {
+  margin: 0;
+  position: sticky;
+  top: 1rem;
+}
+
+@media (max-width: 860px) {
+  .gr-cover__figure {
+    position: static;
+  }
+}
+
+.gr-cover__caption {
+  margin-top: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--gr-page-fg-soft);
+  max-width: 46ch;
+}
+
+/* ------------------------------------------------------------------- plate */
+
+.gr-plate {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.gr-plate__edge {
+  fill: var(--gr-plate-bg);
+  stroke: var(--gr-ink-soft);
+  stroke-width: 2;
+}
+
+/* Engraved strokes. Everything in the drawing inherits from these three. */
+.gr-plate .ln,
+.gr-plate .bit {
+  fill: none;
+  stroke: var(--gr-ink);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gr-plate .thin {
+  stroke-width: 1.3;
+  stroke: var(--gr-ink-soft);
+}
+
+.gr-plate .hair {
+  stroke-width: 0.8;
+  stroke: var(--gr-ink-soft);
+  opacity: 0.55;
+}
+
+.gr-plate .bold {
+  stroke-width: 3.4;
+}
+
+.gr-plate .tiny {
+  stroke-width: 1.5;
+}
+
+.gr-plate .dashed {
+  stroke-dasharray: 5 6;
+}
+
+.gr-plate .fill {
+  fill: var(--gr-ink);
+  stroke: none;
+}
+
+.gr-plate .fill-plate {
+  fill: var(--gr-plate-bg2);
+}
+
+.gr-plate .wave {
+  stroke-width: 2;
+}
+
+/* ------------------------------------------------------------------ glyphs */
+
+.gr-glyph {
+  cursor: pointer;
+  outline: none;
+}
+
+.gr-glyph__hit {
+  fill: transparent;
+  stroke: none;
+  pointer-events: all;
+}
+
+.gr-glyph__frame {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 1.6;
+  transition: fill 140ms ease, stroke 140ms ease;
+}
+
+.gr-glyph__art {
+  transition: opacity 140ms ease;
+  pointer-events: none;
+}
+
+.gr-glyph:hover .gr-glyph__frame,
+.gr-glyph.is-active .gr-glyph__frame {
+  fill: var(--gr-halo);
+  stroke: var(--gr-accent);
+}
+
+/* Drawn rather than using outline: SVG outline support is uneven in Safari. */
+.gr-glyph:focus-visible .gr-glyph__frame,
+.gr-glyph:focus .gr-glyph__frame {
+  fill: var(--gr-halo);
+  stroke: var(--gr-focus);
+  stroke-width: 3.5;
+}
+
+.gr-glyph.is-active .gr-glyph__art .ln,
+.gr-glyph.is-active .gr-glyph__art .bit {
+  stroke: var(--gr-accent);
+}
+
+.gr-glyph.is-active .gr-glyph__art .fill {
+  fill: var(--gr-accent);
+}
+
+/* Once a glyph is chosen, the rest of the plate steps back. */
+.gr-cover.is-selecting .gr-glyph:not(.is-active) .gr-glyph__art {
+  opacity: 0.3;
+}
+
+/* ------------------------------------------------------------------ reader */
+
+.gr-reader {
+  min-width: 0;
+  border-left: 2px solid var(--gr-rule);
+  padding-left: clamp(0.9rem, 2vw, 1.6rem);
+}
+
+@media (max-width: 860px) {
+  .gr-reader {
+    border-left: 0;
+    border-top: 2px solid var(--gr-rule);
+    padding-left: 0;
+    padding-top: 1.2rem;
+  }
+}
+
+.gr-reader__dots {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+.gr-dot {
+  width: 100%;
+  max-width: 34px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--gr-rule);
+  transition: background 140ms ease;
+}
+
+.gr-dot.is-active {
+  background: var(--gr-accent);
+}
+
+.gr-reader__panel {
+  min-height: 22rem;
+}
+
+.gr-reader__lede {
+  font-size: 1.05rem;
+  color: var(--gr-page-fg);
+}
+
+.gr-reader__place {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gr-page-fg-soft);
+}
+
+.gr-reader__title {
+  margin: 0.25rem 0 0.7rem;
+  font-size: clamp(1.15rem, 0.9rem + 1vw, 1.5rem);
+  font-weight: 620;
+  line-height: 1.2;
+}
+
+.gr-reader__says p,
+.gr-reader__decoder p {
+  margin: 0.75rem 0 0;
+}
+
+.gr-reader__h {
+  margin: 1.35rem 0 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gr-page-fg-soft);
+}
+
+.gr-reader__h--decoder {
+  color: var(--gr-accent);
+}
+
+.gr-reader__work {
+  margin: 0;
+  padding: 0.8rem 0.9rem;
+  background: var(--gr-code-bg);
+  border-radius: 6px;
+  border-left: 3px solid var(--gr-accent);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.gr-cover code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.87em;
+  background: var(--gr-code-bg);
+  border-radius: 4px;
+  padding: 0.05em 0.32em;
+}
+
+.gr-lit {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  letter-spacing: 0.08em;
+}
+
+.gr-caveat,
+.gr-todo {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--gr-warn);
+}
+
+.gr-reader__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.gr-btn {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--gr-page-fg);
+  background: transparent;
+  border: 1.5px solid var(--gr-rule);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  transition: border-color 140ms ease, color 140ms ease;
+}
+
+.gr-btn:hover {
+  border-color: var(--gr-accent);
+  color: var(--gr-accent);
+}
+
+.gr-btn:focus-visible {
+  outline: 3px solid var(--gr-focus);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------- note */
+
+.gr-cover__note {
+  max-width: 76ch;
+  margin: clamp(1.5rem, 4vw, 2.75rem) 0 0;
+  padding: 1rem 1.1rem;
+  border: 1.5px dashed var(--gr-rule);
+  border-radius: 8px;
+  font-size: 0.92rem;
+  color: var(--gr-page-fg-soft);
+}
+
+.gr-cover__note b {
+  color: var(--gr-page-fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gr-cover *,
+  .gr-cover *::before,
+  .gr-cover *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

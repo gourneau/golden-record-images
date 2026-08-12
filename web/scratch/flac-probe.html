@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>FLAC / 96 kHz loader probe</title>
+    <style>
+      body {
+        background: #111;
+        color: #ddd;
+        font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+        margin: 0;
+        padding: 24px;
+      }
+      h1 { font-size: 15px; font-weight: 600; margin: 0 0 4px; }
+      p.sub { color: #888; margin: 0 0 16px; }
+      pre { white-space: pre-wrap; margin: 0; }
+      .ok { color: #7ddc7d; }
+      .bad { color: #ff7b6b; }
+      .verdict { font-size: 15px; padding: 10px 0; }
+    </style>
+  </head>
+  <body>
+    <h1>Voyager frame loader probe</h1>
+    <p class="sub">
+      Query params: <code>?url=</code> frame asset (default <code>data/frames/L000.flac</code>),
+      <code>?mod=</code> loader module URL (default <code>../src/audio/loader.ts</code>, i.e. served
+      by Vite), <code>?peak=</code> level-restore factor to test.
+    </p>
+    <div id="verdict" class="verdict">running…</div>
+    <pre id="out"></pre>
+
+    <script type="module">
+      const params = new URLSearchParams(location.search);
+      const modUrl = params.get('mod') || '../src/audio/loader.ts';
+      const fileUrl = params.get('url') || 'data/frames/L000.flac';
+      const peak = params.get('peak') ? Number(params.get('peak')) : undefined;
+
+      const out = document.getElementById('out');
+      const lines = [];
+      const log = (s) => {
+        lines.push(s);
+        out.textContent = lines.join('\n');
+        console.log('[probe] ' + s);
+      };
+      const verdict = (ok, msg) => {
+        const el = document.getElementById('verdict');
+        el.textContent = (ok ? 'PASS: ' : 'FAIL: ') + msg;
+        el.className = 'verdict ' + (ok ? 'ok' : 'bad');
+        console.log('[probe] VERDICT ' + (ok ? 'PASS' : 'FAIL') + ': ' + msg);
+      };
+
+      const result = { done: false, pass: false, lines, notes: {} };
+      window.__probe = result;
+
+      function peakOf(x) {
+        let m = 0;
+        for (let i = 0; i < x.length; i++) m = Math.max(m, Math.abs(x[i]));
+        return m;
+      }
+
+      try {
+        log('userAgent: ' + navigator.userAgent);
+
+        // Raw capability check, independent of the loader, so a failure tells us
+        // whether the browser or our code is at fault.
+        const Ctor = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+        const probeCtx = new Ctor(1, 128, 96000);
+        log('OfflineAudioContext(1, 128, 96000).sampleRate = ' + probeCtx.sampleRate);
+        result.notes.offlineCtxRate = probeCtx.sampleRate;
+        const devCtx = new (window.AudioContext || window.webkitAudioContext)();
+        log('default AudioContext.sampleRate  = ' + devCtx.sampleRate + '  (what we must NOT decode at)');
+        result.notes.deviceRate = devCtx.sampleRate;
+        devCtx.close();
+
+        const mod = await import(/* @vite-ignore */ modUrl);
+        log('loader module: ' + modUrl + '  (TARGET_SAMPLE_RATE=' + mod.TARGET_SAMPLE_RATE + ')');
+
+        const base = new URL('.', new URL(fileUrl, location.href)).href;
+        const loader = new mod.FrameLoader({ baseUrl: base, maxCacheBytes: 4 * 1024 * 1024 });
+        const frame = {
+          id: 'PROBE',
+          file: fileUrl.split('/').pop(),
+          leadIn: 2000,
+          durationSamples: 420000,
+          peak,
+        };
+
+        // Two simultaneous callers must share one fetch.
+        const netBefore = performance.getEntriesByType('resource').length;
+        const t0 = performance.now();
+        const [a, b] = await Promise.all([loader.get(frame), loader.get(frame)]);
+        const dt = performance.now() - t0;
+        const fetched = performance
+          .getEntriesByType('resource')
+          .slice(netBefore)
+          .filter((e) => e.name.includes(frame.file)).length;
+
+        log('');
+        log('--- decoded ---------------------------------------------');
+        log('url            : ' + a.url);
+        log('decode path    : ' + a.path);
+        log('sampleRate     : ' + a.sampleRate);
+        log('length         : ' + a.samples.length + ' samples (' +
+            (a.samples.length / a.sampleRate).toFixed(6) + ' s)');
+        log('peak           : ' + a.peak.toFixed(9));
+        log('levelScale     : ' + a.levelScale);
+        log('leadIn         : ' + a.leadIn);
+        log('bytes cached   : ' + a.bytes);
+        log('first 8 samples: ' + Array.from(a.samples.slice(0, 8))
+              .map((v) => v.toFixed(9)).join(', '));
+        let rms = 0;
+        for (let i = 0; i < a.samples.length; i++) rms += a.samples[i] * a.samples[i];
+        rms = Math.sqrt(rms / a.samples.length);
+        log('rms            : ' + rms.toFixed(9));
+        log('elapsed        : ' + dt.toFixed(1) + ' ms for 2 concurrent callers');
+        log('network reqs for asset: ' + fetched + ' (coalescing works if 1)');
+        log('same object for both callers: ' + (a === b));
+
+        Object.assign(result.notes, {
+          url: a.url,
+          path: a.path,
+          sampleRate: a.sampleRate,
+          length: a.samples.length,
+          peak: a.peak,
+          rms,
+          first8: Array.from(a.samples.slice(0, 8)),
+          shared: a === b,
+          requests: fetched,
+          stats: loader.stats(),
+        });
+
+        log('');
+        log('--- cache / abort ---------------------------------------');
+        const c = await loader.get(frame);
+        log('second get is cache hit, same object: ' + (c === a));
+        const ac = new AbortController();
+        const pending = loader.get({ ...frame, id: 'PROBE2' }, { signal: ac.signal });
+        ac.abort();
+        let abortName = 'none';
+        try {
+          await pending;
+        } catch (e) {
+          abortName = e.name;
+        }
+        log('aborted load rejects with: ' + abortName);
+        result.notes.abortName = abortName;
+
+        // Level restore: same asset, declared peak 0.5, must scale by exactly 0.5.
+        const scaled = await loader.get({ ...frame, id: 'PROBE3', peak: 0.5 });
+        const ratio = scaled.samples[0] / a.samples[0] / (a.levelScale || 1);
+        log('level restore with peak=0.5 scales samples by ' + ratio.toFixed(6));
+        result.notes.levelRestoreRatio = ratio;
+        log('loader stats: ' + JSON.stringify(loader.stats()));
+
+        const rateOk = a.sampleRate === 96000 && probeCtx.sampleRate === 96000;
+        const pathOk = a.path === 'offline-audio-context';
+        const usable = a.samples.length > 0 && rms > 0;
+        result.pass = rateOk && usable;
+        result.done = true;
+
+        log('');
+        if (rateOk && pathOk && usable) {
+          verdict(true,
+            '96 kHz FLAC path works. decodeAudioData ran in an OfflineAudioContext at 96000 Hz ' +
+            'and returned a 96000 Hz buffer, while this device\'s own AudioContext runs at ' +
+            result.notes.deviceRate + ' Hz.');
+        } else if (rateOk && usable) {
+          verdict(true,
+            'Got 96 kHz samples, but via the ' + a.path + ' fallback rather than FLAC/Web Audio.');
+        } else {
+          verdict(false,
+            'sampleRate came back as ' + a.sampleRate + ' via ' + a.path +
+            ' -- the 96 kHz path did NOT hold.');
+        }
+      } catch (err) {
+        result.done = true;
+        result.error = String((err && err.stack) || err);
+        log('');
+        log('EXCEPTION: ' + result.error);
+        verdict(false, 'probe threw: ' + err);
+      }
+    </script>
+  </body>
+</html>
