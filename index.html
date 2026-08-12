@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Golden Record · 116 images decoded from audio</title>
+<meta name="description" content="The 116 images encoded as audio on the Voyager Golden Record, decoded from the 384 kHz master tape digitisation.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%230a0b0d'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%23c9a227' stroke-width='1.3'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#0a0b0d; --panel:#101216; --line:#20242b; --line2:#2c323b;
+  --ink:#e8eaed; --dim:#9aa3ad; --dimmer:#6b737d;
+  --gold:#c9a227; --cyan:#5fd3c4;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+a{color:var(--cyan)}
+
+header{border-bottom:1px solid var(--line);padding:72px 0 48px;
+  background:radial-gradient(1100px 420px at 50% -180px,#15181e 0%,var(--bg) 70%)}
+h1{font-size:clamp(30px,5.2vw,52px);line-height:1.08;margin:0 0 18px;letter-spacing:-.022em;font-weight:600}
+h1 em{font-style:normal;color:var(--gold)}
+.lede{font-size:clamp(16px,2vw,19px);color:var(--dim);max-width:66ch;margin:0 0 26px}
+.lede strong{color:var(--ink);font-weight:600}
+
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.stat{border:1px solid var(--line2);border-radius:8px;padding:9px 14px;background:var(--panel)}
+.stat b{font-family:var(--mono);color:var(--gold);font-size:15px}
+.stat span{color:var(--dimmer);font-size:12px;text-transform:uppercase;letter-spacing:.09em;
+  display:block;margin-top:1px}
+
+.bar{position:sticky;top:0;z-index:20;background:rgba(10,11,13,.93);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:12px 0}
+.bar .wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button{font:inherit;font-size:13px;color:var(--dim);background:transparent;
+  border:1px solid var(--line2);border-radius:7px;padding:7px 13px;cursor:pointer;transition:.14s}
+button:hover{color:var(--ink);border-color:#3d454f}
+button[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:var(--gold);font-weight:600}
+.grow{flex:1}
+.count{font-family:var(--mono);font-size:12px;color:var(--dimmer)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));
+  gap:18px;padding:36px 0 64px}
+figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  overflow:hidden;transition:.16s}
+figure:hover{border-color:#39414b;transform:translateY(-2px)}
+.shot{position:relative;background:#000;aspect-ratio:512/377;display:block;width:100%}
+.shot canvas{width:100%;height:100%;display:block;object-fit:contain;image-rendering:auto}
+.tag{position:absolute;top:8px;left:8px;font-family:var(--mono);font-size:10px;
+  padding:2px 6px;border-radius:4px;background:rgba(0,0,0,.72);color:var(--dim);letter-spacing:.04em}
+.tag.rgb{right:8px;left:auto;color:#0a0b0d;background:var(--gold);font-weight:700}
+figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
+.ttl{font-size:13.5px;line-height:1.35;color:var(--ink)}
+.sub{font-family:var(--mono);font-size:10.5px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
+
+section{border-top:1px solid var(--line);padding:56px 0}
+h2{font-size:23px;margin:0 0 20px;letter-spacing:-.012em;font-weight:600}
+h3{font-size:15px;margin:26px 0 8px;color:var(--gold);font-weight:600}
+p{color:var(--dim);max-width:74ch}
+table{border-collapse:collapse;width:100%;max-width:680px;font-size:14px;margin:12px 0}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line)}
+th{color:var(--dimmer);font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:500}
+td.n{font-family:var(--mono);color:var(--gold)}
+.note{border-left:2px solid var(--line2);padding:2px 0 2px 16px;margin:20px 0;color:var(--dimmer);font-size:14.5px}
+.note b{color:var(--dim)}
+footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);font-size:13.5px}
+.err{color:#e6a2a2;font-family:var(--mono);font-size:13px;padding:20px 0}
+@media(max-width:640px){.grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <h1>116 photographs, recovered from <em>eight minutes of noise</em></h1>
+  <p class="lede">In 1977 two spacecraft left Earth carrying a gold-plated copper record. Pressed
+  into it, alongside the music, are 116 images — not as pictures, but as <strong>sound</strong>.
+  These were decoded from a 384&nbsp;kHz digitisation of the original master tapes.</p>
+  <p class="lede">The colour images below are composited in your browser, right now, from their
+  three separate monochrome scans.</p>
+  <div class="stats">
+    <div class="stat"><b>116</b><span>images</span></div>
+    <div class="stat"><b>156</b><span>audio frames</span></div>
+    <div class="stat"><b>20</b><span>in colour</span></div>
+    <div class="stat"><b>262.5</b><span>dots per trace</span></div>
+    <div class="stat"><b>8.326 ms</b><span>per trace</span></div>
+  </div>
+</div></header>
+
+<div class="bar"><div class="wrap">
+  <button data-f="all" aria-pressed="true">All 116</button>
+  <button data-f="color">Colour only</button>
+  <button data-f="mono">Monochrome</button>
+  <span class="grow"></span>
+  <button id="ord">Separation order: <span id="ordv">R G B</span></button>
+  <span class="count" id="count"></span>
+</div></div>
+
+<div class="wrap"><div class="grid" id="grid"></div></div>
+
+<section><div class="wrap">
+  <h2>What this decoder found</h2>
+
+  <h3>The trace is sampled, not swept</h3>
+  <p>Every decoder written for this record treats each stripe as a continuous brightness sweep,
+  chopped into equal bins. It isn't. The 1977 scan converter sampled the source picture
+  <em>once per television scan line</em> and held each value — so a stripe is a staircase of
+  262.5 plateaus, not a ramp. Looking for that clock in the audio finds it exactly where the
+  hardware's patent says it should be:</p>
+  <table>
+    <tr><th>measurement</th><th>value</th></tr>
+    <tr><td>dots per trace, measured</td><td class="n">262.519 ± 0.043</td></tr>
+    <tr><td>predicted from the hardware spec</td><td class="n">262.500</td></tr>
+    <tr><td>error</td><td class="n">0.007%</td></tr>
+  </table>
+  <p>It also dissolves a long-standing mystery: the 2017 decoder carried a hardcoded
+  “−12 samples on even traces” that its author called a brainless heuristic. Twelve samples is
+  <em>one dot</em>. It was the scan converter's own clock showing through.</p>
+
+  <h3>Lock to the falling edge, not the peak</h3>
+  <p>The sync pulse changes width between alternate stripes — deliberately, to signal which
+  television field a line came from. So its peak moves, but its falling edge does not.</p>
+  <table>
+    <tr><th>landmark</th><th>timing wander</th></tr>
+    <tr><td>peak of the pulse (most decoders)</td><td class="n">±100 samples</td></tr>
+    <tr><td>the trough after it</td><td class="n">±7</td></tr>
+    <tr><td>falling edge, at zero crossing</td><td class="n">±6</td></tr>
+  </table>
+
+  <div class="note"><b>Two corrections, kept on the record.</b> An earlier version of this work
+  claimed the stripe alternation was 60&nbsp;Hz mains hum at ~70% of picture amplitude. Both
+  halves were wrong — measuring the whole record at 25× finer resolution puts it at 60.0436 Hz,
+  which is half the scan rate and <em>not</em> mains. It also claimed the frame geometry was
+  self-contradictory; that was a bad measurement of my own. Full details are in the repository.</div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Honest status</h2>
+  <p>This page is a <strong>gallery</strong>, not the interactive decoder. The real thing — where
+  the audio plays and the picture paints stripe by stripe under your control — is still being
+  built. What you see here was decoded offline and rendered to images.</p>
+  <p>The images have a distinctly <em>embossed</em>, bas-relief look. That is a real, known,
+  unfixed defect: nothing in the 1977 recording chain passed a constant brightness level, so flat
+  areas decay toward mid-grey and only edges survive. It is the same flaw the 2017 decoder's
+  author documented and could not solve, and it remains unsolved here. Correcting it is the next
+  piece of work, and the biggest single improvement still available.</p>
+  <p>Colour separation order is also unsettled — published decoders disagree on whether the three
+  scans run red-green-blue or the reverse. Use the toggle above to switch; the evidence is still
+  being weighed.</p>
+</div></section>
+
+<footer><div class="wrap">
+  <p>Decoded from the <a href="https://archive.org/details/voyager.decode">384&nbsp;kHz master
+  digitisation</a> made available by Ron Barry and David Pescovitz. Built on
+  <a href="https://github.com/foodini/voyager">Ron Barry's 2017 decoder</a> and his essay
+  <em>The Voyager Image Decoding Method</em>, which is where all of this starts.</p>
+  <p>The Voyager Golden Record and its contents are not mine. NASA material is generally public
+  domain; a number of the photographs are third-party works licensed for the record itself.
+  Images are shown here for the technical purpose of demonstrating the decoding.</p>
+  <p><a href="https://github.com/gourneau/golden-record-images">Source, method and full
+  corrections →</a></p>
+</div></footer>
+
+<script>
+const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
+let images=[], filter='all', rgbOrder=true;
+
+const load=src=>new Promise(res=>{
+  const i=new Image(); i.crossOrigin='anonymous';
+  i.onload=()=>res(i); i.onerror=()=>res(null); i.src=src;
+});
+
+// Barry's orientation table: 0 = upright, 1 and 2 are quarter turns.
+function draw(cv,srcs,orientation,colour){
+  const turn = orientation===1 ? -90 : orientation===2 ? 90 : 0;
+  return Promise.all(srcs.map(load)).then(imgs=>{
+    imgs=imgs.filter(Boolean); if(!imgs.length) return;
+    const w=imgs[0].naturalWidth, h=imgs[0].naturalHeight;
+    const off=document.createElement('canvas'); off.width=w; off.height=h;
+    const oc=off.getContext('2d',{willReadFrequently:true});
+
+    if(colour && imgs.length===3){
+      // Composite three monochrome separations into one RGB image.
+      const order = rgbOrder ? [0,1,2] : [2,1,0];
+      const out=oc.createImageData(w,h);
+      const planes=order.map(k=>{
+        const t=document.createElement('canvas'); t.width=w; t.height=h;
+        const tc=t.getContext('2d',{willReadFrequently:true});
+        tc.drawImage(imgs[k],0,0,w,h);
+        return tc.getImageData(0,0,w,h).data;
+      });
+      for(let p=0;p<w*h;p++){
+        out.data[p*4]  =planes[0][p*4];
+        out.data[p*4+1]=planes[1][p*4];
+        out.data[p*4+2]=planes[2][p*4];
+        out.data[p*4+3]=255;
+      }
+      oc.putImageData(out,0,0);
+    } else {
+      oc.drawImage(imgs[0],0,0,w,h);
+    }
+
+    const swap = turn!==0;
+    cv.width  = swap? h : w;
+    cv.height = swap? w : h;
+    const c=cv.getContext('2d');
+    c.save(); c.translate(cv.width/2,cv.height/2); c.rotate(turn*Math.PI/180);
+    c.drawImage(off,-w/2,-h/2); c.restore();
+  });
+}
+
+function render(){
+  const list=images.filter(im=> filter==='all' || (filter==='color')===!!im.color);
+  COUNT.textContent=`${list.length} shown`;
+  GRID.innerHTML='';
+  const io=new IntersectionObserver((es,obs)=>{
+    es.forEach(e=>{ if(!e.isIntersecting) return; obs.unobserve(e.target);
+      const f=e.target, d=JSON.parse(f.dataset.im);
+      draw(f.querySelector('canvas'), d.frames.map(x=>`data/thumbs/${x}.png`), d.orientation, d.color);
+    });
+  },{rootMargin:'400px'});
+
+  for(const im of list){
+    const f=document.createElement('figure');
+    f.dataset.im=JSON.stringify(im);
+    f.innerHTML=`<div class="shot"><canvas></canvas>
+        <span class="tag">${String(im.n).padStart(3,'0')}</span>
+        ${im.color?'<span class="tag rgb">RGB</span>':''}</div>
+      <figcaption><div class="ttl">${im.title??'—'}</div>
+        <div class="sub">${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'}</div>
+      </figcaption>`;
+    GRID.appendChild(f); io.observe(f);
+  }
+}
+
+document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-f]').forEach(x=>x.setAttribute('aria-pressed', x===b));
+  filter=b.dataset.f; render();
+});
+document.getElementById('ord').onclick=()=>{
+  rgbOrder=!rgbOrder;
+  document.getElementById('ordv').textContent=rgbOrder?'R G B':'B G R';
+  render();
+};
+
+fetch('web/public/data/catalog.json').then(r=>{
+  if(!r.ok) throw new Error(r.status); return r.json();
+}).then(cat=>{
+  const orient={}; for(const fr of cat.frames) orient[fr.id]=fr.orientation??0;
+  images=cat.images.map(im=>({...im, orientation:orient[im.frames[0]]??0}));
+  render();
+}).catch(e=>{
+  GRID.innerHTML=`<p class="err">Could not load the catalog (${e.message}).</p>`;
+});
+</script>
+</body>
+</html>
