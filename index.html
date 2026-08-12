@@ -147,9 +147,12 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   areas decay toward mid-grey and only edges survive. It is the same flaw the 2017 decoder's
   author documented and could not solve, and it remains unsolved here. Correcting it is the next
   piece of work, and the biggest single improvement still available.</p>
-  <p>Colour separation order is also unsettled — published decoders disagree on whether the three
-  scans run red-green-blue or the reverse. Use the toggle above to switch; the evidence is still
-  being weighed.</p>
+  <p><strong>Colour separation order: settled.</strong> Published decoders disagreed on whether
+  the three scans run red-green-blue or the reverse, and nobody had shown evidence either way.
+  Flipping the toggle above answers it by eye: under B&nbsp;G&nbsp;R the Earth's oceans turn
+  brown and the Sinai desert turns blue-grey. Under R&nbsp;G&nbsp;B the oceans are blue, the
+  desert is tan and the Red Sea reads correctly. R&nbsp;G&nbsp;B is right, which confirms Ron
+  Barry's 2017 table.</p>
 </div></section>
 
 <footer><div class="wrap">
@@ -243,7 +246,12 @@ document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{
 document.getElementById('ord').onclick=()=>{
   rgbOrder=!rgbOrder;
   document.getElementById('ordv').textContent=rgbOrder?'R G B':'B G R';
-  render();
+  // Redraw the colour composites in place. Calling render() would rebuild the
+  // grid and blank every canvas until the lazy loader caught up again.
+  GRID.querySelectorAll('figure').forEach(f=>{
+    const d=JSON.parse(f.dataset.im); if(!d.color) return;
+    draw(f.querySelector('canvas'), d.frames.map(x=>`data/thumbs/${x}.png`), d.orientation, true);
+  });
 };
 
 fetch('web/public/data/catalog.json').then(r=>{
