@@ -82,6 +82,41 @@ solved parts of this independently and better than I would have:
 Everything below is measured from the master, and the measurements are reproducible with the
 code in `pipeline/`.
 
+### The trace is sampled, not swept
+
+Every decoder written for this record — Barry's, the seven other public ones, and every earlier
+version of this one — treats a trace as a continuous brightness sweep to be chopped into *N*
+equal bins.
+
+It isn't. Patent [US4802008](https://patents.google.com/patent/US4802008A/en) quotes the
+Colorado Video Series-262 specification: the converter sampled the source television picture
+**once per scan line** and held each value. *Murmurs of Earth*'s "eight seconds each" agrees. A
+trace is a staircase of 262.5 sample-and-hold plateaus — one NTSC field, one dot per line — not
+a ramp.
+
+So we went looking for that clock in the audio. Averaging the picture-band spectrum over 440
+traces with the smooth background divided out produces a narrow line exactly where the patent
+predicts, on 16 of 22 frames sampled across both channels and the whole record:
+
+```
+dots per trace    mean 262.519    sd 0.043    range 262.47 .. 262.61
+NTSC field                        262.500     ->  error 0.007%
+```
+
+The six frames that show nothing simply lack the dot-to-dot contrast needed to excite the line;
+there the rate is predicted from the trace period and flagged as unmeasured rather than
+asserted.
+
+A trace being sampled means it should be *decoded* as sampled: integrate each dot over its own
+plateau, which is the matched filter for sample-and-hold. Any other bin grid mixes adjacent dots
+together. Native output is now **234 × 512** — the true dot count — rather than an invented 384
+rows.
+
+**It also dissolves a 2017 mystery.** Barry hardcoded "−12 samples on even traces" and called it
+a brainless heuristic. Twelve samples is *one dot*: one NTSC line period at the 2× tape speed.
+It was never a fudge factor. It was the scan converter's own clock showing through, and he was
+compensating for it without knowing what it was.
+
 ### The alternating sync pulse — and a correction
 
 Every other trace behaves differently. Barry saw it in 2017 as traces alternating ~3100 and
