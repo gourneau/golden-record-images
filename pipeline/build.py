@@ -3,12 +3,16 @@
 For every one of the 156 frames:
 
   1. read a window of the correct channel around Barry's hand-tuned seed,
-  2. re-detect the true trace-0 position and line period with sync.recover(),
-  3. cut the frame at the *detected* start, keeping LEAD_IN samples of run-up,
-  4. decimate 384 kHz -> 96 kHz (exact /4) and normalise to int16,
+  2. decimate the whole window 384 kHz -> 96 kHz (exact /4),
+  3. re-detect the true trace-0 position and line period with sync.recover(),
+  4. cut at the *detected* start, keeping LEAD_IN samples of run-up, and
+     normalise to int16 recording the pre-normalisation peak,
   5. write mono 16-bit FLAC and verify it round-trips sample for sample,
   6. decode the emitted asset -- not the master -- to a PNG, so the thumbnail
      proves the thing we shipped is decodable.
+
+Decimating before cutting makes the cut a slice, so the shipped file is never
+resampled a second time and trace 0 lands within half a sample of `leadIn`.
 
 Then emit catalog.json per the web data contract, plus a contact sheet of every
 frame for the later visual-identification pass.

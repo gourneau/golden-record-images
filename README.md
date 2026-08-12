@@ -79,26 +79,53 @@ solved parts of this independently and better than I would have:
 Everything below is measured from the master, and the measurements are reproducible with the
 code in `pipeline/`.
 
-### 60 Hz mains hum, phase-locked to the scan
+### The alternating sync pulse — and a correction
 
-The scan runs at 120 traces per second. US mains runs at 60 Hz. 120 is exactly twice 60, and
-in 1977 the scan rate would have been derived from the mains supply — so the two are *locked*.
+Every other trace behaves differently. Barry saw it in 2017 as traces alternating ~3100 and
+~3300 samples apart, and killed it with a hardcoded "−12 samples on even traces, changing at
+trace 164". It is the most consequential feature of this signal.
 
-The consequence is unusual. Hum in a video signal normally appears as a bar drifting slowly up
-the picture. Here it cannot drift, so it stands perfectly still: **every odd trace lifted,
-every even trace lowered, by the same amount, for the whole recording.** It looks like fine
-vertical texture, or like a slightly mistimed decoder, which is how it has been read until now.
+**An earlier version of this README claimed this was 60 Hz mains hum phase-locked to the
+120 Hz scan, at ~70% of picture amplitude. Both halves of that were wrong, and the corrected
+account is more interesting.**
 
-Measured: the blanking-level series peaks at **exactly 0.5000 cycles/trace**, carrying 100% of
-the peak power, at an amplitude of about **70% of the picture signal**.
+*It is not mains.* Decimating the whole 473 s record and taking a 0.002 Hz-resolution spectrum
+puts the component at **60.0436 Hz** — 2.5 bins from half the measured line rate (60.0488 Hz)
+and 20.6 bins from mains (60.000 Hz). It is locked to the scan, not to the power grid. The
+original claim rested on a peak at "exactly 0.5000 cycles/trace", but over a 512-trace frame
+those two hypotheses sit 0.21 FFT bins apart — that measurement could never have distinguished
+them, and I should not have asserted it.
 
-It also explains three things that were previously loose ends: Barry's traces alternating
-~3100 and ~3300 samples apart, his residual interlace artefact, and the exactly-two-trace
-periodicity in the quiet gaps between images.
+*It is not 70%.* That figure was measured inside the sync burst, which was leaking into the
+picture window because of a coordinate-convention bug. The genuine parity-locked component
+within the picture is 0.0016–0.0031 in signal units, **5–30% of picture RMS**.
 
-And because it's locked, it subtracts out *exactly* — average the odd traces, average the even
-traces, real picture content cancels between them, and the difference that remains is the hum.
-No filtering, nothing blurred, nothing lost.
+*What it actually is:* by design. Colorado Video's Model 262 scan converter specifies **two
+sync/blanking widths, used to identify which interlace field a line belongs to**. The encoder
+is telling the receiver which field it is looking at. On our master the even-trace pulse goes
+high ~155 samples before the falling edge and the odd-trace pulse only ~45 before; both fall
+through zero at the same instant.
+
+The practical consequence is that the alternation is primarily a **timing** effect, not an
+amplitude one — which is why a single matched filter cannot fit both parities, and why
+correlating against one averaged template mislocks by ~100 samples on alternate traces. Two
+parity-specific templates cut one bad frame from 89 misplaced traces out of 512 down to 2.
+
+### Lock to the falling edge, not the peak
+
+Landmark stability, measured as the standard deviation of spacing between consecutive
+detections on our master:
+
+| landmark | spacing std |
+|---|---|
+| peak maximum (Barry's, and most decoders') | **100.3 samples** |
+| trough after the peak | 7.1 |
+| **downward zero crossing of the falling edge** | **5.5 – 6.2** |
+
+The peak moves because the pulse *width* alternates; the falling edge does not. A ±100-sample
+landmark error is exactly what produces a diagonal staircase band across a photograph, and it
+explains why line-art diagrams decode cleanly while detailed photographs fail — picture content
+occasionally out-peaks the sync burst.
 
 ### Sync by matched filter instead of peak-picking
 

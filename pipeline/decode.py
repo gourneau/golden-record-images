@@ -27,14 +27,17 @@ This is one digitisation of a 1977 analog chain, so the defects are the ones
 analog tape and disc always have. Each is measured and either corrected or
 reported:
 
-  60 Hz mains hum   The line rate is 120 Hz and US mains is 60 Hz, so hum lands
-                    at exactly half the line rate -- phase-locked to the scan.
-                    It therefore does not roll through the picture, it stands
-                    still as a fixed offset that flips sign every trace. We
-                    measured it at 0.021 in signal units against a picture RMS
-                    of 0.030: about 70% of the signal. Because it is locked it
-                    subtracts out exactly, by removing the difference between
-                    the odd-trace and even-trace mean profiles.
+  parity-locked     The sync/blanking pulse alternates width between traces. This is by
+  sync alternation  design: Colorado Video's Model 262 scan converter used two sync widths to
+                    identify which interlace field a line belonged to. It is NOT 60 Hz mains
+                    hum -- measured over the whole record the component sits at 60.0436 Hz,
+                    2.5 FFT bins from half the line rate (60.0488) and 20.6 bins from mains
+                    (60.000). An earlier docstring here claimed mains hum at ~70% of picture
+                    amplitude; that figure was measured inside the sync burst, which was
+                    leaking into the picture window through a coordinate-convention bug. The
+                    genuine picture-domain component is 0.0016-0.0031, i.e. 5-30% of picture
+                    RMS. It is mainly a TIMING effect, not an amplitude one, which is why one
+                    matched template cannot fit both parities.
   wow and flutter   Tape speed wanders. Every trace is located independently and
                     the picture is resampled onto corrected timing.
   AC-coupling droop Nothing in the chain passed DC, so brightness decays across

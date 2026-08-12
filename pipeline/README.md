@@ -29,8 +29,7 @@ python -m pipeline.build --sheet-only            # re-tile existing thumbnails
 
 Requires `numpy`, `scipy`, `Pillow`, and the `flac` CLI on `$PATH`.
 
-Roughly 6 s per frame, dominated by two calls to `sync.recover()`; the full set
-takes a few minutes at `--jobs 6`. Output:
+About 0.3 s per frame; the full 156 take 37 s at `--jobs 2`. Output:
 
 | path | what |
 | --- | --- |
@@ -83,36 +82,36 @@ Decimation removes everything above 48 kHz, which as far as the sync edges are
 concerned is noise: the correlation in `sync.py` runs on the derivative of the
 signal, and differentiating amplifies exactly the band decimation throws away.
 The 384 kHz recovery is available behind `--full-rate-check` and is off by
-default, because `sync.estimate_period()` autocorrelates with
-`np.correlate(mode="full")`, which is O(n^2) in the segment length -- so
-recovering at four times the rate costs sixteen times as much for a number we do
-not use. (That O(n^2) is also why a frame takes ~6 s instead of ~0.3 s. An
-FFT-based autocorrelation, or one evaluated only over the lags it actually
-searches, would give the whole build back an order of magnitude. `sync.py` is
-not ours to change.)
+default: it costs several times what the decimated recovery costs, for a
+measurement the assets do not use.
 
 ### Seed versus detected start
 
 Barry's `start_points` are seeds only. Every frame start is re-detected from the
-signal, and the run reports the difference. Over the first six frames:
+signal, and the run reports the difference. Over all 156 frames, in 384 kHz
+samples (one line = 3197.4):
 
 ```
-signed: mean -324.8   sd 27.0   min -377.8   max -298.5     (384 kHz samples)
-after removing the median offset:  median 18.0   max 60.4   rms 28.0
+signed:  mean -172.3   sd 229.1   median -149.4   min -1471.1   max +1282.1
+after removing the median offset:  p50 31.7   p90 166.5   max 1431.5
+    <=   8 samples:  27/156 (17%)      <=  200 samples: 146/156 (94%)
+    <=  50 samples: 115/156 (74%)      <= 1599 samples: 156/156 (100%)
 ```
 
-Two separate things are in that number:
+Three separate things are in that number:
 
-* **A constant ~325-sample offset**, about a tenth of a line. This is a
-  convention difference, not error: `sync.py` calls the leading edge of the
-  blanking burst the trace start, and Barry's seeds land near a different
-  feature of the same sync region. A constant offset costs nothing -- it moves
-  every trace of every frame by the same amount.
-* **The scatter around it**, tens of samples, which is what his hand-tuning
-  actually cost. His table carries manual `+3151`-style fudges precisely because
-  a seed that is a full line out has to be nudged by hand; re-detection removes
-  the need for any of them, and the run prints how many frames land within 8,
-  50, 200, 800 and 1599 samples once the common offset is removed.
+* **A constant ~150-sample offset**, a twentieth of a line. This is a convention
+  difference, not error: `sync.py` calls the leading edge of the blanking burst
+  the trace start, and Barry's seeds land near a different feature of the same
+  sync region. A constant offset costs nothing -- it moves every trace of every
+  frame alike.
+* **The scatter around it** -- 32 samples for the median frame, 167 at the 90th
+  percentile -- which is what his hand-tuning actually cost. His table carries
+  manual `+3151`-style fudges precisely because a seed that is a full line out
+  has to be nudged by hand; re-detection removes the need for all of them.
+* **Six frames** (`R061 L028 R039 R044 L023 R063`) sit 700-1500 samples out,
+  a quarter to a half line. Five of those six are the frames the confidence
+  check flags, so they are our uncertainty rather than his -- see below.
 
 The run also reports the odd/even alternation in the fit residuals, the artefact
 Barry compensated with a hardcoded "+/-12 samples on even traces, changing at
@@ -121,16 +120,22 @@ trace 164". At 96 kHz his fudge is 3 samples; we measure ~1.
 ### Per-frame quality
 
 `measurement_noise96` above `NOISE_LIMIT` flags a frame whose timebase is not
-trustworthy, and flagged frames are listed by id. The flag earns its keep: an
-earlier build flagged 117 of 156 frames -- every photograph, no line-art diagram
--- which turned out to be `sync.py` anchoring its matched filter on the notch
-*inside* the picture region instead of on the blanking burst. That is fixed in
-`sync.py`; the tripwire stays.
+trustworthy, and flagged frames are listed by id. Five of 156 are flagged today
+(`L023 L028 R039 R044 R063`), and they are the same frames that carry the worst
+seed deltas. The flag earns its keep: an earlier build flagged 117 of 156 --
+every photograph, no line-art diagram -- which turned out to be `sync.py`
+anchoring its matched filter on the notch *inside* the picture region instead of
+on the blanking burst. That is fixed in `sync.py`; the tripwire stays.
 
 `trace0_offset96` is the strongest end-to-end check in the build: it is the
 shipped file's own answer, after decimation, int16 quantisation and a FLAC round
-trip, to "where is trace 0?". It should equal `leadIn`. It currently does, to
-within 0.53 samples worst case.
+trip, to "where is trace 0?". It should equal `leadIn`, and for 149 of 156
+frames it does to within 2 samples (median 0.45, p90 1.04). The exceptions are
+`R044` (278), `R038` (64), `L023` (56), `R063` (13), `L028` (7): all but `R038`
+are already flagged, so `R038` is the one frame where the confidence check is
+too generous. None of these is fatal -- the error is a fraction of a line, so a
+consumer that picks the trace nearest `leadIn` still picks the right one -- but
+they are the frames to look at first if a picture comes out misframed.
 
 ### Known gaps
 

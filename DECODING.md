@@ -131,31 +131,49 @@ The fix is the one television engineers have used since the 1950s. That flat she
 sync burst is *known* to be a fixed level, so measure it on every trace and subtract it.
 That's called clamping, and it removes most of the drift immediately.
 
-### Step 6 — Remove the hum ⚡
+### Step 6 — Handle the alternating stripes ⚡
 
-**This is the part nobody had noticed, and it's the single biggest defect in the
-recording.**
+**Every other stripe behaves differently, and this is the thing that breaks decoders.**
 
-The scan runs at 120 traces per second. American mains electricity runs at 60 Hz. 120 is
-exactly twice 60 — and in 1977 the scan rate would have been derived from the mains supply,
-so the two are *locked together*.
+If you measure the gap between one sync burst and the next, you get ~3100 samples, then
+~3300, then ~3100, then ~3300. That alternation is why the 2017 decode had a persistent
+"jitter" it fixed with a hardcoded fudge.
 
-That has a strange consequence. Normally mains hum in a video signal shows up as a bar
-drifting slowly up the picture. Here it can't drift, because it's synchronised to the scan.
-Instead it stands perfectly still: **every odd-numbered stripe is lifted, every
-even-numbered stripe is lowered, by the same amount, forever.**
+The cause turns out to be documented. The 1977 scan converter — Colorado Video's Model 262 —
+**deliberately used two different sync-pulse widths, so the receiver could tell which
+interlace field a line belonged to.** It's a feature, not a fault. On our recording, the
+even-trace pulse goes high about 155 samples before it falls; the odd-trace pulse only about
+45 samples before. But both fall through zero at the *same* instant.
 
-It hides beautifully. It looks like fine vertical texture, or like the decoder is slightly
-mistimed — which is how it has been interpreted until now. It also explains the "3100, then
-3300, then 3100" alternation seen in 2017, and a two-stripe rhythm in the quiet gaps
-between images.
+That last detail is the whole trick:
 
-Measured amplitude: **about 70% of the picture signal itself.**
+| What you lock onto | How much it wanders |
+|---|---|
+| the peak of the pulse *(what most decoders use)* | **±100 samples** |
+| the trough after the peak | ±7 |
+| **the falling edge, where it crosses zero** | **±6** |
 
-And because it's locked, it comes out *exactly*. Average all the odd stripes; average all
-the even stripes. Real picture content has nothing to do with whether a stripe is odd or
-even, so it cancels between the two, and the difference that's left is the hum. Subtract
-it. No filtering, no blurring, nothing lost.
+Lock to the falling edge and your timing error drops by a factor of ~16, because the edge
+doesn't care how wide the pulse was. This single change is the difference between a
+photograph decoding cleanly and decoding with a diagonal staircase torn across it.
+
+It also means **one template can't match both stripe types** — they're genuinely different
+shapes. Use two, one per parity, or match only the falling edge that they share.
+
+> **A correction.** An earlier version of this document claimed the alternation was 60 Hz
+> mains hum locked to the 120 Hz scan, at about 70% of the picture signal. That was wrong on
+> both counts and it's worth saying why, because the mistake is instructive.
+>
+> The evidence was a peak at "exactly half the stripe rate". But over one 512-stripe image,
+> "mains hum at 60.000 Hz" and "something locked to the scan" sit only a fifth of a
+> measurement bin apart — the test could never have separated them. Measuring the *whole*
+> record instead gives 25× finer resolution, and the answer is 60.0436 Hz: essentially exactly
+> half the scan rate, and clearly *not* 60.000 Hz mains. And the "70%" was measured inside the
+> sync burst, which was leaking into the picture because of a coordinate bug. In the picture
+> itself the effect is 5–30%.
+>
+> The lesson generalises: if two explanations predict nearly the same number, measuring more
+> carefully beats arguing about which is more plausible.
 
 ### Step 7 — Set the levels, and check the circle
 
