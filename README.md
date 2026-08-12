@@ -9,6 +9,9 @@ This is a decoder that turns that sound back into pictures, in your browser, in 
 **[Read how the decoding works →](DECODING.md)** (written for a general audience, no signal
 processing assumed)
 
+**[What an alien could not easily work out →](ALIENS.md)** — which parts of this a recipient
+could actually recover, and where the record lets its reader down
+
 <p align="center">
   <img src="docs/img/calibration-barry.png" width="45%" alt="Calibration circle decoded with the 2017 method: an ellipse">
   <img src="docs/img/calibration-restored.png" width="45%" alt="Calibration circle decoded with this decoder: round">
