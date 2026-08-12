@@ -19,8 +19,16 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 
 TABLES_PATH = Path(__file__).with_name("barry_tables.json")
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+FRAME_MAP_PATH = DATA_DIR / "frame_map.json"
+IMAGES_PATH = DATA_DIR / "images.json"
 
 CHANNEL_LETTERS = ("L", "R")
+# The order of the three separations within a colour triplet, as they occur on
+# the record. Settled empirically -- see pipeline/colour.py for the measurement
+# (all 20 triplets correlated against the canonical NAIC source images; 20/20
+# say first frame = red). Barry's r,g,b tables are right; the b,g,r order
+# asserted in amazing-rando's README is wrong.
 RGB_ORDER = ("r", "g", "b")
 EXPECTED_FRAMES = 156
 EXPECTED_IMAGES = 116
@@ -39,6 +47,8 @@ class Frame:
     color: str  # "mono" | "r" | "g" | "b"
     triplet_id: str | None  # "T01".."T20" when color != "mono"
     orientation: int  # quarter turns, from Barry's table
+    image_number: int | None = None  # canonical 1..116, from data/frame_map.json
+    title: str | None = None  # canonical title, from data/frame_map.json
 
 
 @dataclass(frozen=True)
@@ -47,6 +57,8 @@ class Image:
 
     frames: tuple[str, ...]
     color: bool
+    n: int | None = None  # canonical 1..116
+    title: str | None = None
 
 
 @dataclass(frozen=True)
@@ -72,6 +84,66 @@ def load_tables(path: str | Path = TABLES_PATH) -> dict:
         if len(rows) != len(CHANNEL_LETTERS) or any(len(r) != n for r in rows):
             raise ValueError(f"{key}: expected {len(CHANNEL_LETTERS)}x{n}, got {[len(r) for r in rows]}")
     return tables
+
+
+def _identify(frames: list[Frame], images: list[Image]) -> tuple[list[Frame], list[Image]]:
+    """Attach canonical imageNumber and title from data/frame_map.json.
+
+    The frame->image mapping was established by the prior-art sweep (left
+    channel carries images 1-54 in order, right channel 55-116) and verified
+    visually at 30+ anchor points. Here it is cross-checked against the
+    structural catalog; any disagreement means one of the two is corrupt, so
+    every check raises rather than warns.
+    """
+    if not FRAME_MAP_PATH.exists() or not IMAGES_PATH.exists():
+        raise FileNotFoundError(
+            f"identification tables missing: need {FRAME_MAP_PATH} and {IMAGES_PATH}"
+        )
+    frame_map = {e["frame"]: e for e in json.loads(FRAME_MAP_PATH.read_text())}
+    canon = {e["n"]: e for e in json.loads(IMAGES_PATH.read_text())}
+
+    if len(frame_map) != EXPECTED_FRAMES:
+        raise ValueError(f"frame_map.json has {len(frame_map)} frames, expected {EXPECTED_FRAMES}")
+    if len(canon) != EXPECTED_IMAGES or set(canon) != set(range(1, EXPECTED_IMAGES + 1)):
+        raise ValueError(f"images.json must cover n=1..{EXPECTED_IMAGES} exactly")
+
+    out_frames: list[Frame] = []
+    for f in frames:
+        e = frame_map.get(f.id)
+        if e is None:
+            raise ValueError(f"{f.id}: missing from frame_map.json")
+        if e["role"] != f.color:
+            raise ValueError(f"{f.id}: frame_map role {e['role']!r} != catalog color {f.color!r}")
+        n = int(e["imageNumber"])
+        title = canon[n]["title"]
+        if e.get("title") != title:
+            raise ValueError(f"{f.id}: frame_map title {e['title']!r} != images.json {title!r}")
+        out_frames.append(replace(f, image_number=n, title=title))
+
+    by_id = {f.id: f for f in out_frames}
+    out_images: list[Image] = []
+    seen: set[int] = set()
+    for im in images:
+        ns = {by_id[fid].image_number for fid in im.frames}
+        if len(ns) != 1:
+            raise ValueError(f"image frames {im.frames} map to several imageNumbers {sorted(ns)}")
+        n = ns.pop()
+        if n in seen:
+            raise ValueError(f"imageNumber {n} claimed by more than one image")
+        seen.add(n)
+        if im.color and not canon[n]["color"]:
+            raise ValueError(
+                f"image {n} ({canon[n]['title']!r}) is an r/g/b triplet on the record "
+                f"but images.json marks it monochrome"
+            )
+        out_images.append(replace(im, n=n, title=canon[n]["title"]))
+    if seen != set(range(1, EXPECTED_IMAGES + 1)):
+        raise ValueError(f"images do not cover 1..{EXPECTED_IMAGES}: missing {sorted(set(range(1, 117)) - seen)}")
+
+    n_colour_canon = sum(1 for e in canon.values() if e["color"])
+    if n_colour_canon != EXPECTED_TRIPLETS:
+        raise ValueError(f"images.json marks {n_colour_canon} colour images, expected {EXPECTED_TRIPLETS}")
+    return out_frames, out_images
 
 
 def build(tables: dict | None = None) -> Catalog:
@@ -143,6 +215,7 @@ def build(tables: dict | None = None) -> Catalog:
             f"got {n_mono} + {triplet_n}"
         )
 
+    frames, images = _identify(frames, images)
     return Catalog(frames=tuple(frames), images=tuple(images))
 
 
@@ -159,8 +232,8 @@ def catalog_json(
     `frame_meta` supplies the per-frame numbers that only the asset build knows
     (file, leadIn, startSample, periodGuess, durationSamples, peak); frames
     absent from it are omitted, so a partial build produces a catalog that
-    describes exactly the assets on disk. imageNumber and title stay null until
-    a later step identifies the pictures visually.
+    describes exactly the assets on disk. imageNumber and title come from the
+    identification tables (data/frame_map.json + data/images.json).
     """
     out_frames = []
     for f in catalog.frames:
@@ -181,14 +254,14 @@ def catalog_json(
                 "orientation": f.orientation,
                 "durationSamples": meta["durationSamples"],
                 "peak": meta["peak"],
-                "imageNumber": None,
-                "title": None,
+                "imageNumber": f.image_number,
+                "title": f.title,
             }
         )
 
     present = {f["id"] for f in out_frames}
     out_images = [
-        {"n": None, "title": None, "frames": list(im.frames), "color": im.color}
+        {"n": im.n, "title": im.title, "frames": list(im.frames), "color": im.color}
         for im in catalog.images
         if all(fid in present for fid in im.frames)
     ]

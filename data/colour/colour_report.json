@@ -1,0 +1,489 @@
+{
+ "separationOrder": [
+  "r",
+  "g",
+  "b"
+ ],
+ "images": [
+  {
+   "n": 8,
+   "title": "Solar spectrum",
+   "frames": [
+    "L007",
+    "L008",
+    "L009"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 0.02,
+     "dx": -103.95,
+     "peak": 0.027
+    },
+    {
+     "role": "b",
+     "dy": 0.07,
+     "dx": 66.72,
+     "peak": 0.028
+    }
+   ],
+   "file": "image008.png"
+  },
+  {
+   "n": 12,
+   "title": "Earth",
+   "frames": [
+    "L013",
+    "L014",
+    "L015"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": -0.04,
+     "dx": -0.2,
+     "peak": 0.413
+    },
+    {
+     "role": "b",
+     "dy": -0.3,
+     "dx": 0.26,
+     "peak": 0.271
+    }
+   ],
+   "file": "image012.png"
+  },
+  {
+   "n": 13,
+   "title": "Egypt, Red Sea, Sinai Peninsula, and the Nile",
+   "frames": [
+    "L016",
+    "L017",
+    "L018"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 0.01,
+     "dx": -0.17,
+     "peak": 0.395
+    },
+    {
+     "role": "b",
+     "dy": -0.01,
+     "dx": -0.01,
+     "peak": 0.386
+    }
+   ],
+   "file": "image013.png"
+  },
+  {
+   "n": 23,
+   "title": "Anatomy 6 (Internal organs front)",
+   "frames": [
+    "L028",
+    "L029",
+    "L030"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": -0.88,
+     "dx": -0.81,
+     "peak": 0.233
+    },
+    {
+     "role": "b",
+     "dy": 0.18,
+     "dx": 0.0,
+     "peak": 0.315
+    }
+   ],
+   "file": "image023.png"
+  },
+  {
+   "n": 34,
+   "title": "Nursing mother (Philippines)",
+   "frames": [
+    "L041",
+    "L042",
+    "L043"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": -0.57,
+     "dx": -0.2,
+     "peak": 0.25
+    },
+    {
+     "role": "b",
+     "dy": 0.38,
+     "dx": 0.08,
+     "peak": 0.322
+    }
+   ],
+   "file": "image034.png"
+  },
+  {
+   "n": 35,
+   "title": "Father and daughter (Malaysia)",
+   "frames": [
+    "L044",
+    "L045",
+    "L046"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": -0.06,
+     "dx": -0.22,
+     "peak": 0.221
+    },
+    {
+     "role": "b",
+     "dy": 0.07,
+     "dx": 0.06,
+     "peak": 0.273
+    }
+   ],
+   "file": "image035.png"
+  },
+  {
+   "n": 36,
+   "title": "Group of children",
+   "frames": [
+    "L047",
+    "L048",
+    "L049"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 0.05,
+     "dx": 0.02,
+     "peak": 0.283
+    },
+    {
+     "role": "b",
+     "dy": -0.06,
+     "dx": -0.11,
+     "peak": 0.301
+    }
+   ],
+   "file": "image036.png"
+  },
+  {
+   "n": 45,
+   "title": "Monument Valley",
+   "frames": [
+    "L058",
+    "L059",
+    "L060"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 0.11,
+     "dx": 0.9,
+     "peak": 0.318
+    },
+    {
+     "role": "b",
+     "dy": -0.1,
+     "dx": -0.29,
+     "peak": 0.253
+    }
+   ],
+   "file": "image045.png"
+  },
+  {
+   "n": 46,
+   "title": "Forest scene with mushrooms",
+   "frames": [
+    "L061",
+    "L062",
+    "L063"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 0.09,
+     "dx": -0.02,
+     "peak": 0.557
+    },
+    {
+     "role": "b",
+     "dy": -0.45,
+     "dx": -0.28,
+     "peak": 0.221
+    }
+   ],
+   "file": "image046.png"
+  },
+  {
+   "n": 48,
+   "title": "Autumn Fallen leaves",
+   "frames": [
+    "L065",
+    "L066",
+    "L067"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 0.03,
+     "dx": -0.08,
+     "peak": 0.439
+    },
+    {
+     "role": "b",
+     "dy": -0.05,
+     "dx": -0.36,
+     "peak": 0.284
+    }
+   ],
+   "file": "image048.png"
+  },
+  {
+   "n": 49,
+   "title": "Snowflakes over Sequoia",
+   "frames": [
+    "L068",
+    "L069",
+    "L070"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 1.4,
+     "dx": -0.14,
+     "peak": 0.34
+    },
+    {
+     "role": "b",
+     "dy": 0.94,
+     "dx": 0.13,
+     "peak": 0.307
+    }
+   ],
+   "file": "image049.png"
+  },
+  {
+   "n": 50,
+   "title": "Tree with daffodils",
+   "frames": [
+    "L071",
+    "L072",
+    "L073"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": -0.1,
+     "dx": -0.04,
+     "peak": 0.427
+    },
+    {
+     "role": "b",
+     "dy": -1.01,
+     "dx": -0.22,
+     "peak": 0.252
+    }
+   ],
+   "file": "image050.png"
+  },
+  {
+   "n": 55,
+   "title": "School of fish",
+   "frames": [
+    "R000",
+    "R001",
+    "R002"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 0.04,
+     "dx": -0.0,
+     "peak": 0.357
+    },
+    {
+     "role": "b",
+     "dy": 0.05,
+     "dx": 0.02,
+     "peak": 0.393
+    }
+   ],
+   "file": "image055.png"
+  },
+  {
+   "n": 60,
+   "title": "Jane Goodall and chimps",
+   "frames": [
+    "R007",
+    "R008",
+    "R009"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": -2.06,
+     "dx": -0.01,
+     "peak": 0.617
+    },
+    {
+     "role": "b",
+     "dy": -0.01,
+     "dx": -0.4,
+     "peak": 0.246
+    }
+   ],
+   "file": "image060.png"
+  },
+  {
+   "n": 78,
+   "title": "Underwater scene with diver and fish",
+   "frames": [
+    "R027",
+    "R028",
+    "R029"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": -0.02,
+     "dx": -1.2,
+     "peak": 0.23
+    },
+    {
+     "role": "b",
+     "dy": -0.05,
+     "dx": -0.08,
+     "peak": 0.256
+    }
+   ],
+   "file": "image078.png"
+  },
+  {
+   "n": 89,
+   "title": "House interior with artist and fire",
+   "frames": [
+    "R040",
+    "R041",
+    "R042"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 0.06,
+     "dx": 0.12,
+     "peak": 0.361
+    },
+    {
+     "role": "b",
+     "dy": 0.59,
+     "dx": -0.02,
+     "peak": 0.233
+    }
+   ],
+   "file": "image089.png"
+  },
+  {
+   "n": 94,
+   "title": "UN Building Night",
+   "frames": [
+    "R047",
+    "R048",
+    "R049"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": -1.21,
+     "dx": 0.04,
+     "peak": 0.408
+    },
+    {
+     "role": "b",
+     "dy": -0.51,
+     "dx": 0.11,
+     "peak": 0.295
+    }
+   ],
+   "file": "image094.png"
+  },
+  {
+   "n": 97,
+   "title": "Factory interior",
+   "frames": [
+    "R052",
+    "R053",
+    "R054"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 0.04,
+     "dx": -0.07,
+     "peak": 0.47
+    },
+    {
+     "role": "b",
+     "dy": 0.04,
+     "dx": 0.75,
+     "peak": 0.213
+    }
+   ],
+   "file": "image097.png"
+  },
+  {
+   "n": 112,
+   "title": "Astronaut in space (Ed White)",
+   "frames": [
+    "R069",
+    "R070",
+    "R071"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 0.05,
+     "dx": -0.07,
+     "peak": 0.488
+    },
+    {
+     "role": "b",
+     "dy": 0.09,
+     "dx": -0.95,
+     "peak": 0.274
+    }
+   ],
+   "file": "image112.png"
+  },
+  {
+   "n": 114,
+   "title": "Sunset with birds",
+   "frames": [
+    "R073",
+    "R074",
+    "R075"
+   ],
+   "offsets": [
+    {
+     "role": "r",
+     "dy": 0.9,
+     "dx": 0.93,
+     "peak": 0.105
+    },
+    {
+     "role": "b",
+     "dy": 0.08,
+     "dx": 0.92,
+     "peak": 0.07
+    }
+   ],
+   "file": "image114.png"
+  }
+ ]
+}

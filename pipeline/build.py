@@ -201,6 +201,11 @@ def align_timebase(tb: sync_mod.Timebase, lead_in: float, n_traces: int) -> sync
         raise ValueError(f"no trace within half a period of leadIn={lead_in} (nearest {off:+.1f})")
     if len(tb.smoothed) - k < n_traces:
         raise ValueError(f"only {len(tb.smoothed) - k} traces after leadIn, need {n_traces}")
+    extra = {}
+    if getattr(tb, "located", np.zeros(0)).size:  # sync v2 carries per-trace flags
+        extra["located"] = tb.located[k:]
+        # parity offset is keyed to trace-index parity; an odd shift flips it
+        extra["parity_offset"] = tb.parity_offset * (-1 if k % 2 else 1)
     return dataclasses.replace(
         tb,
         phase=tb.phase + k * tb.period,
@@ -208,6 +213,7 @@ def align_timebase(tb: sync_mod.Timebase, lead_in: float, n_traces: int) -> sync
         smoothed=tb.smoothed[k:],
         residuals=tb.residuals[k:],
         n_traces=len(tb.smoothed) - k,
+        **extra,
     )
 
 

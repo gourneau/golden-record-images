@@ -112,6 +112,17 @@ plateau, which is the matched filter for sample-and-hold. Any other bin grid mix
 together. Native output is now **234 × 512** — the true dot count — rather than an invented 384
 rows.
 
+It also settles the geometry. Because a trace is one *field* rather than a full frame, it carries
+half a frame's vertical lines, so the dots are not square: each is 384/234 = 1.641 times taller
+than a trace is wide. Fit an ellipse to the calibration ring on the native dot grid and it comes
+out at 1.6373 against that predicted 1.6410 — **round to 0.23%**, with 185 inliers over 320° of
+arc. 512 traces, a 4:3 frame and 234 active dots are all mutually consistent after all.
+
+(An earlier revision of this README claimed those three could *not* all be true, citing a ring
+axis ratio of 1.1159. That number came from thresholding the ring's bounding box in a resampled
+display image, which is a poor estimator — a proper ellipse fit on the native grid disagrees. The
+contradiction was mine, not the record's.)
+
 **It also dissolves a 2017 mystery.** Barry hardcoded "−12 samples on even traces" and called it
 a brainless heuristic. Twelve samples is *one dot*: one NTSC line period at the 2× tape speed.
 It was never a fudge factor. It was the scan converter's own clock showing through, and he was

@@ -1,83 +1,161 @@
 """Timebase recovery: find where every trace begins, to a fraction of a sample.
 
-Barry's 2017 decoder picked the maximum sample in a 190-sample window, then the
-minimum after it. That works, but the sync region has several features and
-peak-picking latches onto whichever one happens to be tallest on a given line --
-which is why his traces came out alternately 3100 and 3300 samples apart and why
-he needed a hardcoded `+/-12 samples on even traces, changing at trace 164` fudge.
+v2 -- rebuilt on measurements of the 384 kHz master. The v1 template-fold
+approach lives in sync_v1_backup.py; it is structurally wrong for this signal
+because THE SYNC PULSE WIDTH ALTERNATES WITH TRACE PARITY (wide pulse: high
+plateau for the last ~140 samples at 384 kHz before the fall; narrow pulse:
+high only for the last ~40), so a single folded template correlates early on
+one parity and late on the other -- and worse, v1's blanking detector latched a
+different pulse feature on different frames: the measured spread of its anchor
+across frames was 38 to 104 samples at 96 kHz, i.e. the picture window moved by
+up to 17 pixels from frame to frame.
 
-We do it differently:
+What both parities share is the TRAILING FALLING EDGE: from the high plateau
+(~0.10-0.19) through a deep trough within ~8 samples at 384 kHz. Its
+half-amplitude downward crossing measured the most stable landmark on this
+master (spacing std 5.5-6.2 samples at 384 kHz, vs ~100 for the peak Barry's
+decoder used). We lock onto that crossing:
 
-  1. Fold several hundred lines together at the nominal period. Picture content
-     averages away; everything locked to the line clock survives. That gives a
-     high-SNR template of the *whole* sync region.
-  2. Cross-correlate each line against that template and parabolically
-     interpolate the correlation peak -> sub-sample position, using every sync
-     feature at once instead of one fragile extremum.
-  3. Fit position-vs-line-index with iteratively reweighted least squares. The
-     slope is the true line period, the intercept the frame phase, and the
-     residuals are the master tape's wow and flutter.
+  1. Period first, by FFT autocorrelation over a ~50-line baseline
+     (estimate_period, unchanged from v1). This cannot be skipped: it was
+     tried during the v2 rebuild, and with the nominal period 0.7 samples/line
+     wrong the phase vote smeared by ~360 samples and half the frames lost
+     lock.
+  2. A bipolar "drop score" over the whole signal: mean of a short window
+     before each sample minus mean of a short window after. Picture content
+     does not produce the plateau-then-trough swing, so the score is large
+     only on sync falls. A phase vote (fold the score at the period over all
+     traces) finds the frame phase without any threshold.
+  3. Predict-and-correct with coasting: search a narrow window around each
+     predicted landmark, take the drop-score argmax, refine to the sub-sample
+     half-amplitude crossing. Half-amplitude, not zero: the record's
+     AC-coupling offset means the raw signal need not cross zero at all -- an
+     absolute-zero test measurably loses half the traces on some frames
+     because the trough after the narrow pulse is shallow. A validity gate
+     (score above 0.45 x the frame median) rejects traces where picture or
+     dropouts swamp the sync; those coast on the smoothed prediction and are
+     flagged, never invented.
+  4. Robust straight-line fit for period/phase + Savitzky-Golay smoothing of
+     the residual for wow and flutter, iterated with a shrinking window.
+  5. Parity: the crossing alternates a further ~1.6 samples at 96 kHz between
+     even and odd traces. Surveyed over all 156 frames: 148 measure
+     -1.62 +/- 0.03, TWO measure +1.6 (R015, R025 -- the sign flip prior work
+     saw; a global rule would misplace their traces by 1.7 px), and six
+     left-channel frames (L000/L004/L005/L021/L037/L075) measure ~0.0 with no
+     mid-frame flip (checked by running median), i.e. their pulses genuinely
+     do not alternate. So the offset MUST be measured per frame, never
+     hardcoded. 1.6 samples at 96 kHz is half of one scan-converter dot
+     (period/262.5): this is Barry's "+/-12 samples at 384 kHz on even
+     traces" fudge -- one dot -- measured instead of guessed. The offset is
+     measured from the fit residuals and REMOVED from the reported trace
+     starts, because the picture itself sits on a uniform grid: removing it
+     lowers the image-domain odd/even misalignment energy (parity_db 7.4 ->
+     3.5 on L055, 6.7 -> 4.7 on R040), and a direct high-passed NCC between
+     adjacent picture columns then measures the residual alternation at only
+     -0.19 +/- 0.04 samples across frames spanning the whole record.
 
-Two passes: the first template is built on the nominal period, then rebuilt on
-the fitted one so it is not smeared by a wrong guess.
+Measured per-landmark precision, second-difference method (immune to genuine
+smooth flutter): 0.41-0.70 samples RMS at 96 kHz (~1.7-2.8 at 384 kHz, ~0.24
+px) on frames spanning the record, photographs included. A parity-split
+template correlator measured the same (0.39-0.70), so the simpler half-cross
+is used. v1 measured 0.5-2.5 on line art and 2-6 on photographs.
+
+The trace-start convention is the half-amplitude downward crossing of the sync
+falling edge ("the crossing"). Relative to it, measured on sub-sample-aligned
+folds of eight frames spanning both channels and the whole record (96 kHz
+samples, period ~799.35): trough at +1..+3, picture from about +6 to about
++716, content-free shelf from ~+717, next pulse's high plateau ending at the
+next crossing one period later. decode.py's window constants are expressed in
+this convention.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 
 # Measured from the master by autocorrelation over a 50-line baseline. The
 # record cover specifies 8.34 ms/trace (11845632 hydrogen hyperfine periods);
-# this digitisation runs ~0.16% fast, so we only ever use this as a starting
-# guess and fit the real value per frame.
+# this digitisation runs ~0.16% fast and the period DRIFTS monotonically
+# across the record (~3197.2 down to ~3193.6 at 384 kHz), so this is only ever
+# a starting guess; the real value is fitted per frame.
 NOMINAL_PERIOD = 3197.4
 TRACES_PER_FRAME = 512
+
+# Detector geometry scales with the period so recovery behaves identically at
+# 96 kHz (period ~799.35) and 384 kHz (period ~3197.4).
+_GAP_FRAC = 0.00375  # half-gap of the bipolar drop windows (3 samples at 96 kHz)
+_AVG_FRAC = 0.010  # length of each drop window (8 samples at 96 kHz)
+_SMOOTH_N = 3  # boxcar on the signal for the sub-sample crossing
+_GATE = 0.45  # validity gate: drop score vs frame median
+_SG_WINDOW = 31  # Savitzky-Golay window (traces) for the wow/flutter trend
+_TPL_BACK_FRAC = 0.115  # template extent before the crossing (~92 samples at 96k)
+_TPL_FWD_FRAC = 0.031  # and after (~25 samples)
 
 
 @dataclass
 class Timebase:
-    """Recovered line timing for one frame."""
+    """Recovered line timing for one frame.
+
+    `positions` holds the measured landmark of every trace where the validity
+    gate passed, and the smoothed prediction where it did not; `located` says
+    which is which. `smoothed` is the parity-corrected uniform-grid trajectory
+    that trace_start() serves.
+    """
 
     phase: float  # sub-sample position of trace 0, from the straight-line fit
     period: float  # samples per trace, fitted
-    positions: np.ndarray  # (n,) measured sub-sample position of each trace
-    smoothed: np.ndarray  # (n,) measured positions with measurement noise removed
-    residuals: np.ndarray  # (n,) measured minus fitted, i.e. wow and flutter
-    template: np.ndarray  # the matched filter used
-    template_origin: int  # index within `template` treated as the trace start
+    positions: np.ndarray  # (n,) measured landmark, or prediction where coasted
+    smoothed: np.ndarray  # (n,) trend with measurement noise + parity removed
+    residuals: np.ndarray  # (n,) positions minus fit, i.e. wow and flutter
+    template: np.ndarray  # mean sync-region fold (for PSF measurement etc.)
+    template_origin: int  # index within `template` of the trace start
     n_traces: int
-    blank_len: float = 0.0  # measured blanking burst length, in samples
+    blank_len: float = 0.0  # measured blanking extent, in samples
+    located: np.ndarray = field(default_factory=lambda: np.zeros(0, dtype=bool))
+    parity_offset: float = 0.0  # even-minus-odd landmark alternation, samples
+    lock_quality: float = 0.0  # located fraction x noise figure, 0..1
 
     @property
     def jitter_rms(self) -> float:
-        """RMS departure from constant line rate, in samples."""
-        return float(np.sqrt(np.mean(self.residuals**2)))
+        """RMS departure from constant line rate, in samples (located traces)."""
+        r = self.residuals[self.located] if self.located.any() else self.residuals
+        return float(np.sqrt(np.mean(r**2))) if len(r) else 0.0
 
     @property
     def measurement_noise(self) -> float:
-        """RMS of what smoothing removed -- our own uncertainty, not the tape's."""
-        return float(np.sqrt(np.mean((self.positions - self.smoothed) ** 2)))
+        """RMS of what smoothing removed, over traces actually measured."""
+        if not self.located.any():
+            return float("inf")
+        d = (self.positions - self._parity_signed() - self.smoothed)[self.located]
+        return float(np.sqrt(np.mean(d**2)))
+
+    def _parity_signed(self) -> np.ndarray:
+        """Per-trace landmark offset implied by the measured parity alternation."""
+        n = len(self.positions)
+        s = np.where(np.arange(n) % 2 == 0, 0.5, -0.5)
+        return s * self.parity_offset
+
+    def trace_confidence(self) -> np.ndarray:
+        """Per-trace 0..1: 0 where coasted, else how well the landmark agreed
+        with the smooth trend the rest of the frame voted for."""
+        dev = np.abs(self.positions - self._parity_signed() - self.smoothed)
+        good = dev[self.located]
+        scale = 1.4826 * np.median(np.abs(good - np.median(good))) + 1e-9 if len(good) else 1.0
+        conf = np.clip(1.0 - dev / (8.0 * scale), 0.0, 1.0)
+        conf[~self.located] = 0.0
+        return conf
 
     def trace_start(self, i: int) -> float:
-        """Where trace `i` begins.
-
-        Uses the *smoothed measured* position rather than the straight-line fit,
-        so genuine wow and flutter in the master is corrected rather than
-        averaged into a slant. Falls back to the fit outside the measured range.
-        """
+        """Where trace `i` begins (the parity-corrected uniform grid)."""
         if 0 <= i < len(self.smoothed):
             return float(self.smoothed[i])
         return self.phase + i * self.period
 
 
 def _savgol(y: np.ndarray, window: int, order: int = 2) -> np.ndarray:
-    """Savitzky-Golay smoothing with edge handling by polynomial extension.
-
-    The timing drift is smooth (lag-1 autocorrelation ~0.9) while our
-    per-line measurement noise is not, so this separates the two.
-    """
+    """Savitzky-Golay smoothing with edge handling by polynomial extension."""
     n = len(y)
     window = min(window | 1, n if n % 2 else n - 1)
     if window < order + 2:
@@ -96,19 +174,18 @@ def _savgol(y: np.ndarray, window: int, order: int = 2) -> np.ndarray:
 
 
 def estimate_period(x: np.ndarray, guess: float, tolerance: float = 0.02) -> float:
-    """Measure the line period by autocorrelation, before any template work.
+    """Measure the line period by autocorrelation, before any landmark work.
 
-    This has to happen first. The template search only looks +/- `search`
-    samples around where it predicts a trace should be, and that prediction
-    comes from the period. An error of only 0.12 samples per trace accumulates
-    to 60 samples over a 512-trace frame -- enough to walk the search window
-    clean off the sync burst and start locking onto picture content instead,
-    which decodes as a diagonal staircase sweeping across the image.
+    This has to happen first. Both the phase vote and the landmark search
+    predict positions from the period; an error of only 0.12 samples per trace
+    accumulates to 60 samples over a 512-trace frame -- enough to walk the
+    search clean off the sync and lock onto picture content instead, which
+    decodes as a diagonal staircase sweeping across the image.
 
-    Autocorrelation has no such failure mode: successive traces of a photograph
-    resemble each other, so the correlation peaks at the line period regardless
-    of how far that is from our guess. Measuring across a ~50-trace baseline
-    then divides the timing error by 50.
+    Autocorrelation has no such failure mode: successive traces of a
+    photograph resemble each other, so the correlation peaks at the line
+    period regardless of how far that is from our guess. Measuring across a
+    ~50-trace baseline then divides the timing error by 50.
     """
     n = len(x)
     lag = int(guess * 50)
@@ -117,9 +194,7 @@ def estimate_period(x: np.ndarray, guess: float, tolerance: float = 0.02) -> flo
         return guess
     seg = np.asarray(x[:span], dtype=np.float64)
     seg = seg - seg.mean()
-    # Autocorrelation via FFT. np.correlate(mode="full") is direct O(n^2), which
-    # on a quarter-million samples is ~65 billion operations -- it hangs rather
-    # than returns, and would be equally fatal in the browser port.
+    # Autocorrelation via FFT; direct correlation is O(n^2) and hangs.
     nfft = 1 << int(np.ceil(np.log2(2 * span)))
     F = np.fft.rfft(seg, nfft)
     ac = np.fft.irfft(F * np.conj(F), nfft)[:span]
@@ -139,140 +214,92 @@ def estimate_period(x: np.ndarray, guess: float, tolerance: float = 0.02) -> flo
     return float(k) / 50.0
 
 
-def fold(x: np.ndarray, period: float, n_lines: int, width: int) -> np.ndarray:
-    """Average `n_lines` lines aligned on the nominal period."""
-    acc = np.zeros(width)
+def _drop_score(x: np.ndarray, period: float) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Bipolar edge score: mean-before minus mean-after at every sample.
+
+    High only where a sustained high level is followed by a sustained low one
+    within a few samples -- the sync falling edge. Returns (score, left mean,
+    right mean); the levels feed the half-amplitude crossing.
+    """
+    gap = max(2, int(round(_GAP_FRAC * period)))
+    k = max(4, int(round(_AVG_FRAC * period)))
+    n = len(x)
+    c = np.concatenate([[0.0], np.cumsum(x)])
+    idx = np.arange(n)
+    lo = np.clip(idx - gap - k, 0, n)
+    hi = np.clip(idx - gap, 0, n)
+    left = (c[hi] - c[lo]) / np.maximum(hi - lo, 1)
+    lo2 = np.clip(idx + 1 + gap, 0, n)
+    hi2 = np.clip(idx + 1 + gap + k, 0, n)
+    right = (c[hi2] - c[lo2]) / np.maximum(hi2 - lo2, 1)
+    return left - right, left, right
+
+
+def _phase_vote(drop: np.ndarray, period: float, n_traces: int) -> int:
+    """Fold the drop score at the period; the sync phase wins the vote.
+
+    Threshold-free and dropout-proof: the sync edge stacks coherently across
+    every trace while picture features drift, so the sync column dominates
+    even on frames whose picture also carries strong horizontal edges.
+    """
+    W = int(period)
+    v = np.zeros(W)
+    for k in range(n_traces):
+        o = int(round(k * period))
+        seg = drop[o : o + W]
+        if len(seg) == W:
+            v += seg
+    return int(np.argmax(v))
+
+
+def _half_cross(xs: np.ndarray, j: int, mid: float, radius: int) -> float | None:
+    """Sub-sample position where xs crosses `mid` downward, nearest to j."""
+    for d in range(radius + 1):
+        for jj in (j + d, j - d) if d else (j,):
+            if jj < 1 or jj + 1 >= len(xs):
+                continue
+            if xs[jj] >= mid > xs[jj + 1]:
+                a, b = xs[jj], xs[jj + 1]
+                return jj + (a - mid) / (a - b)
+    return None
+
+
+def _robust_line(k: np.ndarray, p: np.ndarray, iters: int = 5) -> tuple[float, float]:
+    """IRLS straight-line fit (Tukey biweight); returns (slope, intercept)."""
+    A = np.vstack([k, np.ones_like(k)]).T
+    w = np.ones(len(k))
+    slope, intercept = 0.0, 0.0
+    for _ in range(iters):
+        sw = np.sqrt(w)
+        coef, *_ = np.linalg.lstsq(A * sw[:, None], p * sw, rcond=None)
+        slope, intercept = float(coef[0]), float(coef[1])
+        r = p - (intercept + slope * k)
+        s = 1.4826 * np.median(np.abs(r - np.median(r))) + 1e-9
+        u = np.clip(r / (4.0 * s), -1, 1)
+        w = (1 - u**2) ** 2
+    return slope, intercept
+
+
+def _fold_template(
+    x: np.ndarray, pos: np.ndarray, located: np.ndarray, period: float
+) -> tuple[np.ndarray, int]:
+    """Mean sync-region waveform, sub-sample aligned on the located crossings."""
+    back = int(round(_TPL_BACK_FRAC * period))
+    fwd = int(round(_TPL_FWD_FRAC * period))
+    grid = np.arange(-back, fwd + 1)
+    acc = np.zeros(len(grid))
     used = 0
-    for i in range(n_lines):
-        o = int(round(i * period))
-        seg = x[o : o + width]
-        if len(seg) < width:
-            break
-        acc += seg
+    for p in pos[located]:
+        idx = p + grid
+        if idx[0] < 0 or idx[-1] + 1 >= len(x):
+            continue
+        base = np.floor(idx).astype(np.int64)
+        fr = idx - base
+        acc += x[base] * (1 - fr) + x[base + 1] * fr
         used += 1
     if used == 0:
-        raise ValueError("no complete lines available to fold")
-    return acc / used
-
-
-def find_blanking(folded: np.ndarray) -> tuple[int, int]:
-    """Locate the sync/blanking burst within a folded trace.
-
-    This is the only stretch of a trace that carries no picture, which makes it
-    the only honest thing to build a matched filter from. It shows up in the
-    fold as a strong, sustained positive excursion.
-
-    Getting this wrong is not a subtle error. An earlier version of this file
-    anchored on the deep negative notch and cut the template from `notch +/-
-    120` samples -- but the notch sits *inside* the picture, 2563 samples before
-    the burst, so the "matched filter" was correlating against averaged picture
-    content. It held up on the line-art diagrams, whose columns all resemble
-    each other, and collapsed on the detailed photographs, which is exactly the
-    pattern of failure we saw across the frame set.
-    """
-    n = len(folded)
-    # Smooth over ~2% of a trace so picture detail cannot form a false peak.
-    k = max(3, (n // 50) | 1)
-    pad = np.pad(folded, k // 2, mode="wrap")
-    sm = np.convolve(pad, np.ones(k) / k, mode="valid")[:n]
-
-    thr = sm.mean() + 0.5 * (sm.max() - sm.mean())
-    on = sm > thr
-    # Longest contiguous run, treating the trace as circular.
-    best_len, best_lo, cur = 0, 0, None
-    for i in range(2 * n):
-        if on[i % n] and cur is None:
-            cur = i
-        elif not on[i % n] and cur is not None:
-            if i - cur > best_len:
-                best_len, best_lo = i - cur, cur
-            cur = None
-            if i >= n:
-                break
-    if best_len == 0 or best_len > n // 2:
-        # No clear burst; fall back to the strongest single point.
-        p = int(np.argmax(sm))
-        return p, min(n // 8, 400)
-    return best_lo % n, best_len
-
-
-def _template_from_fold(
-    folded: np.ndarray, margin: int, tail: int
-) -> tuple[np.ndarray, int]:
-    """Cut the blanking burst out of a folded trace, plus a little either side.
-
-    The returned origin is the index within the template of the burst's leading
-    edge, which we adopt as the trace start. That convention makes the picture
-    a single contiguous run from the end of blanking to the start of the next,
-    with no wrap.
-    """
-    start, length = find_blanking(folded)
-    idx = np.arange(start - margin, start + length + tail) % len(folded)
-    return folded[idx].copy(), margin
-
-
-def _refine_peak(c: np.ndarray, k: int) -> float:
-    """Parabolic sub-sample refinement of a correlation peak at index k."""
-    if k <= 0 or k >= len(c) - 1:
-        return float(k)
-    y0, y1, y2 = c[k - 1], c[k], c[k + 1]
-    denom = y0 - 2 * y1 + y2
-    if denom == 0:
-        return float(k)
-    return k + 0.5 * (y0 - y2) / denom
-
-
-def _correlate_line(
-    x: np.ndarray, centre: float, template: np.ndarray, search: int
-) -> float | None:
-    """Sub-sample offset of the template near `centre`, or None if out of range."""
-    lo = int(round(centre)) - search
-    hi = lo + len(template) + 2 * search
-    if lo < 0 or hi > len(x):
-        return None
-    seg = x[lo:hi]
-    # Correlate on the derivative: it emphasises the sync edges and is immune to
-    # the slow AC-coupling droop that otherwise dominates the raw signal.
-    c = np.correlate(np.diff(seg), np.diff(template), mode="valid")
-    k = int(np.argmax(c))
-    return lo + _refine_peak(c, k)
-
-
-def _irls_fit(
-    idx: np.ndarray, pos: np.ndarray, iters: int = 6
-) -> tuple[float, float, np.ndarray, np.ndarray]:
-    """Robust fit of position against trace index, with a parity term.
-
-    Returns (intercept, slope, residuals, parity_cleaned_positions).
-
-    The parity term matters more than it looks. The blanking burst's LEADING
-    edge alternates by ~100 samples between odd and even traces -- by design,
-    since Colorado Video's scan converter used two sync widths to signal the
-    interlace field. A whole-burst matched filter therefore reports positions
-    that alternate, and feeding those straight into the timebase writes a
-    comb artefact into the picture.
-
-    But the picture itself is not alternating: cross-correlating adjacent
-    picture columns on a purely linear timebase gives a median shift of about
-    0.12 samples. The line clock is nearly perfect. So the parity component of
-    the measured positions is an artefact of what we are measuring, not of the
-    recording, and it must be ESTIMATED AND DISCARDED rather than tracked.
-    """
-    par = np.where((idx.astype(np.int64) % 2) == 0, 1.0, -1.0)
-    A = np.stack([np.ones_like(idx), idx, par], axis=1)
-    w = np.ones_like(pos)
-    coef = np.zeros(3)
-    for _ in range(iters):
-        Aw = A * w[:, None]
-        coef, *_ = np.linalg.lstsq(Aw.T @ A, Aw.T @ pos, rcond=None)
-        r = pos - A @ coef
-        # Tukey biweight, scaled by a robust sigma estimate.
-        sc = 1.4826 * np.median(np.abs(r - np.median(r))) + 1e-9
-        u = np.clip(r / (4.685 * sc), -1, 1)
-        w = (1 - u**2) ** 2
-    intercept, slope, parity_amp = float(coef[0]), float(coef[1]), float(coef[2])
-    cleaned = pos - parity_amp * par
-    return intercept, slope, cleaned - (intercept + slope * idx), cleaned
+        return np.zeros(len(grid)), back
+    return acc / used, back
 
 
 def recover(
@@ -280,64 +307,106 @@ def recover(
     *,
     period_guess: float = NOMINAL_PERIOD,
     n_traces: int = TRACES_PER_FRAME,
-    search: int = 60,
-    margin: int = 140,
-    tail: int = 140,
+    search: int = 0,  # initial half-window; 0 means 4% of a period
     passes: int = 3,
-    smooth_window: int = 15,
+    smooth_window: int = _SG_WINDOW,
+    remove_parity: bool = True,
 ) -> Timebase:
     """Recover the timebase of one frame from its signal.
 
-    `x` must start at or slightly before the frame's first trace.
+    `x` must start at or slightly before the frame's first trace. Works at any
+    sample rate; pass the matching `period_guess`.
     """
-    # Measure the period before any template work; see estimate_period.
+    x = np.asarray(x, dtype=np.float64)
     period = estimate_period(x, period_guess)
-    template = np.zeros(0)
-    origin = 0
-    positions = np.zeros(0)
-    residuals = np.zeros(0)
-    phase = 0.0
 
-    for p in range(passes):
-        width = int(round(period)) + 1
-        n_fold = min(n_traces, max(1, (len(x) - width) // int(round(period))))
-        folded = fold(x, period, n_fold, width)
-        template, origin = _template_from_fold(folded, margin, tail)
+    drop, left, right = _drop_score(x, period)
+    # 3-sample boxcar: suppresses single-sample noise on the crossing without
+    # moving a ~2-sample edge.
+    kernel = np.ones(_SMOOTH_N) / _SMOOTH_N
+    xs = np.convolve(np.pad(x, _SMOOTH_N // 2, mode="edge"), kernel, mode="valid")[: len(x)]
 
-        # Trace 0 is the first blanking burst that leaves room for the whole
-        # template plus the search window on either side.
-        burst, blank_len = find_blanking(folded)
-        first = float(burst) + period
-        raw_idx, raw_pos = [], []
-        for i in range(n_traces):
-            centre = first + i * period - origin
-            off = _correlate_line(x, centre, template, search)
-            if off is None:
+    phi = float(_phase_vote(drop, period, n_traces))
+    pred = phi + np.arange(n_traces) * period
+    W = max(6, int(round(0.04 * period))) if search == 0 else search
+    cross_rad = max(3, int(round(0.006 * period)))
+    edge_margin = max(16, int(round(0.02 * period)))
+
+    pos = np.full(n_traces, np.nan)
+    score = np.zeros(n_traces)
+    gate = np.zeros(n_traces, dtype=bool)
+    smoothed = pred.copy()
+    signed = np.zeros(n_traces)
+    alt = 0.0
+    slope, intercept = period, phi
+
+    for _ in range(passes):
+        pos[:] = np.nan
+        score[:] = 0.0
+        for k in range(n_traces):
+            c = int(round(pred[k]))
+            a, b = c - W, c + W + 1
+            if a < edge_margin or b + edge_margin > len(x):
                 continue
-            raw_idx.append(i)
-            raw_pos.append(off + origin)  # convert back to trace-start position
+            j = a + int(np.argmax(drop[a:b]))
+            p = _half_cross(xs, j, 0.5 * (left[j] + right[j]), cross_rad)
+            if p is None:
+                continue
+            pos[k] = p
+            score[k] = drop[j]
 
-        if len(raw_idx) < 32:
-            raise ValueError(f"only {len(raw_idx)} traces located; signal too short?")
+        valid = np.isfinite(pos)
+        if valid.sum() < 32:
+            raise ValueError(f"only {int(valid.sum())} traces located; signal too short?")
+        med = np.median(score[valid])
+        gate = valid & (score > _GATE * med)
+        if gate.sum() < 32:
+            raise ValueError(f"only {int(gate.sum())} traces passed the sync gate")
 
-        idx = np.asarray(raw_idx, dtype=np.float64)
-        pos = np.asarray(raw_pos, dtype=np.float64)
-        phase, period, residuals, cleaned = _irls_fit(idx, pos)
-        # Smooth the parity-cleaned positions: real wow and flutter is smooth,
-        # the parity term is not ours to keep.
-        positions = cleaned
-        if p == passes - 1:
-            smoothed = _savgol(cleaned, smooth_window)
-            return Timebase(
-                blank_len=float(blank_len),
-                phase=phase,
-                period=period,
-                positions=pos,
-                smoothed=smoothed,
-                residuals=residuals,
-                template=template,
-                template_origin=origin,
-                n_traces=len(idx),
-            )
+        kv = np.where(gate)[0].astype(np.float64)
+        slope, intercept = _robust_line(kv, pos[gate])
+        line = intercept + np.arange(n_traces) * slope
+        res_g = pos[gate] - line[gate]
 
-    raise AssertionError("unreachable")
+        # Parity alternation of the landmark, measured per frame.
+        par = kv.astype(int) % 2
+        if (par == 0).any() and (par == 1).any():
+            alt = float(res_g[par == 0].mean() - res_g[par == 1].mean())
+        else:
+            alt = 0.0
+        signed = np.where(np.arange(n_traces) % 2 == 0, 0.5, -0.5) * alt
+
+        # Smooth trend of the parity-decoupled residual = wow and flutter.
+        res_d = pos[gate] - signed[gate] - line[gate]
+        r_all = np.interp(np.arange(n_traces), kv, res_d)
+        s = 1.4826 * np.median(np.abs(res_d - np.median(res_d))) + 1e-9
+        r_all = np.clip(r_all, np.median(res_d) - 6 * s, np.median(res_d) + 6 * s)
+        smoothed = line + _savgol(r_all, smooth_window)
+        pred = smoothed + signed  # predict the landmark, parity included
+        W = max(4, int(round(0.0075 * period)))
+
+    period = slope
+    # Coasted traces carry the prediction, flagged via `located`.
+    coasted = ~gate
+    pos[coasted] = pred[coasted]
+
+    noise = pos[gate] - signed[gate] - smoothed[gate]
+    noise_rms = float(np.sqrt(np.mean(noise**2))) if gate.any() else float("inf")
+    lock = float(gate.mean()) / (1.0 + noise_rms / (0.002 * period))
+
+    template, origin = _fold_template(x, pos, gate, period)
+
+    return Timebase(
+        phase=intercept,
+        period=period,
+        positions=pos,
+        smoothed=smoothed if remove_parity else smoothed + signed,
+        residuals=pos - (intercept + np.arange(n_traces) * period),
+        template=template,
+        template_origin=origin,
+        n_traces=int(n_traces),
+        blank_len=0.104 * period,  # shelf start to crossing, measured fraction
+        located=gate.copy(),
+        parity_offset=alt,
+        lock_quality=lock,
+    )

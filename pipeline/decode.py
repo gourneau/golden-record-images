@@ -10,14 +10,17 @@ are given in samples after the detected trace start, for a trace period of
 3197.4 samples (the record cover specifies 8.34 ms; this digitisation runs
 ~0.16% fast, so the period is fitted per frame and never hardcoded).
 
-    -310 ..  2563   picture -- one vertical column of the image, 2873 samples
-    2563 ..  2887   blanking: sync plateau, falling edge, back porch
-    3197            next trace
+       0            trace start: half-amplitude crossing of the sync falling edge
+      +4 ..   +12   trough, then recovery
+     +24 .. +2864   picture -- one vertical column of the image, ~2840 samples
+   +2868 .. +3197   blanking: content-free shelf, then the next sync pulse
+                    (high for the last ~140 samples on wide-pulse traces, ~40
+                    on narrow ones), ending at the next crossing
 
-The picture wraps across the detected trace start: our sync template locks to a
-notch that sits 310 samples inside the picture region. Barry's 2017 decoder used
-a 2680-sample window, which is 7% short and is why his calibration circle came
-out as an ellipse he had to correct by "a couple percent" by hand.
+The picture does NOT wrap across the trace start. An earlier revision anchored
+on a notch inside the picture and concluded it did; that "wrap" was an artefact
+of the wrong landmark, confirmed by the calibration circle sitting +105 px off
+centre until the window was re-derived against the crossing.
 
 The picture is a NEGATIVE: more signal means darker.
 
@@ -66,23 +69,30 @@ from . import sync as sync_mod
 # --- geometry, measured (see pipeline/README.md for the derivation) ---------
 # Fractions of a trace period, so they hold at any sample rate.
 #
-# These are expressed against the trace start that sync.recover returns, which
-# is the LEADING EDGE OF THE BLANKING BURST. An earlier revision anchored on a
-# notch that sits inside the picture; the constants below were converted when
-# that changed, and any value here must be re-derived if the landmark moves
-# again. Getting this wrong is not subtle -- under the old constants the porch
-# window landed on picture content, so dc_restore subtracted a per-trace
-# picture-dependent offset which _uncouple_rows then integrated along the
-# trace, producing the vertical streaking that was visible on all 156 frames.
+# These are expressed against the trace start that sync.recover (v2) returns,
+# which is the HALF-AMPLITUDE DOWNWARD CROSSING OF THE SYNC FALLING EDGE --
+# the one landmark shared by both sync-pulse parities (spacing std 5.5-6.2
+# samples at 384 kHz vs ~100 for the peak). Earlier revisions anchored on a
+# notch inside the picture and then on the burst's leading edge; the leading
+# edge ALTERNATES ~100 samples with trace parity and v1's detector latched a
+# different feature on different frames (measured spread 38-104 samples at 96
+# kHz, i.e. the window moved by up to 17 px frame to frame). Any value here
+# must be re-derived if the landmark moves again.
+#
+# Measured on sub-sample-aligned folds of eight frames spanning the record
+# (values below in 384 kHz samples after the crossing): trough +4..+12,
+# picture from ~+24 to ~+2864, content-free shelf ~+2868..+3040, next pulse
+# high plateau until the next crossing at +period. The picture does NOT wrap.
+# PICTURE_SPAN was then calibrated on the L000 circle (axis_ratio -> 1).
 _P = 3197.4
-BLANK_START = 0.0
-BLANK_END = 347.0 / _P          # burst occupies the first ~347 samples
-PICTURE_START = 347.0 / _P      # picture runs from the end of blanking...
-PICTURE_SPAN = 2850.0 / _P      # ...to the next burst. It does NOT wrap.
-# The content-free shelf inside blanking: across-trace spread here is 0.001-0.003
-# against ~0.02 in picture, which is how it was located.
-PORCH_START = 200.0 / _P
-PORCH_END = 400.0 / _P
+BLANK_START = 2868.0 / _P       # shelf start; blanking runs to the next crossing
+BLANK_END = 1.0
+PICTURE_START = 24.0 / _P       # first clean sample after the trough recovery
+PICTURE_SPAN = 2848.0 / _P      # to the shelf. It does NOT wrap.
+# The content-free shelf inside blanking: across-trace spread here is a third
+# of picture level on every measured frame, which is how it was located.
+PORCH_START = 2890.0 / _P
+PORCH_END = 3020.0 / _P
 
 TRACES_PER_FRAME = 512
 FRAME_ASPECT = 4.0 / 3.0  # from the cover; 512 traces wide => 384 px tall
@@ -252,6 +262,18 @@ def measure_hum(pic: np.ndarray) -> tuple[np.ndarray, float]:
     return half, float(np.sqrt(np.mean(half**2)))
 
 
+# NOTE(negative result, 2026-08, sync-v2 rebuild): a per-trace hum-envelope
+# tracker (project each trace onto the odd/even profile, smooth the
+# alternating-sign envelope over ~63 traces, subtract envelope x profile) was
+# tried here to chase residual odd/even striping. Measured on the 16-frame
+# test set it LOST to this plain global median subtraction (mean composite
+# 9.7 vs 12.7): the envelope estimate carries ~12% content noise which leaves
+# an alternating residual on every frame, while the striping it targeted
+# turned out to be resolved DOT-PHASE structure (262.5 dots/trace => the dot
+# grid alternates half a dot per trace), which no amplitude correction can
+# remove -- only dot-locked sampling can.
+
+
 def _hampel(x: np.ndarray, k: int, n_sigmas: float) -> np.ndarray:
     """Replace impulsive outliers (clicks, tape ticks) with the local median.
 
@@ -388,13 +410,18 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
     dropouts = (np.abs(porch_level - med) > 6 * mad) | (~porch_ok)
 
     # sync confidence: how sharply this trace's timing was determined, relative
-    # to the smooth trend the rest of the frame agrees on
-    dev = np.abs(tb.positions[:n_tr] - tb.smoothed[:n_tr]) if len(tb.positions) >= n_tr else None
-    if dev is None:
-        conf = np.ones(n_tr)
+    # to the smooth trend the rest of the frame agrees on. sync v2 computes
+    # this itself (its positions carry a deliberate parity offset that must
+    # not read as deviation, and coasted traces must score 0).
+    if hasattr(tb, "trace_confidence") and getattr(tb, "located", np.zeros(0)).size:
+        conf = tb.trace_confidence()[:n_tr].copy()
     else:
-        scale = 1.4826 * np.median(np.abs(dev - np.median(dev))) + 1e-9
-        conf = np.clip(1.0 - dev / (6.0 * scale), 0.0, 1.0)
+        dev = np.abs(tb.positions[:n_tr] - tb.smoothed[:n_tr]) if len(tb.positions) >= n_tr else None
+        if dev is None:
+            conf = np.ones(n_tr)
+        else:
+            scale = 1.4826 * np.median(np.abs(dev - np.median(dev))) + 1e-9
+            conf = np.clip(1.0 - dev / (6.0 * scale), 0.0, 1.0)
     conf[dropouts] = 0.0
 
     # --- sample the picture ------------------------------------------------
@@ -403,7 +430,11 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
     clock = None
     if cfg.dot_lock:
         try:
-            clock = dot_mod.measure(x, tb)
+            # Restrict the spectral search to the active picture band under the
+            # current landmark convention; the defaults predate the v2 landmark.
+            clock = dot_mod.measure(
+                x, tb, lo_f=cfg.picture_start + 0.01, hi_f=cfg.picture_start + cfg.picture_span - 0.01
+            )
         except ValueError:
             clock = None
 
