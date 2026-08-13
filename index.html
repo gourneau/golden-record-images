@@ -208,7 +208,12 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .noref{margin:auto;color:var(--dimmer);font-size:13px;text-align:center;padding:24px;max-width:46ch}
 
 .lb-wave{border-top:1px solid var(--line);padding:7px 16px 9px;position:relative}
+/* This row may wrap; it sits BELOW the picture, so growing it costs the
+   waveform a few pixels and never the image. That is the whole reason the frame
+   metadata lives here rather than in the label strip above the picture, where a
+   long title and three frame ids together were squeezing everything out. */
 .wrow{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:7px}
+.wrow .wstat{white-space:nowrap}
 .wrow .wstat{font-family:var(--mono);font-size:11px;color:var(--dimmer)}
 .wrow .seps{display:flex;gap:6px}
 .wrow .seps button{font-family:var(--mono);font-size:11px;padding:5px 9px}
@@ -292,8 +297,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 
   <div class="lb-panes">
     <section class="pane">
-      <div class="pane-head"><span id="lbTier">Decoded from the audio</span><span id="lbFrames"></span>
-        <span id="lbDecDim"></span>
+      <div class="pane-head"><span id="lbTier">Decoded from the audio</span>
         <span class="grow"></span>
         <button id="lbTierBtn" class="tipbtn" aria-pressed="true"
                 title="Switch between the physics-only decode and the same decode denoised (T)">tier: reconstructed</button>
@@ -339,6 +343,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
         </select>
       </label>
       <span class="seps" id="lbSeps"></span>
+      <span class="wstat" id="lbFrames"></span>
+      <span class="wstat" id="lbDecDim"></span>
       <span class="wstat" id="lbWStat"></span>
     </div>
     <canvas id="lbWave"></canvas>
@@ -574,7 +580,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='41';
+const ASSETV='42';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -1148,8 +1154,9 @@ function fillText(im){
   // Frame ids and colour beside the pane they describe; the position in the set
   // beside the buttons that change it. Neither is in the header's flex line any
   // more, so neither can grow it.
-  $('lbTier').textContent = TIER==='recovered'
-    ? 'Decoded from the audio' : 'Decoded, then denoised · tier 1';
+  // Short and the SAME LENGTH in both tiers -- the tier button beside it already
+  // says which one is on, so this need not repeat it and must not resize.
+  $('lbTier').textContent = 'Decoded from the audio';
   $('lbFrames').textContent=
     `${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'}`;
   $('lbPos').textContent=`${LB.idx+1} / ${VIEW.length}`;
