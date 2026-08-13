@@ -165,6 +165,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .tipbtn{font-size:10px;font-family:var(--mono);padding:1px 7px;border-radius:5px;
   letter-spacing:.03em;text-transform:none;line-height:1.6}
 #tip{position:fixed;z-index:90;max-width:min(460px,72vw);background:#14161b;
+  user-select:text;max-height:min(60vh,420px);overflow:auto;
   border:1px solid var(--line2);border-radius:8px;padding:10px 12px;
   font-size:12px;line-height:1.5;color:var(--dim);
   box-shadow:0 10px 34px -8px rgba(0,0,0,.85)}
@@ -498,7 +499,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='30';
+const ASSETV='31';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -1192,14 +1193,35 @@ function showTip(btn){
   t.style.left=Math.max(10,x)+'px';
   t.style.top=y+'px';
 }
-const hideTip=()=>{ $('tip').hidden=true; };
+// Hover previews it; CLICK PINS it. A tooltip that vanishes the moment the
+// pointer leaves the button cannot be read carefully, cannot be selected, and
+// cannot have a link followed inside it -- which is most of what these notes are
+// for. So: pinned stays until you dismiss it, and even unpinned there is a short
+// grace period so the pointer can travel from the button into the box.
+let TIP_PIN=null, TIP_HIDE=0;
+function hideTip(){ clearTimeout(TIP_HIDE); TIP_PIN=null; $('tip').hidden=true;
+  document.querySelectorAll('.tipbtn').forEach(x=>x.setAttribute('aria-expanded','false')); }
+function hideTipSoon(){ if(TIP_PIN) return; clearTimeout(TIP_HIDE); TIP_HIDE=setTimeout(()=>{ if(!TIP_PIN) $('tip').hidden=true; }, 260); }
+function keepTip(){ clearTimeout(TIP_HIDE); }
+
+$('tip').addEventListener('mouseenter',keepTip);
+$('tip').addEventListener('mouseleave',hideTipSoon);
+$('tip').addEventListener('click',e=>e.stopPropagation());   // select text freely
+
 document.querySelectorAll('.tipbtn').forEach(b=>{
-  b.addEventListener('mouseenter',()=>showTip(b));
+  b.setAttribute('aria-expanded','false');
+  b.addEventListener('mouseenter',()=>{ if(!TIP_PIN) showTip(b); keepTip(); });
   b.addEventListener('focus',()=>showTip(b));
-  b.addEventListener('mouseleave',hideTip);
-  b.addEventListener('blur',hideTip);
-  b.addEventListener('click',e=>{ e.stopPropagation(); $('tip').hidden?showTip(b):hideTip(); });
+  b.addEventListener('mouseleave',hideTipSoon);
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(TIP_PIN===b){ hideTip(); return; }
+    TIP_PIN=b; showTip(b); b.setAttribute('aria-expanded','true');
+  });
 });
+// Anywhere else dismisses a pinned note, which is the convention people expect
+// and means the pin can never strand itself on screen.
+document.addEventListener('click',()=>{ if(TIP_PIN) hideTip(); });
 $('lbRefBody').addEventListener('click',e=>{
   if(LB.sources.length) zoomToggle($('lbRefBody'),e);
 });
