@@ -110,51 +110,77 @@ denoiser fitted to this record's own repeats, its output is scored purely on
 predicting unseen measurements, and hallucinated high-frequency content RAISES
 that score's error, it does not lower it.
 
-MEASURED RESULT. Two runs exist and they do not agree in every particular, so
-both are given and the SECOND -- an independent confirmatory run of the shipped
-code, 4 folds x 3000 steps, 19 triplets, nothing tuned on the outcome -- is the
-one to cite.
+MEASURED RESULT (2026-08, data/master/384kHzStereo.wav; 19 triplets -- image
+8, the solar spectrum, excluded because its content moves with wavelength;
+4 folds x 3000 steps, every triplet evaluated exactly once as a scene the
+network never saw). EXACTLY ONE full run exists. A draft of this docstring
+briefly contained illustrative placeholder figures written before anything had
+been run; they were never measurements, and any text describing them as a
+"first run" to be compared against is describing numbers that were invented.
+The table below is the run.
 
-  quantity                        confirmatory      first run
-  full-band MSE, identity            0.03410          0.13084
-  full-band MSE, blur control        0.03928          0.13724
-  full-band MSE, n2n single          0.03217          0.12744
-  full-band MSE, 2-plane mean        0.02546          0.12784
-  full-band MSE, n2n-then-mean       0.02524          0.12641
-  high-band gain, mean               7.73 dB          8.28 dB
-  high-band gain, median             7.45 dB          8.05 dB
-  chroma retention                   0.933            0.87
+  held-out full-band MSE predicting the withheld separation, mean over the 19
+  unseen scenes (every predictor built from the other two planes only):
+      identity            0.03410     the raw registered plane
+      blur sigma=1        0.03928     control; beats identity on only 4/19
+      n2n (single plane)  0.03217     beats identity 19/19, beats blur 19/19
+      2-plane mean        0.02546     the fuse.py estimator, and it is strong
+      n2n then mean       0.02524     beats the plain mean on 14/19
+  high band (0.40-0.71 cyc/px, chroma-free) noise algebra, mean:
+      per-plane noise N           1.18e-3
+      after n2n                   2.40e-4   -> +7.73 dB  (median +7.45)
+      2-plane mean, ideal         5.92e-4   -> +3.01 dB  (sqrt 2)
+      3-plane mean, ideal         3.95e-4   -> +4.77 dB  (sqrt 3, averaging's
+                                               ceiling)
+      n2n then 2-plane mean       1.93e-4   -> +8.82 dB
+      blur control                3.26e-4   -> +5.60 dB  <- READ THIS ONE
+  low band (0.02-0.35 cyc/px): n2n beats identity on 15/19; blur is WORSE
+  than identity there on 17/19. Chroma retention 0.93 mean (0.78-1.16).
 
-  n2n single beats identity         19 / 19          19 / 19
-  n2n-then-mean beats plain mean    14 / 19          19 / 19
-  low band beats identity           15 / 19          19 / 19
-  single plane beats 3-plane mean   17 / 19          --
+What is and is not established, in order of strength:
 
-WHAT SURVIVES, and it is the headline:
+  * NOISE2NOISE WORKS ON THIS ARTIFACT: on 19 of 19 scenes the network never
+    saw, the denoised plane predicts a withheld separation better than the
+    plane it was given -- real, held-out, and not blur (the blur arm fails
+    the same test on 15/19 and is beaten by n2n on every scene).
+  * The hi-band +7.7 dB exceeds the sqrt(3) averaging ceiling on 17/19
+    scenes, BUT the blur control's +5.6 dB shows hi-band suppression alone is
+    cheap -- there is almost no camera signal above 0.40 cyc/px to protect.
+    The claim n2n earns and blur does not is the CONJUNCTION: blur-level
+    noise suppression at high frequency while the low band, where the picture
+    lives, gets better on 15/19 rather than worse on 17/19.
+  * AGAINST SIMPLE AVERAGING (the deliverable question): a single denoised
+    plane does NOT beat even the 2-plane mean full-band (0.03217 vs 0.02546)
+    -- averaging removes noise at every frequency and this network earns its
+    keep mostly above ~0.1 cyc/px. Denoise-THEN-average beats plain
+    averaging, but modestly: 14/19 scenes, -0.9% mean MSE. The margin is
+    small because most of the full-band error against a different colour
+    channel is the target's own noise plus real chroma, which no predictor
+    of any kind can remove. So: n2n is a genuine, held-out improvement ON
+    TOP of fusion, not a replacement for it, and plain 3-plane averaging
+    remains a strong, nearly-free baseline.
 
-  * The BLUR CONTROL FAILS in both runs (0.03928 vs 0.03410 identity). The
-    arbiter punishes indiscriminate smoothing, which is the check that
-    separates denoising from making things look nicer.
-  * A single denoised plane beats the raw plane on 19 of 19 scenes.
-  * In the chroma-free high band the gain is 7.7 dB, against the 4.77 dB
-    (sqrt(3)) ceiling of averaging all three separations -- so ONE denoised
-    scan out-predicts the three-scan average, on 17 of 19 scenes.
-  * Chroma retention 0.93: the wins are not bought by desaturating toward the
-    shared luminance.
+NEGATIVES, per project policy, none quietly dropped:
 
-WHAT DOES NOT REPRODUCE, recorded rather than quietly dropped:
+  * Low-band error RISES on 4 of 19 scenes: images 12 (+6.2%), 46 (+4.0%),
+    13 and 112 (<1%). 46 is the noisiest triplet on the record (12.9% noise,
+    fuse.py). On roughly a fifth of scenes the network costs something where
+    real structure lives; "no structure destroyed" is NOT a claim this
+    evidence supports, only "structure preserved or improved on 15/19".
+  * Chroma retention dips to 0.78-0.84 on the noisiest triplets (78, 114,
+    55, 23): mild desaturation, so part of those scenes' full-band win may
+    be chroma geometry rather than denoising. Their hi-band gains, which
+    cannot be bought that way, are still +4.9 to +13.0 dB.
+  * The training loss sits on the irreducible chroma+noise floor and is
+    visibly noisy at batch 16; the budget was fixed, not extended to chase
+    convergence, so these numbers are a floor on the method, not a ceiling.
 
-  * The three "19/19" unanimity claims are 14/19, 15/19 and 19/19 on re-run.
-    Only "single plane beats identity" is actually unanimous.
-  * LOW-BAND ERROR RISES ON 4 OF 19 SCENES. The first run reported none. This
-    matters more than the headline dB: it means that on roughly a fifth of
-    scenes the network costs something where real structure lives, and "no
-    structure destroyed" is NOT a claim this evidence supports.
-  * The absolute MSEs differ by a factor of about four between runs, which is
-    a normalisation or preparation difference I could not reconcile from the
-    outputs alone. The RATIOS -- which is what every conclusion rests on --
-    are consistent, but an unexplained factor of four is a reason to treat
-    the absolute numbers as meaningless and quote only the comparisons.
+Disclosure: two defects were found and fixed on smoke runs of fold 0 before
+the full run -- the regression-slope tone map (see tone_fields: it taught the
+network a ~30% damping of shared detail) and a zero last-layer init that
+stalled training. Both fixes are structural, neither is per-scene; fold 0's
+five scenes were observed during that debugging, folds 1-3 (14 of 19 scenes)
+were not, and the fold-0 numbers are indistinguishable from the rest.
 
 Usage:
     python -m pipeline.n2n --report            # build cache, train folds, evaluate
@@ -535,9 +561,11 @@ def algebra(m: dict, band: str) -> dict:
     n = 2.0 * (m[f"m_id_{band}"] - m[f"m_avg_{band}"])
     res1 = m[f"m_n2n1_{band}"] - m[f"m_id_{band}"] + n
     res2 = m[f"m_n2n2_{band}"] - m[f"m_avg_{band}"] + n / 2.0
+    res_blur = m[f"m_blur_{band}"] - m[f"m_id_{band}"] + n
     db = lambda r: 10.0 * math.log10(n / r) if (n > 0 and r > 0) else float("nan")
-    return {"N": n, "res1": res1, "res2": res2,
-            "gain1_db": db(res1), "gain2_db": db(res2)}
+    return {"N": n, "res1": res1, "res2": res2, "res_blur": res_blur,
+            "gain1_db": db(res1), "gain2_db": db(res2),
+            "gain_blur_db": db(res_blur)}
 
 
 # --------------------------------------------------------------------------
@@ -612,6 +640,13 @@ def run(folds: int = 4, steps: int = 3000, seed: int = 0,
           f"gain {gm2:+.2f} dB (median {gmed2:+.2f})")
     print(f"             single n2n plane beats the 3-plane average on "
           f"{beats_avg3_hi}/{len(rows)} scenes")
+    gb = np.array([r["hi_gain_blur_db"] for r in rows])
+    blur_lo_worse = sum(r["m_blur_lo"] > r["m_id_lo"] for r in rows)
+    print(f"             CONTEXT: the blur control also reaches "
+          f"{float(np.nanmean(gb)):+.2f} dB here -- hi-band dB alone cannot "
+          f"tell denoising from smoothing. The difference is the low band, "
+          f"where blur is worse than identity on {blur_lo_worse}/{len(rows)} "
+          f"scenes and n2n is better on {wins_lo}/{len(rows)}.")
     print(f"  chroma retention {mean('chroma_retention'):.2f} "
           f"(1.0 = untouched; ~0.5 would mean the wins were bought by "
           f"desaturation)")
@@ -626,6 +661,8 @@ def run(folds: int = 4, steps: int = 3000, seed: int = 0,
         "hi_gain2_db_mean": gm2, "hi_gain2_db_median": gmed2,
         "wins_single_vs_id": wins1, "wins_pair_vs_avg": wins2,
         "wins_lo": wins_lo, "beats_avg3_hi": beats_avg3_hi,
+        "hi_gain_blur_db_mean": float(np.nanmean(gb)),
+        "blur_lo_worse": blur_lo_worse,
         "chroma_retention": mean("chroma_retention"), "n_scenes": len(rows)}}
     if json_out:
         json_out.write_text(json.dumps(out, indent=1, default=float))
