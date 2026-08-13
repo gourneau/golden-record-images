@@ -129,15 +129,24 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .lb{position:fixed;inset:0;z-index:60;background:rgba(6,7,9,.975);
   backdrop-filter:blur(6px);display:flex;flex-direction:column;overscroll-behavior:contain}
 .lb[hidden]{display:none}
-.lb-top{display:flex;gap:12px;align-items:baseline;padding:9px 16px 8px;
-  border-bottom:1px solid var(--line);flex-wrap:wrap}
+/* ONE ROW, ALWAYS. flex-wrap let a long title -- image 116's is a full sentence
+   -- push the close button onto a second line, which made the header taller and
+   the picture shorter, and only for some images. A header whose height depends
+   on the caption is a header that resizes the artwork. So: no wrap, the title
+   truncates, and the buttons keep their place. */
+.lb-top{display:flex;gap:12px;align-items:center;padding:9px 16px 8px;
+  border-bottom:1px solid var(--line);flex-wrap:nowrap;min-height:52px}
+.lb-top .t{min-width:0;flex:0 1 auto;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.lb-top .n{flex:0 0 auto}
+.lb-top button{flex:0 0 auto}
 .lb-top .n{font-family:var(--mono);color:var(--gold);font-size:13px}
 .lb-top .t{font-size:17px;font-weight:600;letter-spacing:-.01em}
-.lb-top .m{font-family:var(--mono);font-size:11px;color:var(--dimmer)}
+.lb-top .m{font-family:var(--mono);font-size:11px;color:var(--dimmer);flex:0 0 auto}
 .lb-top button{padding:5px 10px}
 .lb-panes{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 16px 4px}
 .pane{display:flex;flex-direction:column;min-width:0;min-height:0}
-.pane-head{display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+.pane-head{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;overflow:hidden;
   font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--dimmer);padding-bottom:4px}
 .pane-head .srcs{display:flex;gap:6px;flex-wrap:wrap}
@@ -255,8 +264,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   <div class="lb-top">
     <span class="n" id="lbNum"></span>
     <span class="t" id="lbTitle"></span>
-    <span class="m" id="lbFrames"></span>
     <span class="grow"></span>
+    <span class="m" id="lbPos"></span>
     <button id="lbPrev" title="Previous image (left arrow)">← Prev</button>
     <button id="lbNext" title="Next image (right arrow)">Next →</button>
     <button id="lbClose" title="Close (Esc)">Close ✕</button>
@@ -264,7 +273,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 
   <div class="lb-panes">
     <section class="pane">
-      <div class="pane-head"><span>Decoded from the audio</span><span id="lbDecDim"></span>
+      <div class="pane-head"><span>Decoded from the audio</span><span id="lbFrames"></span>
+        <span id="lbDecDim"></span>
         <span class="grow"></span>
         <button class="tipbtn" data-tip="dec" aria-describedby="tip">notes</button></div>
       <div class="pane-body" id="lbDecBody"><canvas id="lbCanvas"></canvas>
@@ -501,7 +511,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='33';
+const ASSETV='34';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -935,8 +945,13 @@ const stepLB=d=>{ if(!LB.el.hidden) openLB(LB.idx+d); };
 function fillText(im){
   $('lbNum').textContent=String(im.n).padStart(3,'0');
   $('lbTitle').textContent=im.title??'—';
+  $('lbTitle').title=im.title??'';       // the truncated part, on hover
+  // Frame ids and colour beside the pane they describe; the position in the set
+  // beside the buttons that change it. Neither is in the header's flex line any
+  // more, so neither can grow it.
   $('lbFrames').textContent=
-    `${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'} · ${LB.idx+1} of ${VIEW.length}`;
+    `${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'}`;
+  $('lbPos').textContent=`${LB.idx+1} / ${VIEW.length}`;
   $('lbDecFootBody').innerHTML=
     `<div>Decoded from the audio alone — no reference image has ever touched pixel recovery.</div>` +
     provenanceNote(im) +
