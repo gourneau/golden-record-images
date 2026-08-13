@@ -16,3 +16,16 @@ venv/
 
 .DS_Store
 *.swp
+
+# Derived caches, regenerable from the master by the modules that wrote them.
+# data/cache is 151 MB of training tensors and model weights (n2n_triplets.npz,
+# n2n_model.pt); data/globaltime is a landmark harvest. Both are outputs, not
+# sources, and both would push the repository past what GitHub is comfortable
+# serving for a gallery.
+data/cache/
+data/globaltime/
+
+# Intermediate crop candidates from the reference matching pass. The CONFIRMED
+# crops in docs/reference/crops/ are committed; these 26 MB of rejected
+# candidates are working material.
+docs/reference/candidates/

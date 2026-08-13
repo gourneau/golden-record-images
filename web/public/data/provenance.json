@@ -78,6 +78,17 @@
    "contamination": ""
   },
   {
+   "name": "vertical_shading",
+   "tier": 0,
+   "tier_name": "record",
+   "what": "the along-trace pedestal, 92.8 grey levels p-p, and its inverse",
+   "why": "measured on L000's field, which the cover states is a uniform slide with a circle on it; confirmed on the other 155 frames without using L000's pixels",
+   "module": "dedroop.py",
+   "consumes": [],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
    "name": "circle_metrics",
    "tier": 0,
    "tier_name": "record",
@@ -132,6 +143,19 @@
    "what": "the reconstructed tier: every frame with a denoiser applied",
    "why": "trained ONLY on this record's own colour repeats -- twenty scenes scanned three times give independent noisy pairs, so no Earth photograph and no external corpus is involved and an alien could run it. Measured on the colour images against a held-out scan (19/19, blur control fails); on the 96 mono images there is no held-out measurement and it is an extrapolation, checked only against the calibration circle's geometry",
    "module": "reconstruct.py",
+   "consumes": [
+    "record"
+   ],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "destripe",
+   "tier": 1,
+   "tier_name": "universal",
+   "what": "per-trace streak removal by 2-D spectral separation",
+   "why": "the streak's SHAPE is measured on L000's ring interior, which the cover says is a circle on a uniform field, so the calibration itself is tier 0; the separation it drives -- streak smooth down the trace and rough across traces, scene smooth in both -- is a universal prior, and the correction is applied to frames the calibration never saw. Held out across traces, checked against the circle's geometry, and bounded by a transpose control on twelve other frames",
+   "module": "destripe.py",
    "consumes": [
     "record"
    ],

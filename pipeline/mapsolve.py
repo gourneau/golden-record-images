@@ -63,8 +63,85 @@ decoder uses, so the two images are on the same intensity scale.
 NO REFERENCE IMAGE ENTERS ANY OF THIS.  The only inputs are the WAV, the
 timebase and the constants above.
 
-RESULTS: see the module-level report printed by
-    python -m pipeline.mapsolve --report
+WHAT IT ACTUALLY MEASURED -- A NULL RESULT (2026-08)
+----------------------------------------------------
+Everything below was run on the real master at 384 kHz, 512 traces, ~230
+plateaus per trace: 322,500 unknowns against 1,637,112 equations.
+
+1. THE ADJOINT IS EXACT.  <Ax,r> vs <x,A^T r> agrees to 2e-13 relative on all
+   four operator variants (psf on/off x hum on/off), at 96 and at 384 kHz.
+
+2. THE SEQUENTIAL CHAIN IS ALREADY THE ML SOLUTION.  With lambda = 0 the MAP
+   solve reproduces decode.py's plateau values to 2.4e-4 rms against a signal
+   std of 3.9e-2 -- 0.6% -- and the entire remaining difference is a per-trace
+   DC drift (removing each trace's mean takes 1.26e-2 rms down to 2.4e-4),
+   i.e. exactly the direction the high-pass made unobservable and the porch
+   clamp pins anyway.  Sequential correction is NOT costing accuracy here:
+   undroop-then-average-each-plateau IS the maximum-likelihood estimator of
+   this forward model.  This also means the camera deconvolution is NOT a
+   joint-estimation problem: with lambda = 0 the fitted plateau values are
+   bit-for-bit identical whether the camera PSF is in A or not (residual
+   1.9426e-3 either way), because the PSF is invertible and adds no fit power.
+   Deblurring is decided entirely by the prior, so it belongs where
+   pipeline/deconv.py already puts it.
+
+3. HOLD-OUT (whole traces, the only split with no shortcut).  Drop every 8th
+   trace entirely and predict its plateau values back:
+
+                                            L055       R040
+     neighbour mean, UNREGISTERED         0.00487    0.00892
+     neighbour mean, REGISTERED           0.00386    0.00707   <- best
+     MAP tikhonov, best at full data fit  0.00546    0.00745
+     MAP TV, best at full data fit        0.00535    0.00773
+     MAP, sub-plateau offsets discarded   0.00609    0.00920
+
+   The MAP loses, on both frames, to averaging the two neighbouring traces
+   after a Lanczos shift onto the held trace's measured sub-plateau offsets.
+   It can be made to win -- TV at lambda 0.1, anisotropy 3 reaches 0.00358 on
+   L055 -- but only by degrading the fit to the RETAINED samples from 1.82e-3
+   to 3.23e-3, i.e. by blurring across traces, which is what this particular
+   metric rewards.  Read hold-out and training residual together or this test
+   lies to you.
+
+4. A GENUINE POSITIVE, and it is about the record, not about this module:
+   registering the sub-plateau offsets beats ignoring them by 21% rms on BOTH
+   frames (0.00386 vs 0.00487; 0.00707 vs 0.00892), with a mean offset of
+   0.496 / 0.501 plateaus to the neighbouring trace.  That is an independent,
+   ungameable confirmation of decode.py's `delta` correction, from prediction
+   of data the estimate never saw.
+
+5. IMAGE-DOMAIN CRITERIA: no regression, no gain.  Composite (quality.py of
+   2026-08-12 19:38), sequential vs MAP-tikhonov vs MAP-TV:
+   L000 89.2 / 88.9 / 90.3, L055 90.4 / 91.0 / 91.7, L020 38.1 / 37.5 / 41.7,
+   R040 78.6 / 79.2 / 80.3.  L000's circle: axis ratio 1.0065 -> 1.0066 /
+   1.0059, radial rms 0.89 -> 0.87 / 0.86 px, no regression.  L000's flat
+   field, ring interior, residual after the source's own linear shading:
+   0.0017 -> 0.0018 / 0.0017, unchanged.  TV's advantage is 1-4 composite
+   points and it comes with more flat area (L000 6.05% vs 5.99% of pixels
+   below a 1e-3 gradient), which is the cartoon effect starting, not detail.
+
+6. COST.  8-11 s per frame per solve on this machine (Tikhonov 250 LSMR
+   iterations; TV 8 ADMM x 32 LSMR), against 0.1 s for decode.decode -- 80-100x.
+   Not worth offering as a "best quality" mode, because it is not better.
+
+TRAPS THIS MODULE FELL INTO, recorded so nobody repeats them
+------------------------------------------------------------
+  * UNPRECONDITIONED LSMR.  A scene column whose plateau is held out is held
+    up only by the prior (norm ~lambda) while a column with data has norm
+    ~sqrt(samples per plateau); 10^4 in the column norms is 10^8 in the normal
+    equations.  The first hold-out run looked like a substantive MAP defeat
+    and was mostly non-convergence -- doubling the iteration count moved the
+    number 15% and NOT monotonically.  column_scaling() fixes it; every number
+    above passed a 2x-iteration guard.
+  * READING A HOLD-OUT WITHOUT ITS TRAINING RESIDUAL (point 3).
+  * A CONDITION NUMBER MEASURED ON THE BOUNDARY.  The per-trace row-resample
+    operator looks like cond 5e3, which suggested registration was hopeless;
+    cropping 10 rows off each end gives 1.05-35.  It was the zero-padded edge.
+  * THE HUM BLOCK IS DEGENERATE: see scene_to_image.
+
+RESULTS ABOVE ARE REPRODUCED BY
+    python -m pipeline.mapsolve --frame L055 --adjoint
+    python -m pipeline.mapsolve --frame L055 --holdout --solve tik --lam 0.03
 """
 
 from __future__ import annotations
@@ -91,15 +168,12 @@ MASTER = catalog_mod.DATA_DIR / "master" / "384kHzStereo.wav"
 # plateaus.  15.3 samples at 384 kHz / 12.18 samples per plateau.
 CAM_ROWS = 1.26
 # Across traces the camera response has never been measured jitter-free on this
-# master.  Default = no blur; --cam-traces sweeps it and the hold-out picks.
+# master.  Default = no blur; set_psf() takes it and the hold-out judges it.
 CAM_TRACES = 0.0
 # Recording-path 10-90 rise, samples at 384 kHz (decode.measure_psf's range).
 REC_RISE_384 = 2.0
 # 10-90 rise -> Gaussian sigma.
 SIGMA_PER_1090 = 1.0 / 2.5631
-# Plateau centres land anywhere between grid rows, so the row kernel doubles as
-# the interpolator; below this sigma a Gaussian is too narrow to interpolate.
-MIN_ROW_SIGMA = 0.40
 # One plateau of trace-time is this many trace widths (geometry.py: 7.4406 bins
 # per trace, 3200/262.5 = 12.19 bins per plateau).  Isotropic priors need it.
 ROW_PER_TRACE = (3200.0 / dot_mod.DOTS_PER_TRACE) / 7.4406
@@ -764,24 +838,7 @@ def holdout_plateaus(geo: Geometry, frac: float, seed: int = 0):
     return w, np.where(held)[0]
 
 
-def predict_plateaus(chain: Chain, parts: dict) -> np.ndarray:
-    return chain.plateaus(parts)
 
-
-def naive_plateau_fill(geo: Geometry, meas: np.ndarray, held: np.ndarray) -> np.ndarray:
-    """Baseline: linear interpolation along the row axis within each trace."""
-    out = meas.copy()
-    bad = np.zeros(geo.n_pl, dtype=bool)
-    bad[held] = True
-    for i in range(geo.n_tr):
-        sel = np.where(geo.pl_trace == i)[0]
-        v = out[sel].copy()
-        b = bad[sel]
-        if b.all() or not b.any():
-            continue
-        v[b] = np.interp(np.where(b)[0], np.where(~b)[0], v[~b])
-        out[sel] = v
-    return out
 
 
 # ---------------------------------------------------------------------------

@@ -117,6 +117,11 @@ REGISTRY: tuple[Artifact, ...] = (
              "per-channel one-pole inverse, tau from a scene-free probe",
              "the probe is a content-free region of the record's own signal",
              module="droop_inverse.py"),
+    Artifact("vertical_shading", RECORD,
+             "the along-trace pedestal, 92.8 grey levels p-p, and its inverse",
+             "measured on L000's field, which the cover states is a uniform slide with a "
+             "circle on it; confirmed on the other 155 frames without using L000's pixels",
+             module="dedroop.py"),
     Artifact("circle_metrics", RECORD,
              "axis ratio, radial rms, MTF50 of the calibration frame",
              "a circle is self-checking; the cover says the first image is one",
@@ -144,6 +149,16 @@ REGISTRY: tuple[Artifact, ...] = (
              "held-out measurement and it is an extrapolation, checked only against the "
              "calibration circle's geometry",
              module="reconstruct.py", consumes=("record",)),
+    Artifact("destripe", UNIVERSAL,
+             "per-trace streak removal by 2-D spectral separation",
+             "the streak's SHAPE is measured on L000's ring interior, which the cover "
+             "says is a circle on a uniform field, so the calibration itself is tier 0; "
+             "the separation it drives -- streak smooth down the trace and rough across "
+             "traces, scene smooth in both -- is a universal prior, and the correction "
+             "is applied to frames the calibration never saw. Held out across traces, "
+             "checked against the circle's geometry, and bounded by a transpose control "
+             "on twelve other frames",
+             module="destripe.py", consumes=("record",)),
     Artifact("deconvolution", UNIVERSAL,
              "deconvolution by the measured camera PSF",
              "the PSF is measured from the record; the inversion prior is generic",
