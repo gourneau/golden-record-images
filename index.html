@@ -501,7 +501,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='32';
+const ASSETV='33';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -994,6 +994,7 @@ function provenanceNote(im){
       seps.appendChild(b);
     });
   }
+  refreshTip();
 }
 
 function selectSep(k){
@@ -1092,6 +1093,7 @@ function renderRefFoot(){
     html+=`<span class="mono">${bits.join(' · ')}</span>`;
   }
   $('lbRefFootBody').innerHTML=html;
+  refreshTip();
 }
 
 function setSource(k){
@@ -1182,6 +1184,12 @@ $('lbDecBody').addEventListener('scroll',()=>drawMini(),{passive:true});
 // can see them -- and the tooltip just borrows their HTML when asked. That
 // keeps one source of truth for the text.
 const TIPSRC={dec:'lbDecFootBody', ref:'lbRefFootBody'};
+// A pinned note shows content that fillText/fillRef rewrote for a DIFFERENT
+// image the moment you press an arrow key. It has to be re-read from its source
+// whenever that source changes, or the pin quietly turns into a lie about the
+// picture now on screen. Called at the end of both fill functions.
+function refreshTip(){ if(TIP_PIN && !$('tip').hidden) showTip(TIP_PIN); }
+
 function showTip(btn){
   const src=$(TIPSRC[btn.dataset.tip]); if(!src) return;
   const t=$('tip');
@@ -1224,6 +1232,19 @@ document.querySelectorAll('.tipbtn').forEach(b=>{
 // Anywhere else dismisses a pinned note, which is the convention people expect
 // and means the pin can never strand itself on screen.
 document.addEventListener('click',()=>{ if(TIP_PIN) hideTip(); });
+// Arrow keys page images while a note is pinned. fillText/fillRef rewrite the
+// source divs, and refreshTip() re-reads them -- but the buttons are also
+// rebuilt, so the pin is re-anchored on the next tick rather than left pointing
+// at a node that is no longer in the document.
+addEventListener('keydown',e=>{
+  if((e.key==='ArrowLeft'||e.key==='ArrowRight') && TIP_PIN){
+    const which=TIP_PIN.dataset.tip;
+    setTimeout(()=>{
+      const b=document.querySelector(`.tipbtn[data-tip="${which}"]`);
+      if(b){ TIP_PIN=b; b.setAttribute('aria-expanded','true'); showTip(b); }
+    },0);
+  }
+},true);
 $('lbRefBody').addEventListener('click',e=>{
   if(LB.sources.length) zoomToggle($('lbRefBody'),e);
 });
