@@ -617,7 +617,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='46';
+const ASSETV='48';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -1130,6 +1130,12 @@ function openLB(i, opts){
   }
   unzoom($('lbDecBody')); unzoom($('lbRefBody'));
   syncHash(!!(opts && opts.replace));
+  // Kick the reference fetch off BEFORE fillText does its work, so the two
+  // panes race rather than queue. load() is cached by URL, so fillRef asking
+  // again a moment later is free.
+  { const r=REF[im.n];
+    if(r) sourcesFor(r).forEach(src=>
+      load(src.url + (src.url.indexOf('?')<0 ? `?v=${ASSETV}` : ''))); }
   fillText(im);
   fillRef(im);
   loadDecoded(im);
@@ -1168,6 +1174,19 @@ function prefetchNeighbours(){
         composite(im.frames.map(x=>`data/${d}/${x}.png?v=${ASSETV}`), im.color);
       }
       waveOf(im.frames[0]);
+
+      // AND THE REFERENCE. This was the whole latency complaint and it was a
+      // plain omission: the decode side was warmed and the reference side was
+      // not, so arrowing across produced one picture instantly and the other
+      // after a round trip. Half a comparison arriving first is worse than both
+      // arriving together, because the eye starts on the wrong thing.
+      //
+      // sourcesFor() is the same list setSource() will ask for, so this warms
+      // exactly what is about to be needed rather than guessing at a filename.
+      const r=REF[im.n];
+      if(r) sourcesFor(r).forEach(src=>{
+        load(src.url + (src.url.indexOf('?')<0 ? `?v=${ASSETV}` : ''));
+      });
     }, k*40);
   });
 }
@@ -1377,10 +1396,16 @@ function setSource(k){
   renderRefFoot();
   const img=$('lbRef'), cvs=$('lbRefCrop');
   const url=s.url+(s.url.indexOf('?')<0?`?v=${ASSETV}`:'');
+  // DO NOT BLANK THE PANE FIRST. Hiding the old reference before the new one
+  // has decoded shows an empty box for exactly as long as the swap takes, which
+  // reads as lag even when the file is already in cache -- and next to a decode
+  // pane that repaints instantly it reads as the reference being slow. The old
+  // picture stays up until the new one is ready to replace it, and only then do
+  // the two elements swap. The srcIdx guard makes that safe: a stale load that
+  // arrives after you have moved on is discarded rather than shown.
   if(s.box){
     // A normalised rectangle on the page scan: cut it here rather than shipping
     // a second copy of the same JPEG.
-    img.hidden=true;
     load(url).then(i=>{
       if(LB.srcIdx!==k||!i) return;
       const W=i.naturalWidth, H=i.naturalHeight;
@@ -1388,10 +1413,16 @@ function setSource(k){
       const w=Math.max(1,Math.round(s.box[2]*W)), h=Math.max(1,Math.round(s.box[3]*H));
       cvs.width=w; cvs.height=h;
       cvs.getContext('2d').drawImage(i,x,y,w,h,0,0,w,h);
-      cvs.hidden=false;
+      cvs.hidden=false; img.hidden=true;      // swap only now
     });
   } else {
-    cvs.hidden=true; img.hidden=false; img.src=url;
+    // Same discipline for a whole-page source: decode it off-screen first, then
+    // point the visible <img> at a URL the browser already holds, so assigning
+    // src cannot produce a frame of blank.
+    load(url).then(i=>{
+      if(LB.srcIdx!==k) return;
+      img.src=url; img.hidden=false; cvs.hidden=true;
+    });
   }
 }
 
