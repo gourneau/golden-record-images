@@ -1,0 +1,74 @@
+device: mps;  19 triplets (image 8 excluded)
+folds: 4  steps: 3000  (fixed a priori; the hold-out is a test, never a tuning signal)
+
+fold 0: train on 14 scenes, evaluate on unseen [12, 35, 48, 60, 97]
+    step     0  n2n loss 0.05259
+    step   500  n2n loss 0.03309
+    step  1000  n2n loss 0.05556
+    step  1500  n2n loss 0.04770
+    step  2000  n2n loss 0.04966
+    step  2500  n2n loss 0.05801
+    step  2999  n2n loss 0.03488
+    img  12  full: id 0.01817 blur 0.02999 n2n1 0.01750 avg 0.01367 n2n2 0.01473   hi: N 2.56e-03 n2n 5.24e-04 (+6.9 dB)   chroma kept 1.25
+    img  35  full: id 0.02807 blur 0.02606 n2n1 0.02568 avg 0.02113 n2n2 0.02024   hi: N 1.27e-03 n2n 1.24e-04 (+10.1 dB)   chroma kept 0.82
+    img  48  full: id 0.05678 blur 0.07147 n2n1 0.05438 avg 0.04165 n2n2 0.04180   hi: N 1.62e-03 n2n 6.11e-04 (+4.2 dB)   chroma kept 0.97
+    img  60  full: id 0.05023 blur 0.07246 n2n1 0.04823 avg 0.03764 n2n2 0.03799   hi: N 1.62e-03 n2n 7.35e-04 (+3.4 dB)   chroma kept 1.05
+    img  97  full: id 0.04744 blur 0.05397 n2n1 0.04518 avg 0.03630 n2n2 0.03591   hi: N 8.82e-04 n2n 2.01e-04 (+6.4 dB)   chroma kept 1.05
+
+fold 1: train on 14 scenes, evaluate on unseen [13, 36, 49, 78, 112]
+    step     0  n2n loss 0.03975
+    step   500  n2n loss 0.03924
+    step  1000  n2n loss 0.06231
+    step  1500  n2n loss 0.05788
+    step  2000  n2n loss 0.04722
+    step  2500  n2n loss 0.04378
+    step  2999  n2n loss 0.05935
+    img  13  full: id 0.02581 blur 0.02945 n2n1 0.02431 avg 0.01860 n2n2 0.01849   hi: N 1.07e-03 n2n 2.24e-04 (+6.8 dB)   chroma kept 0.92
+    img  36  full: id 0.03999 blur 0.04062 n2n1 0.03813 avg 0.03070 n2n2 0.03011   hi: N 5.95e-04 n2n 7.98e-05 (+8.7 dB)   chroma kept 0.89
+    img  49  full: id 0.03362 blur 0.04098 n2n1 0.03114 avg 0.02523 n2n2 0.02448   hi: N 1.82e-03 n2n 2.84e-04 (+8.1 dB)   chroma kept 0.97
+    img  78  full: id 0.03920 blur 0.03637 n2n1 0.03487 avg 0.02879 n2n2 0.02727   hi: N 2.02e-03 n2n 1.15e-04 (+12.4 dB)   chroma kept 0.81
+    img 112  full: id 0.03299 blur 0.03854 n2n1 0.03125 avg 0.02457 n2n2 0.02425   hi: N 1.00e-03 n2n 1.89e-04 (+7.2 dB)   chroma kept 0.97
+
+fold 2: train on 14 scenes, evaluate on unseen [23, 45, 50, 89, 114]
+    step     0  n2n loss 0.02935
+    step   500  n2n loss 0.04741
+    step  1000  n2n loss 0.02957
+    step  1500  n2n loss 0.02999
+    step  2000  n2n loss 0.03422
+    step  2500  n2n loss 0.03193
+    step  2999  n2n loss 0.03259
+    img  23  full: id 0.04837 blur 0.04657 n2n1 0.04522 avg 0.03640 n2n2 0.03530   hi: N 1.40e-03 n2n 1.33e-04 (+10.2 dB)   chroma kept 0.85
+    img  45  full: id 0.01601 blur 0.01670 n2n1 0.01502 avg 0.01224 n2n2 0.01212   hi: N 7.02e-04 n2n 8.84e-05 (+9.0 dB)   chroma kept 0.92
+    img  50  full: id 0.03709 blur 0.04884 n2n1 0.03402 avg 0.02747 n2n2 0.02673   hi: N 2.16e-03 n2n 3.09e-04 (+8.4 dB)   chroma kept 0.99
+    img  89  full: id 0.09069 blur 0.09547 n2n1 0.08638 avg 0.06745 n2n2 0.06627   hi: N 1.27e-03 n2n 2.75e-04 (+6.7 dB)   chroma kept 0.93
+    img 114  full: id 0.05892 blur 0.05375 n2n1 0.05277 avg 0.04259 n2n2 0.04061   hi: N 2.42e-03 n2n 1.35e-04 (+12.5 dB)   chroma kept 0.77
+
+fold 3: train on 15 scenes, evaluate on unseen [34, 46, 55, 94]
+    step     0  n2n loss 0.05650
+    step   500  n2n loss 0.05748
+    step  1000  n2n loss 0.05210
+    step  1500  n2n loss 0.07111
+    step  2000  n2n loss 0.02471
+    step  2500  n2n loss 0.03713
+    step  2999  n2n loss 0.02927
+    img  34  full: id 0.04744 blur 0.04788 n2n1 0.04493 avg 0.03528 n2n2 0.03447   hi: N 1.04e-03 n2n 2.33e-04 (+6.5 dB)   chroma kept 0.91
+    img  46  full: id 0.06254 blur 0.10530 n2n1 0.05857 avg 0.04734 n2n2 0.04810   hi: N 4.61e-03 n2n 1.34e-03 (+5.4 dB)   chroma kept 1.16
+    img  55  full: id 0.07963 blur 0.08056 n2n1 0.07507 avg 0.05718 n2n2 0.05632   hi: N 1.44e-03 n2n 4.39e-04 (+5.2 dB)   chroma kept 0.86
+    img  94  full: id 0.02501 blur 0.02742 n2n1 0.02318 avg 0.01891 n2n2 0.01856   hi: N 1.12e-03 n2n 1.46e-04 (+8.8 dB)   chroma kept 0.90
+
+SUMMARY -- prediction of withheld separations, 19 unseen scenes
+  full band  id 0.04411   blur 0.05065 (wins 4/19 -- the arbiter punishes blur)
+             n2n(single) 0.04136  beats identity on 19/19
+             2-plane mean 0.03280  vs n2n-then-mean 0.03230  -- n2n beats plain averaging on 15/19
+  low band   n2n(single) beats identity on 16/19 (structure preserved where the picture lives)
+  high band (chroma-free) noise algebra, mean over scenes:
+             per-plane noise N       1.612e-03
+             n2n residual            3.255e-04   gain +7.74 dB (median +7.24)
+             2-plane mean ideal      8.060e-04   +3.01 dB
+             3-plane mean ideal      5.374e-04   +4.77 dB (sqrt(3), the averaging ceiling)
+             n2n-then-mean residual  2.640e-04   gain +8.80 dB (median +8.43)
+             single n2n plane beats the 3-plane average on 17/19 scenes
+             CONTEXT: the blur control also reaches +7.46 dB here -- hi-band dB alone cannot tell denoising from smoothing. The difference is the low band, where blur is worse than identity on 16/19 scenes and n2n is better on 16/19.
+  chroma retention 0.95 (1.0 = untouched; ~0.5 would mean the wins were bought by desaturation)
+
+wrote docs/n2n_after_correction.json

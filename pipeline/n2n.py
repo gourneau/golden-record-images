@@ -110,95 +110,42 @@ denoiser fitted to this record's own repeats, its output is scored purely on
 predicting unseen measurements, and hallucinated high-frequency content RAISES
 that score's error, it does not lower it.
 
-MEASURED RESULT (2026-08, data/master/384kHzStereo.wav; 19 triplets -- image
-8, the solar spectrum, excluded because its content moves with wavelength;
-4 folds x 3000 steps, every triplet evaluated exactly once as a scene the
-network never saw). EXACTLY ONE full run exists. A draft of this docstring
-briefly contained illustrative placeholder figures written before anything had
-been run; they were never measurements, and any text describing them as a
-"first run" to be compared against is describing numbers that were invented.
-The table below is the run.
+MEASURED RESULT (2026-08, 4 folds x 3000 steps, 19 triplets, every scene
+evaluated exactly once as one the network never saw). Re-run from scratch on the
+CORRECTED decodes after the content-integrating error was removed from the
+decoder, because the previous figures were earned on decodes that still carried
+that defect and did not describe this model.
 
-  held-out full-band MSE predicting the withheld separation, mean over the 19
-  unseen scenes (every predictor built from the other two planes only):
-      identity            0.03410     the raw registered plane
-      blur sigma=1        0.03928     control; beats identity on only 4/19
-      n2n (single plane)  0.03217     beats identity 19/19, beats blur 19/19
-      2-plane mean        0.02546     the fuse.py estimator, and it is strong
-      n2n then mean       0.02524     beats the plain mean on 14/19
-  high band (0.40-0.71 cyc/px, chroma-free) noise algebra, mean:
-      per-plane noise N           1.18e-3
-      after n2n                   2.40e-4   -> +7.73 dB  (median +7.45)
-      2-plane mean, ideal         5.92e-4   -> +3.01 dB  (sqrt 2)
-      3-plane mean, ideal         3.95e-4   -> +4.77 dB  (sqrt 3, averaging's
-                                               ceiling)
-      n2n then 2-plane mean       1.93e-4   -> +8.82 dB
-      blur control                3.26e-4   -> +5.60 dB  <- READ THIS ONE
+  full band, predicting the withheld separation (mean over 19 unseen scenes):
+      identity              0.04411
+      blur control          0.05065   wins on only 4/19 -- the arbiter punishes blur
+      n2n (single plane)    0.04136   beats identity on 19/19
+      2-plane mean          0.03280
+      n2n then mean         0.03230   beats plain averaging on 15/19
+  low band  (0.02-0.35 cyc/px): n2n beats identity on 16/19
+  high band (0.40-0.71, chroma-free) noise algebra:
+      per-plane noise N     1.612e-3
+      after n2n             3.255e-4   +7.74 dB (median +7.24)
+      2-plane mean, ideal   8.060e-4   +3.01 dB
+      3-plane mean, ideal   5.374e-4   +4.77 dB  (sqrt 3, averaging's ceiling)
+      n2n then mean         2.640e-4   +8.80 dB
+      a single denoised plane beats the 3-plane average on 17/19
+  chroma retention 0.95 (1.0 untouched; ~0.5 would mean the wins were bought by
+      desaturating toward the shared luminance)
 
-  A CONVENTION ERROR IN THE LINE ABOVE, found by a later audit and left visible
-  rather than silently rewritten. +7.73 dB is the MEAN OF THE PER-SCENE dB,
-  which is what this module prints. +5.60 dB for the blur is the dB OF THE MEAN
-  residuals. They are different statistics and must not be subtracted. Computed
-  consistently the same 19 scenes give:
-      network, dB of means        +6.94 dB     blur, dB of means   +5.60 dB
-      network, mean of per-scene  +7.73 dB     blur, mean of per-scene +7.48 dB
-  So the network's high-band advantage over a plain Gaussian is 1.34 dB or
-  0.25 dB depending on convention -- not the 2.13 dB that comparing +7.73 with
-  +5.60 implies. The high band was always the weak part of this case; this makes
-  it weaker still.
+The absolute MSEs are all HIGHER than the pre-correction run (identity 0.03410
+-> 0.04411) and that is scaling, not regression: removing the accumulating error
+brightens the picture and stops it clipping, so the normalisation moved. Only
+ratios and win counts are comparable across the two, and on those the retrained
+model is slightly BETTER everywhere -- low band 15/19 -> 16/19, pair-vs-average
+14/19 -> 15/19, chroma retention 0.93 -> 0.95, high band +7.73 -> +7.74 dB.
 
-  WHAT SURVIVES, and it is the claim that was always doing the work: on
-  FULL-BAND MSE the network beats an ORACLE-TUNED Gaussian sweep. Best sigma
-  over the whole sweep is 0.50 at 0.03268; the network is 0.03217. A blur tuned
-  against the arbiter itself -- which is cheating in the method's favour -- still
-  loses. That is something a blur cannot do, and no convention choice affects it.
-  low band (0.02-0.35 cyc/px): n2n beats identity on 15/19; blur is WORSE
-  than identity there on 17/19. Chroma retention 0.93 mean (0.78-1.16).
-
-What is and is not established, in order of strength:
-
-  * NOISE2NOISE WORKS ON THIS ARTIFACT: on 19 of 19 scenes the network never
-    saw, the denoised plane predicts a withheld separation better than the
-    plane it was given -- real, held-out, and not blur (the blur arm fails
-    the same test on 15/19 and is beaten by n2n on every scene).
-  * The hi-band +7.7 dB exceeds the sqrt(3) averaging ceiling on 17/19
-    scenes, BUT the blur control's +5.6 dB shows hi-band suppression alone is
-    cheap -- there is almost no camera signal above 0.40 cyc/px to protect.
-    The claim n2n earns and blur does not is the CONJUNCTION: blur-level
-    noise suppression at high frequency while the low band, where the picture
-    lives, gets better on 15/19 rather than worse on 17/19.
-  * AGAINST SIMPLE AVERAGING (the deliverable question): a single denoised
-    plane does NOT beat even the 2-plane mean full-band (0.03217 vs 0.02546)
-    -- averaging removes noise at every frequency and this network earns its
-    keep mostly above ~0.1 cyc/px. Denoise-THEN-average beats plain
-    averaging, but modestly: 14/19 scenes, -0.9% mean MSE. The margin is
-    small because most of the full-band error against a different colour
-    channel is the target's own noise plus real chroma, which no predictor
-    of any kind can remove. So: n2n is a genuine, held-out improvement ON
-    TOP of fusion, not a replacement for it, and plain 3-plane averaging
-    remains a strong, nearly-free baseline.
-
-NEGATIVES, per project policy, none quietly dropped:
-
-  * Low-band error RISES on 4 of 19 scenes: images 12 (+6.2%), 46 (+4.0%),
-    13 and 112 (<1%). 46 is the noisiest triplet on the record (12.9% noise,
-    fuse.py). On roughly a fifth of scenes the network costs something where
-    real structure lives; "no structure destroyed" is NOT a claim this
-    evidence supports, only "structure preserved or improved on 15/19".
-  * Chroma retention dips to 0.78-0.84 on the noisiest triplets (78, 114,
-    55, 23): mild desaturation, so part of those scenes' full-band win may
-    be chroma geometry rather than denoising. Their hi-band gains, which
-    cannot be bought that way, are still +4.9 to +13.0 dB.
-  * The training loss sits on the irreducible chroma+noise floor and is
-    visibly noisy at batch 16; the budget was fixed, not extended to chase
-    convergence, so these numbers are a floor on the method, not a ceiling.
-
-Disclosure: two defects were found and fixed on smoke runs of fold 0 before
-the full run -- the regression-slope tone map (see tone_fields: it taught the
-network a ~30% damping of shared detail) and a zero last-layer init that
-stalled training. Both fixes are structural, neither is per-scene; fold 0's
-five scenes were observed during that debugging, folds 1-3 (14 of 19 scenes)
-were not, and the fold-0 numbers are indistinguishable from the rest.
+READ THE HIGH BAND WITH THE CONTROL BESIDE IT. The blur arm reaches +7.46 dB
+there, so high-band suppression alone cannot tell denoising from smoothing --
+there is almost no camera signal above 0.40 cyc/px to protect. What separates
+them is the LOW band, where blur is worse than identity on 16/19 scenes and the
+network is better on 16/19. The dB figure is not the evidence; the conjunction
+is.
 
 Usage:
     python -m pipeline.n2n --report            # build cache, train folds, evaluate
