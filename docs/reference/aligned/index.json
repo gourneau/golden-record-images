@@ -1,0 +1,1134 @@
+[
+ {
+  "n": 1,
+  "ok": false,
+  "reason": "only 11 inliers",
+  "inliers": 11,
+  "file": "docs/reference/aligned/1.jpg",
+  "warped": false
+ },
+ {
+  "n": 2,
+  "ok": true,
+  "inliers": 70,
+  "scale": 0.567,
+  "rotation_deg": 179.38,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/2.jpg",
+  "warped": true
+ },
+ {
+  "n": 3,
+  "ok": true,
+  "inliers": 50,
+  "scale": 0.622,
+  "rotation_deg": 0.94,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/3.jpg",
+  "warped": true
+ },
+ {
+  "n": 4,
+  "ok": true,
+  "inliers": 73,
+  "scale": 0.6148,
+  "rotation_deg": 0.76,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/4.jpg",
+  "warped": true
+ },
+ {
+  "n": 5,
+  "ok": true,
+  "inliers": 85,
+  "scale": 0.8932,
+  "rotation_deg": 0.2,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/5.jpg",
+  "warped": true
+ },
+ {
+  "n": 6,
+  "ok": true,
+  "inliers": 93,
+  "scale": 0.8871,
+  "rotation_deg": -0.1,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/6.jpg",
+  "warped": true
+ },
+ {
+  "n": 7,
+  "ok": true,
+  "inliers": 146,
+  "scale": 0.6321,
+  "rotation_deg": -0.17,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/7.jpg",
+  "warped": true
+ },
+ {
+  "n": 8,
+  "ok": true,
+  "inliers": 37,
+  "scale": 0.0,
+  "rotation_deg": -0.0,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/8.jpg",
+  "warped": true
+ },
+ {
+  "n": 9,
+  "ok": true,
+  "inliers": 435,
+  "scale": 0.5821,
+  "rotation_deg": 0.99,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/9.jpg",
+  "warped": true
+ },
+ {
+  "n": 10,
+  "ok": true,
+  "inliers": 106,
+  "scale": 0.6485,
+  "rotation_deg": -0.47,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/10.jpg",
+  "warped": true
+ },
+ {
+  "n": 11,
+  "ok": true,
+  "inliers": 39,
+  "scale": 0.5122,
+  "rotation_deg": -91.24,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/11.jpg",
+  "warped": true
+ },
+ {
+  "n": 12,
+  "ok": true,
+  "inliers": 519,
+  "scale": 0.6799,
+  "rotation_deg": -89.9,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/12.jpg",
+  "warped": true
+ },
+ {
+  "n": 13,
+  "ok": true,
+  "inliers": 482,
+  "scale": 0.8716,
+  "rotation_deg": -0.54,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/13.jpg",
+  "warped": true
+ },
+ {
+  "n": 14,
+  "ok": true,
+  "inliers": 61,
+  "scale": 0.8177,
+  "rotation_deg": 0.39,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/14.jpg",
+  "warped": true
+ },
+ {
+  "n": 15,
+  "ok": true,
+  "inliers": 54,
+  "scale": 0.8075,
+  "rotation_deg": -0.41,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/15.jpg",
+  "warped": true
+ },
+ {
+  "n": 16,
+  "ok": true,
+  "inliers": 116,
+  "scale": 0.8688,
+  "rotation_deg": -0.56,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/16.jpg",
+  "warped": true
+ },
+ {
+  "n": 17,
+  "ok": true,
+  "inliers": 613,
+  "scale": 0.5404,
+  "rotation_deg": -0.76,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/17.jpg",
+  "warped": true
+ },
+ {
+  "n": 18,
+  "ok": true,
+  "inliers": 286,
+  "scale": 0.5266,
+  "rotation_deg": 1.11,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/18.jpg",
+  "warped": true
+ },
+ {
+  "n": 19,
+  "ok": true,
+  "inliers": 249,
+  "scale": 0.7454,
+  "rotation_deg": -2.04,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/19.jpg",
+  "warped": true
+ },
+ {
+  "n": 20,
+  "ok": true,
+  "inliers": 172,
+  "scale": 0.6221,
+  "rotation_deg": 0.76,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/20.jpg",
+  "warped": true
+ },
+ {
+  "n": 21,
+  "ok": true,
+  "inliers": 112,
+  "scale": 0.6034,
+  "rotation_deg": 0.5,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/21.jpg",
+  "warped": true
+ },
+ {
+  "n": 22,
+  "ok": true,
+  "inliers": 285,
+  "scale": 0.7349,
+  "rotation_deg": 0.25,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/22.jpg",
+  "warped": true
+ },
+ {
+  "n": 23,
+  "ok": true,
+  "inliers": 30,
+  "scale": 0.7922,
+  "rotation_deg": -0.39,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/23.jpg",
+  "warped": true
+ },
+ {
+  "n": 24,
+  "ok": true,
+  "inliers": 185,
+  "scale": 0.7929,
+  "rotation_deg": 0.58,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/24.jpg",
+  "warped": true
+ },
+ {
+  "n": 25,
+  "ok": true,
+  "inliers": 85,
+  "scale": 0.7148,
+  "rotation_deg": 0.45,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/25.jpg",
+  "warped": true
+ },
+ {
+  "n": 26,
+  "ok": true,
+  "inliers": 95,
+  "scale": 0.6344,
+  "rotation_deg": -1.47,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/26.jpg",
+  "warped": true
+ },
+ {
+  "n": 27,
+  "ok": true,
+  "inliers": 30,
+  "scale": 0.9696,
+  "rotation_deg": 89.09,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/27.jpg",
+  "warped": true
+ },
+ {
+  "n": 28,
+  "ok": true,
+  "inliers": 904,
+  "scale": 0.9713,
+  "rotation_deg": 91.03,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/28.jpg",
+  "warped": true
+ },
+ {
+  "n": 29,
+  "ok": true,
+  "inliers": 321,
+  "scale": 0.9537,
+  "rotation_deg": 0.23,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/29.jpg",
+  "warped": true
+ },
+ {
+  "n": 30,
+  "ok": true,
+  "inliers": 71,
+  "scale": 0.974,
+  "rotation_deg": -0.33,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/30.jpg",
+  "warped": true
+ },
+ {
+  "n": 31,
+  "ok": true,
+  "inliers": 40,
+  "scale": 0.554,
+  "rotation_deg": -1.01,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/31.jpg",
+  "warped": true
+ },
+ {
+  "n": 32,
+  "ok": true,
+  "inliers": 40,
+  "scale": 0.5777,
+  "rotation_deg": -0.91,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/32.jpg",
+  "warped": true
+ },
+ {
+  "n": 33,
+  "ok": true,
+  "inliers": 389,
+  "scale": 0.6433,
+  "rotation_deg": -1.34,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/33.jpg",
+  "warped": true
+ },
+ {
+  "n": 34,
+  "ok": true,
+  "inliers": 268,
+  "scale": 0.6582,
+  "rotation_deg": -0.27,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/34.jpg",
+  "warped": true
+ },
+ {
+  "n": 35,
+  "ok": false,
+  "reason": "only 4 inliers",
+  "inliers": 4,
+  "file": "docs/reference/aligned/35.jpg",
+  "warped": false
+ },
+ {
+  "n": 36,
+  "ok": false,
+  "reason": "only 5 inliers",
+  "inliers": 5,
+  "file": "docs/reference/aligned/36.jpg",
+  "warped": false
+ },
+ {
+  "n": 37,
+  "ok": true,
+  "inliers": 55,
+  "scale": 0.8792,
+  "rotation_deg": -0.14,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/37.jpg",
+  "warped": true
+ },
+ {
+  "n": 38,
+  "ok": true,
+  "inliers": 194,
+  "scale": 0.9287,
+  "rotation_deg": -0.22,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/38.jpg",
+  "warped": true
+ },
+ {
+  "n": 39,
+  "ok": true,
+  "inliers": 177,
+  "scale": 0.4603,
+  "rotation_deg": -0.21,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/39.jpg",
+  "warped": true
+ },
+ {
+  "n": 40,
+  "ok": true,
+  "inliers": 96,
+  "scale": 1.0156,
+  "rotation_deg": -0.57,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/40.jpg",
+  "warped": true
+ },
+ {
+  "n": 41,
+  "ok": true,
+  "inliers": 80,
+  "scale": 0.8851,
+  "rotation_deg": -0.24,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/41.jpg",
+  "warped": true
+ },
+ {
+  "n": 42,
+  "ok": true,
+  "inliers": 249,
+  "scale": 0.6871,
+  "rotation_deg": -0.06,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/42.jpg",
+  "warped": true
+ },
+ {
+  "n": 43,
+  "ok": true,
+  "inliers": 222,
+  "scale": 0.7139,
+  "rotation_deg": -0.32,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/43.jpg",
+  "warped": true
+ },
+ {
+  "n": 44,
+  "ok": true,
+  "inliers": 420,
+  "scale": 0.829,
+  "rotation_deg": -0.27,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/44.jpg",
+  "warped": true
+ },
+ {
+  "n": 45,
+  "ok": true,
+  "inliers": 408,
+  "scale": 0.559,
+  "rotation_deg": -0.42,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/45.jpg",
+  "warped": true
+ },
+ {
+  "n": 46,
+  "ok": true,
+  "inliers": 609,
+  "scale": 0.5499,
+  "rotation_deg": -1.38,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/46.jpg",
+  "warped": true
+ },
+ {
+  "n": 47,
+  "ok": true,
+  "inliers": 257,
+  "scale": 0.5518,
+  "rotation_deg": -0.05,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/47.jpg",
+  "warped": true
+ },
+ {
+  "n": 48,
+  "ok": true,
+  "inliers": 397,
+  "scale": 0.626,
+  "rotation_deg": 0.28,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/48.jpg",
+  "warped": true
+ },
+ {
+  "n": 49,
+  "ok": true,
+  "inliers": 490,
+  "scale": 0.6092,
+  "rotation_deg": 0.15,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/49.jpg",
+  "warped": true
+ },
+ {
+  "n": 50,
+  "ok": true,
+  "inliers": 483,
+  "scale": 0.6353,
+  "rotation_deg": 0.26,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/50.jpg",
+  "warped": true
+ },
+ {
+  "n": 51,
+  "ok": true,
+  "inliers": 297,
+  "scale": 0.5986,
+  "rotation_deg": -89.61,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/51.jpg",
+  "warped": true
+ },
+ {
+  "n": 52,
+  "ok": true,
+  "inliers": 95,
+  "scale": 0.5656,
+  "rotation_deg": -0.22,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/52.jpg",
+  "warped": true
+ },
+ {
+  "n": 53,
+  "ok": true,
+  "inliers": 73,
+  "scale": 0.6376,
+  "rotation_deg": -0.54,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/53.jpg",
+  "warped": true
+ },
+ {
+  "n": 54,
+  "ok": true,
+  "inliers": 148,
+  "scale": 0.608,
+  "rotation_deg": -0.32,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/54.jpg",
+  "warped": true
+ },
+ {
+  "n": 55,
+  "ok": true,
+  "inliers": 87,
+  "scale": 0.5785,
+  "rotation_deg": 0.27,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/55.jpg",
+  "warped": true
+ },
+ {
+  "n": 56,
+  "ok": false,
+  "reason": "only 0 inliers",
+  "inliers": 0,
+  "file": "docs/reference/aligned/56.jpg",
+  "warped": false
+ },
+ {
+  "n": 57,
+  "ok": true,
+  "inliers": 234,
+  "scale": 0.5553,
+  "rotation_deg": -0.81,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/57.jpg",
+  "warped": true
+ },
+ {
+  "n": 58,
+  "ok": true,
+  "inliers": 230,
+  "scale": 0.8818,
+  "rotation_deg": 0.41,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/58.jpg",
+  "warped": true
+ },
+ {
+  "n": 59,
+  "ok": true,
+  "inliers": 242,
+  "scale": 0.6832,
+  "rotation_deg": -0.22,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/59.jpg",
+  "warped": true
+ },
+ {
+  "n": 60,
+  "ok": true,
+  "inliers": 589,
+  "scale": 0.5446,
+  "rotation_deg": 0.19,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/60.jpg",
+  "warped": true
+ },
+ {
+  "n": 61,
+  "ok": true,
+  "inliers": 26,
+  "scale": 0.0,
+  "rotation_deg": 180.0,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/61.jpg",
+  "warped": true
+ },
+ {
+  "n": 62,
+  "ok": true,
+  "inliers": 356,
+  "scale": 0.5832,
+  "rotation_deg": -0.83,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/62.jpg",
+  "warped": true
+ },
+ {
+  "n": 63,
+  "ok": true,
+  "inliers": 98,
+  "scale": 0.6342,
+  "rotation_deg": -0.55,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/63.jpg",
+  "warped": true
+ },
+ {
+  "n": 64,
+  "ok": false,
+  "reason": "only 4 inliers",
+  "inliers": 4,
+  "file": "docs/reference/aligned/64.jpg",
+  "warped": false
+ },
+ {
+  "n": 65,
+  "ok": false,
+  "reason": "only 4 inliers",
+  "inliers": 4,
+  "file": "docs/reference/aligned/65.jpg",
+  "warped": false
+ },
+ {
+  "n": 66,
+  "ok": true,
+  "inliers": 26,
+  "scale": 0.01,
+  "rotation_deg": -31.65,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/66.jpg",
+  "warped": true
+ },
+ {
+  "n": 67,
+  "ok": false,
+  "reason": "only 3 inliers",
+  "inliers": 3,
+  "file": "docs/reference/aligned/67.jpg",
+  "warped": false
+ },
+ {
+  "n": 68,
+  "ok": false,
+  "reason": "only 3 inliers",
+  "inliers": 3,
+  "file": "docs/reference/aligned/68.jpg",
+  "warped": false
+ },
+ {
+  "n": 69,
+  "ok": true,
+  "inliers": 339,
+  "scale": 0.5629,
+  "rotation_deg": 0.41,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/69.jpg",
+  "warped": true
+ },
+ {
+  "n": 70,
+  "ok": true,
+  "inliers": 224,
+  "scale": 0.4724,
+  "rotation_deg": 0.35,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/70.jpg",
+  "warped": true
+ },
+ {
+  "n": 71,
+  "ok": true,
+  "inliers": 152,
+  "scale": 0.565,
+  "rotation_deg": 0.52,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/71.jpg",
+  "warped": true
+ },
+ {
+  "n": 72,
+  "ok": true,
+  "inliers": 461,
+  "scale": 0.4555,
+  "rotation_deg": -0.55,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/72.jpg",
+  "warped": true
+ },
+ {
+  "n": 73,
+  "ok": false,
+  "reason": "only 4 inliers",
+  "inliers": 4,
+  "file": "docs/reference/aligned/73.jpg",
+  "warped": false
+ },
+ {
+  "n": 74,
+  "ok": true,
+  "inliers": 275,
+  "scale": 0.547,
+  "rotation_deg": 0.77,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/74.jpg",
+  "warped": true
+ },
+ {
+  "n": 75,
+  "ok": true,
+  "inliers": 484,
+  "scale": 0.9775,
+  "rotation_deg": -1.46,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/75.jpg",
+  "warped": true
+ },
+ {
+  "n": 76,
+  "ok": false,
+  "reason": "only 10 inliers",
+  "inliers": 10,
+  "file": "docs/reference/aligned/76.jpg",
+  "warped": false
+ },
+ {
+  "n": 77,
+  "ok": true,
+  "inliers": 432,
+  "scale": 0.9548,
+  "rotation_deg": -1.38,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/77.jpg",
+  "warped": true
+ },
+ {
+  "n": 78,
+  "ok": true,
+  "inliers": 182,
+  "scale": 0.5563,
+  "rotation_deg": -0.25,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/78.jpg",
+  "warped": true
+ },
+ {
+  "n": 79,
+  "ok": false,
+  "reason": "only 5 inliers",
+  "inliers": 5,
+  "file": "docs/reference/aligned/79.jpg",
+  "warped": false
+ },
+ {
+  "n": 80,
+  "ok": true,
+  "inliers": 364,
+  "scale": 0.83,
+  "rotation_deg": -0.57,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/80.jpg",
+  "warped": true
+ },
+ {
+  "n": 81,
+  "ok": true,
+  "inliers": 374,
+  "scale": 0.8272,
+  "rotation_deg": -0.63,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/81.jpg",
+  "warped": true
+ },
+ {
+  "n": 82,
+  "ok": true,
+  "inliers": 171,
+  "scale": 0.9544,
+  "rotation_deg": -1.0,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/82.jpg",
+  "warped": true
+ },
+ {
+  "n": 83,
+  "ok": true,
+  "inliers": 178,
+  "scale": 0.5591,
+  "rotation_deg": -0.03,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/83.jpg",
+  "warped": true
+ },
+ {
+  "n": 84,
+  "ok": false,
+  "reason": "only 3 inliers",
+  "inliers": 3,
+  "file": "docs/reference/aligned/84.jpg",
+  "warped": false
+ },
+ {
+  "n": 85,
+  "ok": true,
+  "inliers": 537,
+  "scale": 0.5324,
+  "rotation_deg": -0.9,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/85.jpg",
+  "warped": true
+ },
+ {
+  "n": 86,
+  "ok": true,
+  "inliers": 317,
+  "scale": 0.9164,
+  "rotation_deg": -0.23,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/86.jpg",
+  "warped": true
+ },
+ {
+  "n": 87,
+  "ok": true,
+  "inliers": 451,
+  "scale": 0.8742,
+  "rotation_deg": -0.59,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/87.jpg",
+  "warped": true
+ },
+ {
+  "n": 88,
+  "ok": true,
+  "inliers": 249,
+  "scale": 0.8889,
+  "rotation_deg": -0.16,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/88.jpg",
+  "warped": true
+ },
+ {
+  "n": 89,
+  "ok": true,
+  "inliers": 283,
+  "scale": 0.9375,
+  "rotation_deg": 0.12,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/89.jpg",
+  "warped": true
+ },
+ {
+  "n": 90,
+  "ok": true,
+  "inliers": 223,
+  "scale": 0.5015,
+  "rotation_deg": 0.28,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/90.jpg",
+  "warped": true
+ },
+ {
+  "n": 91,
+  "ok": true,
+  "inliers": 514,
+  "scale": 0.8502,
+  "rotation_deg": 0.01,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/91.jpg",
+  "warped": true
+ },
+ {
+  "n": 92,
+  "ok": true,
+  "inliers": 153,
+  "scale": 0.9275,
+  "rotation_deg": -0.54,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/92.jpg",
+  "warped": true
+ },
+ {
+  "n": 93,
+  "ok": true,
+  "inliers": 222,
+  "scale": 0.5687,
+  "rotation_deg": -0.4,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/93.jpg",
+  "warped": true
+ },
+ {
+  "n": 94,
+  "ok": true,
+  "inliers": 319,
+  "scale": 0.5692,
+  "rotation_deg": 0.35,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/94.jpg",
+  "warped": true
+ },
+ {
+  "n": 95,
+  "ok": true,
+  "inliers": 115,
+  "scale": 0.9313,
+  "rotation_deg": -0.02,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/95.jpg",
+  "warped": true
+ },
+ {
+  "n": 96,
+  "ok": true,
+  "inliers": 248,
+  "scale": 0.5816,
+  "rotation_deg": 0.52,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/96.jpg",
+  "warped": true
+ },
+ {
+  "n": 97,
+  "ok": true,
+  "inliers": 325,
+  "scale": 0.9237,
+  "rotation_deg": 0.88,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/97.jpg",
+  "warped": true
+ },
+ {
+  "n": 98,
+  "ok": true,
+  "inliers": 425,
+  "scale": 0.5833,
+  "rotation_deg": 0.57,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/98.jpg",
+  "warped": true
+ },
+ {
+  "n": 99,
+  "ok": true,
+  "inliers": 76,
+  "scale": 0.9862,
+  "rotation_deg": 0.51,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/99.jpg",
+  "warped": true
+ },
+ {
+  "n": 100,
+  "ok": true,
+  "inliers": 121,
+  "scale": 0.6513,
+  "rotation_deg": -0.86,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/100.jpg",
+  "warped": true
+ },
+ {
+  "n": 101,
+  "ok": true,
+  "inliers": 429,
+  "scale": 0.9644,
+  "rotation_deg": 0.09,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/101.jpg",
+  "warped": true
+ },
+ {
+  "n": 102,
+  "ok": false,
+  "reason": "only 6 inliers",
+  "inliers": 6,
+  "file": "docs/reference/aligned/102.jpg",
+  "warped": false
+ },
+ {
+  "n": 103,
+  "ok": true,
+  "inliers": 81,
+  "scale": 0.9681,
+  "rotation_deg": 0.33,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/103.jpg",
+  "warped": true
+ },
+ {
+  "n": 104,
+  "ok": true,
+  "inliers": 79,
+  "scale": 0.9842,
+  "rotation_deg": -0.67,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/104.jpg",
+  "warped": true
+ },
+ {
+  "n": 105,
+  "ok": true,
+  "inliers": 201,
+  "scale": 0.6189,
+  "rotation_deg": 1.01,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/105.jpg",
+  "warped": true
+ },
+ {
+  "n": 106,
+  "ok": true,
+  "inliers": 100,
+  "scale": 0.8898,
+  "rotation_deg": -0.17,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/106.jpg",
+  "warped": true
+ },
+ {
+  "n": 107,
+  "ok": true,
+  "inliers": 459,
+  "scale": 0.9549,
+  "rotation_deg": 0.01,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/107.jpg",
+  "warped": true
+ },
+ {
+  "n": 108,
+  "ok": true,
+  "inliers": 337,
+  "scale": 0.5461,
+  "rotation_deg": 0.75,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/108.jpg",
+  "warped": true
+ },
+ {
+  "n": 109,
+  "ok": true,
+  "inliers": 234,
+  "scale": 0.3962,
+  "rotation_deg": -0.62,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/109.jpg",
+  "warped": true
+ },
+ {
+  "n": 110,
+  "ok": true,
+  "inliers": 124,
+  "scale": 0.7298,
+  "rotation_deg": -0.4,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/110.jpg",
+  "warped": true
+ },
+ {
+  "n": 111,
+  "ok": true,
+  "inliers": 34,
+  "scale": 0.5492,
+  "rotation_deg": 0.1,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/111.jpg",
+  "warped": true
+ },
+ {
+  "n": 112,
+  "ok": true,
+  "inliers": 299,
+  "scale": 0.4513,
+  "rotation_deg": -0.65,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/112.jpg",
+  "warped": true
+ },
+ {
+  "n": 113,
+  "ok": true,
+  "inliers": 67,
+  "scale": 0.5542,
+  "rotation_deg": -0.2,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/113.jpg",
+  "warped": true
+ },
+ {
+  "n": 114,
+  "ok": false,
+  "reason": "only 3 inliers",
+  "inliers": 3,
+  "file": "docs/reference/aligned/114.jpg",
+  "warped": false
+ },
+ {
+  "n": 115,
+  "ok": true,
+  "inliers": 298,
+  "scale": 0.514,
+  "rotation_deg": -0.05,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/115.jpg",
+  "warped": true
+ },
+ {
+  "n": 116,
+  "ok": true,
+  "inliers": 138,
+  "scale": 0.7614,
+  "rotation_deg": -90.44,
+  "polarity_inverted": false,
+  "file": "docs/reference/aligned/116.jpg",
+  "warped": true
+ }
+]

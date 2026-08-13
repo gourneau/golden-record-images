@@ -29,7 +29,10 @@
   },
   "file": "docs/reference/001-calibration-circle-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Calibration-circle.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/1.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 11
  },
  "2": {
   "status": "confirmed",
@@ -39,7 +42,10 @@
   "bookPage": 24,
   "captionPage": 24,
   "ozma": "Pulsar map with the Andromeda galaxy as a landmark",
-  "credit": "Frank Drake"
+  "credit": "Frank Drake",
+  "aligned": "docs/reference/aligned/2.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 70
  },
  "3": {
   "status": "confirmed",
@@ -49,7 +55,10 @@
   "bookPage": 25,
   "captionPage": 26,
   "ozma": "Definitions of mathematical notation",
-  "credit": "Frank Drake"
+  "credit": "Frank Drake",
+  "aligned": "docs/reference/aligned/3.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 50
  },
  "4": {
   "status": "confirmed",
@@ -59,7 +68,10 @@
   "bookPage": 25,
   "captionPage": 26,
   "ozma": "Definitions of physical units of measurement",
-  "credit": "Frank Drake"
+  "credit": "Frank Drake",
+  "aligned": "docs/reference/aligned/4.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 73
  },
  "5": {
   "status": "confirmed",
@@ -69,7 +81,10 @@
   "bookPage": 26,
   "captionPage": 26,
   "ozma": "Solar system with planetary measurements",
-  "credit": "Frank Drake"
+  "credit": "Frank Drake",
+  "aligned": "docs/reference/aligned/5.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 85
  },
  "6": {
   "status": "confirmed",
@@ -79,7 +94,10 @@
   "bookPage": 26,
   "captionPage": 26,
   "ozma": "Solar system with planetary measurements",
-  "credit": "Frank Drake"
+  "credit": "Frank Drake",
+  "aligned": "docs/reference/aligned/6.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 93
  },
  "7": {
   "status": "confirmed",
@@ -89,7 +107,10 @@
   "bookPage": 26,
   "captionPage": 26,
   "ozma": "The sun",
-  "credit": "Hale Telescope"
+  "credit": "Hale Telescope",
+  "aligned": "docs/reference/aligned/7.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 146
  },
  "8": {
   "status": "confirmed",
@@ -109,7 +130,10 @@
   },
   "file": "docs/reference/008-voyager-golden-record-8-spectra-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_8_spectra.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/8.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 37
  },
  "9": {
   "status": "confirmed",
@@ -129,7 +153,10 @@
   },
   "file": "docs/reference/009-voyager-golden-record-9-mercury-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_9_mercury.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/9.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 435
  },
  "10": {
   "status": "confirmed",
@@ -149,7 +176,10 @@
   },
   "file": "docs/reference/010-voyager-golden-record-10-mars-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_10_mars.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/10.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 106
  },
  "11": {
   "status": "confirmed",
@@ -169,7 +199,10 @@
   },
   "file": "docs/reference/011-voyager-golden-record-11-jupiter-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_11_jupiter.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/11.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 39
  },
  "12": {
   "status": "confirmed",
@@ -189,7 +222,10 @@
   },
   "file": "docs/reference/012-voyager-golden-record-12-earth-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_12_earth.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/12.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 519
  },
  "13": {
   "status": "confirmed",
@@ -209,7 +245,10 @@
   },
   "file": "docs/reference/013-voyager-golden-record-13-earth-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_13_earth.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/13.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 482
  },
  "14": {
   "status": "confirmed",
@@ -219,7 +258,10 @@
   "bookPage": 29,
   "captionPage": 30,
   "ozma": "DNA structure and replication",
-  "credit": "Jon Lomberg"
+  "credit": "Jon Lomberg",
+  "aligned": "docs/reference/aligned/14.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 61
  },
  "15": {
   "status": "confirmed",
@@ -229,7 +271,10 @@
   "bookPage": 29,
   "captionPage": 30,
   "ozma": "DNA structure and replication",
-  "credit": "Jon Lomberg"
+  "credit": "Jon Lomberg",
+  "aligned": "docs/reference/aligned/15.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 54
  },
  "16": {
   "status": "confirmed",
@@ -239,7 +284,10 @@
   "bookPage": 29,
   "captionPage": 30,
   "ozma": "DNA structure and replication",
-  "credit": "Jon Lomberg"
+  "credit": "Jon Lomberg",
+  "aligned": "docs/reference/aligned/16.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 116
  },
  "17": {
   "status": "confirmed",
@@ -248,7 +296,10 @@
   "book": "docs/reference/book/n030.jpg",
   "bookPage": 30,
   "captionPage": 30,
-  "ozma": "Cell division"
+  "ozma": "Cell division",
+  "aligned": "docs/reference/aligned/17.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 613
  },
  "18": {
   "status": "confirmed",
@@ -257,7 +308,10 @@
   "book": "docs/reference/book/n031.jpg",
   "bookPage": 31,
   "captionPage": 32,
-  "ozma": "Human anatomy"
+  "ozma": "Human anatomy",
+  "aligned": "docs/reference/aligned/18.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 286
  },
  "19": {
   "status": "confirmed",
@@ -266,7 +320,10 @@
   "book": "docs/reference/book/n031.jpg",
   "bookPage": 31,
   "captionPage": 32,
-  "ozma": "Human anatomy"
+  "ozma": "Human anatomy",
+  "aligned": "docs/reference/aligned/19.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 249
  },
  "20": {
   "status": "confirmed",
@@ -275,7 +332,10 @@
   "book": "docs/reference/book/n032.jpg",
   "bookPage": 32,
   "captionPage": 32,
-  "ozma": "Human anatomy"
+  "ozma": "Human anatomy",
+  "aligned": "docs/reference/aligned/20.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 172
  },
  "21": {
   "status": "confirmed",
@@ -284,7 +344,10 @@
   "book": "docs/reference/book/n032.jpg",
   "bookPage": 32,
   "captionPage": 32,
-  "ozma": "Human anatomy"
+  "ozma": "Human anatomy",
+  "aligned": "docs/reference/aligned/21.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 112
  },
  "22": {
   "status": "confirmed",
@@ -293,7 +356,10 @@
   "book": "docs/reference/book/n032.jpg",
   "bookPage": 32,
   "captionPage": 32,
-  "ozma": "Human anatomy"
+  "ozma": "Human anatomy",
+  "aligned": "docs/reference/aligned/22.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 285
  },
  "23": {
   "status": "confirmed",
@@ -302,7 +368,10 @@
   "book": "docs/reference/book/n032.jpg",
   "bookPage": 32,
   "captionPage": 32,
-  "ozma": "Human anatomy"
+  "ozma": "Human anatomy",
+  "aligned": "docs/reference/aligned/23.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 30
  },
  "24": {
   "status": "confirmed",
@@ -311,7 +380,10 @@
   "book": "docs/reference/book/n032.jpg",
   "bookPage": 32,
   "captionPage": 32,
-  "ozma": "Human anatomy"
+  "ozma": "Human anatomy",
+  "aligned": "docs/reference/aligned/24.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 185
  },
  "25": {
   "status": "confirmed",
@@ -320,7 +392,10 @@
   "book": "docs/reference/book/n032.jpg",
   "bookPage": 32,
   "captionPage": 32,
-  "ozma": "Human anatomy"
+  "ozma": "Human anatomy",
+  "aligned": "docs/reference/aligned/25.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 85
  },
  "26": {
   "status": "confirmed",
@@ -330,7 +405,10 @@
   "bookPage": 33,
   "captionPage": 34,
   "ozma": "Diagram of human sex organs",
-  "credit": "Sarah Landry"
+  "credit": "Sarah Landry",
+  "aligned": "docs/reference/aligned/26.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 95
  },
  "27": {
   "status": "confirmed",
@@ -340,7 +418,10 @@
   "bookPage": 33,
   "captionPage": 34,
   "ozma": "Conception silhouette",
-  "credit": "Jon Lomberg"
+  "credit": "Jon Lomberg",
+  "aligned": "docs/reference/aligned/27.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 30
  },
  "28": {
   "status": "confirmed",
@@ -350,7 +431,10 @@
   "bookPage": 33,
   "captionPage": 34,
   "ozma": "Conception",
-  "credit": "Lennart Nilsson"
+  "credit": "Lennart Nilsson",
+  "aligned": "docs/reference/aligned/28.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 904
  },
  "29": {
   "status": "confirmed",
@@ -360,7 +444,10 @@
   "bookPage": 33,
   "captionPage": 34,
   "ozma": "Fertilized ovum",
-  "credit": "Lennart Nilsson"
+  "credit": "Lennart Nilsson",
+  "aligned": "docs/reference/aligned/29.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 321
  },
  "30": {
   "status": "confirmed",
@@ -370,7 +457,10 @@
   "bookPage": 33,
   "captionPage": 34,
   "ozma": "Fetus silhouette",
-  "credit": "Jon Lomberg"
+  "credit": "Jon Lomberg",
+  "aligned": "docs/reference/aligned/30.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 71
  },
  "31": {
   "status": "confirmed",
@@ -380,7 +470,10 @@
   "bookPage": 34,
   "captionPage": 34,
   "ozma": "Fetus",
-  "credit": "Frank Allan"
+  "credit": "Frank Allan",
+  "aligned": "docs/reference/aligned/31.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 40
  },
  "32": {
   "status": "confirmed",
@@ -390,7 +483,10 @@
   "bookPage": 34,
   "captionPage": 34,
   "ozma": "Silhouette of male and female",
-  "credit": "Jon Lomberg"
+  "credit": "Jon Lomberg",
+  "aligned": "docs/reference/aligned/32.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 40
  },
  "33": {
   "status": "confirmed",
@@ -400,7 +496,10 @@
   "bookPage": 35,
   "captionPage": 36,
   "ozma": "Birth",
-  "credit": "Wayne Miller"
+  "credit": "Wayne Miller",
+  "aligned": "docs/reference/aligned/33.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 389
  },
  "34": {
   "status": "confirmed",
@@ -410,7 +509,10 @@
   "bookPage": 35,
   "captionPage": 36,
   "ozma": "Nursing mother",
-  "credit": "United Nations"
+  "credit": "United Nations",
+  "aligned": "docs/reference/aligned/34.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 268
  },
  "35": {
   "status": "confirmed",
@@ -420,7 +522,10 @@
   "bookPage": 35,
   "captionPage": 36,
   "ozma": "Malaysian man and his daughter",
-  "credit": "David Alan Harvey"
+  "credit": "David Alan Harvey",
+  "aligned": "docs/reference/aligned/35.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 4
  },
  "36": {
   "status": "confirmed",
@@ -430,7 +535,10 @@
   "bookPage": 36,
   "captionPage": 36,
   "ozma": "Group of children at the United Nations International School",
-  "credit": "Ruby Mera"
+  "credit": "Ruby Mera",
+  "aligned": "docs/reference/aligned/36.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 5
  },
  "37": {
   "status": "confirmed",
@@ -440,7 +548,10 @@
   "bookPage": 36,
   "captionPage": 36,
   "ozma": "Family portrait silhouette",
-  "credit": "Jon Lomberg"
+  "credit": "Jon Lomberg",
+  "aligned": "docs/reference/aligned/37.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 55
  },
  "38": {
   "status": "confirmed",
@@ -450,7 +561,10 @@
   "bookPage": 36,
   "captionPage": 36,
   "ozma": "Family portrait",
-  "credit": "Nina Leen"
+  "credit": "Nina Leen",
+  "aligned": "docs/reference/aligned/38.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 194
  },
  "39": {
   "status": "confirmed",
@@ -460,7 +574,10 @@
   "bookPage": 37,
   "captionPage": 38,
   "ozma": "Diagram of continental drift",
-  "credit": "Jon Lomberg"
+  "credit": "Jon Lomberg",
+  "aligned": "docs/reference/aligned/39.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 177
  },
  "40": {
   "status": "confirmed",
@@ -470,7 +587,10 @@
   "bookPage": 38,
   "captionPage": 38,
   "ozma": "Structure of the Earth with abundance of elements",
-  "credit": "Jon Lomberg with Steven Soter"
+  "credit": "Jon Lomberg with Steven Soter",
+  "aligned": "docs/reference/aligned/40.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 96
  },
  "41": {
   "status": "confirmed",
@@ -480,7 +600,10 @@
   "bookPage": 38,
   "captionPage": 38,
   "ozma": "Heron Island",
-  "credit": "Jay M. Pasachoff"
+  "credit": "Jay M. Pasachoff",
+  "aligned": "docs/reference/aligned/41.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 80
  },
  "42": {
   "status": "confirmed",
@@ -502,7 +625,10 @@
   "file": "docs/reference/042-voyager-golden-record-42-adams-the-tetons-and-the-snake-rive.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_42_Adams_The_Tetons_and_the_Snake_River.gif",
   "licence": "Public domain",
-  "mislabelled": true
+  "mislabelled": true,
+  "aligned": "docs/reference/aligned/42.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 249
  },
  "43": {
   "status": "confirmed",
@@ -523,7 +649,10 @@
   },
   "file": "docs/reference/042-voyager-golden-record-42-adams-the-tetons-and-the-snake-rive.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_42_Adams_The_Tetons_and_the_Snake_River.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/43.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 222
  },
  "44": {
   "status": "confirmed",
@@ -533,7 +662,10 @@
   "bookPage": 38,
   "captionPage": 38,
   "ozma": "A horseman and his dog cross the desert, Pisco, Peru",
-  "credit": "George Mobley"
+  "credit": "George Mobley",
+  "aligned": "docs/reference/aligned/44.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 420
  },
  "45": {
   "status": "confirmed",
@@ -543,7 +675,10 @@
   "bookPage": 38,
   "captionPage": 38,
   "ozma": "Monument Valley, Arizona",
-  "credit": "Ray Manley"
+  "credit": "Ray Manley",
+  "aligned": "docs/reference/aligned/45.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 408
  },
  "46": {
   "status": "confirmed",
@@ -553,7 +688,10 @@
   "bookPage": 39,
   "captionPage": 40,
   "ozma": "Forest scene with mushrooms, Petersburg, Virginia",
-  "credit": "Bruce Dale"
+  "credit": "Bruce Dale",
+  "aligned": "docs/reference/aligned/46.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 609
  },
  "47": {
   "status": "confirmed",
@@ -563,7 +701,10 @@
   "bookPage": 39,
   "captionPage": 40,
   "ozma": "Strawberry leaf",
-  "credit": "J. Arthur Herrick"
+  "credit": "J. Arthur Herrick",
+  "aligned": "docs/reference/aligned/47.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 257
  },
  "48": {
   "status": "confirmed",
@@ -573,7 +714,10 @@
   "bookPage": 40,
   "captionPage": 40,
   "ozma": "Fallen leaves, White Sulphur Springs, West Virginia",
-  "credit": "Jodi Cobb"
+  "credit": "Jodi Cobb",
+  "aligned": "docs/reference/aligned/48.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 397
  },
  "49": {
   "status": "confirmed",
@@ -583,7 +727,10 @@
   "bookPage": 40,
   "captionPage": 40,
   "ozma": "Sequoia and snowflake",
-  "credit": "Josef Muench/Robert Sisson"
+  "credit": "Josef Muench/Robert Sisson",
+  "aligned": "docs/reference/aligned/49.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 490
  },
  "50": {
   "status": "confirmed",
@@ -593,7 +740,10 @@
   "bookPage": 40,
   "captionPage": 40,
   "ozma": "Tree and daffodils",
-  "credit": "Gottlieb Hampfler"
+  "credit": "Gottlieb Hampfler",
+  "aligned": "docs/reference/aligned/50.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 483
  },
  "51": {
   "status": "confirmed",
@@ -603,7 +753,10 @@
   "bookPage": 41,
   "captionPage": 42,
   "ozma": "Ichneumon fly",
-  "credit": "Stephen Dalton"
+  "credit": "Stephen Dalton",
+  "aligned": "docs/reference/aligned/51.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 297
  },
  "52": {
   "status": "confirmed",
@@ -613,7 +766,10 @@
   "bookPage": 41,
   "captionPage": 42,
   "ozma": "Diagram of vertebrate evolution",
-  "credit": "Jon Lomberg"
+  "credit": "Jon Lomberg",
+  "aligned": "docs/reference/aligned/52.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 95
  },
  "53": {
   "status": "confirmed",
@@ -623,7 +779,10 @@
   "bookPage": 41,
   "captionPage": 42,
   "ozma": "Turbinellidae seashell",
-  "credit": "Hermann Landshoff"
+  "credit": "Hermann Landshoff",
+  "aligned": "docs/reference/aligned/53.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 73
  },
  "54": {
   "status": "confirmed",
@@ -633,7 +792,10 @@
   "bookPage": 42,
   "captionPage": 42,
   "ozma": "Dolphins",
-  "credit": "Thomas Nebbia"
+  "credit": "Thomas Nebbia",
+  "aligned": "docs/reference/aligned/54.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 148
  },
  "55": {
   "status": "confirmed",
@@ -643,7 +805,10 @@
   "bookPage": 42,
   "captionPage": 42,
   "ozma": "Sweeper fish and diver in the Red Sea",
-  "credit": "David Doubilet"
+  "credit": "David Doubilet",
+  "aligned": "docs/reference/aligned/55.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 87
  },
  "56": {
   "status": "confirmed",
@@ -653,7 +818,10 @@
   "bookPage": 43,
   "captionPage": 44,
   "ozma": "Tree toad",
-  "credit": "David Wickstrom"
+  "credit": "David Wickstrom",
+  "aligned": "docs/reference/aligned/56.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 0
  },
  "57": {
   "status": "confirmed",
@@ -663,7 +831,10 @@
   "bookPage": 43,
   "captionPage": 44,
   "ozma": "Crocodile in Alia Bay, Lake Rudolf, Kenya",
-  "credit": "Peter Beard"
+  "credit": "Peter Beard",
+  "aligned": "docs/reference/aligned/57.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 234
  },
  "58": {
   "status": "confirmed",
@@ -672,8 +843,11 @@
   "book": "docs/reference/book/n043.jpg",
   "bookPage": 43,
   "captionPage": 44,
-  "ozma": "Short-toed eagle, Doñana National Park, Spain",
-  "credit": "José Ramón Pons"
+  "ozma": "Short-toed eagle, Do\u00f1ana National Park, Spain",
+  "credit": "Jos\u00e9 Ram\u00f3n Pons",
+  "aligned": "docs/reference/aligned/58.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 230
  },
  "59": {
   "status": "confirmed",
@@ -683,7 +857,10 @@
   "bookPage": 43,
   "captionPage": 44,
   "ozma": "Watering hole",
-  "credit": "South African Tourism"
+  "credit": "South African Tourism",
+  "aligned": "docs/reference/aligned/59.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 242
  },
  "60": {
   "status": "confirmed",
@@ -693,7 +870,10 @@
   "bookPage": 44,
   "captionPage": 44,
   "ozma": "Jane Goodall observing chimpanzees, Gombe Stream National Park, Tanzania",
-  "credit": "Vanne Morris-Goodall"
+  "credit": "Vanne Morris-Goodall",
+  "aligned": "docs/reference/aligned/60.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 589
  },
  "61": {
   "status": "confirmed",
@@ -703,7 +883,10 @@
   "bookPage": 44,
   "captionPage": 44,
   "ozma": "Bushmen hunters in Botswana silhouette",
-  "credit": "Jon Lomberg"
+  "credit": "Jon Lomberg",
+  "aligned": "docs/reference/aligned/61.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 26
  },
  "62": {
   "status": "confirmed",
@@ -713,7 +896,10 @@
   "bookPage": 44,
   "captionPage": 44,
   "ozma": "Bushmen hunters in Botswana",
-  "credit": "Nat Farbman"
+  "credit": "Nat Farbman",
+  "aligned": "docs/reference/aligned/62.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 356
  },
  "63": {
   "status": "confirmed",
@@ -723,7 +909,10 @@
   "bookPage": 45,
   "captionPage": 46,
   "ozma": "Man from Nicaragua",
-  "credit": "Yutaka Nagata"
+  "credit": "Yutaka Nagata",
+  "aligned": "docs/reference/aligned/63.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 98
  },
  "64": {
   "status": "confirmed",
@@ -733,7 +922,10 @@
   "bookPage": 45,
   "captionPage": 46,
   "ozma": "Dancer from Bali",
-  "credit": "Donna Grosvenor"
+  "credit": "Donna Grosvenor",
+  "aligned": "docs/reference/aligned/64.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 4
  },
  "65": {
   "status": "confirmed",
@@ -743,7 +935,10 @@
   "bookPage": 45,
   "captionPage": 46,
   "ozma": "Women in Santiago Atitlan, Guatemala",
-  "credit": "Joe Schershel"
+  "credit": "Joe Schershel",
+  "aligned": "docs/reference/aligned/65.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 4
  },
  "66": {
   "status": "confirmed",
@@ -753,7 +948,10 @@
   "bookPage": 46,
   "captionPage": 46,
   "ozma": "Craftsman carving elephants from teak, Chiang Mai, Thailand",
-  "credit": "Dean Conger"
+  "credit": "Dean Conger",
+  "aligned": "docs/reference/aligned/66.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 26
  },
  "67": {
   "status": "confirmed",
@@ -763,7 +961,10 @@
   "bookPage": 46,
   "captionPage": 46,
   "ozma": "Elephant, Mae Sariang, Thailand",
-  "credit": "Peter Kunstadter"
+  "credit": "Peter Kunstadter",
+  "aligned": "docs/reference/aligned/67.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 3
  },
  "68": {
   "status": "confirmed",
@@ -773,7 +974,10 @@
   "bookPage": 46,
   "captionPage": 46,
   "ozma": "Elderly farmer from Cappadocia, Turkey",
-  "credit": "Jonathan Blair"
+  "credit": "Jonathan Blair",
+  "aligned": "docs/reference/aligned/68.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 3
  },
  "69": {
   "status": "confirmed",
@@ -783,7 +987,10 @@
   "bookPage": 46,
   "captionPage": 46,
   "ozma": "Man searching for herbs in Owen County, Indiana",
-  "credit": "Bruce Baumann"
+  "credit": "Bruce Baumann",
+  "aligned": "docs/reference/aligned/69.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 339
  },
  "70": {
   "status": "confirmed",
@@ -792,8 +999,11 @@
   "book": "docs/reference/book/n047.jpg",
   "bookPage": 47,
   "captionPage": 48,
-  "ozma": "Gaston Rébuffat atop Aiguille de Roc, Mont Blanc massif, France",
-  "credit": "Georges Tairraz"
+  "ozma": "Gaston R\u00e9buffat atop Aiguille de Roc, Mont Blanc massif, France",
+  "credit": "Georges Tairraz",
+  "aligned": "docs/reference/aligned/70.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 224
  },
  "71": {
   "status": "confirmed",
@@ -803,7 +1013,10 @@
   "bookPage": 48,
   "captionPage": 48,
   "ozma": "Gymnast Cathy Rigby",
-  "credit": "Phillip Leonian"
+  "credit": "Phillip Leonian",
+  "aligned": "docs/reference/aligned/71.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 152
  },
  "72": {
   "status": "confirmed",
@@ -813,7 +1026,10 @@
   "bookPage": 49,
   "captionPage": 50,
   "ozma": "Valeriy Borzov winning gold, 1972 Olympic Games, Munich, Germany",
-  "credit": "Topham Picturepoint"
+  "credit": "Topham Picturepoint",
+  "aligned": "docs/reference/aligned/72.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 461
  },
  "73": {
   "status": "confirmed",
@@ -823,7 +1039,10 @@
   "bookPage": 49,
   "captionPage": 50,
   "ozma": "School in Eastern Hokkaido, Japan",
-  "credit": "Yutaka Nagata"
+  "credit": "Yutaka Nagata",
+  "aligned": "docs/reference/aligned/73.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 4
  },
  "74": {
   "status": "confirmed",
@@ -833,7 +1052,10 @@
   "bookPage": 50,
   "captionPage": 50,
   "ozma": "Children with globe at the United Nations International School",
-  "credit": "Yutaka Nagata"
+  "credit": "Yutaka Nagata",
+  "aligned": "docs/reference/aligned/74.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 275
  },
  "75": {
   "status": "confirmed",
@@ -843,7 +1065,10 @@
   "bookPage": 51,
   "captionPage": 52,
   "ozma": "Cotton harvesting, New South Wales, Australia",
-  "credit": "Howell Walker"
+  "credit": "Howell Walker",
+  "aligned": "docs/reference/aligned/75.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 484
  },
  "76": {
   "status": "confirmed",
@@ -853,7 +1078,10 @@
   "bookPage": 51,
   "captionPage": 52,
   "ozma": "Grape picker near Griffith, New South Wales, Australia",
-  "credit": "David Moore"
+  "credit": "David Moore",
+  "aligned": "docs/reference/aligned/76.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 10
  },
  "77": {
   "status": "confirmed",
@@ -873,7 +1101,10 @@
   },
   "file": "docs/reference/077-voyager-golden-record-77-supermarket-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_77_supermarket.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/77.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 432
  },
  "78": {
   "status": "confirmed",
@@ -883,7 +1114,10 @@
   "bookPage": 51,
   "captionPage": 52,
   "ozma": "Diver and fish, Buck Island Reef National Monument, St. Croix, U.S. Virgin Islands",
-  "credit": "Jerry Greenberg"
+  "credit": "Jerry Greenberg",
+  "aligned": "docs/reference/aligned/78.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 182
  },
  "79": {
   "status": "confirmed",
@@ -893,7 +1127,10 @@
   "bookPage": 51,
   "captionPage": 52,
   "ozma": "Fishermen at Evia, Greece",
-  "credit": "Tsagris"
+  "credit": "Tsagris",
+  "aligned": "docs/reference/aligned/79.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 5
  },
  "80": {
   "status": "confirmed",
@@ -903,7 +1140,10 @@
   "bookPage": 51,
   "captionPage": 52,
   "ozma": "Cooking fish",
-  "credit": "Brian Seed"
+  "credit": "Brian Seed",
+  "aligned": "docs/reference/aligned/80.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 364
  },
  "81": {
   "status": "confirmed",
@@ -913,7 +1153,10 @@
   "bookPage": 51,
   "captionPage": 52,
   "ozma": "Chinese dinner party",
-  "credit": "Michael Rougier"
+  "credit": "Michael Rougier",
+  "aligned": "docs/reference/aligned/81.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 374
  },
  "82": {
   "status": "confirmed",
@@ -933,7 +1176,10 @@
   },
   "file": "docs/reference/082-voyager-golden-record-82-feeding-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_82_feeding.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/82.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 171
  },
  "83": {
   "status": "confirmed",
@@ -943,7 +1189,10 @@
   "bookPage": 52,
   "captionPage": 52,
   "ozma": "The Great Wall of China",
-  "credit": "Edward Kim"
+  "credit": "Edward Kim",
+  "aligned": "docs/reference/aligned/83.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 178
  },
  "84": {
   "status": "confirmed",
@@ -952,8 +1201,11 @@
   "book": "docs/reference/book/n053.jpg",
   "bookPage": 53,
   "captionPage": 54,
-  "ozma": "Home construction in Sangmélima, Republic of Cameroon",
-  "credit": "UN"
+  "ozma": "Home construction in Sangm\u00e9lima, Republic of Cameroon",
+  "credit": "UN",
+  "aligned": "docs/reference/aligned/84.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 3
  },
  "85": {
   "status": "confirmed",
@@ -963,7 +1215,10 @@
   "bookPage": 53,
   "captionPage": 54,
   "ozma": "Amish barn raising",
-  "credit": "William Albert Allard"
+  "credit": "William Albert Allard",
+  "aligned": "docs/reference/aligned/85.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 537
  },
  "86": {
   "status": "confirmed",
@@ -973,7 +1228,10 @@
   "bookPage": 53,
   "captionPage": 54,
   "ozma": "Rural house in Bishoftu, Ethiopia",
-  "credit": "Ray Witlin"
+  "credit": "Ray Witlin",
+  "aligned": "docs/reference/aligned/86.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 317
  },
  "87": {
   "status": "confirmed",
@@ -983,7 +1241,10 @@
   "bookPage": 53,
   "captionPage": 54,
   "ozma": "House in Provincetown, Massachusetts",
-  "credit": "Robert Sisson"
+  "credit": "Robert Sisson",
+  "aligned": "docs/reference/aligned/87.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 451
  },
  "88": {
   "status": "confirmed",
@@ -993,7 +1254,10 @@
   "bookPage": 54,
   "captionPage": 54,
   "ozma": "House in Cloudcroft, New Mexico",
-  "credit": "Frank Drake"
+  "credit": "Frank Drake",
+  "aligned": "docs/reference/aligned/88.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 249
  },
  "89": {
   "status": "confirmed",
@@ -1003,7 +1267,10 @@
   "bookPage": 54,
   "captionPage": 54,
   "ozma": "Home interior",
-  "credit": "James L. Amos"
+  "credit": "James L. Amos",
+  "aligned": "docs/reference/aligned/89.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 283
  },
  "90": {
   "status": "confirmed",
@@ -1013,7 +1280,10 @@
   "bookPage": 54,
   "captionPage": 54,
   "ozma": "Taj Mahal",
-  "credit": "David Carroll"
+  "credit": "David Carroll",
+  "aligned": "docs/reference/aligned/90.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 223
  },
  "91": {
   "status": "confirmed",
@@ -1023,7 +1293,10 @@
   "bookPage": 54,
   "captionPage": 54,
   "ozma": "Oxford, England",
-  "credit": "Douglas R. Gilbert"
+  "credit": "Douglas R. Gilbert",
+  "aligned": "docs/reference/aligned/91.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 514
  },
  "92": {
   "status": "confirmed",
@@ -1033,7 +1306,10 @@
   "bookPage": 54,
   "captionPage": 54,
   "ozma": "Sailboats in the Charles River Basin, Boston, Massachusetts",
-  "credit": "Ted Spiegel"
+  "credit": "Ted Spiegel",
+  "aligned": "docs/reference/aligned/92.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 153
  },
  "93": {
   "status": "confirmed",
@@ -1043,7 +1319,10 @@
   "bookPage": 55,
   "captionPage": 56,
   "ozma": "Headquarters of the United Nations, day and night",
-  "credit": "UN/Yutaka Nagata"
+  "credit": "UN/Yutaka Nagata",
+  "aligned": "docs/reference/aligned/93.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 222
  },
  "94": {
   "status": "confirmed",
@@ -1053,7 +1332,10 @@
   "bookPage": 55,
   "captionPage": 56,
   "ozma": "Headquarters of the United Nations, day and night",
-  "credit": "UN/Yutaka Nagata"
+  "credit": "UN/Yutaka Nagata",
+  "aligned": "docs/reference/aligned/94.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 319
  },
  "95": {
   "status": "confirmed",
@@ -1063,7 +1345,10 @@
   "bookPage": 56,
   "captionPage": 56,
   "ozma": "Sydney Opera House",
-  "credit": "Michael E. Long"
+  "credit": "Michael E. Long",
+  "aligned": "docs/reference/aligned/95.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 115
  },
  "96": {
   "status": "confirmed",
@@ -1073,7 +1358,10 @@
   "bookPage": 56,
   "captionPage": 56,
   "ozma": "Artisan with drill",
-  "credit": "Frank Hewlett"
+  "credit": "Frank Hewlett",
+  "aligned": "docs/reference/aligned/96.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 248
  },
  "97": {
   "status": "confirmed",
@@ -1083,7 +1371,10 @@
   "bookPage": 56,
   "captionPage": 56,
   "ozma": "Factory interior",
-  "credit": "Fred Ward"
+  "credit": "Fred Ward",
+  "aligned": "docs/reference/aligned/97.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 325
  },
  "98": {
   "status": "confirmed",
@@ -1093,7 +1384,10 @@
   "bookPage": 56,
   "captionPage": 56,
   "ozma": "Visitors at a museum",
-  "credit": "David Cupp"
+  "credit": "David Cupp",
+  "aligned": "docs/reference/aligned/98.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 425
  },
  "99": {
   "status": "confirmed",
@@ -1113,7 +1407,10 @@
   },
   "file": "docs/reference/099-voyager-golden-record-99-xray-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_99_xray.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/99.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 76
  },
  "100": {
   "status": "confirmed",
@@ -1123,7 +1420,10 @@
   "bookPage": 56,
   "captionPage": 56,
   "ozma": "Woman with microscope in a Mogadishu health center",
-  "credit": "Rice"
+  "credit": "Rice",
+  "aligned": "docs/reference/aligned/100.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 121
  },
  "101": {
   "status": "confirmed",
@@ -1133,7 +1433,10 @@
   "bookPage": 56,
   "captionPage": 56,
   "ozma": "Street scene in Lahore, Pakistan",
-  "credit": "B. Wolff"
+  "credit": "B. Wolff",
+  "aligned": "docs/reference/aligned/101.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 429
  },
  "102": {
   "status": "confirmed",
@@ -1143,7 +1446,10 @@
   "bookPage": 57,
   "captionPage": 58,
   "ozma": "Rush hour in Bangkok, Thailand",
-  "credit": "UN"
+  "credit": "UN",
+  "aligned": "docs/reference/aligned/102.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 6
  },
  "103": {
   "status": "confirmed",
@@ -1163,7 +1469,10 @@
   },
   "file": "docs/reference/103-voyager-golden-record-103-highway-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_103_highway.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/103.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 81
  },
  "104": {
   "status": "confirmed",
@@ -1173,7 +1482,10 @@
   "bookPage": 58,
   "captionPage": 58,
   "ozma": "The Golden Gate and Bridge from Baker Beach, San Francisco, California",
-  "credit": "Ansel Adams"
+  "credit": "Ansel Adams",
+  "aligned": "docs/reference/aligned/104.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 79
  },
  "105": {
   "status": "confirmed",
@@ -1183,7 +1495,10 @@
   "bookPage": 58,
   "captionPage": 58,
   "ozma": "TurboTrain linking Boston to New York",
-  "credit": "Gordon Gahan"
+  "credit": "Gordon Gahan",
+  "aligned": "docs/reference/aligned/105.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 201
  },
  "106": {
   "status": "confirmed",
@@ -1193,7 +1508,10 @@
   "bookPage": 58,
   "captionPage": 58,
   "ozma": "Airplane from runway at Syracuse Hancock International Airport",
-  "credit": "Frank Drake"
+  "credit": "Frank Drake",
+  "aligned": "docs/reference/aligned/106.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 100
  },
  "107": {
   "status": "confirmed",
@@ -1203,7 +1521,10 @@
   "bookPage": 58,
   "captionPage": 58,
   "ozma": "Toronto Pearson International Airport Terminal 1",
-  "credit": "Ray Manley"
+  "credit": "Ray Manley",
+  "aligned": "docs/reference/aligned/107.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 459
  },
  "108": {
   "status": "confirmed",
@@ -1213,7 +1534,10 @@
   "bookPage": 59,
   "captionPage": 60,
   "ozma": "Sno-Cat hanging over crevasse, Trans-Antarctic Expedition, 1955-1958",
-  "credit": "George Lowe"
+  "credit": "George Lowe",
+  "aligned": "docs/reference/aligned/108.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 337
  },
  "109": {
   "status": "confirmed",
@@ -1223,7 +1547,10 @@
   "bookPage": 60,
   "captionPage": 60,
   "ozma": "The Westerbork Synthesis Radio Telescope, The Netherlands",
-  "credit": "James P. Blair"
+  "credit": "James P. Blair",
+  "aligned": "docs/reference/aligned/109.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 234
  },
  "110": {
   "status": "confirmed",
@@ -1243,7 +1570,10 @@
   },
   "file": "docs/reference/110-voyager-golden-record-110-arecibo-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_110_arecibo.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/110.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 124
  },
  "111": {
   "status": "confirmed",
@@ -1252,7 +1582,7 @@
   "book": "docs/reference/book/n061.jpg",
   "bookPage": 61,
   "captionPage": 62,
-  "ozma": "Pages from Sir Isaac Newton's Philosophiæ Naturalis Principia Mathematica, Book 3: De Mundi Systemate",
+  "ozma": "Pages from Sir Isaac Newton's Philosophi\u00e6 Naturalis Principia Mathematica, Book 3: De Mundi Systemate",
   "credit": "Jon Lomberg",
   "wikimedia": {
    "file": "docs/reference/111-voyager-golden-record-111-systemoftheworld-gif.jpg",
@@ -1263,7 +1593,10 @@
   },
   "file": "docs/reference/111-voyager-golden-record-111-systemoftheworld-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_111_systemoftheworld.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/111.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 34
  },
  "112": {
   "status": "confirmed",
@@ -1283,7 +1616,10 @@
   },
   "file": "docs/reference/112-voyager-golden-record-112-astronaut-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_112_astronaut.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/112.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 299
  },
  "113": {
   "status": "confirmed",
@@ -1303,7 +1639,10 @@
   },
   "file": "docs/reference/113-voyager-golden-record-113-launch-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_113_launch.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/113.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 67
  },
  "114": {
   "status": "confirmed",
@@ -1313,7 +1652,10 @@
   "bookPage": 63,
   "captionPage": 64,
   "ozma": "Whistling swans at sunset, Back Bay National Wildlife Refuge, Virginia",
-  "credit": "David Alan Harvey"
+  "credit": "David Alan Harvey",
+  "aligned": "docs/reference/aligned/114.jpg",
+  "aligned_warped": false,
+  "aligned_inliers": 3
  },
  "115": {
   "status": "confirmed",
@@ -1322,7 +1664,10 @@
   "book": "docs/reference/book/n064.jpg",
   "bookPage": 64,
   "captionPage": 64,
-  "ozma": "Quartetto Italiano"
+  "ozma": "Quartetto Italiano",
+  "aligned": "docs/reference/aligned/115.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 298
  },
  "116": {
   "status": "confirmed",
@@ -1342,6 +1687,9 @@
   },
   "file": "docs/reference/116-voyager-golden-record-116-score-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_116_score.gif",
-  "licence": "Public domain"
+  "licence": "Public domain",
+  "aligned": "docs/reference/aligned/116.jpg",
+  "aligned_warped": true,
+  "aligned_inliers": 138
  }
 }
