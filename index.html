@@ -617,7 +617,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='50';
+const ASSETV='51';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -814,10 +814,23 @@ function draw(cv,srcs,im,colour){
 // correction removes 20-42% of the droop and RAISES the streak metric 24-96%,
 // and a viewer told me it looked like nothing had changed. Both of us should be
 // able to check, so all three ship.
-const TIER_ORDER=['plain','decoded','denoised'];
-const TIER_DIR={plain:'thumbs_nc', decoded:'thumbs', denoised:'thumbs_ml'};
-const TIER_LABEL={plain:'No correction', decoded:'Decoded', denoised:'Denoised'};
-let TIER='decoded';
+// TWO tiers offered, after a viewer compared three and rejected the middle one.
+//
+// The physics-only tier -- the decode WITH the accumulation correction and
+// nothing else -- is no longer offered for viewing. It is still what the
+// pipeline produces and what the denoised tier is built on; it is simply not
+// worth looking at on its own, and the reason is measured: the correction
+// removes 20-42% of the droop and RAISES the streak amplitude 24-96%, because
+// the inverse is a running sum and integration amplifies each trace's residual
+// clamp error into a ramp. On the calibration frame that is a clear win; on a
+// photograph the extra streaking costs more than the flatter field buys.
+//
+// The denoiser removes those streaks, so the useful comparison is the whole
+// pipeline against no correction at all.
+const TIER_ORDER=['plain','denoised'];
+const TIER_DIR={plain:'thumbs_nc', denoised:'thumbs_ml'};
+const TIER_LABEL={plain:'No correction', denoised:'Denoised'};
+let TIER='denoised';
 const thumbs=im=>im.frames.map(x=>`data/${TIER_DIR[TIER]}/${x}.png?v=${ASSETV}`);
 
 // --------------------------------------------------------------------------
@@ -1255,10 +1268,10 @@ function fillText(im){
 
 function provenanceDebts(im){
   const out=[];
-  if(TIER!=='decoded') out.push(
+  if(TIER==='denoised') out.push(
     `you are looking at the <b>${TIER_LABEL[TIER].toLowerCase()}</b> tier` +
-    (TIER==='plain' ? ` — the decode WITHOUT the accumulation correction, kept for comparison` :
-     TIER==='denoised' ? `: the decode with a denoiser applied, ` : `: physics only, `) +
+    (TIER==='plain' ? ` — the decode WITHOUT the chain correction, kept for comparison` :
+     `: the corrected decode with a denoiser applied, `) +
     `trained only on this record's own colour repeats. Measured on the 20 colour images against ` +
     `a held-out scan — <b>on the 96 monochrome images there is no held-out measurement, so it is ` +
     `an extrapolation</b>`);
@@ -2173,7 +2186,7 @@ $('lbWHelp').textContent=
 // The lightbox copy sits in the decoded pane's own label strip, directly above
 // the picture it changes. One setter, so they cannot disagree.
 function setTier(t){
-  TIER = TIER_ORDER.indexOf(t)>=0 ? t : 'decoded';
+  TIER = TIER_ORDER.indexOf(t)>=0 ? t : 'denoised';
   $('tierv').textContent = TIER_LABEL[TIER];
   $('tier').setAttribute('aria-pressed', String(TIER!=='plain'));
   const b=$('lbTierBtn');

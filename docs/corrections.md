@@ -341,3 +341,47 @@ And it caught a defect in its own work: the module reported its cross term as nu
 term is **8σ real and unexplained** (−0.136 ± 0.016 against a synthetic control of +0.008 ±
 0.007, a −8.3° tilt). That is an open question, and it is the same diagonal signature that turned
 up in the ellipticity measurement (F5) — which is at least a coincidence worth noting.
+
+### F9. The chain correction is real, and on its own it is not worth looking at *(measured, then judged by eye)*
+
+The content-integrating error is established: the slide mount reads differently at its two ends
+(bottom slope −0.284, negative on 12/12 frames; top +0.054, negative on 3/12), which shading and
+per-trace offsets cannot produce. Inverting it works by every instrument that measures the
+*droop*:
+
+    mount gap, 13 held-out frames   1.404 → 0.283   (−80%)
+    L000 level fall, top to bottom  88.0 → 20.0 grey levels
+    white clipping                  5.99% → 0.12%
+    circle geometry                 unmoved
+
+**And it makes the streaking worse, by 24–96%.**
+
+| frame | droop p-p | streak sd |
+|---|---|---|
+| L000 | 2.94 → 1.73 (−41%) | 0.0447 → **0.0875 (+96%)** |
+| L020 | 2.87 → 1.66 (−42%) | 0.0654 → **0.1188 (+82%)** |
+| L055 | 2.54 → 1.97 (−22%) | 0.0502 → **0.0713 (+42%)** |
+| R040 | 2.13 → 1.71 (−20%) | 0.0669 → **0.0829 (+24%)** |
+
+**Why**: the inverse is a running sum, and integration does not care whether it is summing signal
+or an error in that trace's starting level. The flat residual left by the porch clamp emerges as a
+**ramp down the trace**, different per trace — which is a streak. I had written that droop and
+streaking were "one defect, so fixing one fixes both", reasoning from the error field being 96.5%
+droop and 0.2–0.7% streak. That inference was wrong: the *field* is mostly droop, but the
+*correction* redistributes error into the streak band.
+
+**A fix attempted and failed** (`decode._reclamp_after`, kept in the file and switched off): the
+mount is known-constant across traces, so redistributing each trace's mount deviation back along
+its own accumulation should cancel the amplified part. It made things worse — streak sd
+0.0815 → 0.1109 — because the mount is only ~8 dots deep, so the deviation read from it is mostly
+its own noise, injected as a ramp. A wider known-constant region might still work.
+
+**Outcome**: the physics-only tier was shown alongside the uncorrected and denoised versions, and
+a viewer rejected it. It remains what the pipeline produces and what the denoised tier is built
+on; it is no longer offered as something to look at. **On the calibration frame the correction is
+a clear win; on a photograph the extra streaking costs more than the flatter field buys, and the
+denoiser is what makes the correction worth having.**
+
+The general lesson, which cost a full rebuild to learn: *a correction validated on the calibration
+frame is validated for the calibration frame.* Its side effects live in bands the flat field
+cannot see.
