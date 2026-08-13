@@ -1,0 +1,162 @@
+[
+ {
+  "n": 7,
+  "title": "The Sun",
+  "frame": "L006",
+  "blind": 0.38433777661219876,
+  "oracle": 0.6968370319953598,
+  "gain": 0.3124992553831611,
+  "settings": {
+   "uncouple": true,
+   "dot_lock": false,
+   "picture_shift": 0.006,
+   "deconv": 0.3,
+   "gamma": 1.0,
+   "levels": "reference"
+  }
+ },
+ {
+  "n": 19,
+  "title": "Anatomy 2 (Skeleton and muscles back)",
+  "frame": "L024",
+  "blind": 0.1734316706052846,
+  "oracle": 0.29077692556590895,
+  "gain": 0.11734525496062434,
+  "settings": {
+   "uncouple": true,
+   "dot_lock": true,
+   "picture_shift": 0.006,
+   "deconv": 0.3,
+   "gamma": 1.25,
+   "levels": "reference"
+  }
+ },
+ {
+  "n": 11,
+  "title": "Jupiter",
+  "frame": "L012",
+  "blind": 0.05214965194603406,
+  "oracle": 0.16289430221025888,
+  "gain": 0.11074465026422482,
+  "settings": {
+   "uncouple": true,
+   "dot_lock": false,
+   "picture_shift": -0.006,
+   "deconv": 0.6,
+   "gamma": 0.8,
+   "levels": "reference"
+  }
+ },
+ {
+  "n": 26,
+  "title": "Human sex organs",
+  "frame": "L033",
+  "blind": 0.031062243893225285,
+  "oracle": 0.1388134139819252,
+  "gain": 0.10775117008869992,
+  "settings": {
+   "uncouple": true,
+   "dot_lock": false,
+   "picture_shift": 0.003,
+   "deconv": 0.0,
+   "gamma": 1.25,
+   "levels": "percentile"
+  }
+ },
+ {
+  "n": 9,
+  "title": "Mercury",
+  "frame": "L010",
+  "blind": 0.20066667932305443,
+  "oracle": 0.2929807573430518,
+  "gain": 0.09231407801999736,
+  "settings": {
+   "uncouple": false,
+   "dot_lock": false,
+   "picture_shift": -0.006,
+   "deconv": 0.0,
+   "gamma": 0.8,
+   "levels": "percentile"
+  }
+ },
+ {
+  "n": 17,
+  "title": "Cells and cell division",
+  "frame": "L022",
+  "blind": 0.10978860473738072,
+  "oracle": 0.18761180962195986,
+  "gain": 0.07782320488457914,
+  "settings": {
+   "uncouple": false,
+   "dot_lock": false,
+   "picture_shift": -0.003,
+   "deconv": 0.3,
+   "gamma": 1.0,
+   "levels": "reference"
+  }
+ },
+ {
+  "n": 24,
+  "title": "Anatomy 7 (Ribcage)",
+  "frame": "L031",
+  "blind": 0.19350686075937118,
+  "oracle": 0.2300789749688697,
+  "gain": 0.03657211420949852,
+  "settings": {
+   "uncouple": true,
+   "dot_lock": true,
+   "picture_shift": 0.006,
+   "deconv": 0.0,
+   "gamma": 1.25,
+   "levels": "reference"
+  }
+ },
+ {
+  "n": 16,
+  "title": "DNA Structure magnified, light hit",
+  "frame": "L021",
+  "blind": 0.35700566864370054,
+  "oracle": 0.3843696616507007,
+  "gain": 0.027363993007000154,
+  "settings": {
+   "uncouple": true,
+   "dot_lock": true,
+   "picture_shift": -0.006,
+   "deconv": 0.0,
+   "gamma": 0.8,
+   "levels": "percentile"
+  }
+ },
+ {
+  "n": 14,
+  "title": "Chemical definitions",
+  "frame": "L019",
+  "blind": 0.4083294420982552,
+  "oracle": 0.4215222147683294,
+  "gain": 0.013192772670074182,
+  "settings": {
+   "uncouple": true,
+   "dot_lock": false,
+   "picture_shift": -0.003,
+   "deconv": 0.0,
+   "gamma": 1.0,
+   "levels": "percentile"
+  }
+ },
+ {
+  "n": 12,
+  "title": "Earth",
+  "frame": "L013",
+  "blind": 0.27022320419885293,
+  "oracle": 0.2737058883446079,
+  "gain": 0.0034826841457549773,
+  "settings": {
+   "uncouple": true,
+   "dot_lock": true,
+   "picture_shift": -0.006,
+   "deconv": 0.0,
+   "gamma": 1.25,
+   "levels": "reference"
+  }
+ }
+]

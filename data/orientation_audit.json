@@ -1,0 +1,2708 @@
+{
+ "what": "Orientation audit of the 116 Voyager Golden Record images. Separates what the signal actually encodes from what human recognition supplies.",
+ "generated": "2026-08-12",
+ "encodedOrientationNote": "Always 0, for every image, as a statement of fact. The record encodes no \"this way up\" information whatsoever: the signal fixes a raster of 512 traces and nothing about which edge is the top. encodedOrientation is therefore the unrotated decode - the only orientation the signal itself licenses. An alien recipient could not do better than guess.",
+ "displayOrientationNote": "Our judgement, derived from recognising the subject matter, which is human knowledge and not recoverable from the signal. Expressed as QUARTER TURNS CLOCKWISE applied to the as-encoded frame: 0 = none, 1 = 90 CW, 2 = 180, 3 = 90 CCW (270 CW).",
+ "conventionWarning": "displayOrientation is NOT in the same convention as currentOrientation. Barry's 2017 column uses 1 and 2 for quarter turns in OPPOSITE directions (1 = 90 CW, 2 = 90 CCW) and has no way to express a half turn. The field currentOrientationAsQuarterTurnsCW restates his value in the display convention so the two can be compared directly; displayOrientation differs from it only where changed is true.",
+ "barryIntentMapping": {
+  "0": 0,
+  "1": 1,
+  "2": 3
+ },
+ "howTheConventionWasFixed": "Empirically, from frames whose own hand-lettering settles the answer, not from the code. Barry 1 = 90 CW: L033 (image 26, MALE/FEMALE and every leader label reads left-to-right) and L039 (image 32, 160 cm / 155 cm / 20 y upright, figures standing). Barry 2 = 90 CCW: all four frames that carry the value - L012 Jupiter, L013 Earth, L074 insect, R077 violin - read their own captions upright only after a counter-clockwise quarter turn, and the scanned book plates for Earth, the insect and the violin independently imply the same 3 quarter turns clockwise.",
+ "method": "Every one of the 116 images was rendered at all four quarter turns from the as-encoded decode (reconstructed by undoing the rotation pipeline/build.py bakes into data/thumbs) and looked at. Colour images were composited from their RGB triplets where that helped. Judgements were then screened against the scanned book plates in docs/reference: 95 images have a plate match at or above 60 RANSAC inliers, and 93 of those confirmed the 2017 table. The two that did not were inspected side by side with the plate and are the two corrections recorded here.",
+ "summary": {
+  "total": 116,
+  "agreed": 114,
+  "corrected": 2,
+  "ambiguous": 1,
+  "corrections": [
+   2,
+   28
+  ],
+  "ambiguousImages": [
+   1
+  ],
+  "confidence": {
+   "certain": 113,
+   "likely": 2,
+   "ambiguous": 1
+  },
+  "bookPlateCorroborated": 95
+ },
+ "images": [
+  {
+   "n": 1,
+   "frameId": "L000",
+   "frames": [
+    "L000"
+   ],
+   "title": "Calibration circle",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "ambiguous",
+   "evidence": "A plain dark circle centred on a light field. It is rotationally symmetric: all four quarter turns are identical apart from decode noise along one frame edge, and the reference scan (Jon Lomberg, Wikimedia Commons) is likewise a bare circle with no asymmetric feature. No evidence exists in the frame or in any reference. 0 is recorded as the do-nothing default, not as a determination.",
+   "referenceScan": "docs/reference/001-calibration-circle-gif.jpg"
+  },
+  {
+   "n": 2,
+   "frameId": "L001",
+   "frames": [
+    "L001"
+   ],
+   "title": "Solar location map",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 2,
+   "changed": true,
+   "confidence": "certain",
+   "evidence": "CORRECTED. The scanned book plate prints the pulsar radiant at upper LEFT with the galaxy inset at lower RIGHT; the as-encoded decode has both exactly reversed. The decisive detail is asymmetric: the small bright companion dot sits to the LEFT of the galaxy's core in the plate and in our 180-rotated decode, and to the RIGHT in the as-encoded frame. So this slide needs a half turn. Barry's column records 0, and being limited to 0/1/2 quarter turns it cannot express a half turn at all. Corroborated by the scanned book plate (page 24, 94 RANSAC inliers), which independently implies 2 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n024_0.jpg",
+    "page": 24,
+    "inliers": 94,
+    "rotationFromStoredThumb": 180,
+    "impliedDisplayOrientation": 2,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 3,
+   "frameId": "L002",
+   "frames": [
+    "L002"
+   ],
+   "title": "Mathematical definitions",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Text evidence. The hand-lettered numerals 1..10, the binary dot/dash column and the equations 2+3=5, 13 x 28 = 364 and 1000 = 10^3 are upright and read left-to-right in the as-encoded frame, with exponents raised above the baseline."
+  },
+  {
+   "n": 4,
+   "frameId": "L003",
+   "frames": [
+    "L003"
+   ],
+   "title": "Physical unit definitions",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Text evidence. '1M', '1 L', '86400 s = 1 d', '365 d = 1 y' and '1000 m = 1 km' are upright and read left-to-right; the hydrogen-spin circles sit above the equations and the sine wave runs along a horizontal axis. Corroborated by the scanned book plate (page 25, 98 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n025_2.jpg",
+    "page": 25,
+    "inliers": 98,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 5,
+   "frameId": "L004",
+   "frames": [
+    "L004"
+   ],
+   "title": "Solar System parameters",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Text evidence. The parameter table reads left-to-right in horizontal rows ('139 x 10^4 km  4840 km  12400  12760  6800') with the row of planet discs above it and the fraction stacks upright, numerator over denominator. Corroborated by the scanned book plate (page 26, 155 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n026_1.jpg",
+    "page": 26,
+    "inliers": 155,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 6,
+   "frameId": "L005",
+   "frames": [
+    "L005"
+   ],
+   "title": "Solar System parameters",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Text evidence, same slide family as image 5. '142 x 10^3 km  121 x 10^3  47600  44600  14000' reads left-to-right in a horizontal row and fractions such as '41/100 d' are upright. Corroborated by the scanned book plate (page 26, 146 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n026_3.jpg",
+    "page": 26,
+    "inliers": 146,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 7,
+   "frameId": "L006",
+   "frames": [
+    "L006"
+   ],
+   "title": "The Sun",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "No lettering and no gravity cue in the frame; the 2x2 montage of solar panels is square in a landscape card and would be defensible at more than one turn on internal evidence alone. Settled externally by the scanned book plate. Corroborated by the scanned book plate (page 26, 165 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n026_4.jpg",
+    "page": 26,
+    "inliers": 165,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 8,
+   "frameId": "L007",
+   "frames": [
+    "L007",
+    "L008",
+    "L009"
+   ],
+   "title": "Solar spectrum",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Confirmed against the reference scan of the original slide (National Astronomy and Ionosphere Center, Wikimedia Commons): a horizontal dispersed band running blue at the LEFT through green to red at the RIGHT, with a faint X ruled across the green section. Our colour composite of the L007/L008/L009 triplet reproduces that left-right sense exactly, which is what fixes the answer - a horizontal band alone would leave 0 and 180 open.",
+   "referenceScan": "docs/reference/008-voyager-golden-record-8-spectra-gif.jpg"
+  },
+  {
+   "n": 9,
+   "frameId": "L010",
+   "frames": [
+    "L010"
+   ],
+   "title": "Mercury",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Confirmed against the reference scan (NASA, Wikimedia Commons): the bright cratered limb sweeps from upper left down to the right with black space above it, matching the as-encoded frame. Crater shading alone gives no absolute up, so without the reference this would have stayed ambiguous. Corroborated by the scanned book plate (page 27, 425 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n027_3.jpg",
+    "page": 27,
+    "inliers": 425,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/009-voyager-golden-record-9-mercury-gif.jpg"
+  },
+  {
+   "n": 10,
+   "frameId": "L011",
+   "frames": [
+    "L011"
+   ],
+   "title": "Mars",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The record's own annotation settles it: the caption '6787 km' with '1/10 e' beneath sits below the planet, upright and reading left-to-right with a horizontal fraction bar. Corroborated by the scanned book plate (page 27, 128 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n027_4.jpg",
+    "page": 27,
+    "inliers": 128,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/010-voyager-golden-record-10-mars-gif.jpg"
+  },
+  {
+   "n": 11,
+   "frameId": "L012",
+   "frames": [
+    "L012"
+   ],
+   "title": "Jupiter",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 2,
+   "currentOrientationAsQuarterTurnsCW": 3,
+   "displayOrientation": 3,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Caption evidence. Turning the as-encoded frame 90 degrees COUNTER-clockwise sets '142800 km / 318 e' upright and horizontal beneath the planet and lays the cloud bands flat with the Great Red Spot on a band boundary. This is one of the frames that fixes Barry's 2 as a counter-clockwise quarter turn.",
+   "referenceScan": "docs/reference/011-voyager-golden-record-11-jupiter-gif.jpg"
+  },
+  {
+   "n": 12,
+   "frameId": "L013",
+   "frames": [
+    "L013",
+    "L014",
+    "L015"
+   ],
+   "title": "Earth",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 2,
+   "currentOrientationAsQuarterTurnsCW": 3,
+   "displayOrientation": 3,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Caption evidence, independent of Jupiter. A 90 degree COUNTER-clockwise turn sets '12756km / 1e' upright and horizontal below the globe and puts Africa and Arabia in their familiar attitude. Second anchor for Barry's 2 = counter-clockwise. Corroborated by the scanned book plate (page 28, 458 RANSAC inliers), which independently implies 3 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n028_0.jpg",
+    "page": 28,
+    "inliers": 458,
+    "rotationFromStoredThumb": 90,
+    "impliedDisplayOrientation": 3,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/012-voyager-golden-record-12-earth-gif.jpg"
+  },
+  {
+   "n": 13,
+   "frameId": "L016",
+   "frames": [
+    "L016",
+    "L017",
+    "L018"
+   ],
+   "title": "Egypt, Red Sea, Sinai Peninsula, and the Nile",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Annotation evidence. The overlaid atmosphere table 'n2 78/100', 'o2 21/100', 'h2o 1/100', 'co2 3/10000' and the circled '18' are upright and read left-to-right with horizontal fraction bars. Corroborated by the scanned book plate (page 28, 385 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n028_2.jpg",
+    "page": 28,
+    "inliers": 385,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/013-voyager-golden-record-13-earth-gif.jpg"
+  },
+  {
+   "n": 14,
+   "frameId": "L019",
+   "frames": [
+    "L019"
+   ],
+   "title": "Chemical definitions",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Text evidence. The boxed base labels A, T, G, S are upright, the circled atomic numbers beside the Bohr shell diagrams are upright, and the element letters c, n, o, p sit readably to the left of their shells. Corroborated by the scanned book plate (page 29, 100 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n029_1.jpg",
+    "page": 29,
+    "inliers": 100,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 15,
+   "frameId": "L020",
+   "frames": [
+    "L020"
+   ],
+   "title": "DNA Structure",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Text evidence. The boxed 'A' and 'G' callouts, the '34 a-degrees' pitch annotation and the whole structural formula are upright. The helix in this drawing genuinely runs left-to-right across the frame; that is the artwork, and the lettering settles the turn. Corroborated by the scanned book plate (page 29, 135 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n029_3.jpg",
+    "page": 29,
+    "inliers": 135,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 16,
+   "frameId": "L021",
+   "frames": [
+    "L021"
+   ],
+   "title": "DNA Structure magnified, light hit",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Text evidence, agreeing with image 15, which is the same artwork at lower magnification. '34 a-degrees' is upright at top left and the base-pair labels T-A, A-T, G-S, S-G along the ladder read left-to-right. Corroborated by the scanned book plate (page 29, 186 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n029_4.jpg",
+    "page": 29,
+    "inliers": 186,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 17,
+   "frameId": "L022",
+   "frames": [
+    "L022"
+   ],
+   "title": "Cells and cell division",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Annotation evidence. The scale bar '1/300 cm' is upright between its end ticks with a horizontal fraction bar, and the inset helix panel sits in the upper right of a landscape frame. Corroborated by the scanned book plate (page 30, 342 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n030_0.jpg",
+    "page": 30,
+    "inliers": 342,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 18,
+   "frameId": "L023",
+   "frames": [
+    "L023"
+   ],
+   "title": "Anatomy 1 (Skeleton front)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Human body, unambiguous: skull at the top, cervical spine, ribcage, pelvis, and an arm hanging down to a hand near the bottom. Corroborated by the scanned book plate (page 31, 323 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n031_0.jpg",
+    "page": 31,
+    "inliers": 323,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 19,
+   "frameId": "L024",
+   "frames": [
+    "L024"
+   ],
+   "title": "Anatomy 2 (Skeleton and muscles back)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Human body: skull top, spine vertical, scapula and ribcage below, arm hanging with the hand level with the hip, thigh continuing off the bottom edge. Corroborated by the scanned book plate (page 31, 311 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n031_1.jpg",
+    "page": 31,
+    "inliers": 311,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 20,
+   "frameId": "L025",
+   "frames": [
+    "L025"
+   ],
+   "title": "Anatomy 3 (Heart, lungs, kidneys and main blood vessels back)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Anatomical order, cranial to caudal: paired lungs at the top with the trachea rising between them, kidneys below, aorta descending to the pelvic bifurcation with the femoral vessels running out at the bottom. Corroborated by the scanned book plate (page 32, 193 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n032_7.jpg",
+    "page": 32,
+    "inliers": 193,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 21,
+   "frameId": "L026",
+   "frames": [
+    "L026"
+   ],
+   "title": "Anatomy 4 (Heart, lungs, kidneys and main blood vessels front)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Same anatomical logic as image 20 from the front: lungs and heart at the top with the trachea above, kidneys mid-frame, aortic bifurcation and femoral vessels descending at the bottom. Corroborated by the scanned book plate (page 32, 124 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n032_4.jpg",
+    "page": 32,
+    "inliers": 124,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 22,
+   "frameId": "L027",
+   "frames": [
+    "L027"
+   ],
+   "title": "Anatomy 5 (Internal organs back)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Head in profile at the top, then lungs, then the coiled small intestine, with the arm hanging down the left side to a hand near the bottom. Head above viscera above hand. Corroborated by the scanned book plate (page 32, 333 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n032_6.jpg",
+    "page": 32,
+    "inliers": 333,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 23,
+   "frameId": "L028",
+   "frames": [
+    "L028",
+    "L029",
+    "L030"
+   ],
+   "title": "Anatomy 6 (Internal organs front)",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Head in profile at the top, lungs and diaphragm below, intestines below that, arm hanging down the right side to an open hand at the bottom. Corroborated by the scanned book plate (page 32, 357 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n032_10.jpg",
+    "page": 32,
+    "inliers": 357,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 24,
+   "frameId": "L031",
+   "frames": [
+    "L031"
+   ],
+   "title": "Anatomy 7 (Ribcage)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Clavicle and shoulder girdle at the top, ribs angling down and forward from the sternum, abdominal wall continuing below toward the hip. Corroborated by the scanned book plate (page 32, 242 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n032_9.jpg",
+    "page": 32,
+    "inliers": 242,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 25,
+   "frameId": "L032",
+   "frames": [
+    "L032"
+   ],
+   "title": "Anatomy 8 (Muscles front)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Annotation and anatomy agree: the '12 cm' scale bar reads left-to-right with its underline below, the boxed organ diagrams with male and female symbols sit upright along the bottom, and the vertebral column runs vertically with the neck at the top and the sacrum at the bottom. Corroborated by the scanned book plate (page 32, 93 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n032_8.jpg",
+    "page": 32,
+    "inliers": 93,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 26,
+   "frameId": "L033",
+   "frames": [
+    "L033"
+   ],
+   "title": "Human sex organs",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Text evidence, decisive. 'MALE' heads the upper panel and 'FEMALE' the lower, and the leader labels URINARY BLADDER, URETER, RECTUM, SEMINAL VESICLE, PROSTATE, OVARY, UTERUS, CERVIX, VAGINA all read horizontally left-to-right, as does the '12 cm' scale. The male symbol's arrow points up-right and the female cross hangs below its circle. This frame is one of the three anchors that fix Barry's 1 as a clockwise quarter turn. Corroborated by the scanned book plate (page 33, 159 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n033_1.jpg",
+    "page": 33,
+    "inliers": 159,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 27,
+   "frameId": "L034",
+   "frames": [
+    "L034"
+   ],
+   "title": "Diagram of conception",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Text evidence. The elapsed-time label '0 s' is upright and horizontal at the top with its underline below, and the male and female glyphs are upright. The '1/150 cm' annotation runs vertically because it is a vertical scale bar across the ovum, not because the frame is turned. Composition agrees: the dark ovum fills the lower part, sperm above it."
+  },
+  {
+   "n": 28,
+   "frameId": "L035",
+   "frames": [
+    "L035"
+   ],
+   "title": "Conception",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 0,
+   "changed": true,
+   "confidence": "certain",
+   "evidence": "CORRECTED. The scanned book plate for this micrograph is LANDSCAPE - the grainy ovum fills the right-hand side, the sperm are scattered in the dark field to the left, and a hand-drawn leader line points rightward at a single sperm on the ovum's margin. That is the as-encoded frame exactly, detail for detail, including the second sperm just below-left of the leader tip and the column of sperm down the left edge. Barry's quarter turn puts it portrait with the ovum at the bottom. This was the one image every previous pass called undetermined and kept at 1 only by analogy with the companion diagram (image 27); the plate settles it, and the analogy was misleading. Corroborated by the scanned book plate (page 33, 625 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n033_6.jpg",
+    "page": 33,
+    "inliers": 625,
+    "rotationFromStoredThumb": 270,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 29,
+   "frameId": "L036",
+   "frames": [
+    "L036"
+   ],
+   "title": "Fertilized ovum",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Annotation evidence. '1 s' sits over the left cell and '43200 s' over the right two-cell stage, both upright, with the '1/50 cm' scale bar down the left margin. Corroborated by the scanned book plate (page 33, 422 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n033_7.jpg",
+    "page": 33,
+    "inliers": 422,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 30,
+   "frameId": "L037",
+   "frames": [
+    "L037"
+   ],
+   "title": "Fetus diagram",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Annotation evidence. The scale bars '2 1/2 cm' and '5 cm' and the elapsed-time labels '3456000 s' and '5184000 s' are upright with correctly stacked fractions, and the two fetal silhouettes are head-up with limbs tucked below. Corroborated by the scanned book plate (page 33, 95 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n033_3.jpg",
+    "page": 33,
+    "inliers": 95,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 31,
+   "frameId": "L038",
+   "frames": [
+    "L038"
+   ],
+   "title": "Fetus",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "likely",
+   "evidence": "No lettering, no scale bar and no strong book-plate match, so this rests on the body alone: the fetus is head-up with the curved spine down one side, an arm folded across the chest, a foot with splayed toes low in the frame and the cord trailing off the bottom edge. That is the conventional presentation and it agrees with the head-up posture of the diagram in image 30, but it is a judgement about how such a specimen is normally shown, not a gravity cue."
+  },
+  {
+   "n": 32,
+   "frameId": "L039",
+   "frames": [
+    "L039"
+   ],
+   "title": "Diagram of male and female",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "USER-FLAGGED, and Barry's value is right. Both silhouettes stand with heads up on a common baseline; '160 cm' and '155 cm' read left-to-right beside the man and woman, '20 y' appears twice along the bottom, and the male and female glyphs are upright in the top corners. What was wrong on the live gallery is the renderer, not this value - see the summary note on double rotation. Corroborated by the scanned book plate (page 34, 82 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n034_1.jpg",
+    "page": 34,
+    "inliers": 82,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 33,
+   "frameId": "L040",
+   "frames": [
+    "L040"
+   ],
+   "title": "Birth",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "USER-FLAGGED, and Barry's value is right. The masked, gowned obstetrician is upright at the top, the newborn is held head-down in his hands at centre, and the annotations '22982400 s' and '266 d' read left-to-right across the drape at the bottom with their underlines below. Corroborated by the scanned book plate (page 35, 481 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n035_3.jpg",
+    "page": 35,
+    "inliers": 481,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 34,
+   "frameId": "L041",
+   "frames": [
+    "L041",
+    "L042",
+    "L043"
+   ],
+   "title": "Nursing mother (Philippines)",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "USER-FLAGGED, and Barry's value is right. The mother's head is at the top and tilted down toward the infant, her shoulders are level, the bodice hangs correctly, and the infant lies across her lap with its head at her breast. The wall and mat behind form a level horizon. Corroborated by the scanned book plate (page 35, 508 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n035_2.jpg",
+    "page": 35,
+    "inliers": 508,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 35,
+   "frameId": "L044",
+   "frames": [
+    "L044",
+    "L045",
+    "L046"
+   ],
+   "title": "Father and daughter (Malaysia)",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "USER-FLAGGED, and Barry's value is right. The man's head is upright with the child held on his hip, her head above his, her legs hanging down and his forearm horizontal beneath her. Two upright human faces settle it; no book plate was matched for this frame, so the faces are the whole of the evidence."
+  },
+  {
+   "n": 36,
+   "frameId": "L047",
+   "frames": [
+    "L047",
+    "L048",
+    "L049"
+   ],
+   "title": "Group of children",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "A ring of children on a floor seen from slightly above: every face is upright, the boy standing at the back is vertical head-over-feet, the curved bench runs across the top as the far background, and the nearest children at the bottom are seen from behind with their backs up."
+  },
+  {
+   "n": 37,
+   "frameId": "L050",
+   "frames": [
+    "L050"
+   ],
+   "title": "Diagram of family ages",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Annotation evidence. '12 y / 38 1/2 kg', '30 y / 54 1/2 kg', '80 y / 42 1/2 kg' and '4 y / 22 1/2 kg' are all upright with correctly stacked halves, and the silhouettes stand or sit on a common ground line with heads up. Corroborated by the scanned book plate (page 36, 70 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n036_2.jpg",
+    "page": 36,
+    "inliers": 70,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 38,
+   "frameId": "L051",
+   "frames": [
+    "L051"
+   ],
+   "title": "Family portrait",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Everyone in the group is upright with the seated row below the standing row, the framed portraits hang in a level line high on the wall behind, and the wainscot and floor run level across the bottom. Corroborated by the scanned book plate (page 36, 249 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n036_3.jpg",
+    "page": 36,
+    "inliers": 249,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 39,
+   "frameId": "L052",
+   "frames": [
+    "L052"
+   ],
+   "title": "Diagram of continental drift (derived from LAGEOS plaque)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "USER-FLAGGED, and Barry's value is right. Three oval world maps are stacked one above the other, each captioned in upright left-to-right digits ('1500000000y', '4500000000y', '4510000000y'), the hand silhouette at mid-right is fingers-up, and the continents in the lower two ovals are correctly poled. Corroborated by the scanned book plate (page 37, 225 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n037_0.jpg",
+    "page": 37,
+    "inliers": 225,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 40,
+   "frameId": "L053",
+   "frames": [
+    "L053"
+   ],
+   "title": "Structure of the Earth",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Annotation evidence. Two columns of circled fractions read upright with numerator over denominator, and '12756 km' with '1 g' below it reads left-to-right beneath the concentric shell diagram. Corroborated by the scanned book plate (page 38, 183 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n038_1.jpg",
+    "page": 38,
+    "inliers": 183,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 41,
+   "frameId": "L054",
+   "frames": [
+    "L054"
+   ],
+   "title": "Heron Island (Great Barrier Reef of Australia)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Aerial photograph with an unambiguous horizon: the pale sky band and sea horizon run level across the top, ocean fills the bottom, and the island sits between them with its white sand rim. Corroborated by the scanned book plate (page 38, 104 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n038_3.jpg",
+    "page": 38,
+    "inliers": 104,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 42,
+   "frameId": "L055",
+   "frames": [
+    "L055"
+   ],
+   "title": "Seashore (Cape Neddick, Maine)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Sky with cumulus at the top, the lighthouse tower and keeper's house standing vertically on the headland, a level sea horizon, and spray thrown upward from the rocks in the foreground below. Corroborated by the scanned book plate (page 38, 278 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n038_5.jpg",
+    "page": 38,
+    "inliers": 278,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/042-voyager-golden-record-42-adams-the-tetons-and-the-snake-rive.jpg"
+  },
+  {
+   "n": 43,
+   "frameId": "L056",
+   "frames": [
+    "L056"
+   ],
+   "title": "Snake River and Grand Tetons",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Cloud-flecked sky at the top, the Teton peaks with snow on their upper faces below it, then forest, and the S-bend of the Snake River sweeping through the bottom half. Water at the lowest point of the frame. Corroborated by the scanned book plate (page 38, 240 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n038_4.jpg",
+    "page": 38,
+    "inliers": 240,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 44,
+   "frameId": "L057",
+   "frames": [
+    "L057"
+   ],
+   "title": "Sand dunes",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The horse and rider are upright with the horse's legs down and its shadow cast along the sand below; the distant dune crest forms a level horizon under a pale sky, and rippled sand fills the foreground. Corroborated by the scanned book plate (page 38, 432 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n038_6.jpg",
+    "page": 38,
+    "inliers": 432,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 45,
+   "frameId": "L058",
+   "frames": [
+    "L058",
+    "L059",
+    "L060"
+   ],
+   "title": "Monument Valley",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Towering cumulus across the top, buttes and mesas standing vertically on a level desert floor, and a flock of sheep with a standing herder in the foreground, all resting on the ground plane at the bottom. Corroborated by the scanned book plate (page 38, 417 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n038_7.jpg",
+    "page": 38,
+    "inliers": 417,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 46,
+   "frameId": "L061",
+   "frames": [
+    "L061",
+    "L062",
+    "L063"
+   ],
+   "title": "Forest scene with mushrooms",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Tree trunks run vertically top to bottom, leaf litter and undergrowth lie along the bottom, and the two mushrooms at lower right have their caps above their stalks with the gills shaded underneath. Corroborated by the scanned book plate (page 39, 562 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n039_1.jpg",
+    "page": 39,
+    "inliers": 562,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 47,
+   "frameId": "L064",
+   "frames": [
+    "L064"
+   ],
+   "title": "Leaf (Fragaria)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The record's own '2 cm' scale bar reads left-to-right with 'cm' underlined and its end ticks vertical. The trifoliate strawberry leaf radiates from the petiole junction with dew beaded along the serrated margins. Corroborated by the scanned book plate (page 39, 319 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n039_2.jpg",
+    "page": 39,
+    "inliers": 319,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 48,
+   "frameId": "L065",
+   "frames": [
+    "L065",
+    "L066",
+    "L067"
+   ],
+   "title": "Autumn Fallen leaves",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "USER-FLAGGED, and Barry's value is right. The tree trunk runs vertically up the right of the frame with branches spreading across the top, a person stands upright at lower centre holding a rake angled down to the ground, and the drift of fallen leaves lies across the bottom. Corroborated by the scanned book plate (page 40, 531 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n040_0.jpg",
+    "page": 40,
+    "inliers": 531,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 49,
+   "frameId": "L068",
+   "frames": [
+    "L068",
+    "L069",
+    "L070"
+   ],
+   "title": "Snowflakes over Sequoia",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The giant sequoias stand vertically with snow-laden crowns up and trunks running down to a snowy forest floor; the snowflake photomicrograph inset sits in a lower corner. Corroborated by the scanned book plate (page 40, 562 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n040_2.jpg",
+    "page": 40,
+    "inliers": 562,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 50,
+   "frameId": "L071",
+   "frames": [
+    "L071",
+    "L072",
+    "L073"
+   ],
+   "title": "Tree with daffodils",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The bare tree stands on a level horizon with the daffodil field receding at the bottom and the single-flower inset in a lower corner. The '14 m' annotation runs vertically beside the trunk because it is a height dimension, so the tree and horizon rather than the text carry the argument. Corroborated by the scanned book plate (page 40, 511 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n040_1.jpg",
+    "page": 40,
+    "inliers": 511,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 51,
+   "frameId": "L074",
+   "frames": [
+    "L074"
+   ],
+   "title": "Flying insect with flowers (Ichneumonidae)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 2,
+   "currentOrientationAsQuarterTurnsCW": 3,
+   "displayOrientation": 3,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Annotation evidence. '2 cm' over '1 g', each underlined, reads horizontally left-to-right only after a 90 degree COUNTER-clockwise turn of the as-encoded frame; in that view the asters sit at the bottom on their stems with the ichneumon wasp above them. Barry's 2 means exactly that counter-clockwise quarter turn, so the table is right - a previous pass read his 2 as a half turn and wrongly scored this as a disagreement. Corroborated by the scanned book plate (page 41, 347 RANSAC inliers), which independently implies 3 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n041_1.jpg",
+    "page": 41,
+    "inliers": 347,
+    "rotationFromStoredThumb": 90,
+    "impliedDisplayOrientation": 3,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 52,
+   "frameId": "L075",
+   "frames": [
+    "L075"
+   ],
+   "title": "Diagram of vertebrate evolution",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The evolutionary series is upright: the human figures stand head-up at the top right, the bird is in level flight, and the fish forms below are horizontal with dorsal surfaces up. Corroborated by the scanned book plate (page 41, 134 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n041_2.jpg",
+    "page": 41,
+    "inliers": 134,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 53,
+   "frameId": "L076",
+   "frames": [
+    "L076"
+   ],
+   "title": "Seashell (Xancidae)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The shell sits apex-up with the coiled spire at the top, the aperture facing the viewer, and the siphonal canal tapering to the bottom - the standard malacological presentation. A shell has no intrinsic up, so on internal evidence alone this would only be a convention; the book plate is what makes it firm. Corroborated by the scanned book plate (page 41, 85 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n041_3.jpg",
+    "page": 41,
+    "inliers": 85,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 54,
+   "frameId": "L077",
+   "frames": [
+    "L077"
+   ],
+   "title": "Dolphins",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The dolphins are leaping upward clear of the water, with the sea surface and shoreline across the lower part of the frame and open sky above. Corroborated by the scanned book plate (page 42, 193 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n042_0.jpg",
+    "page": 42,
+    "inliers": 193,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 55,
+   "frameId": "R000",
+   "frames": [
+    "R000",
+    "R001",
+    "R002"
+   ],
+   "title": "School of fish",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Settled by looking at the scanned book plate, which is PORTRAIT: the school hangs at the left of a reef crevice, a diver is silhouetted at lower centre, and bright surface light floods in from the upper right. Our decode matches that after a clockwise quarter turn. An independent mechanical check agrees - the fish bodies in the as-encoded frame have their long axes predominantly vertical (median 61 degrees from horizontal, 87 per cent nearer vertical than horizontal), and swimming fish are elongated horizontally, so a quarter turn is required on shape grounds alone. Corroborated by the scanned book plate (page 42, 386 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n042_1.jpg",
+    "page": 42,
+    "inliers": 386,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 56,
+   "frameId": "R003",
+   "frames": [
+    "R003"
+   ],
+   "title": "Tree toad",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "likely",
+   "evidence": "No lettering and no book plate matched. A tree toad sits on an open human hand with the fingers extending to one side; the toad's back is up and its limbs are folded beneath it. A held hand is not a reliable gravity cue, so this is subject recognition rather than a determination."
+  },
+  {
+   "n": 57,
+   "frameId": "R004",
+   "frames": [
+    "R004"
+   ],
+   "title": "Crocodile",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The crocodile lies horizontally at the waterline with its back up and its dorsal scutes uppermost, water surface across the frame and a bird standing upright on its back. Corroborated by the scanned book plate (page 43, 274 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n043_3.jpg",
+    "page": 43,
+    "inliers": 274,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 58,
+   "frameId": "R005",
+   "frames": [
+    "R005"
+   ],
+   "title": "Eagle",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The eagle is descending with wings raised above its body and talons reaching down, and the annotation beneath it reads left-to-right. Corroborated by the scanned book plate (page 43, 270 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n043_5.jpg",
+    "page": 43,
+    "inliers": 270,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 59,
+   "frameId": "R006",
+   "frames": [
+    "R006"
+   ],
+   "title": "Waterhole",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Zebras and other animals stand on the ground with their legs down and backs up, the waterhole and bank run level across the lower frame, and vegetation rises behind. Corroborated by the scanned book plate (page 43, 200 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n043_4.jpg",
+    "page": 43,
+    "inliers": 200,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 60,
+   "frameId": "R007",
+   "frames": [
+    "R007",
+    "R008",
+    "R009"
+   ],
+   "title": "Jane Goodall and chimps",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Vegetation and tree stems run vertically, the ground and seated figures are along the bottom, and the human and chimpanzee figures are upright. Corroborated by the scanned book plate (page 44, 329 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n044_0.jpg",
+    "page": 44,
+    "inliers": 329,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 61,
+   "frameId": "R010",
+   "frames": [
+    "R010"
+   ],
+   "title": "Sketch of bushmen",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Annotation evidence. The '120 cm' scale reads left-to-right at the top with its end ticks vertical, and the two silhouetted figures stand and crouch on a common ground line."
+  },
+  {
+   "n": 62,
+   "frameId": "R011",
+   "frames": [
+    "R011"
+   ],
+   "title": "Bushmen hunters",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The hunters are upright with heads above feet, standing and crouching on the ground, with grassland and animals receding toward the top of the frame. Corroborated by the scanned book plate (page 44, 292 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n044_1.jpg",
+    "page": 44,
+    "inliers": 292,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 63,
+   "frameId": "R012",
+   "frames": [
+    "R012"
+   ],
+   "title": "Man from Guatemala",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "An upright human face, the hat above the head, and the shoulders level; the tool he carries hangs down past his body. Corroborated by the scanned book plate (page 45, 123 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n045_1.jpg",
+    "page": 45,
+    "inliers": 123,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 64,
+   "frameId": "R013",
+   "frames": [
+    "R013"
+   ],
+   "title": "Dancer from Bali",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "An upright human face with the flowered headdress above it, the neck and shoulders below, and the hands raised in a dance pose at the level of the chest. No book plate was matched; the face is the evidence."
+  },
+  {
+   "n": 65,
+   "frameId": "R014",
+   "frames": [
+    "R014"
+   ],
+   "title": "Andean girls",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Upright human faces in a group, hats and headwear above the heads, shoulders and bodies below."
+  },
+  {
+   "n": 66,
+   "frameId": "R015",
+   "frames": [
+    "R015"
+   ],
+   "title": "Thailand master craftsman",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The craftsman is upright at his bench, the worked pieces stand on the bench surface below him, and the ceiling lights run across the top of the frame."
+  },
+  {
+   "n": 67,
+   "frameId": "R016",
+   "frames": [
+    "R016"
+   ],
+   "title": "Elephant",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The elephant stands with its legs down on level ground, logs lie flat in the foreground, and a mountain skyline with sky runs across the top."
+  },
+  {
+   "n": 68,
+   "frameId": "R017",
+   "frames": [
+    "R017"
+   ],
+   "title": "Old man with beard and glasses (Turkey)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "An upright human face: the knitted cap above the head, spectacles across the eyes, beard below the mouth, and the hand raised to the face from below."
+  },
+  {
+   "n": 69,
+   "frameId": "R018",
+   "frames": [
+    "R018"
+   ],
+   "title": "Old man with dog and flowers",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The figure is upright with the head at the top, standing in a meadow, and the flowers and grass of the foreground occupy the bottom of the frame. Corroborated by the scanned book plate (page 46, 418 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n046_4.jpg",
+    "page": 46,
+    "inliers": 418,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 70,
+   "frameId": "R019",
+   "frames": [
+    "R019"
+   ],
+   "title": "Mountain climber",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Snow-covered peaks with a climber standing on the ridge, sky above, and the mountain falling away below. Corroborated by the scanned book plate (page 47, 276 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n047_0.jpg",
+    "page": 47,
+    "inliers": 276,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 71,
+   "frameId": "R020",
+   "frames": [
+    "R020"
+   ],
+   "title": "Gymnast (Cathy Rigby)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "A multiple-exposure sequence on a balance beam: the beam is horizontal with its supports below, the gymnast's figures are upright above it, and the timing annotations along the beam read left-to-right. Corroborated by the scanned book plate (page 48, 163 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n048_0.jpg",
+    "page": 48,
+    "inliers": 163,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 72,
+   "frameId": "R021",
+   "frames": [
+    "R021"
+   ],
+   "title": "Sprinters \"Valeriy Borzov of the U.S.S.R. in lead\"",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The sprinters are upright with heads above legs, running on a level track whose lane lines converge toward the top of the frame. Corroborated by the scanned book plate (page 49, 405 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n049_1.jpg",
+    "page": 49,
+    "inliers": 405,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 73,
+   "frameId": "R022",
+   "frames": [
+    "R022"
+   ],
+   "title": "Schoolroom (Japan)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The children and teacher are upright around a table, the table top is level and its legs run down to the floor at the bottom, and the doorway behind is vertical. No book plate was matched; the upright figures are the evidence."
+  },
+  {
+   "n": 74,
+   "frameId": "R023",
+   "frames": [
+    "R023"
+   ],
+   "title": "Children with globe (United Nations International School)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The children's faces are upright around the globe, which rests on its stand below them. Corroborated by the scanned book plate (page 50, 300 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n050_0.jpg",
+    "page": 50,
+    "inliers": 300,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 75,
+   "frameId": "R024",
+   "frames": [
+    "R024"
+   ],
+   "title": "Cotton harvest",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The cotton field fills the lower frame with the harvesting machinery upright above it and a level horizon and sky across the top. Corroborated by the scanned book plate (page 51, 383 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n051_2.jpg",
+    "page": 51,
+    "inliers": 383,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 76,
+   "frameId": "R025",
+   "frames": [
+    "R025"
+   ],
+   "title": "Grape picker",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The picker is upright with the head at the top and the harvested bunch held up at chest height; the vine foliage hangs downward. No book plate was matched; the upright figure is the evidence."
+  },
+  {
+   "n": 77,
+   "frameId": "R026",
+   "frames": [
+    "R026"
+   ],
+   "title": "Supermarket",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The shelving runs in level horizontal tiers with the produce resting on them, the shoppers are upright, and the price signs above the aisles read left-to-right. Corroborated by the scanned book plate (page 51, 416 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n051_9.jpg",
+    "page": 51,
+    "inliers": 416,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/077-voyager-golden-record-77-supermarket-gif.jpg"
+  },
+  {
+   "n": 78,
+   "frameId": "R027",
+   "frames": [
+    "R027",
+    "R028",
+    "R029"
+   ],
+   "title": "Underwater scene with diver and fish",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Annotation evidence. The 'h2o' label is upright at the top of the frame, and the diver, fish and sea floor are arranged with the floor at the bottom. Corroborated by the scanned book plate (page 51, 252 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n051_4.jpg",
+    "page": 51,
+    "inliers": 252,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 79,
+   "frameId": "R030",
+   "frames": [
+    "R030"
+   ],
+   "title": "Fishing boat with nets (Greece)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The boats float on a level waterline with masts and standing figures vertical above it, and the shingle beach occupies the foreground at the bottom. No book plate was matched; the waterline is the evidence."
+  },
+  {
+   "n": 80,
+   "frameId": "R031",
+   "frames": [
+    "R031"
+   ],
+   "title": "Cooking fish",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The cook is upright behind a level bench, the fish lie flat on the bench and in the basket below, and the moored boats behind sit on a level waterline. Corroborated by the scanned book plate (page 51, 324 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n051_10.jpg",
+    "page": 51,
+    "inliers": 324,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 81,
+   "frameId": "R032",
+   "frames": [
+    "R032"
+   ],
+   "title": "Chinese dinner party",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The diners are upright around a level table, the dishes rest on the tabletop, and the framed decorations hang on the wall behind at a level height. Corroborated by the scanned book plate (page 51, 407 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n051_8.jpg",
+    "page": 51,
+    "inliers": 407,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 82,
+   "frameId": "R033",
+   "frames": [
+    "R033"
+   ],
+   "title": "Demonstration of licking, eating and drinking",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The three figures are upright with faces the right way up, and the liquid being poured falls downward into the mouth of the figure at the right. Corroborated by the scanned book plate (page 51, 221 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n051_11.jpg",
+    "page": 51,
+    "inliers": 221,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/082-voyager-golden-record-82-feeding-gif.jpg"
+  },
+  {
+   "n": 83,
+   "frameId": "R034",
+   "frames": [
+    "R034"
+   ],
+   "title": "Great Wall of China",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The Wall's parapet and crenellations stand vertically on the ridge, the walkway recedes toward the top of the frame, and the figures on it are upright. Corroborated by the scanned book plate (page 52, 222 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n052_0.jpg",
+    "page": 52,
+    "inliers": 222,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 84,
+   "frameId": "R035",
+   "frames": [
+    "R035"
+   ],
+   "title": "House construction (Cameroon)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The house frame stands with its posts vertical and roof above, the builders are upright, and the ground runs across the bottom. No book plate was matched; the standing structure and figures are the evidence."
+  },
+  {
+   "n": 85,
+   "frameId": "R036",
+   "frames": [
+    "R036"
+   ],
+   "title": "Construction scene (Amish country)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The timber frame stands with posts vertical and the roof trusses at the top, the workmen on it are upright, and the wagons and ground are at the bottom. Corroborated by the scanned book plate (page 53, 424 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n053_0.jpg",
+    "page": 53,
+    "inliers": 424,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 86,
+   "frameId": "R037",
+   "frames": [
+    "R037"
+   ],
+   "title": "House (Ethiopia)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The thatched roof is above the wall with its finial at the apex, the fence posts stand vertically, and the figures beside the house are upright on level ground. Corroborated by the scanned book plate (page 53, 406 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n053_3.jpg",
+    "page": 53,
+    "inliers": 406,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 87,
+   "frameId": "R038",
+   "frames": [
+    "R038"
+   ],
+   "title": "House (New England)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The house stands with roof above and foundation below, the picket fence is vertical, the chimney rises from the roofline, and the trees behind grow upward. Corroborated by the scanned book plate (page 53, 406 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n053_4.jpg",
+    "page": 53,
+    "inliers": 406,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 88,
+   "frameId": "R039",
+   "frames": [
+    "R039"
+   ],
+   "title": "Modern house (Cloudcroft, New Mexico)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The house sits low with its roofline horizontal and the ground and grass in front of it, a wooded hillside behind, and sky across the top. Corroborated by the scanned book plate (page 54, 305 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n054_3.jpg",
+    "page": 54,
+    "inliers": 305,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 89,
+   "frameId": "R040",
+   "frames": [
+    "R040",
+    "R041",
+    "R042"
+   ],
+   "title": "House interior with artist and fire",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The room is upright: the fireplace hood hangs above the hearth, the pictures hang level on the wall, the figures stand and sit upright, and the floor is at the bottom. Corroborated by the scanned book plate (page 54, 342 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n054_7.jpg",
+    "page": 54,
+    "inliers": 342,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 90,
+   "frameId": "R043",
+   "frames": [
+    "R043"
+   ],
+   "title": "Taj Mahal",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The Taj Mahal stands with its dome above the plinth, the minarets are vertical, the reflecting pool runs level across the foreground, and sky occupies the top. Corroborated by the scanned book plate (page 54, 255 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n054_6.jpg",
+    "page": 54,
+    "inliers": 255,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 91,
+   "frameId": "R044",
+   "frames": [
+    "R044"
+   ],
+   "title": "English city (Oxford)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Towers and spires stand vertically above the roofline, the streets and rooftops recede across the middle, and sky is at the top. Corroborated by the scanned book plate (page 54, 468 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n054_4.jpg",
+    "page": 54,
+    "inliers": 468,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 92,
+   "frameId": "R045",
+   "frames": [
+    "R045"
+   ],
+   "title": "Boston",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The city towers stand vertically on a level skyline with sky above, and the harbour water with sailing boats fills the bottom of the frame. Corroborated by the scanned book plate (page 54, 185 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n054_5.jpg",
+    "page": 54,
+    "inliers": 185,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 93,
+   "frameId": "R046",
+   "frames": [
+    "R046"
+   ],
+   "title": "UN Building Day",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The Secretariat slab stands vertically with its roofline at the top, the low General Assembly building sits at its base, and the ground and roadway are at the bottom. Corroborated by the scanned book plate (page 55, 305 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n055_1.jpg",
+    "page": 55,
+    "inliers": 305,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 94,
+   "frameId": "R047",
+   "frames": [
+    "R047",
+    "R048",
+    "R049"
+   ],
+   "title": "UN Building Night",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Same building at night: the lit slab stands vertically, the lights of the low buildings are at its base, and the street lights run along the bottom. Corroborated by the scanned book plate (page 55, 448 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n055_2.jpg",
+    "page": 55,
+    "inliers": 448,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 95,
+   "frameId": "R050",
+   "frames": [
+    "R050"
+   ],
+   "title": "Sydney Opera House",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The shells of the Opera House rise upward from the podium, the harbour water runs level across the foreground, and the '100 m' scale annotation reads left-to-right. Corroborated by the scanned book plate (page 56, 152 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n056_5.jpg",
+    "page": 56,
+    "inliers": 152,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 96,
+   "frameId": "R051",
+   "frames": [
+    "R051"
+   ],
+   "title": "Artisan with drill",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The artisan is upright at his bench with the head at the top, the drill press stands vertically with its column below the head, and the workpiece rests on the bench. Corroborated by the scanned book plate (page 56, 301 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n056_8.jpg",
+    "page": 56,
+    "inliers": 301,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 97,
+   "frameId": "R052",
+   "frames": [
+    "R052",
+    "R053",
+    "R054"
+   ],
+   "title": "Factory interior",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The machines stand in level rows on the shop floor with the workers upright between them, and the ceiling and windows are across the top. Corroborated by the scanned book plate (page 56, 437 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n056_4.jpg",
+    "page": 56,
+    "inliers": 437,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 98,
+   "frameId": "R055",
+   "frames": [
+    "R055"
+   ],
+   "title": "Museum",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The painting hangs level on the wall in the upper part of the frame with the sculpture displayed below it, and the visitors are upright. Corroborated by the scanned book plate (page 56, 511 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n056_7.jpg",
+    "page": 56,
+    "inliers": 511,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 99,
+   "frameId": "R056",
+   "frames": [
+    "R056"
+   ],
+   "title": "X-ray of hand",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The radiograph is displayed upright on the viewing box with the hand's fingers pointing up, and the child beside it is upright with the head at the top. Corroborated by the scanned book plate (page 56, 108 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n056_3.jpg",
+    "page": 56,
+    "inliers": 108,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/099-voyager-golden-record-99-xray-gif.jpg"
+  },
+  {
+   "n": 100,
+   "frameId": "R057",
+   "frames": [
+    "R057"
+   ],
+   "title": "Woman with microscope (Somalia)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The woman is upright at the microscope, which stands on its foot on a level bench with the eyepiece at the top, and she leans down to it from above. Corroborated by the scanned book plate (page 56, 128 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n056_6.jpg",
+    "page": 56,
+    "inliers": 128,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 101,
+   "frameId": "R058",
+   "frames": [
+    "R058"
+   ],
+   "title": "Street scene (Pakistan)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The vehicles stand on their wheels on a level street, the figures are upright, and the buildings and awnings rise above them. Corroborated by the scanned book plate (page 56, 415 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n056_10.jpg",
+    "page": 56,
+    "inliers": 415,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 102,
+   "frameId": "R059",
+   "frames": [
+    "R059"
+   ],
+   "title": "Rush hour traffic (Thailand)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The vehicles stand on their wheels on a level roadway that recedes toward the top of the frame, and the overhead gantry crosses the top. No book plate was matched; the roadway and vehicles are the evidence."
+  },
+  {
+   "n": 103,
+   "frameId": "R060",
+   "frames": [
+    "R060"
+   ],
+   "title": "Modern highway (Ithaca, New York)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The highway recedes toward a level horizon at the top, the vehicles stand on their wheels on the carriageway, and the trees beside the road grow upward. Corroborated by the scanned book plate (page 57, 120 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n057_1.jpg",
+    "page": 57,
+    "inliers": 120,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/103-voyager-golden-record-103-highway-gif.jpg"
+  },
+  {
+   "n": 104,
+   "frameId": "R061",
+   "frames": [
+    "R061"
+   ],
+   "title": "Golden Gate Bridge",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The bridge towers stand vertically above a level deck, the water is at the bottom, the hills and sky at the top, and the '1280 m' span annotation reads left-to-right. Corroborated by the scanned book plate (page 58, 112 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n058_0.jpg",
+    "page": 58,
+    "inliers": 112,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 105,
+   "frameId": "R062",
+   "frames": [
+    "R062"
+   ],
+   "title": "Train (United Aircraft Corporation Turbotrain)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The train stands on its bogies on the track with the roofline above and the rails at the bottom, and the lettering along its flank reads left-to-right. Corroborated by the scanned book plate (page 58, 231 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n058_1.jpg",
+    "page": 58,
+    "inliers": 231,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 106,
+   "frameId": "R063",
+   "frames": [
+    "R063"
+   ],
+   "title": "Airplane in flight",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The aircraft is in level flight with its fin above the fuselage and undercarriage below, above a level airfield horizon with sky at the top. Corroborated by the scanned book plate (page 58, 128 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n058_4.jpg",
+    "page": 58,
+    "inliers": 128,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 107,
+   "frameId": "R064",
+   "frames": [
+    "R064"
+   ],
+   "title": "Airport (Toronto)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Aerial view of the terminal: the building stands on the apron with its roof uppermost, the parked aircraft sit on their undercarriages, and the ground plane fills the frame consistently. Corroborated by the scanned book plate (page 58, 437 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n058_2.jpg",
+    "page": 58,
+    "inliers": 437,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 108,
+   "frameId": "R065",
+   "frames": [
+    "R065"
+   ],
+   "title": "Antarctic expedition (Commonwealth Trans-Antarctic Expedition)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Text evidence. The lettering 'TRANS ANTARCTIC EXPEDITION' along the vehicle's flank is upright and reads left-to-right; the tracked vehicle sits on the snow with the figures standing upright beside it. Corroborated by the scanned book plate (page 59, 392 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n059_0.jpg",
+    "page": 59,
+    "inliers": 392,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 109,
+   "frameId": "R066",
+   "frames": [
+    "R066"
+   ],
+   "title": "Radio telescope (Westerbork)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The dish antennas stand on their mounts with the reflectors above the pedestals, the row recedes across the frame, and the ground and sky are correctly placed. Corroborated by the scanned book plate (page 60, 183 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n060_0.jpg",
+    "page": 60,
+    "inliers": 183,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 110,
+   "frameId": "R067",
+   "frames": [
+    "R067"
+   ],
+   "title": "Radio telescope (Arecibo)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The suspended feed platform hangs above the dish on cables running up to the towers, the karst hills and sky are at the top, and the '305 m' annotation reads left-to-right. Corroborated by the scanned book plate (page 61, 173 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n061_2.jpg",
+    "page": 61,
+    "inliers": 173,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/110-voyager-golden-record-110-arecibo-gif.jpg"
+  },
+  {
+   "n": 111,
+   "frameId": "R068",
+   "frames": [
+    "R068"
+   ],
+   "title": "Page of book (Newton, On the System of the World)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Text evidence. The printed page is upright: the running head 'OF THE SYSTEM' sits at the top, the body text reads left-to-right, and the folio 'Page 6' sits at the foot. Corroborated by the scanned book plate (page 61, 260 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n061_4.jpg",
+    "page": 61,
+    "inliers": 260,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/111-voyager-golden-record-111-systemoftheworld-gif.jpg"
+  },
+  {
+   "n": 112,
+   "frameId": "R069",
+   "frames": [
+    "R069",
+    "R070",
+    "R071"
+   ],
+   "title": "Astronaut in space (Ed White)",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "Confirmed against the reference scan of the original slide (NASA, Wikimedia Commons), which matches the as-encoded frame exactly: the helmet and gold visor at lower right, the tether looping across the middle, and the blue-white Earth at lower left with black space at upper right. This one has no gravity cue of its own - it is a free-fall EVA against Earth - so without the reference it would have stayed ambiguous. Corroborated by the scanned book plate (page 62, 317 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n062_0.jpg",
+    "page": 62,
+    "inliers": 317,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/112-voyager-golden-record-112-astronaut-gif.jpg"
+  },
+  {
+   "n": 113,
+   "frameId": "R072",
+   "frames": [
+    "R072"
+   ],
+   "title": "Titan Centaur launch",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 1,
+   "currentOrientationAsQuarterTurnsCW": 1,
+   "displayOrientation": 1,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The launch vehicle stands vertically with the payload fairing at the top and the exhaust plume billowing below and to the side, with the ground and tower structures at the bottom. Corroborated by the scanned book plate (page 63, 96 RANSAC inliers), which independently implies 1 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n063_1.jpg",
+    "page": 63,
+    "inliers": 96,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 1,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/113-voyager-golden-record-113-launch-gif.jpg"
+  },
+  {
+   "n": 114,
+   "frameId": "R073",
+   "frames": [
+    "R073",
+    "R074",
+    "R075"
+   ],
+   "title": "Sunset with birds",
+   "colour": true,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The sun sits above the horizon with its glitter path running down the water toward the bottom of the frame, cloud bands are level across the sky, and the birds are in level flight. No book plate was matched; the sun above its own reflection is the evidence."
+  },
+  {
+   "n": 115,
+   "frameId": "R076",
+   "frames": [
+    "R076"
+   ],
+   "title": "String Quartet (Quartetto Italiano)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 0,
+   "currentOrientationAsQuarterTurnsCW": 0,
+   "displayOrientation": 0,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The four players are upright with heads above their instruments, standing and seated on a level floor, the cello's endpin resting on the floor at the bottom and the framed decoration level on the wall behind. Corroborated by the scanned book plate (page 64, 301 RANSAC inliers), which independently implies 0 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n064_0.jpg",
+    "page": 64,
+    "inliers": 301,
+    "rotationFromStoredThumb": 0,
+    "impliedDisplayOrientation": 0,
+    "agreesWithDisplayOrientation": true
+   }
+  },
+  {
+   "n": 116,
+   "frameId": "R077",
+   "frames": [
+    "R077"
+   ],
+   "title": "Violin with music score (Cavatina)",
+   "colour": false,
+   "encodedOrientation": 0,
+   "currentOrientation": 2,
+   "currentOrientationAsQuarterTurnsCW": 3,
+   "displayOrientation": 3,
+   "changed": false,
+   "confidence": "certain",
+   "evidence": "The score reads correctly - staves horizontal, note stems and bar lines vertical - only after a 90 degree COUNTER-clockwise turn of the as-encoded frame, with the violin lying above the open score. Barry's 2 means that counter-clockwise quarter turn, so the table is right. Corroborated by the scanned book plate (page 64, 192 RANSAC inliers), which independently implies 3 quarter turn(s) clockwise from the as-encoded frame.",
+   "bookPlate": {
+    "file": "docs/reference/candidates/n064_1.jpg",
+    "page": 64,
+    "inliers": 192,
+    "rotationFromStoredThumb": 90,
+    "impliedDisplayOrientation": 3,
+    "agreesWithDisplayOrientation": true
+   },
+   "referenceScan": "docs/reference/116-voyager-golden-record-116-score-gif.jpg"
+  }
+ ]
+}

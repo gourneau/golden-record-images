@@ -1,0 +1,338 @@
+[
+ {
+  "n": 108,
+  "title": "Antarctic expedition (Commonwealth Trans-Antarctic Expedition)",
+  "grad": 0.4894312265136734,
+  "ncc": 0.7183401069556385
+ },
+ {
+  "n": 40,
+  "title": "Structure of the Earth",
+  "grad": 0.46987192883820517,
+  "ncc": 0.38051634190363476
+ },
+ {
+  "n": 104,
+  "title": "Golden Gate Bridge",
+  "grad": 0.43971426800479824,
+  "ncc": -0.713440535195888
+ },
+ {
+  "n": 44,
+  "title": "Sand dunes",
+  "grad": 0.43358766741838606,
+  "ncc": 0.5615457664984108
+ },
+ {
+  "n": 7,
+  "title": "The Sun",
+  "grad": 0.41981883012415083,
+  "ncc": -0.17755605526924903
+ },
+ {
+  "n": 14,
+  "title": "Chemical definitions",
+  "grad": 0.4055336058081608,
+  "ncc": 0.5755247678139698
+ },
+ {
+  "n": 45,
+  "title": "Monument Valley",
+  "grad": 0.401287516666502,
+  "ncc": -0.672631685651045
+ },
+ {
+  "n": 24,
+  "title": "Anatomy 7 (Ribcage)",
+  "grad": 0.39616813284745894,
+  "ncc": 0.7791816283884719
+ },
+ {
+  "n": 106,
+  "title": "Airplane in flight",
+  "grad": 0.3810646520187165,
+  "ncc": 0.4263729440827701
+ },
+ {
+  "n": 78,
+  "title": "Underwater scene with diver and fish",
+  "grad": 0.3610244233743304,
+  "ncc": -0.1999260652061662
+ },
+ {
+  "n": 100,
+  "title": "Woman with microscope (Somalia)",
+  "grad": 0.35768199666619177,
+  "ncc": 0.6611450694048199
+ },
+ {
+  "n": 50,
+  "title": "Tree with daffodils",
+  "grad": 0.3370932279226125,
+  "ncc": 0.49320691496246255
+ },
+ {
+  "n": 115,
+  "title": "String Quartet (Quartetto Italiano)",
+  "grad": 0.33217586871586596,
+  "ncc": 0.7156541279353097
+ },
+ {
+  "n": 88,
+  "title": "Modern house (Cloudcroft, New Mexico)",
+  "grad": 0.32419764280065877,
+  "ncc": 0.7721298206404456
+ },
+ {
+  "n": 19,
+  "title": "Anatomy 2 (Skeleton and muscles back)",
+  "grad": 0.3221857675413395,
+  "ncc": 0.6420532952949571
+ },
+ {
+  "n": 103,
+  "title": "Modern highway (Ithaca, New York)",
+  "grad": 0.3152537753323688,
+  "ncc": 0.4718703313938668
+ },
+ {
+  "n": 49,
+  "title": "Snowflakes over Sequoia",
+  "grad": 0.3087524736138281,
+  "ncc": 0.31240298336715455
+ },
+ {
+  "n": 30,
+  "title": "Fetus diagram",
+  "grad": 0.30546267147410844,
+  "ncc": 0.4781720661954149
+ },
+ {
+  "n": 16,
+  "title": "DNA Structure magnified, light hit",
+  "grad": 0.30404874558969663,
+  "ncc": 0.5408835725804744
+ },
+ {
+  "n": 61,
+  "title": "Sketch of bushmen",
+  "grad": 0.29127180136257513,
+  "ncc": 0.39614438210497416
+ },
+ {
+  "n": 9,
+  "title": "Mercury",
+  "grad": 0.2850787063128563,
+  "ncc": 0.6854765551804247
+ },
+ {
+  "n": 95,
+  "title": "Sydney Opera House",
+  "grad": 0.28252416489756477,
+  "ncc": 0.7928653638545693
+ },
+ {
+  "n": 87,
+  "title": "House (New England)",
+  "grad": 0.27890829695236824,
+  "ncc": 0.3703552810238309
+ },
+ {
+  "n": 69,
+  "title": "Old man with dog and flowers",
+  "grad": 0.27288055199420774,
+  "ncc": 0.2556058833345367
+ },
+ {
+  "n": 98,
+  "title": "Museum",
+  "grad": 0.2714307127112555,
+  "ncc": -0.3171000576754253
+ },
+ {
+  "n": 33,
+  "title": "Birth",
+  "grad": 0.27108471037920234,
+  "ncc": 0.5599398741545754
+ },
+ {
+  "n": 68,
+  "title": "Old man with beard and glasses (Turkey)",
+  "grad": 0.2688755853374131,
+  "ncc": -0.0692240624406381
+ },
+ {
+  "n": 58,
+  "title": "Eagle",
+  "grad": 0.26526811141331486,
+  "ncc": -0.22323443522878342
+ },
+ {
+  "n": 83,
+  "title": "Great Wall of China",
+  "grad": 0.2627149696696889,
+  "ncc": -0.5236075819833764
+ },
+ {
+  "n": 74,
+  "title": "Children with globe (United Nations International School)",
+  "grad": 0.2600684799605888,
+  "ncc": -0.4205054843766621
+ },
+ {
+  "n": 81,
+  "title": "Chinese dinner party",
+  "grad": 0.2574187969562143,
+  "ncc": 0.5674132972077847
+ },
+ {
+  "n": 71,
+  "title": "Gymnast (Cathy Rigby)",
+  "grad": 0.252861647837668,
+  "ncc": 0.5306861291286474
+ },
+ {
+  "n": 85,
+  "title": "Construction scene (Amish country)",
+  "grad": 0.2507608220374665,
+  "ncc": 0.5628077026566699
+ },
+ {
+  "n": 73,
+  "title": "Schoolroom (Japan)",
+  "grad": 0.24887962671044056,
+  "ncc": 0.6934193150859674
+ },
+ {
+  "n": 56,
+  "title": "Tree toad",
+  "grad": 0.24055463630000173,
+  "ncc": -0.06564395269344839
+ },
+ {
+  "n": 47,
+  "title": "Leaf (Fragaria)",
+  "grad": 0.23603187046702548,
+  "ncc": 0.46708981537312544
+ },
+ {
+  "n": 77,
+  "title": "Supermarket",
+  "grad": 0.23203962835520342,
+  "ncc": 0.7020640158660219
+ },
+ {
+  "n": 12,
+  "title": "Earth",
+  "grad": 0.2240071459457291,
+  "ncc": -0.13559449447722996
+ },
+ {
+  "n": 105,
+  "title": "Train (United Aircraft Corporation Turbotrain)",
+  "grad": 0.21881980140249485,
+  "ncc": 0.3257487761190983
+ },
+ {
+  "n": 64,
+  "title": "Dancer from Bali",
+  "grad": 0.20725387980281168,
+  "ncc": -0.391547798343402
+ },
+ {
+  "n": 113,
+  "title": "Titan Centaur launch",
+  "grad": 0.20388790782638108,
+  "ncc": 0.5715791803493319
+ },
+ {
+  "n": 37,
+  "title": "Diagram of family ages",
+  "grad": 0.1973417894142952,
+  "ncc": -0.21751875172244758
+ },
+ {
+  "n": 46,
+  "title": "Forest scene with mushrooms",
+  "grad": 0.1727709768181366,
+  "ncc": 0.3012881235794885
+ },
+ {
+  "n": 43,
+  "title": "Snake River and Grand Tetons",
+  "grad": 0.17187518874587468,
+  "ncc": 0.5083344185695811
+ },
+ {
+  "n": 65,
+  "title": "Andean girls",
+  "grad": 0.17028887623507502,
+  "ncc": 0.055325084787799635
+ },
+ {
+  "n": 60,
+  "title": "Jane Goodall and chimps",
+  "grad": 0.15774543712476366,
+  "ncc": -0.27851595984904315
+ },
+ {
+  "n": 67,
+  "title": "Elephant",
+  "grad": 0.1547462730364364,
+  "ncc": 0.02189895584741044
+ },
+ {
+  "n": 80,
+  "title": "Cooking fish",
+  "grad": 0.1467123719412538,
+  "ncc": 0.24041485561291182
+ },
+ {
+  "n": 76,
+  "title": "Grape picker",
+  "grad": 0.14274837651516392,
+  "ncc": -0.1817714939847795
+ },
+ {
+  "n": 72,
+  "title": "Sprinters \"Valeriy Borzov of the U.S.S.R. in lead\"",
+  "grad": 0.14136371275045517,
+  "ncc": -0.41576883638049683
+ },
+ {
+  "n": 26,
+  "title": "Human sex organs",
+  "grad": 0.10815205359062736,
+  "ncc": 0.3399358656448412
+ },
+ {
+  "n": 17,
+  "title": "Cells and cell division",
+  "grad": 0.10813513530233734,
+  "ncc": 0.27686670549883313
+ },
+ {
+  "n": 39,
+  "title": "Diagram of continental drift (derived from LAGEOS plaque)",
+  "grad": 0.09411321985445537,
+  "ncc": -0.2767230835453128
+ },
+ {
+  "n": 28,
+  "title": "Conception",
+  "grad": 0.08884931850910353,
+  "ncc": -0.12268347468522567
+ },
+ {
+  "n": 63,
+  "title": "Man from Guatemala",
+  "grad": 0.06480711090037278,
+  "ncc": -0.1166578593115584
+ },
+ {
+  "n": 11,
+  "title": "Jupiter",
+  "grad": 0.03155019921776693,
+  "ncc": 0.4353294621452962
+ }
+]
