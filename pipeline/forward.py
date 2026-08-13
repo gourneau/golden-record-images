@@ -121,11 +121,20 @@ def _droop(x: torch.Tensor, a: float) -> torch.Tensor:
     # y[n] = d[n] + a y[n-1] is a first-order IIR. Written as a cumulative sum
     # in the exponentially-weighted domain so it is one vectorised pass rather
     # than a Python loop over 130k samples.
-    n = torch.arange(len(d), device=x.device, dtype=x.dtype)
-    # Scale factors overflow for long sequences, so work relative to a moving
+    # Scale factors underflow for long sequences, so work relative to a moving
     # reference: split into blocks short enough that a**k stays representable.
+    #
+    # THE BLOCK LENGTH MUST COME FROM THE DTYPE, and getting this wrong is how
+    # the first version of this file shipped broken. It hard-coded the float64
+    # limit (a**k down to e^-700). Run in float32, where the smallest normal is
+    # about e^-87, a**k underflowed to zero a quarter of the way into each
+    # block; `cumsum(seg / w_) * w_` then divided by zero and produced 189166
+    # NaNs out of 193024. Nothing raised. The adjoint test passed the whole time
+    # because it runs in float64 -- testing a different precision from the one
+    # you compute in tests a different program. Hence `adjoint_test_f32`.
+    lim = 80.0 if x.dtype == torch.float32 else 700.0
     out = torch.empty_like(d)
-    blk = max(1, int(-700.0 / np.log(a))) if a < 1.0 else len(d)
+    blk = max(1, int(lim / -np.log(a))) if a < 1.0 else len(d)
     blk = min(blk, len(d))
     carry = torch.zeros((), device=x.device, dtype=x.dtype)
     for s in range(0, len(d), blk):
@@ -137,7 +146,6 @@ def _droop(x: torch.Tensor, a: float) -> torch.Tensor:
         acc = torch.cumsum(seg / w_, dim=0) * w_
         out[s:e] = acc + carry * (w_ * a)
         carry = out[e - 1]
-    del n
     return out.reshape(h, w)
 
 
@@ -180,6 +188,42 @@ def adjoint_test(shape=(64, 96), p: ChainParams | None = None,
     scale = max(abs(lhs), abs(rhs), 1e-30)
     return {"lhs": lhs, "rhs": rhs,
             "abs_err": abs(lhs - rhs), "rel_err": abs(lhs - rhs) / scale}
+
+
+def finite_test(shape=(512, 377), p: ChainParams | None = None,
+                dtype=torch.float32, seed: int = 0) -> dict:
+    """Does the operator produce finite numbers at REAL frame size and dtype?
+
+    Separate from the adjoint test on purpose. The adjoint test runs small and
+    in float64 because that is what makes the inner-product identity sharp --
+    and that is exactly why it cannot see an underflow that only happens in
+    float32 over 193024 samples. This test exists because that bug shipped.
+    """
+    p = p or ChainParams.for_channel("L")
+    g = torch.Generator(device="cpu").manual_seed(seed)
+    x = torch.randn(shape, generator=g).to(dtype)
+    y = forward(x, p)
+    n_bad = int((~torch.isfinite(y)).sum().item())
+    return {"n": int(y.numel()), "n_nonfinite": n_bad,
+            "max_abs": float(y[torch.isfinite(y)].abs().max().item()) if n_bad < y.numel() else float("nan")}
+
+
+def adjoint_test_f32(shape=(256, 192), p: ChainParams | None = None, seed: int = 0) -> dict:
+    """The adjoint identity in the precision the optimiser actually runs in.
+
+    Tolerance is necessarily loose -- float32 inner products over 49k terms
+    accumulate real rounding -- so this is not a substitute for the float64
+    test. It is a check that the float32 path computes the same OPERATOR, which
+    the underflow bug proved is a separate question.
+    """
+    p = p or ChainParams.for_channel("L")
+    g = torch.Generator(device="cpu").manual_seed(seed)
+    x = torch.randn(shape, generator=g)
+    y = torch.randn(shape, generator=g)
+    lhs = torch.sum(forward(x, p) * y).item()
+    rhs = torch.sum(x * adjoint_by_autograd(y, p, shape)).item()
+    scale = max(abs(lhs), abs(rhs), 1e-30)
+    return {"lhs": lhs, "rhs": rhs, "rel_err": abs(lhs - rhs) / scale}
 
 
 def linearity_test(shape=(32, 48), p: ChainParams | None = None, seed: int = 0) -> dict:
@@ -254,7 +298,21 @@ if __name__ == "__main__":  # pragma: no cover
               f"rel err {t['rel_err']:.2e}  {'PASS' if good else 'FAIL'}")
 
     print()
-    if ok_d and ok_l and ok_a:
+    ok_f = True
+    for ch in ("L", "R"):
+        for dt, nm in ((torch.float32, "float32"), (torch.float64, "float64")):
+            t = finite_test(p=ChainParams.for_channel(ch), dtype=dt)
+            good = t["n_nonfinite"] == 0
+            ok_f &= good
+            print(f"  finite  {ch} channel, {nm}, 512x377   non-finite {t['n_nonfinite']:6d} "
+                  f"of {t['n']}   {'PASS' if good else 'FAIL'}")
+    t = adjoint_test_f32()
+    ok_f32 = t["rel_err"] < 1e-4
+    print(f"  adjoint in float32 (the precision the optimiser runs in)   "
+          f"rel err {t['rel_err']:.2e}   {'PASS' if ok_f32 else 'FAIL'}")
+
+    print()
+    if ok_d and ok_l and ok_a and ok_f and ok_f32:
         print("  ALL PASS -- the gradient an optimiser follows is the gradient of this operator.")
     else:
         print("  FAILURES ABOVE. Do not build on this operator until they are fixed.")
