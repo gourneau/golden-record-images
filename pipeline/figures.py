@@ -89,6 +89,7 @@ def build(verbose: bool = True) -> dict:
         "level_fall_before": round(level_fall(nc), 1),
         "level_fall_after": round(level_fall(cur), 1),
     }
+    write_manifest()
     if verbose:
         print(f"  calibration-barry.png     axis ratio {out['barry_axis_ratio']:.4f}  "
               f"(his 2680-sample window)")
@@ -99,19 +100,65 @@ def build(verbose: bool = True) -> dict:
     return out
 
 
-def check() -> list[str]:
-    """Is any committed figure older than the decode it claims to depict?
+# The figures depend on these and on nothing else that matters. Change any of
+# them and a committed figure may no longer show what the code does.
+SOURCES = ("pipeline/decode.py", "pipeline/sync.py", "pipeline/dotclock.py",
+           "pipeline/figures.py")
+MANIFEST = IMG / "FIGURES.json"
 
-    Cheap, and it would have caught the README showing a pre-correction image
-    under a caption saying otherwise.
+
+def fingerprint() -> str:
+    """A hash of the code that determines what the figures look like.
+
+    NOT modification times. The first version of this check compared the
+    figures' mtimes against the decode's, which works in my own tree and is
+    meaningless anywhere else: git does not preserve mtimes, so in a fresh clone
+    -- or in CI -- every file has the same checkout timestamp and the check
+    silently passes whatever the truth is. It would have reported "all figures
+    current" on a repository where they were a year out of date.
     """
-    stale = []
-    newest = max((p.stat().st_mtime for p in (REPO / "data" / "thumbs").glob("*.png")),
-                 default=0.0)
-    for p in sorted(IMG.glob("*.png")):
-        if p.stat().st_mtime < newest:
-            stale.append(f"{p.relative_to(REPO)} predates the current decode")
-    return stale
+    import hashlib
+    h = hashlib.sha256()
+    for rel in SOURCES:
+        h.update(rel.encode())
+        h.update((REPO / rel).read_bytes())
+    return h.hexdigest()[:16]
+
+
+def write_manifest() -> dict:
+    import hashlib, json
+    figs = {p.name: hashlib.sha256(p.read_bytes()).hexdigest()[:16]
+            for p in sorted(IMG.glob("*.png"))}
+    m = {"source_fingerprint": fingerprint(), "figures": figs,
+         "note": ("Regenerate with `python -m pipeline.figures`. The fingerprint is a hash of "
+                  "the code that determines what these images look like, so a stale figure is "
+                  "detectable in any clone -- which mtimes are not.")}
+    MANIFEST.write_text(json.dumps(m, indent=1) + "\n")
+    return m
+
+
+def check() -> list[str]:
+    """Do the committed figures match the code that is committed beside them?
+
+    Works in a fresh clone and in CI, where the master WAV is absent and nothing
+    can be re-decoded -- which is exactly where a stale figure would otherwise
+    go unnoticed.
+    """
+    import hashlib, json
+    problems = []
+    if not MANIFEST.exists():
+        return [f"{MANIFEST.relative_to(REPO)} missing -- run `python -m pipeline.figures`"]
+    m = json.loads(MANIFEST.read_text())
+    if m.get("source_fingerprint") != fingerprint():
+        problems.append("the decode has changed since the figures were built "
+                        "-- run `python -m pipeline.figures`")
+    for name, want in (m.get("figures") or {}).items():
+        p = IMG / name
+        if not p.exists():
+            problems.append(f"docs/img/{name} is missing")
+        elif hashlib.sha256(p.read_bytes()).hexdigest()[:16] != want:
+            problems.append(f"docs/img/{name} does not match the manifest")
+    return problems
 
 
 if __name__ == "__main__":  # pragma: no cover
@@ -124,10 +171,11 @@ if __name__ == "__main__":  # pragma: no cover
     if args.check:
         bad = check()
         print("\n".join(f"  STALE: {b}" for b in bad) if bad
-              else "  all figures are newer than the decode")
+              else "  figures match the code committed beside them")
         raise SystemExit(1 if bad else 0)
 
     print("regenerating the README figures from the current pipeline")
     build()
     bad = check()
-    print("\n  " + ("all figures current" if not bad else "STILL STALE: " + "; ".join(bad)))
+    print("\n  " + ("figures and manifest written" if not bad
+                            else "STILL STALE: " + "; ".join(bad)))

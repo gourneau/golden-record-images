@@ -284,8 +284,8 @@ Each of these prints measurements, not opinions, and each runs in seconds to min
 ```bash
 python -m pipeline.provenance            # what the decoder was allowed to know, and the
                                          # check that it stayed inside those bounds
-python -m pipeline.figures --check       # are the figures in this README older than the
-                                         # decode they claim to show? (they were, once)
+python -m pipeline.figures --check       # do the figures in this README match the code
+                                         # committed beside them? (once, they did not)
 python -m pipeline.forward               # the recording chain as a differentiable operator,
                                          # with its adjoint verified to machine precision
 python -m pipeline.orient_blind          # a falsified hypothesis, kept: can you tell from

@@ -1,0 +1,98 @@
+# What CI can honestly check on this repository, and nothing more.
+#
+# It CANNOT regenerate the figures or re-run the decode: the 384 kHz master is
+# 1.4 GB and gitignored, so no runner has the input. Any workflow claiming to
+# verify the decode here would be theatre.
+#
+# What it CAN do is catch the failure this project has actually had, three times
+# in different forms -- the record of the work drifting away from the work:
+#   * build.py silently dropped the tier-2 presentation metadata, and sixty
+#     portrait images shipped on their side;
+#   * n2n.py's docstring described a model that no longer existed;
+#   * the README's hero image showed a pre-correction decode under a caption
+#     saying it was current output.
+# Each was caught by a person looking, which is not a control.
+
+name: docs integrity
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: install (no torch, no master -- none of these checks decode anything)
+        run: pip install --quiet numpy pillow
+
+      - name: the tier boundary holds
+        run: |
+          python -m pipeline.provenance
+          python - <<'PY'
+          from pipeline.provenance import check
+          bad = check()
+          if bad:
+              raise SystemExit("TIER VIOLATION\n" + "\n".join("  " + b for b in bad))
+          print("tier boundary clean")
+          PY
+
+      - name: decode.py is still blind
+        run: |
+          python - <<'PY'
+          import ast, pathlib
+          t = ast.parse(pathlib.Path("pipeline/decode.py").read_text())
+          mods = set()
+          for n in ast.walk(t):
+              if isinstance(n, ast.Import):
+                  mods.update(a.name for a in n.names)
+              elif isinstance(n, ast.ImportFrom) and n.module:
+                  mods.add(n.module)
+          allowed = {"__future__", "dataclasses", "numpy"}
+          extra = mods - allowed
+          if extra:
+              raise SystemExit(f"decode.py imports {sorted(extra)}; only {sorted(allowed)} allowed")
+          print("decode.py imports only", sorted(mods))
+          PY
+
+      - name: the README figures match the code committed beside them
+        run: python -m pipeline.figures --check
+
+      - name: every internal link resolves
+        run: |
+          python - <<'PY'
+          import re, pathlib
+          bad = []
+          for md in pathlib.Path(".").rglob("*.md"):
+              if any(p in md.parts for p in ("node_modules", ".git")):
+                  continue
+              for m in re.finditer(r"\]\((?!https?:|mailto:)([^)#]+)", md.read_text()):
+                  target = (md.parent / m.group(1).strip()).resolve()
+                  if not target.exists():
+                      bad.append(f"{md}: {m.group(1).strip()}")
+          if bad:
+              raise SystemExit("broken links:\n" + "\n".join("  " + b for b in bad))
+          print("all internal links resolve")
+          PY
+
+      - name: the gallery's JavaScript parses
+        run: |
+          python - <<'PY'
+          import re, pathlib, subprocess, tempfile, os
+          src = pathlib.Path("index.html").read_text()
+          blocks = re.findall(r"<script>(.*?)</script>", src, re.S)
+          for i, b in enumerate(blocks):
+              f = tempfile.NamedTemporaryFile("w", suffix=".js", delete=False)
+              f.write(b); f.close()
+              r = subprocess.run(["node", "--check", f.name], capture_output=True, text=True)
+              os.unlink(f.name)
+              if r.returncode:
+                  raise SystemExit(f"script block {i} does not parse:\n{r.stderr}")
+          print(f"{len(blocks)} script block(s) parse")
+          PY
