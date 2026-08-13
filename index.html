@@ -222,6 +222,10 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   <span class="grow"></span>
   <label class="speed" for="rate">Speed
     <select id="rate">
+      <option value="0.01">0.01× · 7 min</option>
+      <option value="0.02">0.02×</option>
+      <option value="0.05">0.05×</option>
+      <option value="0.1">0.1×</option>
       <option value="0.25">0.25×</option>
       <option value="0.5">0.5×</option>
       <option value="0.75">0.75×</option>
@@ -272,6 +276,10 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <button id="lbPaint" title="Start from a blank screen and paint the picture line by line as the audio plays (P)">✦ Paint it from blank</button>
       <label class="speed" for="lbRate">Speed
         <select id="lbRate">
+          <option value="0.01">0.01× · 7 min</option>
+          <option value="0.02">0.02×</option>
+          <option value="0.05">0.05×</option>
+          <option value="0.1">0.1×</option>
           <option value="0.25">0.25×</option>
           <option value="0.5">0.5×</option>
           <option value="0.75">0.75×</option>
@@ -475,7 +483,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='25';
+const ASSETV='26';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -776,17 +784,24 @@ async function cardPass(k){
   if(CARDSCAN!==S) return;
   d=WAVE.get(S.frames[k]);
 
-  const g=ACTX.createGain(); g.gain.value=0.5; g.connect(ACTX.destination);
-  const src=ACTX.createBufferSource(); src.buffer=buf; src.connect(g);
-  src.playbackRate.value=PLAYRATE;
-  const speed=PLAYRATE, t0=ACTX.currentTime;
-  src.start(0);
-  S.src=src;
-  src.onended=()=>{ if(CARDSCAN===S && S.src===src) cardPass(k+1); };
+  const t0=ACTX.currentTime;
+  let speed=PLAYRATE;
+  if(isSilent()){
+    S.src=null;                     // clock is the transport; see AUDIBLE_FLOOR
+  } else {
+    const g=ACTX.createGain(); g.gain.value=0.5; g.connect(ACTX.destination);
+    const src=ACTX.createBufferSource(); src.buffer=buf; src.connect(g);
+    src.playbackRate.value=PLAYRATE;
+    speed=src.playbackRate.value||PLAYRATE;   // read back: browsers clamp this
+    src.start(0);
+    S.src=src;
+    src.onended=()=>{ if(CARDSCAN===S && S.src===src) cardPass(k+1); };
+  }
   if(S.timer) clearInterval(S.timer);
   S.timer=setInterval(()=>{
     if(CARDSCAN!==S) return;
     const el=(ACTX.currentTime-t0)*speed;
+    if(!S.src && el>=buf.duration){ cardPass(k+1); return; }
     const smp=el*buf.sampleRate;
     const t=d?traceAt(d,smp):Math.round(el/buf.duration*512);
     if(t!=null) S.trace=t;
@@ -1582,6 +1597,15 @@ const AUDIOSTATE={playing:false};
 // elapsed time into a sample position must multiply by it, or the trace line
 // and the picture disagree the moment you leave 1x.
 let PLAYRATE=1;
+// Below this the audio is no longer audio -- a 4.3 second frame stretched past
+// 10x is a sub-sonic drone, and browsers clamp AudioBufferSourceNode.playbackRate
+// well above the rates you want for watching a scan trace by trace anyway
+// (Chrome's media clamp is 0.0625). So under this floor the transport runs
+// SILENT and the paint front is driven from the clock alone, which can go as
+// slow as you like. 0.01x puts one frame at about seven minutes: roughly a
+// second per trace, which is what "watch it line by line" actually needs.
+const AUDIBLE_FLOOR=0.1;
+const isSilent=()=>PLAYRATE<AUDIBLE_FLOOR;
 const BUFFERS=new Map();
 let OFFCTX=null, ACTX=null, SRCNODE=null, PLAYING=null, PENDING_DONE=null;
 
@@ -1633,15 +1657,25 @@ async function playFrom(sample, onDone){
     if(ACTX.state==='suspended') await ACTX.resume();
   }catch(err){ setWStat('audio unavailable here: '+err.message); return; }
 
-  const g=ACTX.createGain(); g.gain.value=0.5; g.connect(ACTX.destination);
-  const s=ACTX.createBufferSource(); s.buffer=buf; s.connect(g);
-  s.playbackRate.value=PLAYRATE;
   const offset=Math.max(0,Math.min(buf.duration-0.02, (sample||0)/buf.sampleRate));
-  s.start(0, offset);
-  SRCNODE=s;
-  PLAYING={t0:ACTX.currentTime, offset, rate:buf.sampleRate, dur:buf.duration, speed:PLAYRATE};
+  let speed=PLAYRATE;
+  if(isSilent()){
+    // No source node at all: the clock is the transport. tick() ends the pass.
+    SRCNODE=null;
+  } else {
+    const g=ACTX.createGain(); g.gain.value=0.5; g.connect(ACTX.destination);
+    const s=ACTX.createBufferSource(); s.buffer=buf; s.connect(g);
+    s.playbackRate.value=PLAYRATE;
+    // Read it BACK. Browsers clamp this, and if we kept using the value we
+    // asked for, the trace line would drift away from the sound.
+    speed=s.playbackRate.value||PLAYRATE;
+    s.start(0, offset);
+    SRCNODE=s;
+    s.onended=()=>{ if(SRCNODE!==s) return; const done=PENDING_DONE; stopAudio(); if(done) done(); };
+  }
+  PLAYING={t0:ACTX.currentTime, offset, rate:buf.sampleRate, dur:buf.duration,
+           speed, silent:isSilent()};
   AUDIOSTATE.playing=true;
-  s.onended=()=>{ if(SRCNODE!==s) return; const done=PENDING_DONE; stopAudio(); if(done) done(); };
   $('lbPlay').textContent='■ Stop';
   // A timer, not requestAnimationFrame. rAF does not fire in a backgrounded or
   // throttled tab -- measured here: document.hidden true, 0 rAF callbacks in
@@ -1655,7 +1689,14 @@ async function playFrom(sample, onDone){
 function tick(){
   if(!PLAYING||!ACTX) return;
   const el=(ACTX.currentTime-PLAYING.t0)*PLAYING.speed+PLAYING.offset;
-  if(el>=PLAYING.dur){ stopAudio(); return; }
+  if(el>=PLAYING.dur){
+    // With no source node there is no onended, so the clock has to do it --
+    // including chaining to the next separation when painting a colour image.
+    const done=PLAYING.silent?PENDING_DONE:null;
+    stopAudio();
+    if(done) done();
+    return;
+  }
   LB.playSample=el*PLAYING.rate;
   if(LB.paint){
     const dd=WAVE.get(LB.frameId), tt=dd?traceAt(dd,LB.playSample):null;
@@ -1665,7 +1706,8 @@ function tick(){
   drawWave();
   const d=WAVE.get(LB.frameId), t=d?traceAt(d,LB.playSample):null;
   const pass=LB.paint ? `painting ${['red','green','blue'][LB.paint.pass]||'scan'} · ` : '';
-  setWStat(`${pass}playing · ${el.toFixed(2)} / ${PLAYING.dur.toFixed(2)} s · ` +
+  const quiet=PLAYING.silent ? 'silent (too slow to hear) · ' : '';
+  setWStat(`${pass}${quiet}${el.toFixed(2)} / ${PLAYING.dur.toFixed(2)} s · ` +
            (t==null?'lead-in/tail':`trace ${t}`) + ' · 96 kHz, not resampled');
 }
 
