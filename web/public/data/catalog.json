@@ -2524,7 +2524,8 @@
    "title_ours": "Solar location map",
    "title_ozma": "Pulsar map with the Andromeda galaxy as a landmark",
    "title_source": "ozma",
-   "displayRotate": 180
+   "displayRotate": 0,
+   "rotation_evidence": "shown as the record has it. The scan direction is fixed for the whole record, so a 180 degree turn makes an image paint against every other image -- image 2 was the only 180 and the only one that played right to left. The book plate disagrees; the record is authoritative, so the plate was rotated to match (docs/reference/crops/2.jpg)."
   },
   {
    "n": 3,

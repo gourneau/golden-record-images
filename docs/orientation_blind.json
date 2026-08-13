@@ -1258,5 +1258,41 @@
    "blank_tb": 0.0186,
    "content_aspect": 1.33
   }
- ]
+ ],
+ "scan_direction_audit": {
+  "reversed": [],
+  "quarter_turned": [
+   {
+    "n": 11,
+    "title": "Jupiter",
+    "rotate": 90
+   },
+   {
+    "n": 12,
+    "title": "Earth",
+    "rotate": 90
+   },
+   {
+    "n": 27,
+    "title": "Conception silhouette",
+    "rotate": 270
+   },
+   {
+    "n": 28,
+    "title": "Conception",
+    "rotate": 270
+   },
+   {
+    "n": 51,
+    "title": "Ichneumon fly",
+    "rotate": 90
+   },
+   {
+    "n": 116,
+    "title": "Beethoven's String Quartet No. 13 in B-flat Major, Opus 130: V. Cavatina, the closing piece of music on the Voyager Interstellar Record",
+    "rotate": 90
+   }
+  ],
+  "n_images": 116
+ }
 }

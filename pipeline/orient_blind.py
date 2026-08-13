@@ -11,6 +11,27 @@ There are four distinct ambiguities, and they are NOT equally hopeless:
      does the start of a trace land at the top or the bottom? Four combinations.
      This one is GLOBAL: whatever the answer, it is the same for all 116 images.
 
+     AND THAT GLOBALITY IS ITSELF A TEST, which we missed until a viewer noticed
+     it by watching the pictures paint. The converter scanned every slide the
+     same way, so trace 0 is always the same physical edge and every image paints
+     in the same direction. A 180 degree display rotation is therefore special:
+     it is the one rotation that REVERSES the scan direction while keeping its
+     axis, so an image turned 180 paints against every other image on the record.
+     A quarter turn does not have this property -- it moves the scan to the other
+     axis, which is exactly what a portrait slide requires and tells you nothing.
+
+     So: a 180 is a claim that one slide was mounted upside down in 1977. It is
+     a possible claim, but it is a strong one, and it is CHECKABLE without any
+     reference image -- which makes it the only per-image orientation evidence
+     the record actually offers. `scan_direction_audit` below runs it.
+
+     It caught a real error. Image 2, the pulsar map, was the only image on the
+     page carrying a 180, and the only one that played right to left. It had been
+     turned to match a book plate -- applying this project's own rule backwards,
+     since for the 15 laterally-inverted plates it is the REFERENCE that gets
+     corrected, not the decode. The record's orientation is restored and the
+     plate is now the thing that was rotated.
+
   2. PORTRAIT vs LANDSCAPE -- was the slide fed into the camera turned on its
      side? This LOOKED measurable, and this module is the test. See below.
 
@@ -142,6 +163,27 @@ def is_portrait(a: np.ndarray) -> tuple[bool, dict]:
     return bool(verdict), p
 
 
+def scan_direction_audit() -> dict:
+    """Flag every image whose display turn makes it paint against the record.
+
+    Needs no reference image and no Earth knowledge: it only asks whether the
+    displayed picture's scan runs the same way as every other picture's, which
+    is a property of the artifact. See the module docstring for why 180 is the
+    only rotation this can catch.
+    """
+    cat = json.loads((REPO / "web" / "public" / "data" / "catalog.json").read_text())
+    flagged, quarter = [], []
+    for im in cat["images"]:
+        r = int(im.get("displayRotate", 0) or 0)
+        if r == 180:
+            flagged.append({"n": im["n"], "title": im.get("title"),
+                            "why": "turned 180, so it paints against every other image"})
+        elif r in (90, 270):
+            quarter.append({"n": im["n"], "title": im.get("title"), "rotate": r})
+    return {"reversed": flagged, "quarter_turned": quarter,
+            "n_images": len(cat["images"])}
+
+
 def run() -> dict:
     tables = json.loads((REPO / "pipeline" / "barry_tables.json").read_text())
     cat = json.loads((REPO / "web" / "public" / "data" / "catalog.json").read_text())
@@ -192,6 +234,18 @@ if __name__ == "__main__":  # pragma: no cover
     print("  signal. The record does not encode which edge is up, and does not")
     print("  encode which images were turned either. See the module docstring.")
 
+    print()
+    a = scan_direction_audit()
+    print(f"  SCAN-DIRECTION AUDIT ({a['n_images']} images) -- needs no reference")
+    if a["reversed"]:
+        for r in a["reversed"]:
+            print(f"    FLAG #{r['n']} {r['title']}: {r['why']}")
+    else:
+        print("    no image is turned 180: every picture paints the way the record scanned it")
+    print(f"    {len(a['quarter_turned'])} quarter-turned (portrait slides; a quarter turn moves")
+    print(f"    the scan to the other axis and so proves nothing either way)")
+
     out = REPO / "docs" / "orientation_blind.json"
+    res["scan_direction_audit"] = a
     out.write_text(json.dumps(res, indent=1))
     print(f"\nwrote {out.relative_to(REPO)}")
