@@ -154,14 +154,24 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   text-transform:none;font-family:var(--mono)}
 .pane-body{flex:1;min-height:0;display:flex;background:#000;border:1px solid var(--line);
   border-radius:8px;overflow:auto;position:relative}
-.pane-body>canvas,.pane-body>img{margin:auto;display:block;max-width:100%;max-height:100%}
+/* FILL the pane, do not merely fit inside it. max-width/max-height only ever
+   SHRINK: a 512x377 canvas in a 700x620 pane rendered at exactly 512x377, small
+   and ringed with black, using about half the space it had. That is also why
+   clicking to zoom did nothing sensible -- zoom set the size to 512x377, which
+   is what it already was. object-fit:contain scales up as well as down and
+   keeps the aspect ratio, so the picture uses the whole pane. */
+.pane-body>canvas,.pane-body>img{margin:auto;display:block;
+  width:100%;height:100%;object-fit:contain}
+/* The overview inset sizes itself and must not be caught by the rule above. */
+.pane-body>#lbMini{width:auto;height:auto;object-fit:fill}
 /* The rule above sets display on the very elements we hide with [hidden], and
    would otherwise win against the UA stylesheet -- which showed the empty crop
    canvas at its default 300x150 and put a scrollbar in the pane. */
 .lb [hidden]{display:none}
 .pane-body.can-zoom{cursor:zoom-in}
 .pane-body.zoomed{cursor:zoom-out}
-.pane-body.zoomed>canvas,.pane-body.zoomed>img{max-width:none;max-height:none}
+.pane-body.zoomed>canvas,.pane-body.zoomed>img{max-width:none;max-height:none;
+  width:auto;height:auto;object-fit:fill}
 /* Smooth, not pixelated. At 512x377 zoomed to 1:1 the scale factor is barely
    above 1, so `pixelated` did not reveal structure -- it just added hard edges
    to a photograph and made it look broken. The decode has no more detail at 1:1
@@ -512,7 +522,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='35';
+const ASSETV='36';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -1013,7 +1023,7 @@ function fillText(im){
     provenanceNote(im) +
     `<span class="mono">512 traces wide × 377 rows. That row count is chosen so the ` +
     `PIXELS ARE SQUARE — nothing is stretched. The 4:3 picture is the first ~503 traces; ` +
-    `the last few are scan beyond the picture gate. Click to zoom to actual size.</span>`;
+    `the last few are scan beyond the picture gate. Click the picture to magnify it.</span>`;
 
   // ---- per-image provenance -------------------------------------------------
 // The claim "decoded from the audio alone" is true of the PIXELS and only of
@@ -1225,19 +1235,28 @@ function drawMini(){
   c.strokeRect(Math.round(vx)-0.5, Math.round(vy)-0.5, Math.max(2,Math.round(vw))+2, Math.max(2,Math.round(vh))+2);
 }
 
+// Zoom is a MAGNIFICATION of what you are looking at, not a jump to the file's
+// pixel dimensions. The old version went to the canvas's natural size, which for
+// a 512x377 decode in a large pane is SMALLER than the fitted view -- so
+// "zooming in" zoomed out, which is exactly the weirdness people reported.
+// Relative to what is on screen, it always enlarges, by the same factor, for
+// every image.
+const ZOOM_FACTOR=2.5;
+
 function zoomToggle(body,ev){
-  const el=[...body.children].find(c=>!c.hidden&&(c.tagName==='IMG'||c.tagName==='CANVAS'));
+  const el=[...body.children].find(c=>!c.hidden && c.id!=='lbMini' &&
+                                      (c.tagName==='IMG'||c.tagName==='CANVAS'));
   if(!el) return;
   if(body.classList.contains('zoomed')){ unzoom(body); return; }
-  const nw=el.tagName==='IMG'? el.naturalWidth : el.width;
-  const nh=el.tagName==='IMG'? el.naturalHeight: el.height;
-  if(!nw||!nh) return;
   const r=el.getBoundingClientRect();
+  if(!r.width||!r.height) return;
   const fx=(ev.clientX-r.left)/r.width, fy=(ev.clientY-r.top)/r.height;
+  const w=Math.round(r.width*ZOOM_FACTOR), h=Math.round(r.height*ZOOM_FACTOR);
   body.classList.add('zoomed');
-  el.style.width=nw+'px'; el.style.height=nh+'px';
-  body.scrollLeft=fx*nw-body.clientWidth/2;
-  body.scrollTop =fy*nh-body.clientHeight/2;
+  el.style.width=w+'px'; el.style.height=h+'px';
+  // Keep the point under the pointer under the pointer.
+  body.scrollLeft=fx*w-body.clientWidth/2;
+  body.scrollTop =fy*h-body.clientHeight/2;
   if(body===$('lbDecBody')) drawMini();
 }
 function unzoom(body){
