@@ -205,26 +205,51 @@ WHITE_REF = -0.75  # (holds picture to 0-4% tails on 10 frames measured)
 #     circle axis ratio                  1.0051 -> 1.0051  unchanged
 #     circle radial rms                  0.837 -> 0.841 px (+0.5%)
 UNCUMULATE_K = 9.4e-4
-
-# NOT ON BY DEFAULT, and the reason is measured rather than cautious. Applied to
-# a finished decode the correction is large and clean:
-#     L000 field rms   0.14  -> 0.08   (-43%)
-#     mount gap        1.478 -> 0.390  (-74%, on ten frames k never saw)
-#     circle           axis 1.0051 unchanged, radial rms 0.837 -> 0.841 px
-# Applied INSIDE decode() it delivers only a third of that: field rms 0.14 ->
-# 0.118, mount gap 1.478 -> 1.322. The cause is not the correction, it is what
-# comes after it. `measure_levels` sets the black and white rails from the RAW
-# signal, i.e. from a picture that still has the error in it. Removing the error
-# makes the picture brighter, it overflows the stale white rail, and the
-# clipped fraction of L000 goes from 5.99% to 12.23% -- precisely in the bright
-# field where the improvement should show. Percentile levels clip less (2.2%)
-# and recover a little more, which confirms the diagnosis rather than fixing it.
+# k is stated PER SQUARE-PIXEL ROW, because that is the grid it was fitted on
+# (caltarget.py works on the 377-row decode). The correction is applied on the
+# ~230-row DOT matrix, where the same physical accumulation has to be spread
+# over fewer, larger steps: the invariant is k x rows (the integral of light
+# down the trace), so decode() rescales by SQUARE_ROWS / n_dots. Getting that
+# wrong applies 61% of the intended correction.
 #
-# The right fix is to derive the rails from the CORRECTED picture, since the
-# accumulation darkened the reference the rails were measured against as much as
-# it darkened everything else. That is a change to the levels stage and it
-# deserves its own measurement pass, so it is written down rather than rushed.
-# Until then this ships off, and the finding stands on its own evidence.
+# WHAT "ALREADY SENT" IS MEASURED FROM: BLACK, not the porch. The accumulator
+# sums LIGHT, and there is no light at black, so the origin of the sum is the
+# black rail (porch + UNCOUPLE_BLACK_REF x amp) -- which is what k was fitted
+# against. `pic` inside decode() is porch-referenced, and the porch sits 0.406
+# of the way up the range, so summing it raw adds a spurious ramp of
+# -k x 0.406 x row to every trace: -0.14 in decoded units by the bottom of the
+# trace, which is the same size as the droop being corrected and points the
+# same way. decode() subtracts the origin before the recursion and adds it back
+# (the recursion is linear, so that is exactly a change of origin).
+#
+# Those two, plus the rails below, are why the in-path correction used to
+# deliver a third of the post-hoc one. With all three in place the in-path
+# result reproduces the post-hoc one to rms 3e-4 of full scale (0.08 grey) on
+# L000 -- i.e. exactly. See pipeline/levelsfix.py.
+
+# RAILS FOR THE UNCUMULATED PICTURE. The rails are not physics, they are the
+# per-frame display map, and they were fitted to a picture that still contained
+# the accumulating error. The sync-amplitude anchor itself is NOT contaminated
+# (measured: regressing each trace's own plateau-minus-porch on that trace's own
+# mean picture level over 12 frames gives a median slope of +0.000 x amp, median
+# r +0.015, negative on 6 of 12 -- and +0.016 on the 6 frames with enough
+# trace-to-trace level spread to say anything -- against the -0.216 the
+# accumulation would print if it acted on the blanking that follows the picture.
+# The anchor is clean and only the FRACTIONS need re-measuring.) Re-measured
+# exactly as the +0.65/-0.95 pair was: per-frame
+# p0.5/p99.5 of the corrected picture in units of amp, 20 frames spanning the
+# record and both channels, rail placed where the current rail sits in the
+# uncorrected distribution (2 frames of 20 keep a ~1% tail), taken at the
+# conservative end of the interval that satisfies that so no frame's tail grows:
+#     bright end p0.5   -1.03..-0.13  ->  -1.20..-0.19   rail -0.95 -> -1.08
+#     dark end  p99.5   +0.16..+0.72  ->  -0.09..+0.56   rail +0.65 -> +0.50
+# Both rails move ~0.14 x amp toward the bright end -- which is the mean
+# darkening the accumulation had imposed, k x rows / 2 x mean light = 0.13 --
+# and the span is almost unchanged (1.60 -> 1.58 x amp). This restores a droop;
+# it does not trade contrast for it, and a correction that had merely stretched
+# the range would have moved the two rails APART instead of together.
+UNCUMULATE_BLACK_REF = +0.50
+UNCUMULATE_WHITE_REF = -1.08
 
 
 UNCOUPLE_TAU_384 = {"L": 530.0, "R": 295.0}
@@ -260,7 +285,7 @@ class Settings:
 
     dehum: bool = True  # remove the scan-locked 60 Hz fixed pattern
     dc_restore: bool = True  # clamp each trace on its back porch
-    uncumulate: float = 0.0  # invert the content-integrating error; see UNCUMULATE_K
+    uncumulate: float = UNCUMULATE_K  # invert the content-integrating error
     # Invert the chain's one-pole high-pass (the decay bias) on the RAW
     # signal in raster order, before sampling. ON by default, but it only
     # acts when it knows the time constant: set `channel` ("L"/"R", per
@@ -666,7 +691,26 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
     conf[dropouts] = 0.0
 
     # --- absolute intensity anchors, from the raw signal --------------------
-    ref = measure_levels(x, starts, period) if cfg.levels == "reference" else None
+    # Measured whether or not the rails are going to use them: `uncumulate`
+    # needs the black rail as the origin of "light already sent", and measuring
+    # it in both levels modes keeps the two modes affinely related -- which is
+    # what lets caltarget.py recover the pre-clip decode exactly.
+    anchors = measure_levels(x, starts, period)
+    ref = anchors if cfg.levels == "reference" else None
+
+    # Which rails describe THIS picture. Each correction that restores range
+    # moves them, and they were re-measured for each (module docstring, and the
+    # UNCUMULATE block above). Decided here rather than at the transfer stage
+    # because the accumulation correction needs the black rail as its origin.
+    if tau > 0:
+        black_ref, white_ref = UNCOUPLE_BLACK_REF, UNCOUPLE_WHITE_REF
+        if cfg.uncumulate > 0.0:
+            black_ref, white_ref = UNCUMULATE_BLACK_REF, UNCUMULATE_WHITE_REF
+    else:
+        # Drooped rails. `uncumulate` without `uncouple` has never been
+        # measured -- the coefficient was fitted on undrooped decodes -- so it
+        # keeps the drooped rails and is not a supported combination.
+        black_ref, white_ref = BLACK_REF, WHITE_REF
 
     # --- sample the picture: dot-locked primary, binning fallback -----------
     span = cfg.picture_span * period
@@ -720,7 +764,15 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
         pic[0::2] += profile
 
     if cfg.uncumulate > 0.0:
-        pic = _uncumulate(pic, cfg.uncumulate)
+        # Two conversions, both forced by the units k was measured in (see the
+        # UNCUMULATE_K block): k is per square-pixel row and this matrix is on
+        # the dot grid, and the accumulator sums light FROM BLACK while `pic` is
+        # referenced to the porch. The recursion is linear, so shifting the
+        # origin is exactly subtract-run-add.
+        origin = (UNCOUPLE_BLACK_REF * anchors[1] if anchors is not None
+                  else float(np.percentile(pic, 99.5)))  # fallback: the picture's own black
+        k_dot = cfg.uncumulate * SQUARE_ROWS / pic.shape[1]
+        pic = _uncumulate(pic - origin, k_dot) + origin
 
     if cfg.repair_dropouts and dropouts.any() and (~dropouts).sum() > 4:
         good = np.where(~dropouts)[0]
@@ -757,10 +809,9 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
     # (signal = porch + black_ref*amp) sits at -black_ref*amp and white at
     # -white_ref*amp. The rails depend on whether the decay bias was
     # inverted: the restored picture spans more range than the drooped one
-    # (module docstring; re-measured on 20 frames).
-    black_ref, white_ref = (
-        (UNCOUPLE_BLACK_REF, UNCOUPLE_WHITE_REF) if tau > 0 else (BLACK_REF, WHITE_REF)
-    )
+    # (module docstring; re-measured on 20 frames). `black_ref`/`white_ref` were
+    # chosen above, before the picture was corrected, because the accumulation
+    # correction needs the black rail.
     sgn = -1.0 if cfg.invert else 1.0
     if ref is not None:
         porch_med, amp, _ = ref
@@ -814,6 +865,8 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
             "hum_amplitude": hum_amp,
             "snr_db": snr_db,
             "uncouple_tau": tau,  # signal samples; 0 = correction not applied
+            "uncumulate_k": float(cfg.uncumulate),  # per square-pixel row; 0 = off
+            "rails": (black_ref, white_ref),  # x sync amplitude, about the porch
             "channel": cfg.channel or None,
             "levels_mode": "reference" if ref is not None else "percentile",
             "black_level": levels[0],
