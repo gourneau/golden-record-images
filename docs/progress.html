@@ -60,9 +60,9 @@ footer{border-top:1px solid var(--line);padding:32px 0 60px;color:var(--dimmer);
   <h2>Where the decode stands<span class="n">measured</span></h2>
   <div class="cards">
     <div class="card"><b>156</b><span>frames decoded</span><small>0 failures</small></div>
-    <div class="card"><b>90</b><span>dot-clock locked</span><small>of 156; the rest use the predicted rate</small></div>
+    <div class="card"><b>116</b><span>references confirmed</span><small>every image, vision-judged</small></div>
     <div class="card"><b>156</b><span>droop corrected</span><small>was 0 — the path was dead code</small></div>
-    <div class="card"><b>1.43</b><span>median jitter, samples</span><small>at 96 kHz; worst frame 12.2</small></div>
+    <div class="card"><b>77</b><span>resolvable px/trace</span><small>the camera&rsquo;s limit, from the ring</small></div>
     <div class="card"><b>1.0060</b><span>circle axis ratio</span><small>radial rms 0.88 px</small></div>
     <div class="card"><b>1</b><span>low-confidence timebase</span><small>L032; was 5</small></div>
   </div>
@@ -98,25 +98,54 @@ footer{border-top:1px solid var(--line);padding:32px 0 60px;color:var(--dimmer);
   <h2>Open<span class="n">honest list</span></h2>
   <table>
     <tr><th>Issue</th><th>Status</th><th>Detail</th></tr>
-    <tr><td>Low-frequency shelf still uncorrected</td><td><span class="st wip">in progress</span></td>
-        <td>|H| ≈ 0.72–0.88 below 2.5 kHz survives the one-pole fix. A prototype halved field ripple but raised parity striping to +14.7 dB, so it was not shipped. Real signal we are not recovering.</td></tr>
-    <tr><td>Blurred band at the top of every frame</td><td><span class="st wip">in progress</span></td>
-        <td>Rows 0–8 have the wrong level (gate opens early); rows 8–32 have half the normal detail (recursive filter settling from a cold start each trace).</td></tr>
-    <tr><td>45 frames scored worse after the droop fix</td><td><span class="st wip">in progress</span></td>
-        <td>Never investigated individually. Could be real regressions or the metric misbehaving; being decided frame by frame by eye.</td></tr>
-    <tr><td>Camera-ESF deconvolution not shipped</td><td><span class="st wip">in progress</span></td>
-        <td>The 1977 camera is the resolution limit (~15.3 samples 10–90, against 1.75 for the recording path). The decoder currently deconvolves the sync edge, which is the wrong and already-sharp operator.</td></tr>
-    <tr><td>√3 noise reduction on colour triplets</td><td><span class="st wip">in progress</span></td>
-        <td>Twenty images are three scans of one scene. Free SNR, unclaimed.</td></tr>
-    <tr><td>66 frames fail to lock the dot clock</td><td><span class="st open">open</span></td>
-        <td>They fall back to a predicted rate. Unclear whether the clock is genuinely invisible or the detection threshold is too strict.</td></tr>
-    <tr><td>L032 parity measurement is broken</td><td><span class="st open">open</span></td>
-        <td>−17.78 samples where 147 frames cluster at −1.617 ± 0.022, and it is silently applied. Needs a guard.</td></tr>
-    <tr><td>Gallery double-rotates 60 images</td><td><span class="st open">open</span></td>
-        <td>Thumbnails are already oriented at build time; the page rotates them again. Barry's values are rotate-left/rotate-right, not quarter-turn counts.</td></tr>
+    <tr><td>Slow tilt across the frame</td><td><span class="st open">open</span></td>
+        <td>The calibration slide is uniform white by design; ours has a &minus;0.57 tilt across it, 4&ndash;9% of black-to-white. The one genuinely unrecovered defect. A &ldquo;low-frequency shelf&rdquo; theory was tested and proved an artefact of the estimator&rsquo;s normalisation band.</td></tr>
+    <tr><td>Picture gate is one global constant</td><td><span class="st open">open</span></td>
+        <td>The oracle moved the gate on <em>10 of 10</em> images, both directions. It should be measured per frame &mdash; and can be, from the signal alone. The largest single cause of the 41% oracle gap.</td></tr>
+    <tr><td>Colour registration and triplet fusion</td><td><span class="st wip">specified</span></td>
+        <td>Measured: residual misregistration 0.40 &rarr; 0.09 px with luminance detail up 14.5% (60 frames); &radic;3 fusion worth +1.96 dB per plane (20 images). Written up, not yet applied.</td></tr>
+    <tr><td>L032 timebase guard</td><td><span class="st wip">specified</span></td>
+        <td>Parity &minus;5.84 dots where 155 frames sit at &minus;0.53 &plusmn; 0.46. Guard takes composite 9.1 &rarr; 62.3, but must be trigger-only: unconditionally it regresses the circle 1.0060 &rarr; 1.0079.</td></tr>
     <tr><td>Interactive decoder</td><td><span class="st open">open</span></td>
-        <td>The original goal. 4,051 lines of UI are written but unwired; the browser DSP port is deliberately deferred until the Python decoder is finished.</td></tr>
+        <td>4,051 lines of UI written and unwired; the browser DSP port is parked until the Python decoder is finished.</td></tr>
   </table>
+
+  <h2>Settled, and it ends the search<span class="n">the ceiling</span></h2>
+  <p>The most consequential measurement here. The recording chain could have carried more than
+  1000 brightness elements per stripe &mdash; its own edge response is 1.75&ndash;2.37 samples.
+  The 1977 television camera could not.</p>
+  <table>
+    <tr><th>direction</th><th>we sample</th><th>the camera resolved</th><th>oversampling</th></tr>
+    <tr><td>along a trace</td><td class="n">230 dots</td><td class="n">138&ndash;172</td><td class="n">1.4&times;</td></tr>
+    <tr><td>across traces</td><td class="n">512 traces</td><td class="n">260&ndash;324</td><td class="n">1.6&ndash;1.9&times;</td></tr>
+  </table>
+  <p>We already sample above the camera&rsquo;s Nyquist in both axes. Every element it captured is
+  in these pictures, and anything sharper would be <em>invented</em>. Independently on the
+  calibration ring: MTF50 0.102 cycles/px, line-spread 5.1 px, ~77 resolvable elements per trace.</p>
+
+  <h2>What cheating would buy<span class="n">the oracle tier</span></h2>
+  <p>A deliberately dishonest decoder, allowed to pick its settings per image by looking at the
+  true slide. Useless as a decoder &mdash; it needs the answer to produce the answer &mdash; but
+  the gap measures what outside knowledge is worth.</p>
+  <table>
+    <tr><th>tier</th><th>gradient NCC vs the real slide</th></tr>
+    <tr><td>blind (shipped; never sees a slide)</td><td class="n">0.2181</td></tr>
+    <tr><td>oracle (allowed to cheat)</td><td class="n">0.3080</td></tr>
+    <tr><td><strong>what cheating buys</strong></td><td class="n"><strong>+41%</strong></td></tr>
+  </table>
+  <p>Most of that is not knowledge an alien lacks &mdash; it is work not yet finished, chiefly the
+  per-frame picture gate.</p>
+
+  <h2>A metric that lies<span class="n">worth knowing</span></h2>
+  <p>The internal quality composite <strong>rewards blur</strong>. On the calibration frame: clean
+  88.5, Gaussian &sigma;=1 &rarr; 99.0, &sigma;=2 &rarr; <strong>100.0</strong>. It scored a term
+  measuring the picture&rsquo;s diagonality rather than the decoder&rsquo;s health, so it
+  anti-correlated with sharpness (&minus;0.169). Fixing that cut the reward for blur from +28 to
+  +7 but did not remove it. It is a timing-damage detector, never a quality score.</p>
+  <p>Two metrics that <em>do</em> behave: MTF50 from the ring falls monotonically under blur
+  (0.102 &rarr; 0.087), and gradient correlation against the real slide falls hard (0.470 &rarr;
+  0.304). Those are the arbiters.</p>
+</table>
 </div></section>
 
 <section><div class="wrap">
