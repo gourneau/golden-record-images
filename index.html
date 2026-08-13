@@ -144,7 +144,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .lb-top .t{font-size:17px;font-weight:600;letter-spacing:-.01em}
 .lb-top .m{font-family:var(--mono);font-size:11px;color:var(--dimmer);flex:0 0 auto}
 .lb-top button{padding:5px 10px}
-.lb-panes{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 16px 4px}
+.lb-panes{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 16px 2px}
 .pane{display:flex;flex-direction:column;min-width:0;min-height:0}
 .pane-head{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;overflow:hidden;
   font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
@@ -214,20 +214,21 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
    long title and three frame ids together were squeezing everything out. */
 .wrow{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:7px}
 .wrow .wstat{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-/* A FIXED strip directly under the picture, present on every image whether or
-   not it has anything to put there. The separation buttons only exist for the
-   twenty colour images, so living in the play row they appeared on those and
-   wrapped it -- which grew the row and shrank the picture, but only sometimes,
-   so stepping from a mono image to a colour one made the artwork jump.
-   Reserving the height unconditionally costs 26px once and buys an image that
-   is the same size on all 116. */
-.pane-strip{height:26px;flex:0 0 auto;display:flex;align-items:center;gap:8px;
-  padding-top:5px;overflow:hidden;white-space:nowrap;
+/* ONE strip, spanning BOTH panes, below them. It used to live inside the
+   decoded pane -- which made that pane 26px shorter than the reference pane, so
+   the decoded image came out smaller than the thing it is meant to be compared
+   against. Two panes being compared must be the same size or the comparison is
+   a lie about which is sharper.
+   Down here it belongs to neither pane, costs both nothing, and fills space
+   that was empty anyway. Fixed height and nowrap so the colour images' three
+   separation buttons cannot grow it and shrink the pictures above. */
+.lb-strip{flex:0 0 auto;height:24px;display:flex;align-items:center;gap:8px;
+  padding:0 16px;overflow:hidden;white-space:nowrap;
   font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dimmer)}
-.pane-strip .seps{display:flex;gap:6px}
-.pane-strip button{font-size:10px;padding:1px 7px;border-radius:5px;line-height:1.6;
+.lb-strip .seps{display:flex;gap:6px}
+.lb-strip button{font-size:10px;padding:1px 7px;border-radius:5px;line-height:1.6;
   font-family:var(--mono);letter-spacing:.03em}
-.pane-strip #lbFrames,.pane-strip #lbDecDim{flex:0 0 auto}
+.lb-strip #lbFrames,.lb-strip #lbDecDim{flex:0 0 auto}
 /* The play row must not wrap either, for the same reason: it sits below the
    waveform, but a wrap there still pushes the whole section taller. */
 .wrow{flex-wrap:nowrap;overflow:hidden}
@@ -322,12 +323,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <div class="pane-body" id="lbDecBody"><canvas id="lbCanvas"></canvas>
         <canvas id="lbMini" hidden title="The whole picture. The box is what you are looking at."></canvas>
       </div>
-      <div class="pane-strip">
-        <span class="seps" id="lbSeps"></span>
-        <span class="grow"></span>
-        <span id="lbFrames"></span>
-        <span id="lbDecDim"></span>
-      </div>
+
       <div id="lbDecFootBody" hidden></div>
     </section>
     <section class="pane">
@@ -341,6 +337,13 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       </div>
       <div id="lbRefFootBody" hidden></div>
     </section>
+  </div>
+
+  <div class="lb-strip">
+    <span class="seps" id="lbSeps"></span>
+    <span class="grow"></span>
+    <span id="lbFrames"></span>
+    <span id="lbDecDim"></span>
   </div>
 
   <div id="tip" role="tooltip" hidden></div>
@@ -606,7 +609,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='44';
+const ASSETV='45';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
