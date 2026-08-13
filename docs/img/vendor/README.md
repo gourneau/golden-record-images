@@ -13,3 +13,20 @@ hot-link to another repository.
 so it is self-contained and reads on any backdrop. `voyager_cover_explanation.svg` is **black**
 line art with no background, so it needs a light one — white, or gold if you want it to look like
 the object rather than the diagram.
+
+## Rendering them, and the trap in it
+
+`qlmanage` — the obvious macOS renderer — **has no transparent output**. It flattens onto white,
+so a plaque rendered that way carries a white square that is invisible on a light page and ugly on
+a dark one. That is where `plaque.png`'s box came from.
+
+`plaque.png` is therefore built by recovering the alpha geometrically rather than by adding a
+system dependency: the plate is a clean circle of `#d4af37`, so fitting that circle from the gold
+pixels gives the mask, with a 2.4px feathered rim so the edge is not stair-stepped. Everything
+outside is fully transparent, so it sits on any background.
+
+The spindle hole is filled **black**, not white. Flattening made it white; on the real object you
+are looking *through* it, and black is both truer and stops the centre glowing on a dark page.
+
+If you have `rsvg-convert` or a working `cairosvg`, render the SVG directly and skip all of this —
+those preserve alpha properly.
