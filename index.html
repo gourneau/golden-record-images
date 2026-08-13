@@ -54,6 +54,13 @@ figure:hover{border-color:#39414b;transform:translateY(-2px)}
   padding:2px 6px;border-radius:4px;background:rgba(0,0,0,.72);color:var(--dim);letter-spacing:.04em}
 .tag.rgb{right:8px;left:auto;color:#0a0b0d;background:var(--gold);font-weight:700}
 .tag.cmp{bottom:8px;top:auto;left:8px;color:#0a0b0d;background:var(--cyan);font-weight:700}
+.scanbtn{position:absolute;bottom:8px;right:8px;z-index:2;width:28px;height:28px;padding:0;
+  border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.66);
+  color:var(--gold);font-size:11px;line-height:1;display:flex;align-items:center;
+  justify-content:center;opacity:0;transition:opacity .14s,background .14s}
+figure:hover .scanbtn,.scanbtn:focus-visible,.scanbtn[aria-pressed="true"]{opacity:1}
+.scanbtn[aria-pressed="true"]{background:var(--gold);color:#0a0b0d;border-color:var(--gold)}
+@media(hover:none){.scanbtn{opacity:1}}
 .tag.cmp.none{background:rgba(0,0,0,.72);color:var(--dim);font-weight:400}
 figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
 .ttl{font-size:13.5px;line-height:1.35;color:var(--ink)}
@@ -189,6 +196,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   <div class="lb-wave">
     <div class="wrow">
       <button id="lbPlay" title="Play this frame's audio (space)">▶ Play the audio</button>
+      <button id="lbPaint" title="Start from a blank screen and paint the picture line by line as the audio plays (P)">✦ Paint it from blank</button>
       <span class="seps" id="lbSeps"></span>
       <span class="wstat" id="lbWStat"></span>
     </div>
@@ -322,7 +330,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='12';
+const ASSETV='14';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -461,10 +469,15 @@ function render(){
     f.innerHTML=`<div class="shot"><canvas></canvas>
         <span class="tag">${String(im.n).padStart(3,'0')}</span>
         ${im.color?'<span class="tag rgb">RGB</span>':''}
+        <button class="scanbtn" title="Play this image's audio and paint it from blank">▶</button>
         <span class="tag cmp${hasRef?'':' none'}">${hasRef?'compare':'open'}</span></div>
       <figcaption><div class="ttl">${esc(im.title??'—')}</div>
         <div class="sub">${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'}</div>
       </figcaption>`;
+    f.querySelector('.scanbtn').addEventListener('click',ev=>{
+      ev.stopPropagation();               // do not also open the lightbox
+      toggleCardScan(f, im);
+    });
     f.addEventListener('click',()=>openLB(i));
     f.addEventListener('mouseenter',()=>waveOf(im.frames[0]),{once:true});
     GRID.appendChild(f); io.observe(f);
@@ -484,6 +497,87 @@ function paint(f){
   f.dataset.painted='1';
   const d=JSON.parse(f.dataset.im);
   draw(f.querySelector('canvas'), thumbs(d), d, d.color);
+}
+
+// ---- painting a thumbnail in place ----------------------------------------
+// The same blank-screen scan as the lightbox, but on the card, so you can hear
+// and watch any of the 116 without opening anything. Only one card runs at a
+// time: 116 simultaneous audio sources would be unusable, and the record was
+// only ever one signal anyway.
+
+let CARDSCAN=null;
+
+function stopCardScan(restore){
+  const S=CARDSCAN; if(!S) return;
+  CARDSCAN=null;
+  if(S.timer) clearInterval(S.timer);
+  if(S.src){ try{ S.src.onended=null; S.src.stop(); }catch(e){} }
+  S.btn.textContent='▶'; S.btn.setAttribute('aria-pressed','false');
+  if(restore!==false){ S.fig.dataset.painted=''; paint(S.fig); }
+}
+
+async function toggleCardScan(fig, im){
+  if(CARDSCAN && CARDSCAN.fig===fig){ stopCardScan(); return; }
+  stopCardScan();
+  const btn=fig.querySelector('.scanbtn'), cv=fig.querySelector('canvas');
+  btn.textContent='…';
+  const imgs=(await Promise.all(thumbs(im).map(load))).filter(Boolean);
+  if(!imgs.length){ btn.textContent='▶'; return; }
+  const colour=im.color&&imgs.length===3;
+  const order=rgbOrder?[0,1,2]:[2,1,0];
+  const planes=colour
+    ? [tintPlane(imgs[order[0]],'#f00'), tintPlane(imgs[order[1]],'#0f0'), tintPlane(imgs[order[2]],'#00f')]
+    : [tintPlane(imgs[0],'#fff')];
+  const frames=im.frames.slice(0,planes.length);
+  CARDSCAN={fig, im, btn, cv, planes, frames, pass:0, trace:-1, src:null, timer:0};
+  btn.textContent='■'; btn.setAttribute('aria-pressed','true');
+  drawCardScan();
+  cardPass(0);
+}
+
+function drawCardScan(){
+  const S=CARDSCAN; if(!S) return;
+  paintInto(S.cv, S.im, S.planes, S.pass, S.trace);
+}
+
+async function cardPass(k){
+  const S=CARDSCAN; if(!S) return;
+  if(k>=S.frames.length){
+    // Leave the finished picture up rather than snapping back to the thumbnail:
+    // the last thing you saw painted is the thing worth looking at.
+    S.pass=k; drawCardScan();
+    stopCardScan(false);
+    return;
+  }
+  S.pass=k; S.trace=-1;
+  let buf, d;
+  try{ buf=await frameBuffer(S.frames[k]); }
+  catch(err){ stopCardScan(); return; }
+  if(CARDSCAN!==S) return;
+  try{
+    ACTX=ACTX||new (window.AudioContext||window.webkitAudioContext)();
+    if(ACTX.state==='suspended') await ACTX.resume();
+  }catch(err){ stopCardScan(); return; }
+  if(CARDSCAN!==S) return;
+  await waveOf(S.frames[k]).catch(()=>{});
+  if(CARDSCAN!==S) return;
+  d=WAVE.get(S.frames[k]);
+
+  const g=ACTX.createGain(); g.gain.value=0.5; g.connect(ACTX.destination);
+  const src=ACTX.createBufferSource(); src.buffer=buf; src.connect(g);
+  const t0=ACTX.currentTime;
+  src.start(0);
+  S.src=src;
+  src.onended=()=>{ if(CARDSCAN===S && S.src===src) cardPass(k+1); };
+  if(S.timer) clearInterval(S.timer);
+  S.timer=setInterval(()=>{
+    if(CARDSCAN!==S) return;
+    const el=ACTX.currentTime-t0;
+    const smp=el*buf.sampleRate;
+    const t=d?traceAt(d,smp):Math.round(el/buf.duration*512);
+    if(t!=null) S.trace=t;
+    drawCardScan();
+  },33);
 }
 
 function sweep(){
@@ -550,7 +644,7 @@ const sampleOfTrace=(d,t)=>d.leadIn+t*d.period;
 // lightbox
 // --------------------------------------------------------------------------
 
-const LB={el:$('lb'), idx:-1, im:null, off:null, sep:0, frameId:null,
+const LB={el:$('lb'), idx:-1, im:null, off:null, sep:0, frameId:null, paint:null,
           sources:[], srcIdx:0, hoverTrace:null, playSample:null,
           timer:0, restoreFocus:null};
 
@@ -581,6 +675,7 @@ function openLB(i){
   const im=VIEW[LB.idx];
   LB.im=im; LB.sep=0; LB.frameId=im.frames[0];
   LB.off=null; LB.hoverTrace=null; LB.playSample=null;
+  if(LB.paint) endPaint(false);
   stopAudio();
   if(LB.el.hidden){
     LB.restoreFocus=document.activeElement;
@@ -878,12 +973,147 @@ function idleStat(){
 const setWStat=t=>{ $('lbWStat').textContent=t; };
 
 function showTrace(){
-  if(!LB.off||!LB.im) return;
+  if(!LB.im) return;
+  if(LB.paint){ paintFrame(); return; }
+  if(!LB.off) return;
   const d=WAVE.get(LB.frameId);
   let t=null;
   if(LB.playSample!=null && d) t=traceAt(d,LB.playSample);
   else if(LB.hoverTrace!=null) t=LB.hoverTrace;
   blit($('lbCanvas'), LB.off, LB.im, t);
+}
+
+// ---- paint mode -----------------------------------------------------------
+// A cathode-ray tube did not fade a picture in; it painted one line at a time
+// onto a dark screen, and this record is a recording of exactly that. So: start
+// black, and reveal each trace at the instant its audio is heard.
+//
+// For the twenty colour images the three separations are three separate scans,
+// so they are played in sequence and the colours ACCUMULATE -- red is laid down
+// over the whole frame, then green joins it, then blue. That is not a stylistic
+// choice, it is what the record does: you are watching the same slide scanned
+// three times through three filters, which is how the colour was stored.
+//
+// The tinted planes are built once when painting starts. Each tick then only
+// draws clipped rectangles with the 'lighter' blend, which sums the channels --
+// so a full RGB frame costs three drawImage calls, not a per-pixel loop.
+
+function tintPlane(img, rgb){
+  const w=img.naturalWidth||img.width, h=img.naturalHeight||img.height;
+  const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+  const c=cv.getContext('2d');
+  c.drawImage(img,0,0);
+  // 'multiply' against a pure primary keeps that one channel and zeroes the
+  // others, so summing the three tinted planes reconstructs the RGB composite
+  // exactly -- the same arithmetic composite() does per pixel, done by the
+  // compositor instead.
+  c.globalCompositeOperation='multiply';
+  c.fillStyle=rgb; c.fillRect(0,0,w,h);
+  return cv;
+}
+
+// Where trace t lands in the STORED image. Same three cases blit() handles for
+// the trace line, and they must agree or the paint front and the yellow line
+// would disagree about which stripe is playing.
+function revealRect(w,h,orientation,t){
+  if(orientation===1)      return [0,0,w,Math.max(0,Math.min(h,t+1))];       // traces run down
+  if(orientation===2){ const x=Math.max(0,w-1-t); return [x,0,w-x,h]; }      // right to left
+  return [0,0,Math.max(0,Math.min(w,t+1)),h];                               // left to right
+}
+
+function paintFrame(){
+  const P=LB.paint; if(!P) return;
+  paintInto($('lbCanvas'), LB.im, P.planes, P.pass, P.trace);
+}
+
+// Shared by the lightbox and the grid cards, so a thumbnail and a full view
+// paint identically and there is only one place where the geometry can be wrong.
+function paintInto(cv, im, planes, pass, trace){
+  if(!planes||!planes.length) return;
+  const first=planes[0];
+  const w=first.width, h=first.height;
+  const turn=(im&&typeof im.displayRotate==='number')?im.displayRotate:0;
+  const orientation=(im&&typeof im.orientation==='number')?im.orientation:0;
+  const swap=(turn===90||turn===270);
+  cv.width=swap?h:w; cv.height=swap?w:h;
+  const c=cv.getContext('2d');
+  c.fillStyle='#000'; c.fillRect(0,0,cv.width,cv.height);
+  c.save();
+  c.translate(cv.width/2,cv.height/2); c.rotate(turn*Math.PI/180);
+  c.globalCompositeOperation='lighter';
+  for(let k=0;k<planes.length;k++){
+    // Passes already finished are drawn whole; the pass in flight is clipped to
+    // the traces heard so far; passes not yet started are not drawn at all.
+    let t;
+    if(k<pass) t=1e9;
+    else if(k===pass) t=trace;
+    else continue;
+    if(t==null||t<0) continue;
+    const [rx,ry,rw,rh]=revealRect(w,h,orientation,t);
+    if(rw<=0||rh<=0) continue;
+    c.drawImage(planes[k], rx,ry,rw,rh, -w/2+rx,-h/2+ry, rw,rh);
+  }
+  // The writing spot itself, at the head of the paint front.
+  if(trace!=null && trace>=0 && pass<planes.length){
+    const [rx,ry,rw,rh]=revealRect(w,h,orientation,trace);
+    c.globalCompositeOperation='source-over';
+    c.strokeStyle='rgba(201,162,39,.9)'; c.lineWidth=1.5;
+    c.beginPath();
+    if(orientation===1){ const y=-h/2+ry+rh; c.moveTo(-w/2,y); c.lineTo(w/2,y); }
+    else if(orientation===2){ const x=-w/2+rx; c.moveTo(x,-h/2); c.lineTo(x,h/2); }
+    else { const x=-w/2+rx+rw; c.moveTo(x,-h/2); c.lineTo(x,h/2); }
+    c.stroke();
+  }
+  c.restore();
+}
+
+async function startPaint(){
+  const im=LB.im; if(!im) return;
+  stopAudio();
+  setWStat('loading the separations…');
+  const imgs=(await Promise.all(thumbs(im).map(load))).filter(Boolean);
+  if(!imgs.length){ setWStat('nothing to paint'); return; }
+  if(LB.im!==im) return;                       // stepped away while loading
+  const colour = im.color && imgs.length===3;
+  const order  = rgbOrder ? [0,1,2] : [2,1,0];
+  const planes = colour
+    ? [tintPlane(imgs[order[0]],'#f00'), tintPlane(imgs[order[1]],'#0f0'), tintPlane(imgs[order[2]],'#00f')]
+    : [tintPlane(imgs[0],'#fff')];
+  LB.paint={planes, pass:0, trace:-1, frames:im.frames.slice(0,planes.length)};
+  $('lbPaint').textContent='■ Stop painting';
+  $('lbPaint').setAttribute('aria-pressed','true');
+  paintFrame();
+  paintPass(0);
+}
+
+function paintPass(k){
+  const P=LB.paint; if(!P) return;
+  if(k>=P.frames.length){                       // finished: hand back the finished picture
+    setWStat('painted · '+P.frames.length+(P.frames.length>1?' separations':' scan')+' complete');
+    endPaint(true);
+    return;
+  }
+  P.pass=k; P.trace=-1;
+  LB.sep=k; LB.frameId=P.frames[k];
+  fillText(LB.im);
+  waveOf(LB.frameId).then(()=>{ if(LB.paint) drawWave(); });
+  playFrom(0, ()=>paintPass(k+1));
+}
+
+function endPaint(keepPicture){
+  if(!LB.paint) return;
+  LB.paint=null;
+  $('lbPaint').textContent='✦ Paint it from blank';
+  $('lbPaint').setAttribute('aria-pressed','false');
+  // Painting a colour image walks LB.sep through the three separations, so put
+  // the panel back on the first one or the separation buttons would be left
+  // claiming "blue" while the composite is shown.
+  if(LB.im){
+    LB.sep=0; LB.frameId=LB.im.frames[0];
+    fillText(LB.im);
+    waveOf(LB.frameId).then(()=>{ if(!LB.el.hidden) drawWave(); });
+  }
+  if(keepPicture && LB.im) loadDecoded(LB.im); else showTrace();
 }
 
 function waveSampleAt(ev){
@@ -918,7 +1148,7 @@ addEventListener('resize',()=>{ if(!LB.el.hidden) drawWave(); },{passive:true});
 
 const AUDIOSTATE={playing:false};
 const BUFFERS=new Map();
-let OFFCTX=null, ACTX=null, SRCNODE=null, PLAYING=null;
+let OFFCTX=null, ACTX=null, SRCNODE=null, PLAYING=null, PENDING_DONE=null;
 
 async function frameBuffer(id){
   if(BUFFERS.has(id)) return BUFFERS.get(id);
@@ -940,6 +1170,7 @@ async function frameBuffer(id){
 }
 
 function stopAudio(){
+  PENDING_DONE=null;
   if(SRCNODE){ try{ SRCNODE.onended=null; SRCNODE.stop(); }catch(e){} SRCNODE=null; }
   if(LB.timer){ clearInterval(LB.timer); LB.timer=0; }
   PLAYING=null; AUDIOSTATE.playing=false; LB.playSample=null;
@@ -948,9 +1179,12 @@ function stopAudio(){
   if(!LB.el.hidden) drawWave();
 }
 
-async function playFrom(sample){
+// `onDone` lets paint mode chain the three separations without stopAudio()
+// tearing the accumulated picture down between them.
+async function playFrom(sample, onDone){
   const id=LB.frameId; if(!id) return;
   stopAudio();
+  PENDING_DONE=onDone||null;
   setWStat('fetching the FLAC…');
   let buf;
   try{ buf=await frameBuffer(id); }
@@ -971,7 +1205,7 @@ async function playFrom(sample){
   SRCNODE=s;
   PLAYING={t0:ACTX.currentTime, offset, rate:buf.sampleRate, dur:buf.duration};
   AUDIOSTATE.playing=true;
-  s.onended=()=>{ if(SRCNODE===s) stopAudio(); };
+  s.onended=()=>{ if(SRCNODE!==s) return; const done=PENDING_DONE; stopAudio(); if(done) done(); };
   $('lbPlay').textContent='■ Stop';
   // A timer, not requestAnimationFrame. rAF does not fire in a backgrounded or
   // throttled tab -- measured here: document.hidden true, 0 rAF callbacks in
@@ -987,19 +1221,27 @@ function tick(){
   const el=ACTX.currentTime-PLAYING.t0+PLAYING.offset;
   if(el>=PLAYING.dur){ stopAudio(); return; }
   LB.playSample=el*PLAYING.rate;
+  if(LB.paint){
+    const dd=WAVE.get(LB.frameId), tt=dd?traceAt(dd,LB.playSample):null;
+    if(tt!=null) LB.paint.trace=tt;
+  }
   showTrace();
   drawWave();
   const d=WAVE.get(LB.frameId), t=d?traceAt(d,LB.playSample):null;
-  setWStat(`playing · ${el.toFixed(2)} / ${PLAYING.dur.toFixed(2)} s · ` +
+  const pass=LB.paint ? `painting ${['red','green','blue'][LB.paint.pass]||'scan'} · ` : '';
+  setWStat(`${pass}playing · ${el.toFixed(2)} / ${PLAYING.dur.toFixed(2)} s · ` +
            (t==null?'lead-in/tail':`trace ${t}`) + ' · 96 kHz, not resampled');
 }
 
 const togglePlay=()=>{ if(AUDIOSTATE.playing) stopAudio(); else playFrom(0); };
 $('lbPlay').onclick=e=>{ e.stopPropagation(); togglePlay(); };
+$('lbPaint').onclick=e=>{ e.stopPropagation(); if(LB.paint) endPaint(false); else startPaint(); };
 
 $('lbWHelp').textContent=
   '1200 precomputed peaks per frame · hover the strip to point at a trace · click it to play '+
-  'from there · shaded ends are the lead-in and the tail lines, not picture';
+  'from there · shaded ends are the lead-in and the tail lines, not picture · '+
+  'P paints the picture from a blank screen as the audio plays, colour images one separation '+
+  'at a time';
 
 // ---- lightbox wiring ------------------------------------------------------
 
@@ -1014,6 +1256,7 @@ addEventListener('keydown',e=>{
   else if(e.key==='ArrowRight'){ stepLB(1); e.preventDefault(); }
   else if(e.key==='ArrowLeft'){ stepLB(-1); e.preventDefault(); }
   else if(e.key===' '){ togglePlay(); e.preventDefault(); }
+  else if(e.key==='p'||e.key==='P'){ if(LB.paint) endPaint(false); else startPaint(); e.preventDefault(); }
 });
 
 // --------------------------------------------------------------------------
