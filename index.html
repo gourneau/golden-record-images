@@ -249,6 +249,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   <button data-f="color">Colour only</button>
   <button data-f="mono">Monochrome</button>
   <span class="grow"></span>
+  <button id="tier" aria-pressed="false" title="Physics-only decode, or the same decode with a denoiser trained on the record's own colour repeats">Tier: <span id="tierv">Recovered</span></button>
   <label class="speed" for="rate">Speed
     <select id="rate">
       <option value="0.005">0.005× · 14 min</option>
@@ -284,7 +285,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 
   <div class="lb-panes">
     <section class="pane">
-      <div class="pane-head"><span>Decoded from the audio</span><span id="lbFrames"></span>
+      <div class="pane-head"><span id="lbTier">Decoded from the audio</span><span id="lbFrames"></span>
         <span id="lbDecDim"></span>
         <span class="grow"></span>
         <button class="tipbtn" data-tip="dec" aria-describedby="tip">notes</button></div>
@@ -458,6 +459,38 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   the decode against the engraving pins the handedness of the whole raster at a stroke. The circle
   checks your timing; the pulsar map checks your handedness. Neither needs a word of language.</p>
 
+  <h2>The machine learning, and what it earned</h2>
+  <p>Four methods were tried against the same arbiter: <strong>predict measurements the model was
+  never shown.</strong> Not image metrics — this project has measured that its own quality
+  composite rewards blur, and every method's metrics keep improving past the correct setting. A
+  prettier picture is not a truer one, and only a hold-out can tell them apart.</p>
+  <table>
+    <tr><th>method</th><th>result</th></tr>
+    <tr><td>Forward operator + adjoint</td><td>verified to 2.8e-16 — and it caught a float32
+      underflow producing 189,166 NaNs with nothing raised</td></tr>
+    <tr><td>Neural field (coordinate MLP)</td><td>a qualified null: 1 of 6, and only on the
+      calibration circle, which is what a smoothness prior wins</td></tr>
+    <tr><td>Deep image prior</td><td>3 of 3 frames, +11% to +43% over neighbour-fill on withheld
+      dots — but ~10 minutes a frame</td></tr>
+    <tr><td>Noise2Noise on the colour repeats</td><td>19 of 19 unseen scenes; beats a blur control
+      on every one</td></tr>
+  </table>
+  <p>The last of those is what ships, because it trains once and then runs in milliseconds. Its
+  premise is a property of the artifact nobody had used: <strong>twenty of these images were
+  scanned three times</strong>, through red, green and blue filters, which is twenty sets of three
+  independent noisy observations of one scene. Noise2Noise proves a network trained to map one
+  noisy observation to another converges on the clean-target estimator — it cannot predict the
+  other scan's noise, so what it learns is the scene. The literature's stated obstacle is that
+  independent noisy pairs are hard to obtain; this record carries sixty frames of them.</p>
+  <p class="note"><b>What is measured, and what is not.</b> On the colour images there is a
+  held-out scan to score against, and the result is real: 19 of 19, with a blur control failing
+  the same test. <b>The 96 monochrome images have no held-out measurement</b>, so applying the
+  denoiser there is an extrapolation — checked only against criteria that cannot be gamed, chiefly
+  that the calibration circle's geometry must not move. And one correction worth keeping: the
+  headline +7.7 dB in the noise band sounded better than it is, because a plain Gaussian blur
+  reaches +5.6 dB there. What the evidence earns is the conjunction — blur-level noise suppression
+  <em>while the low band improves</em>, where blur makes it worse.</p>
+
   <h2>Honest status</h2>
   <p>This page is a <strong>gallery</strong>. The decoder itself is Python, it lives in
   <a href="https://github.com/gourneau/golden-record-images">the repository</a>, and you can run
@@ -522,7 +555,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='36';
+const ASSETV='37';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -544,9 +577,23 @@ let images=[], filter='all', REF={};
 const rgbOrder = true;
 let VIEW=[];   // the currently filtered list -- what the arrow keys step through
 
+// Falls back from the reconstructed tier to the recovered one, per image. The
+// ML tier is generated in a separate pass, so it can legitimately be missing or
+// partial -- and a blank canvas would be a worse answer than the physics-only
+// decode, which is never missing. Silent by design at the image level; the tier
+// label still says which tier was ASKED for, and the console says which frames
+// fell back.
 const load=src=>new Promise(res=>{
   const i=new Image(); i.crossOrigin='anonymous';
-  i.onload=()=>res(i); i.onerror=()=>res(null); i.src=src;
+  i.onload=()=>res(i);
+  i.onerror=()=>{
+    if(src.indexOf('/thumbs_ml/')<0) return res(null);
+    console.warn('no reconstructed tier for', src, '- falling back to the decode');
+    const j=new Image(); j.crossOrigin='anonymous';
+    j.onload=()=>res(j); j.onerror=()=>res(null);
+    j.src=src.replace('/thumbs_ml/','/thumbs/');
+  };
+  i.src=src;
 });
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -654,7 +701,21 @@ function draw(cv,srcs,im,colour){
   return composite(srcs,colour).then(off=>{ if(off) blit(cv,off,im,null); return off; });
 }
 
-const thumbs=im=>im.frames.map(x=>`data/thumbs/${x}.png?v=${ASSETV}`);
+// TWO TIERS, NEVER BLENDED.
+//   recovered      physics only -- timebase, dot clock, geometry, droop
+//                  inverse. Every pixel traceable to the audio. The default,
+//                  and the thing to cite.
+//   reconstructed  the same decode, then a denoiser whose whole training
+//                  corpus is this record's own colour repeats. Provenance
+//                  tier 1: no Earth photograph involved, so an alien could
+//                  run it -- but it is prior-based, and a prior can smooth
+//                  away something real.
+// The switch is global and sticky rather than per-image, because the point of
+// having two tiers is comparing them, and a viewer must always be able to say
+// which one they are looking at.
+let TIER='recovered';
+const thumbs=im=>im.frames.map(x=>
+  `data/${TIER==='reconstructed'?'thumbs_ml':'thumbs'}/${x}.png?v=${ASSETV}`);
 
 // --------------------------------------------------------------------------
 // the grid
@@ -1015,6 +1076,8 @@ function fillText(im){
   // Frame ids and colour beside the pane they describe; the position in the set
   // beside the buttons that change it. Neither is in the header's flex line any
   // more, so neither can grow it.
+  $('lbTier').textContent = TIER==='recovered'
+    ? 'Decoded from the audio' : 'Decoded, then denoised · tier 1';
   $('lbFrames').textContent=
     `${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'}`;
   $('lbPos').textContent=`${LB.idx+1} / ${VIEW.length}`;
@@ -1039,6 +1102,11 @@ function fillText(im){
 
 function provenanceDebts(im){
   const out=[];
+  if(TIER==='reconstructed') out.push(
+    `you are looking at the <b>reconstructed</b> tier: the decode with a denoiser applied, ` +
+    `trained only on this record's own colour repeats. Measured on the 20 colour images against ` +
+    `a held-out scan — <b>on the 96 monochrome images there is no held-out measurement, so it is ` +
+    `an extrapolation</b>`);
   if(im.displayRotate) out.push(
     `it is turned ${im.displayRotate}° to show it upright, and <b>the record does not say ` +
     `which edge is the top</b> — it does not even say which images were turned`);
@@ -1925,6 +1993,22 @@ $('lbWHelp').textContent=
   'then the brightness profile that becomes one column of the photograph';
 
 // ---- lightbox wiring ------------------------------------------------------
+
+$('tier').onclick=e=>{
+  e.stopPropagation();
+  TIER = TIER==='recovered' ? 'reconstructed' : 'recovered';
+  $('tierv').textContent = TIER==='recovered' ? 'Recovered' : 'Reconstructed';
+  $('tier').setAttribute('aria-pressed', String(TIER==='reconstructed'));
+  // Repaint in place rather than render(): rebuilding the grid would blank
+  // every canvas until the lazy loader caught up, and the whole point is an
+  // A/B you can flip back and forth without losing your place.
+  GRID.querySelectorAll('figure').forEach(f=>{
+    const d=JSON.parse(f.dataset.im);
+    draw(f.querySelector('canvas'), thumbs(d), d, d.color);
+    f.dataset.painted='1';
+  });
+  if(!LB.el.hidden && LB.im){ loadDecoded(LB.im); fillText(LB.im); }
+};
 
 $('lbLink').onclick=async e=>{
   e.stopPropagation();

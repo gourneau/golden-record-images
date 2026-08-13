@@ -135,6 +135,15 @@ REGISTRY: tuple[Artifact, ...] = (
              "registration and fusion across the three separations of a slide",
              "cross-separation agreement is a property of the artifact, not of Earth",
              module="fuse.py", consumes=("record",)),
+    Artifact("n2n_denoiser", UNIVERSAL,
+             "the reconstructed tier: every frame with a denoiser applied",
+             "trained ONLY on this record's own colour repeats -- twenty scenes scanned three "
+             "times give independent noisy pairs, so no Earth photograph and no external corpus "
+             "is involved and an alien could run it. Measured on the colour images against a "
+             "held-out scan (19/19, blur control fails); on the 96 mono images there is no "
+             "held-out measurement and it is an extrapolation, checked only against the "
+             "calibration circle's geometry",
+             module="reconstruct.py", consumes=("record",)),
     Artifact("deconvolution", UNIVERSAL,
              "deconvolution by the measured camera PSF",
              "the PSF is measured from the record; the inversion prior is generic",
