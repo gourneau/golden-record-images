@@ -4,7 +4,12 @@ There are 116 photographs bolted to the side of two spacecraft leaving the solar
 They aren't stored as pictures — they're stored as **sound**, about eight minutes of harsh
 buzzing pressed into a gold-plated copper phonograph record.
 
-This is a decoder that turns that sound back into pictures, in your browser, in real time.
+This is a decoder that turns that sound back into pictures. **It is Python, and you can run it
+yourself** — see [Running the decoder yourself](#running-the-decoder-yourself). A browser port
+is planned and deliberately parked: getting the decode right comes first, and it is not right
+yet.
+
+**[Browse all 116 decoded images →](https://gourneau.github.io/golden-record-images/)**
 
 **[Read how the decoding works →](DECODING.md)** (written for a general audience, no signal
 processing assumed)
@@ -342,20 +347,54 @@ web/
   src/ui/, src/panels/    the instrument
 ```
 
-## Building the assets
+## Running the decoder yourself
+
+**The decoder is Python, and it is the real thing** — the gallery shows images it produced
+offline, not a browser reimplementation. If you want to decode the record yourself, this is
+how, and it takes about ten minutes plus the download.
 
 ```bash
-brew install flac ffmpeg
+brew install flac ffmpeg                 # macOS; apt install flac ffmpeg on Linux
 pip install numpy scipy pillow
 
-# ~1.4 GB, one time
-python -m pipeline.fetch
-
-python -m pipeline.build --limit 6      # try a few frames first
-python -m pipeline.build                # all 156
-
-cd web && npm install && npm run dev
+python -m pipeline.fetch                 # the 384 kHz master, ~1.4 GB, one time
+python -m pipeline.build --limit 6       # decode six frames and look at them
+python -m pipeline.build                 # all 156
 ```
+
+Decoded PNGs land in `data/thumbs/`. Start with `L000.png`: it is the calibration circle, and
+**if your circle is round, your timebase is right.** That is the check the record was designed
+to give you, and it needs nothing but your own eyes.
+
+### Check the work rather than take it on trust
+
+Each of these prints measurements, not opinions, and each runs in seconds to minutes:
+
+```bash
+python -m pipeline.provenance            # what the decoder was allowed to know, and the
+                                         # check that it stayed inside those bounds
+python -m pipeline.forward               # the recording chain as a differentiable operator,
+                                         # with its adjoint verified to machine precision
+python -m pipeline.orient_blind          # a falsified hypothesis, kept: can you tell from
+                                         # the signal alone which slides were turned? (no)
+python -m pipeline.circle                # the calibration frame: axis ratio, radial rms, MTF
+python -m pipeline.globaltime images --frames L000
+                                         # the wideband timebase correction and its hold-out
+```
+
+`python -m pipeline.forward` is the one to run if you only run one. It ends in either
+"ALL PASS" or a list of failures, and it is the test that decides whether anything built on
+top of the physics is trustworthy.
+
+### The web page
+
+```bash
+cd web && npm install && npm run dev     # the interactive decoder, still being built
+```
+
+`index.html` at the repository root is the gallery, and is standalone — open it with any
+static server, no build step. A TypeScript port of the decoder is planned but deliberately
+parked: getting the Python decode right comes first.
 
 The master is at
 [archive.org/details/voyager.decode](https://archive.org/details/voyager.decode) — note the
