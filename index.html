@@ -47,6 +47,11 @@ button[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:
   background:var(--panel);border:1px solid var(--line2);border-radius:7px;padding:6px 8px;
   cursor:pointer}
 .speed select:hover{border-color:#5a4a1e}
+/* In the lightbox it sits in the play row at the BOTTOM, beside Play and Paint
+   -- the controls belong next to the thing they control, and that row stays put
+   while a zoomed picture scrolls above it. Sized down to match the bar. */
+.lb-wave .speed{font-size:11px;font-family:var(--mono);letter-spacing:.02em;gap:5px}
+.lb-wave .speed select{font-size:11px;padding:4px 6px;border-radius:6px}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));
   gap:18px;padding:36px 0 64px}
@@ -265,6 +270,17 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
     <div class="wrow">
       <button id="lbPlay" title="Play this frame's audio (space)">▶ Play the audio</button>
       <button id="lbPaint" title="Start from a blank screen and paint the picture line by line as the audio plays (P)">✦ Paint it from blank</button>
+      <label class="speed" for="lbRate">Speed
+        <select id="lbRate">
+          <option value="0.25">0.25×</option>
+          <option value="0.5">0.5×</option>
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.5">1.5×</option>
+          <option value="2">2×</option>
+          <option value="4">4×</option>
+        </select>
+      </label>
       <span class="seps" id="lbSeps"></span>
       <span class="wstat" id="lbWStat"></span>
     </div>
@@ -459,7 +475,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='23';
+const ASSETV='24';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -1640,14 +1656,23 @@ function tick(){
 const togglePlay=()=>{ if(AUDIOSTATE.playing) stopAudio(); else playFrom(0); };
 $('lbPlay').onclick=e=>{ e.stopPropagation(); togglePlay(); };
 $('lbPaint').onclick=e=>{ e.stopPropagation(); if(LB.paint) endPaint(false); else startPaint(); };
-$('rate').addEventListener('change',e=>{
-  PLAYRATE=parseFloat(e.target.value)||1;
-  // Applied live to anything already sounding. PLAYING.speed is NOT updated:
-  // it is the rate that segment started at, and the elapsed-time arithmetic
-  // above depends on it, so changing it mid-note would jump the playhead.
-  // The new rate takes effect on the next thing you start.
+// TWO controls, one value. The grid's copy is unreachable while the lightbox is
+// open -- it is a full-screen overlay -- and that is exactly when you want to
+// slow a scan down, so the lightbox carries its own. Both write through here so
+// they cannot drift apart.
+function setRate(v){
+  PLAYRATE=parseFloat(v)||1;
+  const t=String(PLAYRATE);
+  ['rate','lbRate'].forEach(id=>{ const el=$(id); if(el&&el.value!==t) el.value=t; });
+  // Applied live to anything already sounding. PLAYING.speed is deliberately
+  // NOT updated: it is the rate that segment started at, and the elapsed-time
+  // arithmetic depends on it, so changing it mid-note would jump the playhead.
   if(SRCNODE) try{ SRCNODE.playbackRate.value=PLAYRATE; }catch(err){}
-});
+  if(CARDSCAN&&CARDSCAN.src) try{ CARDSCAN.src.playbackRate.value=PLAYRATE; }catch(err){}
+}
+$('rate').addEventListener('change',e=>setRate(e.target.value));
+$('lbRate').addEventListener('change',e=>{ e.stopPropagation(); setRate(e.target.value); });
+$('lbRate').addEventListener('click',e=>e.stopPropagation());
 
 $('lbWHelp').textContent=
   '1200 precomputed peaks per frame · hover the strip to point at a trace · click it to play '+
