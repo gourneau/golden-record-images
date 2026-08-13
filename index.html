@@ -213,7 +213,24 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
    metadata lives here rather than in the label strip above the picture, where a
    long title and three frame ids together were squeezing everything out. */
 .wrow{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:7px}
-.wrow .wstat{white-space:nowrap}
+.wrow .wstat{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+/* A FIXED strip directly under the picture, present on every image whether or
+   not it has anything to put there. The separation buttons only exist for the
+   twenty colour images, so living in the play row they appeared on those and
+   wrapped it -- which grew the row and shrank the picture, but only sometimes,
+   so stepping from a mono image to a colour one made the artwork jump.
+   Reserving the height unconditionally costs 26px once and buys an image that
+   is the same size on all 116. */
+.pane-strip{height:26px;flex:0 0 auto;display:flex;align-items:center;gap:8px;
+  padding-top:5px;overflow:hidden;white-space:nowrap;
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dimmer)}
+.pane-strip .seps{display:flex;gap:6px}
+.pane-strip button{font-size:10px;padding:1px 7px;border-radius:5px;line-height:1.6;
+  font-family:var(--mono);letter-spacing:.03em}
+.pane-strip #lbFrames,.pane-strip #lbDecDim{flex:0 0 auto}
+/* The play row must not wrap either, for the same reason: it sits below the
+   waveform, but a wrap there still pushes the whole section taller. */
+.wrow{flex-wrap:nowrap;overflow:hidden}
 .wrow .wstat{font-family:var(--mono);font-size:11px;color:var(--dimmer)}
 .wrow .seps{display:flex;gap:6px}
 .wrow .seps button{font-family:var(--mono);font-size:11px;padding:5px 9px}
@@ -305,6 +322,12 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <div class="pane-body" id="lbDecBody"><canvas id="lbCanvas"></canvas>
         <canvas id="lbMini" hidden title="The whole picture. The box is what you are looking at."></canvas>
       </div>
+      <div class="pane-strip">
+        <span class="seps" id="lbSeps"></span>
+        <span class="grow"></span>
+        <span id="lbFrames"></span>
+        <span id="lbDecDim"></span>
+      </div>
       <div id="lbDecFootBody" hidden></div>
     </section>
     <section class="pane">
@@ -342,9 +365,6 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
           <option value="4">4×</option>
         </select>
       </label>
-      <span class="seps" id="lbSeps"></span>
-      <span class="wstat" id="lbFrames"></span>
-      <span class="wstat" id="lbDecDim"></span>
       <span class="wstat" id="lbWStat"></span>
     </div>
     <canvas id="lbWave"></canvas>
@@ -586,7 +606,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='43';
+const ASSETV='44';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
