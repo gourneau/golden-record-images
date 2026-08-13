@@ -617,7 +617,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='49';
+const ASSETV='50';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -649,11 +649,11 @@ const load=src=>new Promise(res=>{
   const i=new Image(); i.crossOrigin='anonymous';
   i.onload=()=>res(i);
   i.onerror=()=>{
-    if(src.indexOf('/thumbs_ml/')<0) return res(null);
+    if(src.indexOf('/thumbs_ml/')<0 && src.indexOf('/thumbs_nc/')<0) return res(null);
     console.warn('no reconstructed tier for', src, '- falling back to the decode');
     const j=new Image(); j.crossOrigin='anonymous';
     j.onload=()=>res(j); j.onerror=()=>res(null);
-    j.src=src.replace('/thumbs_ml/','/thumbs/');
+    j.src=src.replace('/thumbs_ml/','/thumbs/').replace('/thumbs_nc/','/thumbs/');
   };
   i.src=src;
 });
@@ -803,9 +803,22 @@ function draw(cv,srcs,im,colour){
 // The switch is global and sticky rather than per-image, because the point of
 // having two tiers is comparing them, and a viewer must always be able to say
 // which one they are looking at.
-let TIER='reconstructed';
-const thumbs=im=>im.frames.map(x=>
-  `data/${TIER==='reconstructed'?'thumbs_ml':'thumbs'}/${x}.png?v=${ASSETV}`);
+// THREE TIERS, cycled in this order, never blended:
+//   plain     the decode WITHOUT the accumulation correction -- what this
+//             project shipped before, kept so the correction can be judged by
+//             eye rather than by my description of it
+//   decoded   physics: the same decode WITH the correction
+//   denoised  decoded, then the denoiser trained on the record's own repeats
+//
+// The third tier exists because the measurements and the eye disagreed. The
+// correction removes 20-42% of the droop and RAISES the streak metric 24-96%,
+// and a viewer told me it looked like nothing had changed. Both of us should be
+// able to check, so all three ship.
+const TIER_ORDER=['plain','decoded','denoised'];
+const TIER_DIR={plain:'thumbs_nc', decoded:'thumbs', denoised:'thumbs_ml'};
+const TIER_LABEL={plain:'No correction', decoded:'Decoded', denoised:'Denoised'};
+let TIER='decoded';
+const thumbs=im=>im.frames.map(x=>`data/${TIER_DIR[TIER]}/${x}.png?v=${ASSETV}`);
 
 // --------------------------------------------------------------------------
 // the grid
@@ -1169,9 +1182,8 @@ function prefetchNeighbours(){
       // The tier being viewed first, the other one after: if someone is
       // stepping fast, the picture they are about to see matters more than the
       // comparison they might make later.
-      for(const dir of [TIER, TIER==='recovered'?'reconstructed':'recovered']){
-        const d = dir==='reconstructed' ? 'thumbs_ml' : 'thumbs';
-        composite(im.frames.map(x=>`data/${d}/${x}.png?v=${ASSETV}`), im.color);
+      for(const t of [TIER, ...TIER_ORDER.filter(x=>x!==TIER)]){
+        composite(im.frames.map(x=>`data/${TIER_DIR[t]}/${x}.png?v=${ASSETV}`), im.color);
       }
       waveOf(im.frames[0]);
 
@@ -1243,8 +1255,10 @@ function fillText(im){
 
 function provenanceDebts(im){
   const out=[];
-  if(TIER==='reconstructed') out.push(
-    `you are looking at the <b>denoised</b> tier: the decode with a denoiser applied, ` +
+  if(TIER!=='decoded') out.push(
+    `you are looking at the <b>${TIER_LABEL[TIER].toLowerCase()}</b> tier` +
+    (TIER==='plain' ? ` — the decode WITHOUT the accumulation correction, kept for comparison` :
+     TIER==='denoised' ? `: the decode with a denoiser applied, ` : `: physics only, `) +
     `trained only on this record's own colour repeats. Measured on the 20 colour images against ` +
     `a held-out scan — <b>on the 96 monochrome images there is no held-out measurement, so it is ` +
     `an extrapolation</b>`);
@@ -2159,13 +2173,12 @@ $('lbWHelp').textContent=
 // The lightbox copy sits in the decoded pane's own label strip, directly above
 // the picture it changes. One setter, so they cannot disagree.
 function setTier(t){
-  TIER = t;
-  const on = TIER==='reconstructed';
-  $('tierv').textContent = on ? 'Denoised' : 'Decoded';
-  $('tier').setAttribute('aria-pressed', String(on));
+  TIER = TIER_ORDER.indexOf(t)>=0 ? t : 'decoded';
+  $('tierv').textContent = TIER_LABEL[TIER];
+  $('tier').setAttribute('aria-pressed', String(TIER!=='plain'));
   const b=$('lbTierBtn');
-  if(b){ b.textContent = on ? 'tier: denoised' : 'tier: decoded';
-         b.setAttribute('aria-pressed', String(on)); }
+  if(b){ b.textContent = 'tier: '+TIER_LABEL[TIER].toLowerCase();
+         b.setAttribute('aria-pressed', String(TIER!=='plain')); }
   // Repaint in place rather than render(): rebuilding the grid would blank
   // every canvas until the lazy loader caught up, and the whole point is an
   // A/B you can flip back and forth without losing your place.
@@ -2180,21 +2193,23 @@ function setTier(t){
 // press is as fast as the second. Cheap: the images are already on disk and the
 // browser caches them; this just gets the fetch and the composite done early.
 function prefetchOtherTier(){
-  const other = TIER==='recovered' ? 'thumbs_ml' : 'thumbs';
-  const mine  = TIER==='recovered' ? 'thumbs' : 'thumbs_ml';
+  const others = TIER_ORDER.filter(t=>t!==TIER);
   let i=0;
   const step=()=>{
     if(i>=images.length) return;
     const im=images[i++];
-    const srcs=im.frames.map(x=>`data/${other}/${x}.png?v=${ASSETV}`);
-    composite(srcs, im.color).then(()=>setTimeout(step, 0));
+    Promise.all(others.map(t =>
+      composite(im.frames.map(x=>`data/${TIER_DIR[t]}/${x}.png?v=${ASSETV}`), im.color)
+    )).then(()=>setTimeout(step, 0));
   };
   // A few in flight, not all 116 at once: the point is to be ready, not to
   // saturate the connection while someone is still looking at the first screen.
   for(let k=0;k<3;k++) setTimeout(step, 400+k*120);
 }
 
-const toggleTier=()=>setTier(TIER==='recovered' ? 'reconstructed' : 'recovered');
+// Cycles rather than toggles, so T walks all three in a fixed order and you
+// always know which way you are going.
+const toggleTier=()=>setTier(TIER_ORDER[(TIER_ORDER.indexOf(TIER)+1)%TIER_ORDER.length]);
 $('tier').onclick=e=>{ e.stopPropagation(); toggleTier(); };
 $('lbTierBtn').onclick=e=>{ e.stopPropagation(); toggleTier(); };
 

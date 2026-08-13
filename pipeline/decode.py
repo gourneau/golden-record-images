@@ -315,6 +315,7 @@ class Settings:
     dehum: bool = True  # remove the scan-locked 60 Hz fixed pattern
     dc_restore: bool = True  # clamp each trace on its back porch
     uncumulate: float = UNCUMULATE_K  # invert the content-integrating error
+    reclamp_after: bool = False  # FAILED -- see _reclamp_after; kept off
     # Invert the chain's one-pole high-pass (the decay bias) on the RAW
     # signal in raster order, before sampling. ON by default, but it only
     # acts when it knows the time constant: set `channel` ("L"/"R", per
@@ -554,7 +555,61 @@ def _hampel(x: np.ndarray, k: int, n_sigmas: float) -> np.ndarray:
 
 
 
-def _uncumulate(pic: np.ndarray, k: float) -> np.ndarray:
+def _reclamp_after(pic: np.ndarray, acc: np.ndarray, tail: int = 8) -> np.ndarray:
+    """Undo the per-trace error the accumulator inverse amplifies.
+
+    THIS DOES NOT WORK. It is kept, and kept OFF, because the reasoning is sound
+    and the failure is instructive.
+
+    Measured: correction alone takes L000's streak sd 0.0415 -> 0.0815; with
+    this re-clamp it goes to 0.1109. It makes the thing it was written to fix
+    about a third worse again. The reason is sample size, not principle -- the
+    mount is only about eight dots deep, so the per-trace deviation read from it
+    is dominated by its own noise, and redistributing that noise along the trace
+    as a ramp injects more streak than the amplification removed. A wider
+    known-constant region, or the same idea driven by the porch across many
+    traces, might still work. This version does not.
+
+    The inverse is a running sum along each trace. Integration does not care
+    whether what it is summing is signal or an error in that trace's starting
+    level -- so the small residual left by the porch clamp, which was a flat
+    offset, comes out the other side as a RAMP growing down the trace. Traces
+    differ in that residual, so the picture gains exactly the thing everyone
+    complains about: vertical streaks. Measured on the shipped rebuild, the
+    droop fell 20-42% and the streak amplitude ROSE 24-96%. Better by every
+    number I was checking and worse to look at, which is the most embarrassing
+    way to be wrong.
+
+    The record supplies the fix. The slide mount after the picture is one
+    physical object across all 512 traces, so its level is CONSTANT by
+    construction: whatever spread the corrected mount shows is the amplified
+    error and nothing else. And the error's shape along the trace is not a
+    guess -- it is the accumulation itself, which this function is handed. So
+    each trace's mount deviation from the across-trace trend is redistributed
+    back along that trace in proportion to its own accumulated light, which
+    removes the amplified part and leaves the correction intact.
+
+    Tier 0: the mount is on every frame and nothing outside the audio is used.
+    """
+    if pic.shape[1] <= tail + 4:
+        return pic
+    # The mount reading per trace, and the smooth trend it should have followed.
+    lvl = pic[:, -tail:].mean(axis=1)
+    n = len(lvl)
+    if n >= 16:
+        pad = np.pad(lvl, 7, mode="edge")
+        win = np.lib.stride_tricks.sliding_window_view(pad, 15)
+        trend = np.median(win, axis=1)
+    else:
+        trend = np.full(n, float(np.median(lvl)))
+    dev = lvl - trend
+    # Shape along the trace: the accumulation's own profile, normalised so the
+    # correction is zero where the clamp reset it and full where the mount is.
+    prof = acc / (acc[:, -1:] + 1e-12)
+    return pic - dev[:, None] * prof
+
+
+def _uncumulate(pic: np.ndarray, k: float, return_acc: bool = False):
     """Invert error(row) = -k * (light already sent down this trace).
 
     Exact and stable: the forward error is a running sum along the trace, so
@@ -566,15 +621,18 @@ def _uncumulate(pic: np.ndarray, k: float) -> np.ndarray:
     if k <= 0.0:
         return pic
     out = np.empty_like(pic)
+    accs = np.empty_like(pic)
     for i in range(pic.shape[0]):
         row = pic[i]
         acc = 0.0
         o = out[i]
+        a = accs[i]
         for j in range(row.shape[0]):
             v = row[j] + k * acc
             o[j] = v
             acc += v
-    return out
+            a[j] = acc
+    return (out, accs) if return_acc else out
 
 
 def undroop(x: np.ndarray, tau: float) -> np.ndarray:
@@ -801,7 +859,10 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
         origin = (UNCUMULATE_ORIGIN * anchors[1] if anchors is not None
                   else float(np.percentile(pic, 99.5)))  # fallback: the picture's own black
         k_dot = cfg.uncumulate * SQUARE_ROWS / pic.shape[1]
-        pic = _uncumulate(pic - origin, k_dot) + origin
+        pic, acc = _uncumulate(pic - origin, k_dot, return_acc=True)
+        pic = pic + origin
+        if cfg.reclamp_after:
+            pic = _reclamp_after(pic, acc)
 
     if cfg.repair_dropouts and dropouts.any() and (~dropouts).sum() > 4:
         good = np.where(~dropouts)[0]
