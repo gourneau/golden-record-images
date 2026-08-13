@@ -60,6 +60,7 @@ figure:hover{border-color:#39414b;transform:translateY(-2px)}
   justify-content:center;opacity:0;transition:opacity .14s,background .14s}
 figure:hover .scanbtn,.scanbtn:focus-visible,.scanbtn[aria-pressed="true"]{opacity:1}
 .scanbtn[aria-pressed="true"]{background:var(--gold);color:#0a0b0d;border-color:var(--gold)}
+.cardwave{display:block;width:100%;height:26px;background:#07080a;border-top:1px solid var(--line)}
 @media(hover:none){.scanbtn{opacity:1}}
 .tag.cmp.none{background:rgba(0,0,0,.72);color:var(--dim);font-weight:400}
 figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
@@ -330,7 +331,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='14';
+const ASSETV='15';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -471,6 +472,7 @@ function render(){
         ${im.color?'<span class="tag rgb">RGB</span>':''}
         <button class="scanbtn" title="Play this image's audio and paint it from blank">▶</button>
         <span class="tag cmp${hasRef?'':' none'}">${hasRef?'compare':'open'}</span></div>
+      <canvas class="cardwave" height="26"></canvas>
       <figcaption><div class="ttl">${esc(im.title??'—')}</div>
         <div class="sub">${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'}</div>
       </figcaption>`;
@@ -497,6 +499,41 @@ function paint(f){
   f.dataset.painted='1';
   const d=JSON.parse(f.dataset.im);
   draw(f.querySelector('canvas'), thumbs(d), d, d.color);
+  cardWave(f, d);
+}
+
+// ---- the waveform strip under each card -----------------------------------
+// The same precomputed peaks the lightbox uses, at card width. Worth having on
+// the grid because the pictures and the sound are the same object: a diagram
+// with big flat areas looks nothing like a photograph, and you can see that in
+// the envelope before you open anything. Drawn only when the card is painted,
+// so scrolling does not fetch 116 JSON files at once.
+
+function cardWave(fig, im){
+  const cv=fig.querySelector('.cardwave'); if(!cv) return;
+  waveOf(im.frames[0]).then(()=>{
+    const d=WAVE.get(im.frames[0]); if(!d||!cv.isConnected) return;
+    const dpr=Math.min(2,devicePixelRatio||1);
+    const w=cv.clientWidth||220, h=26;
+    cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr);
+    const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
+    c.clearRect(0,0,w,h);
+    const n=d.min.length, mid=h/2, amp=(h/2-1)/(d.peak||1);
+    // The lead-in and tail are not picture; shade them so the strip is not read
+    // as if every part of it were image data.
+    const xOf=s=>s/d.samples*w;
+    c.fillStyle='rgba(255,255,255,.05)';
+    c.fillRect(0,0,xOf(d.leadIn),h);
+    c.fillRect(xOf(d.leadIn+d.traces*d.period),0,w,h);
+    c.strokeStyle='rgba(95,211,196,.62)'; c.lineWidth=1;
+    c.beginPath();
+    for(let i=0;i<n;i++){
+      const x=Math.round(i/n*w)+0.5;
+      c.moveTo(x, mid-d.min[i]*d.scale*amp);
+      c.lineTo(x, mid-d.max[i]*d.scale*amp);
+    }
+    c.stroke();
+  }).catch(()=>{});
 }
 
 // ---- painting a thumbnail in place ----------------------------------------
