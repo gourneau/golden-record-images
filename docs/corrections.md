@@ -311,3 +311,33 @@ Noise2Noise"*.
 Where the Wiener is genuinely better: low band 17/19 against the network's 15/19, worst-case
 low-band cost +1.10% against +6.2%, chroma retention 0.99 against 0.93, and it composes with
 triplet averaging on 17/19 against 14/19. It is gentler, safer, universal — and weaker.
+
+### F8. The blur is already fully corrected — a null on new deconvolution *(measured)*
+
+The calibration ring presents a known-thin line at **every orientation**, which no other frame on
+the record does. Its radial profile as a function of angle is therefore the system's line spread
+function at that angle — a complete 2-D characterisation from one frame. The point was to
+separate blur terms by their angular signature: the 1977 camera's spot is **isotropic**, while
+the sample-and-hold and the trace pitch are **axis-aligned**. Deconvolving the camera would be
+invention; deconvolving what came after it is legitimate recovery.
+
+**The decomposition worked and the answer was no.** Fitted over 858 radial cuts:
+
+| term | variance (px²) |
+|---|---|
+| camera, isotropic | 0.383 (σ ≈ 0.62 px) |
+| along-trace, axis-aligned | 0.224 |
+| **across-trace sampling gate** | **+0.036 ± 0.057 — consistent with zero** |
+
+The removable blur is **exactly the operator `aperture.py` already builds, and not one px² more**.
+There is no second, uncorrected blur term waiting to be found. Deconvolving anyway degrades the
+circle (radial rms 0.837 → 0.845) and raises noise ×1.34 against a predicted ×1.21.
+
+Two things measured here for the first time on this artifact, both worth keeping: **the camera is
+isotropic** (its blur is the same in both axes, which was assumed and never checked), and **the
+across-trace sampling gate is zero** — the trace pitch adds no measurable smearing.
+
+And it caught a defect in its own work: the module reported its cross term as null, and the cross
+term is **8σ real and unexplained** (−0.136 ± 0.016 against a synthetic control of +0.008 ±
+0.007, a −8.3° tilt). That is an open question, and it is the same diagonal signature that turned
+up in the ellipticity measurement (F5) — which is at least a coincidence worth noting.
