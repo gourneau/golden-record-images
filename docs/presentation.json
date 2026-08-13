@@ -1,0 +1,819 @@
+{
+ "note": "TIER 2. Everything here is Earth knowledge -- which way up an image is shown, what it is called, and the evidence for each rotation. build.py derives the catalogue from the audio alone and cannot know any of it, so a rebuild drops these fields and 60 portrait images come out on their side. That happened once. This file is the source of truth; pipeline/presentation.py merges it back.",
+ "images": {
+  "1": {
+   "displayRotate": 0,
+   "title": "Calibration circle",
+   "title_ours": "Calibration circle",
+   "title_ozma": "Calibration circle",
+   "title_source": "ours"
+  },
+  "2": {
+   "displayRotate": 0,
+   "title": "Pulsar map with the Andromeda galaxy as a landmark",
+   "title_ours": "Solar location map",
+   "title_ozma": "Pulsar map with the Andromeda galaxy as a landmark",
+   "title_source": "ozma",
+   "rotation_evidence": "shown as the record has it. The scan direction is fixed for the whole record, so a 180 degree turn makes an image paint against every other image -- image 2 was the only 180 and the only one that played right to left. The book plate disagrees; the record is authoritative, so the plate was rotated to match (docs/reference/crops/2.jpg)."
+  },
+  "3": {
+   "displayRotate": 0,
+   "title": "Definitions of mathematical notation",
+   "title_ours": "Mathematical definitions",
+   "title_ozma": "Definitions of mathematical notation",
+   "title_source": "ozma"
+  },
+  "4": {
+   "displayRotate": 0,
+   "title": "Definitions of physical units of measurement",
+   "title_ours": "Physical unit definitions",
+   "title_ozma": "Definitions of physical units of measurement",
+   "title_source": "ozma"
+  },
+  "5": {
+   "displayRotate": 0,
+   "title": "Solar System parameters",
+   "title_ours": "Solar System parameters",
+   "title_ozma": "Solar system with planetary measurements",
+   "title_source": "ours"
+  },
+  "6": {
+   "displayRotate": 0,
+   "title": "Solar System parameters",
+   "title_ours": "Solar System parameters",
+   "title_ozma": "Solar system with planetary measurements",
+   "title_source": "ours"
+  },
+  "7": {
+   "displayRotate": 0,
+   "title": "The Sun",
+   "title_ours": "The Sun",
+   "title_ozma": "The sun",
+   "title_source": "ours"
+  },
+  "8": {
+   "displayRotate": 0,
+   "title": "Solar spectrum",
+   "title_ours": "Solar spectrum",
+   "title_ozma": "Solar spectrum",
+   "title_source": "ours"
+  },
+  "9": {
+   "displayRotate": 0,
+   "title": "Mercury",
+   "title_ours": "Mercury",
+   "title_ozma": "Mercury",
+   "title_source": "ours"
+  },
+  "10": {
+   "displayRotate": 0,
+   "title": "Mars",
+   "title_ours": "Mars",
+   "title_ozma": "Mars",
+   "title_source": "ours"
+  },
+  "11": {
+   "displayRotate": 90,
+   "title": "Jupiter",
+   "title_ours": "Jupiter",
+   "title_ozma": "Jupiter",
+   "title_source": "ours",
+   "rotation_evidence": "caption '142800 km / 318 e' reads horizontally only at +90; alignment agrees (-91.24 deg, 39 inliers)"
+  },
+  "12": {
+   "displayRotate": 90,
+   "title": "Earth",
+   "title_ours": "Earth",
+   "title_ozma": "Earth",
+   "title_source": "ours"
+  },
+  "13": {
+   "displayRotate": 0,
+   "title": "Egypt, the Red Sea, the Sinai Peninsula, and the Nile with the composition of Earth's atmosphere",
+   "title_ours": "Egypt, Red Sea, Sinai Peninsula, and the Nile",
+   "title_ozma": "Egypt, the Red Sea, the Sinai Peninsula, and the Nile with the composition of Earth's atmosphere",
+   "title_source": "ozma"
+  },
+  "14": {
+   "displayRotate": 0,
+   "title": "Chemical definitions",
+   "title_ours": "Chemical definitions",
+   "title_ozma": "DNA structure and replication",
+   "title_source": "ours"
+  },
+  "15": {
+   "displayRotate": 0,
+   "title": "DNA Structure",
+   "title_ours": "DNA Structure",
+   "title_ozma": "DNA structure and replication",
+   "title_source": "ours"
+  },
+  "16": {
+   "displayRotate": 0,
+   "title": "DNA Structure magnified, light hit",
+   "title_ours": "DNA Structure magnified, light hit",
+   "title_ozma": "DNA structure and replication",
+   "title_source": "ours"
+  },
+  "17": {
+   "displayRotate": 0,
+   "title": "Cell division",
+   "title_ours": "Cells and cell division",
+   "title_ozma": "Cell division",
+   "title_source": "ozma"
+  },
+  "18": {
+   "displayRotate": 0,
+   "title": "Anatomy 1 (Skeleton front)",
+   "title_ours": "Anatomy 1 (Skeleton front)",
+   "title_ozma": "Human anatomy",
+   "title_source": "ours"
+  },
+  "19": {
+   "displayRotate": 0,
+   "title": "Anatomy 2 (Skeleton and muscles back)",
+   "title_ours": "Anatomy 2 (Skeleton and muscles back)",
+   "title_ozma": "Human anatomy",
+   "title_source": "ours"
+  },
+  "20": {
+   "displayRotate": 0,
+   "title": "Anatomy 3 (Heart, lungs, kidneys and main blood vessels back)",
+   "title_ours": "Anatomy 3 (Heart, lungs, kidneys and main blood vessels back)",
+   "title_ozma": "Human anatomy",
+   "title_source": "ours"
+  },
+  "21": {
+   "displayRotate": 0,
+   "title": "Anatomy 4 (Heart, lungs, kidneys and main blood vessels front)",
+   "title_ours": "Anatomy 4 (Heart, lungs, kidneys and main blood vessels front)",
+   "title_ozma": "Human anatomy",
+   "title_source": "ours"
+  },
+  "22": {
+   "displayRotate": 0,
+   "title": "Anatomy 5 (Internal organs back)",
+   "title_ours": "Anatomy 5 (Internal organs back)",
+   "title_ozma": "Human anatomy",
+   "title_source": "ours"
+  },
+  "23": {
+   "displayRotate": 0,
+   "title": "Anatomy 6 (Internal organs front)",
+   "title_ours": "Anatomy 6 (Internal organs front)",
+   "title_ozma": "Human anatomy",
+   "title_source": "ours"
+  },
+  "24": {
+   "displayRotate": 0,
+   "title": "Anatomy 7 (Ribcage)",
+   "title_ours": "Anatomy 7 (Ribcage)",
+   "title_ozma": "Human anatomy",
+   "title_source": "ours"
+  },
+  "25": {
+   "displayRotate": 0,
+   "title": "Anatomy 8 (Muscles front)",
+   "title_ours": "Anatomy 8 (Muscles front)",
+   "title_ozma": "Human anatomy",
+   "title_source": "ours"
+  },
+  "26": {
+   "displayRotate": 0,
+   "title": "Diagram of human sex organs",
+   "title_ours": "Human sex organs",
+   "title_ozma": "Diagram of human sex organs",
+   "title_source": "ozma"
+  },
+  "27": {
+   "displayRotate": 270,
+   "title": "Conception silhouette",
+   "title_ours": "Diagram of conception",
+   "title_ozma": "Conception silhouette",
+   "title_source": "ozma"
+  },
+  "28": {
+   "displayRotate": 270,
+   "title": "Conception",
+   "title_ours": "Conception",
+   "title_ozma": "Conception",
+   "title_source": "ours"
+  },
+  "29": {
+   "displayRotate": 0,
+   "title": "Fertilized ovum",
+   "title_ours": "Fertilized ovum",
+   "title_ozma": "Fertilized ovum",
+   "title_source": "ours"
+  },
+  "30": {
+   "displayRotate": 0,
+   "title": "Fetus silhouette",
+   "title_ours": "Fetus diagram",
+   "title_ozma": "Fetus silhouette",
+   "title_source": "ozma"
+  },
+  "31": {
+   "displayRotate": 0,
+   "title": "Fetus",
+   "title_ours": "Fetus",
+   "title_ozma": "Fetus",
+   "title_source": "ours"
+  },
+  "32": {
+   "displayRotate": 0,
+   "title": "Silhouette of male and female",
+   "title_ours": "Diagram of male and female",
+   "title_ozma": "Silhouette of male and female",
+   "title_source": "ozma"
+  },
+  "33": {
+   "displayRotate": 0,
+   "title": "Birth",
+   "title_ours": "Birth",
+   "title_ozma": "Birth",
+   "title_source": "ours"
+  },
+  "34": {
+   "displayRotate": 0,
+   "title": "Nursing mother",
+   "title_ours": "Nursing mother (Philippines)",
+   "title_ozma": "Nursing mother",
+   "title_source": "ozma"
+  },
+  "35": {
+   "displayRotate": 0,
+   "title": "Malaysian man and his daughter",
+   "title_ours": "Father and daughter (Malaysia)",
+   "title_ozma": "Malaysian man and his daughter",
+   "title_source": "ozma"
+  },
+  "36": {
+   "displayRotate": 0,
+   "title": "Group of children at the United Nations International School",
+   "title_ours": "Group of children",
+   "title_ozma": "Group of children at the United Nations International School",
+   "title_source": "ozma"
+  },
+  "37": {
+   "displayRotate": 0,
+   "title": "Family portrait silhouette",
+   "title_ours": "Diagram of family ages",
+   "title_ozma": "Family portrait silhouette",
+   "title_source": "ozma"
+  },
+  "38": {
+   "displayRotate": 0,
+   "title": "Family portrait",
+   "title_ours": "Family portrait",
+   "title_ozma": "Family portrait",
+   "title_source": "ours"
+  },
+  "39": {
+   "displayRotate": 0,
+   "title": "Diagram of continental drift",
+   "title_ours": "Diagram of continental drift (derived from LAGEOS plaque)",
+   "title_ozma": "Diagram of continental drift",
+   "title_source": "ozma"
+  },
+  "40": {
+   "displayRotate": 0,
+   "title": "Structure of the Earth with abundance of elements",
+   "title_ours": "Structure of the Earth",
+   "title_ozma": "Structure of the Earth with abundance of elements",
+   "title_source": "ozma"
+  },
+  "41": {
+   "displayRotate": 0,
+   "title": "Heron Island",
+   "title_ours": "Heron Island (Great Barrier Reef of Australia)",
+   "title_ozma": "Heron Island",
+   "title_source": "ozma"
+  },
+  "42": {
+   "displayRotate": 0,
+   "title": "Cape Neddick, Maine",
+   "title_ours": "Seashore (Cape Neddick, Maine)",
+   "title_ozma": "Cape Neddick, Maine",
+   "title_source": "ozma"
+  },
+  "43": {
+   "displayRotate": 0,
+   "title": "The Tetons and the Snake River, Wyoming",
+   "title_ours": "Snake River and Grand Tetons",
+   "title_ozma": "The Tetons and the Snake River, Wyoming",
+   "title_source": "ozma"
+  },
+  "44": {
+   "displayRotate": 0,
+   "title": "A horseman and his dog cross the desert, Pisco, Peru",
+   "title_ours": "Sand dunes",
+   "title_ozma": "A horseman and his dog cross the desert, Pisco, Peru",
+   "title_source": "ozma"
+  },
+  "45": {
+   "displayRotate": 0,
+   "title": "Monument Valley, Arizona",
+   "title_ours": "Monument Valley",
+   "title_ozma": "Monument Valley, Arizona",
+   "title_source": "ozma"
+  },
+  "46": {
+   "displayRotate": 0,
+   "title": "Forest scene with mushrooms, Petersburg, Virginia",
+   "title_ours": "Forest scene with mushrooms",
+   "title_ozma": "Forest scene with mushrooms, Petersburg, Virginia",
+   "title_source": "ozma"
+  },
+  "47": {
+   "displayRotate": 0,
+   "title": "Strawberry leaf",
+   "title_ours": "Leaf (Fragaria)",
+   "title_ozma": "Strawberry leaf",
+   "title_source": "ozma"
+  },
+  "48": {
+   "displayRotate": 0,
+   "title": "Fallen leaves, White Sulphur Springs, West Virginia",
+   "title_ours": "Autumn Fallen leaves",
+   "title_ozma": "Fallen leaves, White Sulphur Springs, West Virginia",
+   "title_source": "ozma"
+  },
+  "49": {
+   "displayRotate": 0,
+   "title": "Sequoia and snowflake",
+   "title_ours": "Snowflakes over Sequoia",
+   "title_ozma": "Sequoia and snowflake",
+   "title_source": "ozma"
+  },
+  "50": {
+   "displayRotate": 0,
+   "title": "Tree and daffodils",
+   "title_ours": "Tree with daffodils",
+   "title_ozma": "Tree and daffodils",
+   "title_source": "ozma"
+  },
+  "51": {
+   "displayRotate": 90,
+   "title": "Ichneumon fly",
+   "title_ours": "Flying insect with flowers (Ichneumonidae)",
+   "title_ozma": "Ichneumon fly",
+   "title_source": "ozma"
+  },
+  "52": {
+   "displayRotate": 0,
+   "title": "Diagram of vertebrate evolution",
+   "title_ours": "Diagram of vertebrate evolution",
+   "title_ozma": "Diagram of vertebrate evolution",
+   "title_source": "ours"
+  },
+  "53": {
+   "displayRotate": 0,
+   "title": "Turbinellidae seashell",
+   "title_ours": "Seashell (Xancidae)",
+   "title_ozma": "Turbinellidae seashell",
+   "title_source": "ozma"
+  },
+  "54": {
+   "displayRotate": 0,
+   "title": "Dolphins",
+   "title_ours": "Dolphins",
+   "title_ozma": "Dolphins",
+   "title_source": "ours"
+  },
+  "55": {
+   "displayRotate": 0,
+   "title": "Sweeper fish and diver in the Red Sea",
+   "title_ours": "School of fish",
+   "title_ozma": "Sweeper fish and diver in the Red Sea",
+   "title_source": "ozma"
+  },
+  "56": {
+   "displayRotate": 0,
+   "title": "Tree toad",
+   "title_ours": "Tree toad",
+   "title_ozma": "Tree toad",
+   "title_source": "ours"
+  },
+  "57": {
+   "displayRotate": 0,
+   "title": "Crocodile in Alia Bay, Lake Rudolf, Kenya",
+   "title_ours": "Crocodile",
+   "title_ozma": "Crocodile in Alia Bay, Lake Rudolf, Kenya",
+   "title_source": "ozma"
+  },
+  "58": {
+   "displayRotate": 0,
+   "title": "Short-toed eagle, Do\u00f1ana National Park, Spain",
+   "title_ours": "Eagle",
+   "title_ozma": "Short-toed eagle, Do\u00f1ana National Park, Spain",
+   "title_source": "ozma"
+  },
+  "59": {
+   "displayRotate": 0,
+   "title": "Watering hole",
+   "title_ours": "Waterhole",
+   "title_ozma": "Watering hole",
+   "title_source": "ozma"
+  },
+  "60": {
+   "displayRotate": 0,
+   "title": "Jane Goodall observing chimpanzees, Gombe Stream National Park, Tanzania",
+   "title_ours": "Jane Goodall and chimps",
+   "title_ozma": "Jane Goodall observing chimpanzees, Gombe Stream National Park, Tanzania",
+   "title_source": "ozma"
+  },
+  "61": {
+   "displayRotate": 0,
+   "title": "Bushmen hunters in Botswana silhouette",
+   "title_ours": "Sketch of bushmen",
+   "title_ozma": "Bushmen hunters in Botswana silhouette",
+   "title_source": "ozma"
+  },
+  "62": {
+   "displayRotate": 0,
+   "title": "Bushmen hunters in Botswana",
+   "title_ours": "Bushmen hunters",
+   "title_ozma": "Bushmen hunters in Botswana",
+   "title_source": "ozma"
+  },
+  "63": {
+   "displayRotate": 0,
+   "title": "Man from Nicaragua",
+   "title_ours": "Man from Guatemala",
+   "title_ozma": "Man from Nicaragua",
+   "title_source": "ozma"
+  },
+  "64": {
+   "displayRotate": 0,
+   "title": "Dancer from Bali",
+   "title_ours": "Dancer from Bali",
+   "title_ozma": "Dancer from Bali",
+   "title_source": "ours"
+  },
+  "65": {
+   "displayRotate": 0,
+   "title": "Women in Santiago Atitlan, Guatemala",
+   "title_ours": "Andean girls",
+   "title_ozma": "Women in Santiago Atitlan, Guatemala",
+   "title_source": "ozma"
+  },
+  "66": {
+   "displayRotate": 0,
+   "title": "Craftsman carving elephants from teak, Chiang Mai, Thailand",
+   "title_ours": "Thailand master craftsman",
+   "title_ozma": "Craftsman carving elephants from teak, Chiang Mai, Thailand",
+   "title_source": "ozma"
+  },
+  "67": {
+   "displayRotate": 0,
+   "title": "Elephant, Mae Sariang, Thailand",
+   "title_ours": "Elephant",
+   "title_ozma": "Elephant, Mae Sariang, Thailand",
+   "title_source": "ozma"
+  },
+  "68": {
+   "displayRotate": 0,
+   "title": "Elderly farmer from Cappadocia, Turkey",
+   "title_ours": "Old man with beard and glasses (Turkey)",
+   "title_ozma": "Elderly farmer from Cappadocia, Turkey",
+   "title_source": "ozma"
+  },
+  "69": {
+   "displayRotate": 0,
+   "title": "Man searching for herbs in Owen County, Indiana",
+   "title_ours": "Old man with dog and flowers",
+   "title_ozma": "Man searching for herbs in Owen County, Indiana",
+   "title_source": "ozma"
+  },
+  "70": {
+   "displayRotate": 0,
+   "title": "Gaston R\u00e9buffat atop Aiguille de Roc, Mont Blanc massif, France",
+   "title_ours": "Mountain climber",
+   "title_ozma": "Gaston R\u00e9buffat atop Aiguille de Roc, Mont Blanc massif, France",
+   "title_source": "ozma"
+  },
+  "71": {
+   "displayRotate": 0,
+   "title": "Gymnast Cathy Rigby",
+   "title_ours": "Gymnast (Cathy Rigby)",
+   "title_ozma": "Gymnast Cathy Rigby",
+   "title_source": "ozma"
+  },
+  "72": {
+   "displayRotate": 0,
+   "title": "Valeriy Borzov winning gold, 1972 Olympic Games, Munich, Germany",
+   "title_ours": "Sprinters \"Valeriy Borzov of the U.S.S.R. in lead\"",
+   "title_ozma": "Valeriy Borzov winning gold, 1972 Olympic Games, Munich, Germany",
+   "title_source": "ozma"
+  },
+  "73": {
+   "displayRotate": 0,
+   "title": "School in Eastern Hokkaido, Japan",
+   "title_ours": "Schoolroom (Japan)",
+   "title_ozma": "School in Eastern Hokkaido, Japan",
+   "title_source": "ozma"
+  },
+  "74": {
+   "displayRotate": 0,
+   "title": "Children with globe at the United Nations International School",
+   "title_ours": "Children with globe (United Nations International School)",
+   "title_ozma": "Children with globe at the United Nations International School",
+   "title_source": "ozma"
+  },
+  "75": {
+   "displayRotate": 0,
+   "title": "Cotton harvesting, New South Wales, Australia",
+   "title_ours": "Cotton harvest",
+   "title_ozma": "Cotton harvesting, New South Wales, Australia",
+   "title_source": "ozma"
+  },
+  "76": {
+   "displayRotate": 0,
+   "title": "Grape picker near Griffith, New South Wales, Australia",
+   "title_ours": "Grape picker",
+   "title_ozma": "Grape picker near Griffith, New South Wales, Australia",
+   "title_source": "ozma"
+  },
+  "77": {
+   "displayRotate": 0,
+   "title": "Supermarket",
+   "title_ours": "Supermarket",
+   "title_ozma": "Supermarket",
+   "title_source": "ours"
+  },
+  "78": {
+   "displayRotate": 0,
+   "title": "Diver and fish, Buck Island Reef National Monument, St. Croix, U.S. Virgin Islands",
+   "title_ours": "Underwater scene with diver and fish",
+   "title_ozma": "Diver and fish, Buck Island Reef National Monument, St. Croix, U.S. Virgin Islands",
+   "title_source": "ozma"
+  },
+  "79": {
+   "displayRotate": 0,
+   "title": "Fishermen at Evia, Greece",
+   "title_ours": "Fishing boat with nets (Greece)",
+   "title_ozma": "Fishermen at Evia, Greece",
+   "title_source": "ozma"
+  },
+  "80": {
+   "displayRotate": 0,
+   "title": "Cooking fish",
+   "title_ours": "Cooking fish",
+   "title_ozma": "Cooking fish",
+   "title_source": "ours"
+  },
+  "81": {
+   "displayRotate": 0,
+   "title": "Chinese dinner party",
+   "title_ours": "Chinese dinner party",
+   "title_ozma": "Chinese dinner party",
+   "title_source": "ours"
+  },
+  "82": {
+   "displayRotate": 0,
+   "title": "Demonstration of licking, eating, and drinking",
+   "title_ours": "Demonstration of licking, eating and drinking",
+   "title_ozma": "Demonstration of licking, eating, and drinking",
+   "title_source": "ozma"
+  },
+  "83": {
+   "displayRotate": 0,
+   "title": "The Great Wall of China",
+   "title_ours": "Great Wall of China",
+   "title_ozma": "The Great Wall of China",
+   "title_source": "ozma"
+  },
+  "84": {
+   "displayRotate": 0,
+   "title": "Home construction in Sangm\u00e9lima, Republic of Cameroon",
+   "title_ours": "House construction (Cameroon)",
+   "title_ozma": "Home construction in Sangm\u00e9lima, Republic of Cameroon",
+   "title_source": "ozma"
+  },
+  "85": {
+   "displayRotate": 0,
+   "title": "Amish barn raising",
+   "title_ours": "Construction scene (Amish country)",
+   "title_ozma": "Amish barn raising",
+   "title_source": "ozma"
+  },
+  "86": {
+   "displayRotate": 0,
+   "title": "Rural house in Bishoftu, Ethiopia",
+   "title_ours": "House (Ethiopia)",
+   "title_ozma": "Rural house in Bishoftu, Ethiopia",
+   "title_source": "ozma"
+  },
+  "87": {
+   "displayRotate": 0,
+   "title": "House in Provincetown, Massachusetts",
+   "title_ours": "House (New England)",
+   "title_ozma": "House in Provincetown, Massachusetts",
+   "title_source": "ozma"
+  },
+  "88": {
+   "displayRotate": 0,
+   "title": "House in Cloudcroft, New Mexico",
+   "title_ours": "Modern house (Cloudcroft, New Mexico)",
+   "title_ozma": "House in Cloudcroft, New Mexico",
+   "title_source": "ozma"
+  },
+  "89": {
+   "displayRotate": 0,
+   "title": "Home interior",
+   "title_ours": "House interior with artist and fire",
+   "title_ozma": "Home interior",
+   "title_source": "ozma"
+  },
+  "90": {
+   "displayRotate": 0,
+   "title": "Taj Mahal",
+   "title_ours": "Taj Mahal",
+   "title_ozma": "Taj Mahal",
+   "title_source": "ours"
+  },
+  "91": {
+   "displayRotate": 0,
+   "title": "Oxford, England",
+   "title_ours": "English city (Oxford)",
+   "title_ozma": "Oxford, England",
+   "title_source": "ozma"
+  },
+  "92": {
+   "displayRotate": 0,
+   "title": "Sailboats in the Charles River Basin, Boston, Massachusetts",
+   "title_ours": "Boston",
+   "title_ozma": "Sailboats in the Charles River Basin, Boston, Massachusetts",
+   "title_source": "ozma"
+  },
+  "93": {
+   "displayRotate": 0,
+   "title": "UN Building Day",
+   "title_ours": "UN Building Day",
+   "title_ozma": "Headquarters of the United Nations, day and night",
+   "title_source": "ours"
+  },
+  "94": {
+   "displayRotate": 0,
+   "title": "UN Building Night",
+   "title_ours": "UN Building Night",
+   "title_ozma": "Headquarters of the United Nations, day and night",
+   "title_source": "ours"
+  },
+  "95": {
+   "displayRotate": 0,
+   "title": "Sydney Opera House",
+   "title_ours": "Sydney Opera House",
+   "title_ozma": "Sydney Opera House",
+   "title_source": "ours"
+  },
+  "96": {
+   "displayRotate": 0,
+   "title": "Artisan with drill",
+   "title_ours": "Artisan with drill",
+   "title_ozma": "Artisan with drill",
+   "title_source": "ours"
+  },
+  "97": {
+   "displayRotate": 0,
+   "title": "Factory interior",
+   "title_ours": "Factory interior",
+   "title_ozma": "Factory interior",
+   "title_source": "ours"
+  },
+  "98": {
+   "displayRotate": 0,
+   "title": "Visitors at a museum",
+   "title_ours": "Museum",
+   "title_ozma": "Visitors at a museum",
+   "title_source": "ozma"
+  },
+  "99": {
+   "displayRotate": 0,
+   "title": "X-ray of a hand",
+   "title_ours": "X-ray of hand",
+   "title_ozma": "X-ray of a hand",
+   "title_source": "ozma"
+  },
+  "100": {
+   "displayRotate": 0,
+   "title": "Woman with microscope in a Mogadishu health center",
+   "title_ours": "Woman with microscope (Somalia)",
+   "title_ozma": "Woman with microscope in a Mogadishu health center",
+   "title_source": "ozma"
+  },
+  "101": {
+   "displayRotate": 0,
+   "title": "Street scene in Lahore, Pakistan",
+   "title_ours": "Street scene (Pakistan)",
+   "title_ozma": "Street scene in Lahore, Pakistan",
+   "title_source": "ozma"
+  },
+  "102": {
+   "displayRotate": 0,
+   "title": "Rush hour in Bangkok, Thailand",
+   "title_ours": "Rush hour traffic (Thailand)",
+   "title_ozma": "Rush hour in Bangkok, Thailand",
+   "title_source": "ozma"
+  },
+  "103": {
+   "displayRotate": 0,
+   "title": "Route 13, Ithaca, New York",
+   "title_ours": "Modern highway (Ithaca, New York)",
+   "title_ozma": "Route 13, Ithaca, New York",
+   "title_source": "ozma"
+  },
+  "104": {
+   "displayRotate": 0,
+   "title": "The Golden Gate and Bridge from Baker Beach, San Francisco, California",
+   "title_ours": "Golden Gate Bridge",
+   "title_ozma": "The Golden Gate and Bridge from Baker Beach, San Francisco, California",
+   "title_source": "ozma"
+  },
+  "105": {
+   "displayRotate": 0,
+   "title": "TurboTrain linking Boston to New York",
+   "title_ours": "Train (United Aircraft Corporation Turbotrain)",
+   "title_ozma": "TurboTrain linking Boston to New York",
+   "title_source": "ozma"
+  },
+  "106": {
+   "displayRotate": 0,
+   "title": "Airplane from runway at Syracuse Hancock International Airport",
+   "title_ours": "Airplane in flight",
+   "title_ozma": "Airplane from runway at Syracuse Hancock International Airport",
+   "title_source": "ozma"
+  },
+  "107": {
+   "displayRotate": 0,
+   "title": "Toronto Pearson International Airport Terminal 1",
+   "title_ours": "Airport (Toronto)",
+   "title_ozma": "Toronto Pearson International Airport Terminal 1",
+   "title_source": "ozma"
+  },
+  "108": {
+   "displayRotate": 0,
+   "title": "Sno-Cat hanging over crevasse, Trans-Antarctic Expedition, 1955-1958",
+   "title_ours": "Antarctic expedition (Commonwealth Trans-Antarctic Expedition)",
+   "title_ozma": "Sno-Cat hanging over crevasse, Trans-Antarctic Expedition, 1955-1958",
+   "title_source": "ozma"
+  },
+  "109": {
+   "displayRotate": 0,
+   "title": "The Westerbork Synthesis Radio Telescope, The Netherlands",
+   "title_ours": "Radio telescope (Westerbork)",
+   "title_ozma": "The Westerbork Synthesis Radio Telescope, The Netherlands",
+   "title_source": "ozma"
+  },
+  "110": {
+   "displayRotate": 0,
+   "title": "Arecibo Observatory, Puerto Rico",
+   "title_ours": "Radio telescope (Arecibo)",
+   "title_ozma": "Arecibo Observatory, Puerto Rico",
+   "title_source": "ozma"
+  },
+  "111": {
+   "displayRotate": 0,
+   "title": "Pages from Sir Isaac Newton's Philosophi\u00e6 Naturalis Principia Mathematica, Book 3: De Mundi Systemate",
+   "title_ours": "Page of book (Newton, On the System of the World)",
+   "title_ozma": "Pages from Sir Isaac Newton's Philosophi\u00e6 Naturalis Principia Mathematica, Book 3: De Mundi Systemate",
+   "title_source": "ozma"
+  },
+  "112": {
+   "displayRotate": 0,
+   "title": "Gemini 4 astronaut Ed White, the first American to conduct a spacewalk",
+   "title_ours": "Astronaut in space (Ed White)",
+   "title_ozma": "Gemini 4 astronaut Ed White, the first American to conduct a spacewalk",
+   "title_source": "ozma"
+  },
+  "113": {
+   "displayRotate": 0,
+   "title": "Liftoff of Titan IIIE-Centaur rocket",
+   "title_ours": "Titan Centaur launch",
+   "title_ozma": "Liftoff of Titan IIIE-Centaur rocket",
+   "title_source": "ozma"
+  },
+  "114": {
+   "displayRotate": 0,
+   "title": "Whistling swans at sunset, Back Bay National Wildlife Refuge, Virginia",
+   "title_ours": "Sunset with birds",
+   "title_ozma": "Whistling swans at sunset, Back Bay National Wildlife Refuge, Virginia",
+   "title_source": "ozma"
+  },
+  "115": {
+   "displayRotate": 0,
+   "title": "Quartetto Italiano",
+   "title_ours": "String Quartet (Quartetto Italiano)",
+   "title_ozma": "Quartetto Italiano",
+   "title_source": "ozma"
+  },
+  "116": {
+   "displayRotate": 90,
+   "title": "Beethoven's String Quartet No. 13 in B-flat Major, Opus 130: V. Cavatina, the closing piece of music on the Voyager Interstellar Record",
+   "title_ours": "Violin with music score (Cavatina)",
+   "title_ozma": "Beethoven's String Quartet No. 13 in B-flat Major, Opus 130: V. Cavatina, the closing piece of music on the Voyager Interstellar Record",
+   "title_source": "ozma"
+  }
+ }
+}

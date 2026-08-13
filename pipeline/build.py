@@ -660,3 +660,10 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+# NOTE: this rewrites catalog.json from the audio alone, which is correct -- it is
+# a tier 0 product. It therefore DROPS the tier 2 presentation fields
+# (displayRotate, the titles, the rotation evidence), and sixty portrait images
+# come out on their side until they are put back. Run:
+#     python -m pipeline.presentation
+# after every build. docs/presentation.json is their source of truth.
