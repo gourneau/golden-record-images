@@ -21,7 +21,7 @@ history, conventions, or biology.
 
 ---
 
-## Tier 1 — Engraved on the cover, and genuinely universal
+## Level 1 — Engraved on the cover, and genuinely universal
 
 The cover is a small masterpiece. It communicates the decoding parameters without language,
 units, or shared mathematics beyond physics.
@@ -39,7 +39,7 @@ The circle is the best idea on the whole cover. It needs no explanation, it vali
 chain at once, and it quantifies its own error. If you take one lesson from this record for
 designing a message to strangers, take that one.
 
-## Tier 2 — Not on the cover, but findable in the signal by anyone patient
+## Level 2 — Not on the cover, but findable in the signal by anyone patient
 
 This is the encouraging tier. Everything here we found empirically, or could have. A capable
 recipient with a good analysis engine gets all of it without knowing anything about Earth.
@@ -69,9 +69,53 @@ uniform field makes this obvious and lets you fit and invert it.
 **Where each image starts.** Every frame is preceded by a stretch of gap and then a block of
 constant level. Content-free by construction, and therefore a reliable marker.
 
-## Tier 3 — Genuinely hard, and arguably design faults
+## Level 3 — Genuinely hard, and arguably design faults
 
 Here the record lets its reader down.
+
+There are six things a recipient needs on top of a correctly timed decode before the pictures
+mean what they are supposed to mean. Only one is genuinely settled by the artifact:
+
+| Question | Settled by the record? | How |
+|---|---|---|
+| **Handedness** — is the whole raster mirrored? | **Yes**, and by design | The pulsar map is *both* image 2 and an engraving on the cover. It is strongly chiral, so comparing them pins it. Global: one answer covers all 116. |
+| **Polarity** — is more signal brighter or darker? | Almost | Sync pulses sit beyond black, so the picture only ever swings one way from blanking. Sound engineering inference, not a statement. |
+| **Which edge is up** | **No** | Nothing encodes it. |
+| **Which images were turned** | **No** — and we tested this | A sideways slide should have left blank bands. It did not: the operators reframed each slide to fill the raster. 1.5% recall. |
+| **Which separation is red** | **In principle** | The spectrum slides are the intended universal key. In practice they are too faint to read — see below. |
+| **Scale, place, date, subject** | **No** | Some slides carry engraved scale bars, which is a real partial answer. Nothing carries a subject. |
+
+The pattern is worth naming. **Every ambiguity the record actually solves, it solves with a
+self-checking picture** — the circle for timing, the pulsar map for handedness. Every ambiguity it
+fails, it fails because nobody drew a picture for it. An orientation mark would have been a mark.
+A grey wedge would have been a wedge. The technique that worked was simply not applied again.
+
+Note on words: these levels describe *what a recipient could recover*. They are not the provenance
+tiers in `pipeline/provenance.py`, which describe *what our decoder was allowed to look at*. The
+two are related — provenance tier 0 is roughly "levels 1 and 2" — but they are different scales
+and it is worth not confusing them.
+
+### Mirroring, and why it is the dangerous one
+
+Mirroring deserves separating from rotation, because it fails differently and worse.
+
+A rotation is obvious once you look: a photograph on its side announces itself. A **mirror does
+not**. A laterally inverted photograph of an unfamiliar world is exactly as plausible as the real
+one — there is no internal evidence, because the recipient has never seen the subject. The error
+is silent and permanent.
+
+It is also not hypothetical among *humans who have the originals*. Aligning our decodes against
+published reproductions turned up **fifteen plates printed backwards** — the Thai elephant, the
+Cameroon house, the Bali dancer, the Guatemalan women, the Japanese school, the Greek fishermen,
+the Cappadocia farmer, the Australian grape picker, Bangkok's traffic, the whistling swans, and
+the solar spectrum. If publishers on the source planet flip one plate in eight, a recipient with
+no reference at all has no chance of catching it.
+
+Which is what makes the pulsar map matter so much. It is the one piece of chirality the record
+carries that a recipient can independently verify, and it settles the question for every image at
+once — provided the mirror was introduced by the *decoder*. It cannot help where a mirror was
+introduced upstream, by a slide mounted backwards in 1977, which is a per-image error the record
+has no way to signal.
 
 ### Polarity: is more signal brighter or darker?
 
@@ -174,7 +218,7 @@ because the circle is not centred in the frame and does not touch its edges.
 is, you have to infer the frame edge from the scan converter's own behaviour, which is exactly
 the Earth-specific knowledge a recipient does not have.
 
-## Tier 4 — Not decodable, and not meant to be
+## Level 4 — Not decodable, and not meant to be
 
 Meaning. A recipient can recover a sharp photograph of a supermarket and learn nothing about
 commerce, refrigeration, or queuing. The record includes bootstrapping diagrams — number
@@ -183,7 +227,7 @@ but they get you to quantities, not to culture.
 
 This is not a flaw. No message solves it.
 
-## Tier 5 — Things *we* still cannot explain
+## Level 5 — Things *we* still cannot explain
 
 Honesty requires listing these too. On these points we are exactly as stuck as any recipient:
 
@@ -234,7 +278,7 @@ already demonstrated in the signal.** The patent told us to look for 262.5 dots;
 told us they were there. The standards told us why the sync alternates; clustering the pulses
 would have shown us that it does.
 
-A recipient with a good analysis engine and patience recovers Tiers 1 and 2 in full. They will
+A recipient with a good analysis engine and patience recovers levels 1 and 2 in full. They will
 get sharp, correctly-framed, correctly-scaled pictures.
 
 They may well hang them upside down, and in the wrong colours.

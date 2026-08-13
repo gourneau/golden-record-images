@@ -1,14 +1,11 @@
 [
  {
   "n": 1,
-  "ok": true,
-  "inliers": 12,
-  "scale": 0.0,
-  "rotation_deg": 180.0,
-  "polarity_inverted": false,
-  "mirrored": true,
+  "ok": false,
+  "reason": "only 0 inliers",
+  "inliers": 0,
   "file": "docs/reference/aligned/1.jpg",
-  "warped": true
+  "warped": false
  },
  {
   "n": 2,
@@ -78,14 +75,11 @@
  },
  {
   "n": 8,
-  "ok": true,
-  "inliers": 37,
-  "scale": 0.0,
-  "rotation_deg": -0.0,
-  "polarity_inverted": false,
-  "mirrored": false,
+  "ok": false,
+  "reason": "only 0 inliers",
+  "inliers": 0,
   "file": "docs/reference/aligned/8.jpg",
-  "warped": true
+  "warped": false
  },
  {
   "n": 9,
@@ -661,14 +655,11 @@
  },
  {
   "n": 61,
-  "ok": true,
-  "inliers": 26,
-  "scale": 0.0,
-  "rotation_deg": 180.0,
-  "polarity_inverted": false,
-  "mirrored": false,
+  "ok": false,
+  "reason": "only 0 inliers",
+  "inliers": 0,
   "file": "docs/reference/aligned/61.jpg",
-  "warped": true
+  "warped": false
  },
  {
   "n": 62,

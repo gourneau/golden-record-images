@@ -708,10 +708,12 @@ function renderRefFoot(){
             `image ${im.n} has not been isolated yet, so the page is shown as printed rather `+
             `than a crop that might be the wrong picture.</div>`;
     }
-    if(r.mislabelled){
-      html+=`<div class="warn">The Wikimedia file numbered ${im.n} is mislabelled — it is `+
-            `image 43 — so it is not offered here. The Ozma book is authoritative.</div>`;
-    }
+    // No warning for r.mislabelled. The flag is about a Wikimedia file that
+    // sourcesFor() already refuses to offer, so the reader cannot see the thing
+    // being warned about -- and image 42, the only one carrying it, reads as
+    // "this picture is wrong" when the Cape Neddick match is in fact correct
+    // and confirmed. The flag stays in map.json and still suppresses the bad
+    // Commons scan; it just no longer shouts about it.
     if(r.ozma) html+=`<div class="quote">“${esc(r.ozma)}” <span class="mono" `+
       `style="display:inline">— as printed in the book</span></div>`;
     const bits=[];

@@ -99,6 +99,18 @@ def align_one(n: int, frame_id: str) -> dict:
     ALIGNED.mkdir(parents=True, exist_ok=True)
     out = ALIGNED / f"{n}.jpg"
 
+    # Inlier count alone does not mean the fit is sane. Image 8, the solar
+    # spectrum, is a soft band on black: RANSAC finds 40 "inliers" and returns a
+    # transform with scale 0.0, which collapses the whole plate to a point. A
+    # degenerate warp that passes the inlier gate is worse than no warp, because
+    # it looks like a considered answer. The reference is a crop of the same
+    # photograph at broadly the same size, so anything outside this range is a
+    # failed fit whatever its inlier count says.
+    if M is not None:
+        sc = float(np.hypot(M[0, 0], M[0, 1]))
+        if not (0.2 <= sc <= 5.0):
+            M, n_in = None, 0
+
     if M is None or n_in < MIN_INLIERS:
         # No trustworthy transform: letterbox the reference into the decode's
         # frame so the pair at least shares a box, and flag it. Warping by a bad
