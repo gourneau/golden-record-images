@@ -160,7 +160,6 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   <button data-f="color">Colour only</button>
   <button data-f="mono">Monochrome</button>
   <span class="grow"></span>
-  <button id="ord">Separation order: <span id="ordv">R G B</span></button>
   <span class="count" id="count"></span>
 </div></div>
 
@@ -308,12 +307,22 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   the record is the authority on what it contains, it is the <em>reference</em> that has been
   flipped to match, and the calibration circle — which "wins" a mirror test by one feature on
   noise alone, being symmetric — was deliberately left alone.</p>
-  <p><strong>Colour separation order: settled.</strong> Published decoders disagreed on whether
-  the three scans run red-green-blue or the reverse, and nobody had shown evidence either way.
-  Flipping the toggle above answers it by eye: under B&nbsp;G&nbsp;R the Earth's oceans turn
-  brown and the Sinai desert turns blue-grey. Under R&nbsp;G&nbsp;B the oceans are blue, the
-  desert is tan and the Red Sea reads correctly. R&nbsp;G&nbsp;B is right, which confirms Ron
-  Barry's 2017 table.</p>
+  <p><strong>Colour separation order: settled, and the toggle is gone.</strong> Published
+  decoders disagreed on whether the three scans run red-green-blue or the reverse. It is
+  answerable by eye: under B&nbsp;G&nbsp;R the Earth's oceans turn brown and the Sinai desert
+  blue-grey; under R&nbsp;G&nbsp;B the oceans are blue, the desert tan and the Red Sea reads
+  correctly. R&nbsp;G&nbsp;B is right, confirming Ron Barry's 2017 table.</p>
+  <p>But notice what settled it: <strong>knowing what colour an ocean is</strong> — Earth
+  knowledge, tier 2. The record carries its own key and it is a lovely idea: photograph the
+  solar spectrum, and any chemist anywhere recognises hydrogen's absorption lines and can
+  attach wavelengths to positions. We measured how well it works. It gives the
+  <em>ordering</em> — our three separations peak at 84.2%, 60.4% and 39.3% across the frame,
+  cleanly monotonic, so a recipient learns the filters run in wavelength sequence. It does not
+  give the <em>direction</em>: after removing the smooth envelope the residual line structure
+  is 0.6–1.9 grey levels against an envelope of 60–124, half a percent to 1.6%. The Fraunhofer
+  lines are not readable. So on the record's own evidence R&nbsp;G&nbsp;B versus B&nbsp;G&nbsp;R
+  is a coin flip — which is precisely why humans disagreed about it.
+  <strong>A key that its own designers' species cannot read is not yet a key.</strong></p>
 </div></section>
 
 <footer><div class="wrap">
@@ -331,11 +340,26 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='15';
+const ASSETV='16';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
-let images=[], filter='all', rgbOrder=true, REF={};
+let images=[], filter='all', REF={};
+
+// The separation order is settled, so this is no longer a control. Published
+// decoders disagreed -- Barry's table said red, green, blue and another said
+// the reverse -- and the toggle existed to show the evidence: under B G R the
+// Earth's oceans go brown and the Sinai desert blue-grey; under R G B the
+// oceans are blue, the desert tan and the Red Sea reads correctly.
+//
+// Worth knowing WHICH evidence that is. It is Earth knowledge, provenance
+// tier 2. The record's own key is the solar spectrum, and it half works: our
+// three separations peak at 84.2%, 60.4% and 39.3% across the frame, cleanly
+// monotonic, so the filters are ordered by wavelength. But reading which END is
+// long-wavelength needs the absorption lines, and they measure 0.5-1.6% of the
+// band amplitude -- unreadable. On the record's own evidence R G B versus B G R
+// is a coin flip, which is exactly why humans disagreed.
+const rgbOrder = true;
 let VIEW=[];   // the currently filtered list -- what the arrow keys step through
 
 const load=src=>new Promise(res=>{
@@ -638,18 +662,6 @@ document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('[data-f]').forEach(x=>x.setAttribute('aria-pressed', x===b));
   filter=b.dataset.f; closeLB(); render();
 });
-$('ord').onclick=()=>{
-  rgbOrder=!rgbOrder;
-  $('ordv').textContent=rgbOrder?'R G B':'B G R';
-  // Redraw the colour composites in place. Calling render() would rebuild the
-  // grid and blank every canvas until the lazy loader caught up again.
-  GRID.querySelectorAll('figure').forEach(f=>{
-    const d=JSON.parse(f.dataset.im); if(!d.color) return;
-    draw(f.querySelector('canvas'), thumbs(d), d, true);
-    f.dataset.painted='1';
-  });
-  if(!LB.el.hidden && LB.im && LB.im.color) loadDecoded(LB.im);
-};
 
 // --------------------------------------------------------------------------
 // waveform peaks, precomputed by pipeline/waveform.py
