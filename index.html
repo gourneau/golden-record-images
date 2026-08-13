@@ -266,6 +266,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
     <span class="t" id="lbTitle"></span>
     <span class="grow"></span>
     <span class="m" id="lbPos"></span>
+    <button id="lbLink" title="Copy a link straight to this image">Copy link</button>
     <button id="lbPrev" title="Previous image (left arrow)">← Prev</button>
     <button id="lbNext" title="Next image (right arrow)">Next →</button>
     <button id="lbClose" title="Close (Esc)">Close ✕</button>
@@ -511,7 +512,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='34';
+const ASSETV='35';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -907,12 +908,57 @@ function sourcesFor(r){
   return out;
 }
 
-function openLB(i){
+// ---- deep links -----------------------------------------------------------
+// The lightbox is where people actually look at these, so it is the thing worth
+// sending someone. The hash is the image's own number -- #116 -- with the
+// separation appended for the colour triplets, #12/2, since which scan you are
+// looking at is part of what you would be pointing at.
+//
+// pushState when OPENING so Back closes the lightbox, which is what a phone's
+// back gesture should do; replaceState when stepping, or arrowing through 116
+// images would bury whatever the person was looking at before under 116 history
+// entries.
+
+function hashFor(im, sep){
+  return '#' + im.n + ((im.color && sep) ? '/' + (sep + 1) : '');
+}
+function parseHash(h){
+  const m = /^#(\d+)(?:\/([123]))?$/.exec(h || '');
+  return m ? {n: +m[1], sep: m[2] ? +m[2] - 1 : 0} : null;
+}
+function syncHash(replace){
+  if(!LB.im) return;
+  const h = hashFor(LB.im, LB.sep);
+  if(location.hash === h) return;
+  try{ history[replace ? 'replaceState' : 'pushState'](null, '', h); }
+  catch(e){ location.hash = h; }        // file:// and the like
+}
+function openByHash(h, replace){
+  const p = parseHash(h);
+  if(!p) return false;
+  // A deep link must work whatever filter the page happens to be on, so if the
+  // target is filtered out, drop the filter rather than silently doing nothing.
+  let i = VIEW.findIndex(x => x.n === p.n);
+  if(i < 0){
+    if(!images.some(x => x.n === p.n)) return false;
+    filter = 'all';
+    document.querySelectorAll('[data-f]').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.f === 'all')));
+    render();
+    i = VIEW.findIndex(x => x.n === p.n);
+    if(i < 0) return false;
+  }
+  openLB(i, {sep: p.sep, replace: replace !== false});
+  return true;
+}
+
+function openLB(i, opts){
   if(!VIEW.length) return;
   const n=VIEW.length;
   LB.idx=((i%n)+n)%n;
   const im=VIEW[LB.idx];
-  LB.im=im; LB.sep=0; LB.frameId=im.frames[0];
+  const sep=(opts&&opts.sep&&im.color&&opts.sep<im.frames.length)?opts.sep:0;
+  LB.im=im; LB.sep=sep; LB.frameId=im.frames[sep];
   LB.off=null; LB.hoverTrace=null; LB.playSample=null;
   if(LB.paint) endPaint(false);
   stopAudio();
@@ -922,6 +968,7 @@ function openLB(i){
     document.body.style.overflow='hidden';
   }
   unzoom($('lbDecBody')); unzoom($('lbRefBody'));
+  syncHash(!!(opts && opts.replace));
   fillText(im);
   fillRef(im);
   loadDecoded(im);
@@ -938,9 +985,18 @@ function closeLB(){
   stopAudio();
   LB.el.hidden=true; LB.im=null; LB.off=null; LB.frameId=null;
   document.body.style.overflow='';
+  if(location.hash){
+    try{ history.pushState(null, '', location.pathname + location.search); }
+    catch(e){}
+  }
   if(LB.restoreFocus&&LB.restoreFocus.focus) LB.restoreFocus.focus();
 }
-const stepLB=d=>{ if(!LB.el.hidden) openLB(LB.idx+d); };
+const stepLB=d=>{ if(!LB.el.hidden) openLB(LB.idx+d, {replace:true}); };
+
+// Back and forward move through images and finally out of the lightbox.
+addEventListener('popstate', () => {
+  if(!openByHash(location.hash)) closeLB();
+});
 
 function fillText(im){
   $('lbNum').textContent=String(im.n).padStart(3,'0');
@@ -1016,6 +1072,7 @@ function selectSep(k){
   if(!LB.im) return;
   LB.sep=k; LB.frameId=LB.im.frames[k];
   stopAudio(); LB.hoverTrace=null;
+  syncHash(true);
   fillText(LB.im);
   drawWave();
   waveOf(LB.frameId).then(()=>drawWave());
@@ -1850,6 +1907,23 @@ $('lbWHelp').textContent=
 
 // ---- lightbox wiring ------------------------------------------------------
 
+$('lbLink').onclick=async e=>{
+  e.stopPropagation();
+  if(!LB.im) return;
+  const url=location.origin+location.pathname+location.search+hashFor(LB.im,LB.sep);
+  const b=$('lbLink'), was=b.textContent;
+  try{ await navigator.clipboard.writeText(url); b.textContent='Copied ✓'; }
+  catch(err){
+    // Clipboard access is refused on insecure origins and in some browsers, so
+    // fall back to selecting it: the person can still copy, just by hand.
+    const t=document.createElement('input');
+    t.value=url; document.body.appendChild(t); t.select();
+    try{ document.execCommand('copy'); b.textContent='Copied ✓'; }
+    catch(e2){ b.textContent='Press ⌘C'; }
+    setTimeout(()=>t.remove(), 4000);
+  }
+  setTimeout(()=>{ b.textContent=was; }, 1600);
+};
 $('lbClose').onclick=e=>{ e.stopPropagation(); closeLB(); };
 $('lbPrev').onclick=e=>{ e.stopPropagation(); stepLB(-1); };
 $('lbNext').onclick=e=>{ e.stopPropagation(); stepLB(1); };
@@ -1877,6 +1951,9 @@ fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).then(m=>{
   const orient={}; for(const fr of cat.frames) orient[fr.id]=fr.orientation??0;
   images=cat.images.map(im=>({...im, orientation:orient[im.frames[0]]??0}));
   render();
+  // Honour a deep link, once the catalogue is in. replace:true so the link that
+  // was followed stays the first history entry rather than becoming two.
+  if(location.hash) openByHash(location.hash, true);
   // Counted from the map that actually loaded, never written into the prose by
   // hand: the reference set grows, and a stale number is a false claim.
   const missing=images.filter(im=>!REF[im.n]).length;
