@@ -69,6 +69,13 @@ figure:hover .scanbtn,.scanbtn:focus-visible,.scanbtn[aria-pressed="true"]{opaci
   color:#8d8460;letter-spacing:.02em}
 .tag.tier{right:8px;left:auto;top:auto;bottom:8px;background:rgba(201,162,39,.9);
   color:#0a0b0d;font-weight:700}
+/* The overview inset. position:sticky rather than absolute so it stays put while
+   the zoomed pane scrolls underneath it -- an absolutely-positioned child of a
+   scrolling box scrolls away with the content, which defeats the point. */
+#lbMini{position:sticky;left:8px;top:8px;z-index:3;margin:8px 0 -100% 8px;
+  border:1px solid rgba(255,255,255,.34);border-radius:4px;background:#000;
+  box-shadow:0 3px 14px rgba(0,0,0,.7);image-rendering:auto;pointer-events:none}
+#lbMini[hidden]{display:none}
 @media(hover:none){.scanbtn{opacity:1}}
 .tag.cmp.none{background:rgba(0,0,0,.72);color:var(--dim);font-weight:400}
 figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
@@ -187,7 +194,9 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   <div class="lb-panes">
     <section class="pane">
       <div class="pane-head"><span>Decoded from the audio</span><span id="lbDecDim"></span></div>
-      <div class="pane-body" id="lbDecBody"><canvas id="lbCanvas"></canvas></div>
+      <div class="pane-body" id="lbDecBody"><canvas id="lbCanvas"></canvas>
+        <canvas id="lbMini" hidden title="The whole picture. The box is what you are looking at."></canvas>
+      </div>
       <div class="pane-foot" id="lbDecFoot"></div>
     </section>
     <section class="pane">
@@ -348,7 +357,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='17';
+const ASSETV='18';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -498,12 +507,11 @@ function render(){
     const f=document.createElement('figure');
     f.dataset.im=JSON.stringify(im);
     f.dataset.i=i;
-    const hasRef=!!REF[im.n];
     f.innerHTML=`<div class="shot"><canvas></canvas>
         <span class="tag">${String(im.n).padStart(3,'0')}</span>
         ${im.color?'<span class="tag rgb">RGB</span>':''}
         <button class="scanbtn" title="Play this image's audio and paint it from blank">▶</button>
-        <span class="tag cmp${hasRef?'':' none'}">${hasRef?'compare':'open'}</span></div>
+        </div>
       <canvas class="cardwave" height="26"></canvas>
       <figcaption><div class="ttl">${esc(im.title??'—')}</div>
         <div class="sub">${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'}</div>
@@ -955,6 +963,34 @@ function setSource(k){
 
 // ---- 1:1 zoom -------------------------------------------------------------
 
+// At 1:1 the picture is bigger than the pane, so zooming loses the thing you
+// were watching: the scan front, and where in the frame it is. The inset puts
+// the whole picture back -- painting and playing in step with the big one --
+// with a box showing which part you are looking at.
+
+function drawMini(){
+  const mini=$('lbMini'), body=$('lbDecBody'), big=$('lbCanvas');
+  if(!mini) return;
+  if(!body.classList.contains('zoomed') || !big.width){ mini.hidden=true; return; }
+  const MAXW=176;
+  const sc=Math.min(1, MAXW/big.width);
+  const w=Math.max(1,Math.round(big.width*sc)), h=Math.max(1,Math.round(big.height*sc));
+  if(mini.width!==w||mini.height!==h){ mini.width=w; mini.height=h; }
+  mini.hidden=false;
+  const c=mini.getContext('2d');
+  c.clearRect(0,0,w,h);
+  // Draw the BIG canvas, not the source image: it already carries whatever is
+  // current -- the paint front mid-scan, the trace line, the finished picture.
+  // Copying it means the inset can never disagree with what it is an inset of.
+  c.drawImage(big,0,0,w,h);
+  const vx=body.scrollLeft/big.width*w, vy=body.scrollTop/big.height*h;
+  const vw=Math.min(w, body.clientWidth/big.width*w), vh=Math.min(h, body.clientHeight/big.height*h);
+  c.strokeStyle='rgba(201,162,39,.95)'; c.lineWidth=1;
+  c.strokeRect(Math.round(vx)+0.5, Math.round(vy)+0.5, Math.max(2,Math.round(vw)), Math.max(2,Math.round(vh)));
+  c.strokeStyle='rgba(0,0,0,.55)';
+  c.strokeRect(Math.round(vx)-0.5, Math.round(vy)-0.5, Math.max(2,Math.round(vw))+2, Math.max(2,Math.round(vh))+2);
+}
+
 function zoomToggle(body,ev){
   const el=[...body.children].find(c=>!c.hidden&&(c.tagName==='IMG'||c.tagName==='CANVAS'));
   if(!el) return;
@@ -968,12 +1004,18 @@ function zoomToggle(body,ev){
   el.style.width=nw+'px'; el.style.height=nh+'px';
   body.scrollLeft=fx*nw-body.clientWidth/2;
   body.scrollTop =fy*nh-body.clientHeight/2;
+  if(body===$('lbDecBody')) drawMini();
 }
 function unzoom(body){
   body.classList.remove('zoomed');
-  body.querySelectorAll('canvas,img').forEach(el=>{ el.style.width=''; el.style.height=''; });
+  // Not querySelectorAll('canvas'): that would also reset the inset, which is
+  // not the zoomed thing and sizes itself.
+  const el=[...body.children].find(c=>c.id!=='lbMini'&&(c.tagName==='IMG'||c.tagName==='CANVAS'));
+  if(el){ el.style.width=''; el.style.height=''; }
+  if(body===$('lbDecBody')) drawMini();
 }
 $('lbDecBody').addEventListener('click',e=>zoomToggle($('lbDecBody'),e));
+$('lbDecBody').addEventListener('scroll',()=>drawMini(),{passive:true});
 $('lbRefBody').addEventListener('click',e=>{
   if(LB.sources.length) zoomToggle($('lbRefBody'),e);
 });
@@ -1079,6 +1121,7 @@ function showTrace(){
   if(LB.playSample!=null && d) t=traceAt(d,LB.playSample);
   else if(LB.hoverTrace!=null) t=LB.hoverTrace;
   blit($('lbCanvas'), LB.off, LB.im, t);
+  drawMini();
 }
 
 // ---- paint mode -----------------------------------------------------------
@@ -1122,6 +1165,7 @@ function revealRect(w,h,orientation,t){
 function paintFrame(){
   const P=LB.paint; if(!P) return;
   paintInto($('lbCanvas'), LB.im, P.planes, P.pass, P.trace);
+  drawMini();
 }
 
 // Shared by the lightbox and the grid cards, so a thumbnail and a full view
