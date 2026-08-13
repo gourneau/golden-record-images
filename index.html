@@ -174,7 +174,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 </div></footer>
 
 <script>
-const ASSETV='5';
+const ASSETV='6';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 let images=[], filter='all', rgbOrder=true;
 
@@ -237,10 +237,7 @@ function render(){
   COUNT.textContent=`${list.length} shown`;
   GRID.innerHTML='';
   const io=new IntersectionObserver((es,obs)=>{
-    es.forEach(e=>{ if(!e.isIntersecting) return; obs.unobserve(e.target);
-      const f=e.target, d=JSON.parse(f.dataset.im);
-      draw(f.querySelector('canvas'), d.frames.map(x=>`data/thumbs/${x}.png?v=${ASSETV}`), d.orientation, d.color);
-    });
+    es.forEach(e=>{ if(!e.isIntersecting) return; obs.unobserve(e.target); paint(e.target); });
   },{rootMargin:'400px'});
 
   for(const im of list){
@@ -267,7 +264,40 @@ function render(){
       f.querySelector('.shot').addEventListener('click',()=>f.classList.toggle('open')); }
     GRID.appendChild(f); io.observe(f);
   }
+
+  // The IntersectionObserver alone proved unreliable here: on a reload with the
+  // grid already scrolled, nothing drew at all -- 0 of 116 canvases, with draw()
+  // working perfectly when called by hand. Rather than depend on it, sweep once
+  // for anything already on or near screen, and again on scroll. paint() is
+  // idempotent (it marks the figure done), so the observer and the sweep cannot
+  // fight each other.
+  sweep();
 }
+
+function paint(f){
+  if(f.dataset.painted) return;
+  f.dataset.painted='1';
+  const d=JSON.parse(f.dataset.im);
+  draw(f.querySelector('canvas'), d.frames.map(x=>`data/thumbs/${x}.png?v=${ASSETV}`),
+       d.orientation, d.color);
+}
+
+let sweepPending=false;
+function sweep(){
+  if(sweepPending) return;
+  sweepPending=true;
+  requestAnimationFrame(()=>{
+    sweepPending=false;
+    const h=innerHeight;
+    for(const f of GRID.children){
+      if(f.dataset.painted) continue;
+      const r=f.getBoundingClientRect();
+      if(r.bottom>-600 && r.top<h+600) paint(f);
+    }
+  });
+}
+addEventListener('scroll', sweep, {passive:true});
+addEventListener('resize', sweep, {passive:true});
 
 document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('[data-f]').forEach(x=>x.setAttribute('aria-pressed', x===b));
@@ -281,13 +311,14 @@ document.getElementById('ord').onclick=()=>{
   GRID.querySelectorAll('figure').forEach(f=>{
     const d=JSON.parse(f.dataset.im); if(!d.color) return;
     draw(f.querySelector('canvas'), d.frames.map(x=>`data/thumbs/${x}.png?v=${ASSETV}`), d.orientation, true);
+    f.dataset.painted='1';
   });
 };
 
 let REF={};
-fetch('docs/reference/map.json?v=5').then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
+fetch('docs/reference/map.json?v=6').then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
  .catch(()=>{})
- .then(()=>fetch('web/public/data/catalog.json?v=5'))
+ .then(()=>fetch('web/public/data/catalog.json?v=6'))
  .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
  .then(cat=>{
   const orient={}; for(const fr of cat.frames) orient[fr.id]=fr.orientation??0;
