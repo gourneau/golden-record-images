@@ -182,7 +182,14 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
    image, permanently, for text that is reference material. It lives in a
    tooltip instead, which costs zero layout and appears where you ask for it. */
 .tipbtn{font-size:10px;font-family:var(--mono);padding:1px 7px;border-radius:5px;
-  letter-spacing:.03em;text-transform:none;line-height:1.6}
+  letter-spacing:.03em;text-transform:none;line-height:1.6;flex:0 0 auto;white-space:nowrap}
+/* Fixed width on BOTH tier buttons. "Recovered" and "Reconstructed" differ by
+   five characters, so the button resized every time it was pressed -- which
+   shoved its neighbours, and next to a long title left nothing for the title.
+   A control that changes size when you use it is a control that moves the
+   thing you were about to click. */
+#lbTierBtn{width:15.5em;text-align:center}
+#tier{min-width:14.5em;text-align:left}
 #tip{position:fixed;z-index:90;max-width:min(460px,72vw);background:#14161b;
   user-select:text;max-height:min(60vh,420px);overflow:auto;
   border:1px solid var(--line2);border-radius:8px;padding:10px 12px;
@@ -249,7 +256,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   <button data-f="color">Colour only</button>
   <button data-f="mono">Monochrome</button>
   <span class="grow"></span>
-  <button id="tier" aria-pressed="false" title="Physics-only decode, or the same decode with a denoiser trained on the record's own colour repeats">Tier: <span id="tierv">Recovered</span></button>
+  <button id="tier" aria-pressed="true" title="Physics-only decode, or the same decode with a denoiser trained on the record's own colour repeats">Tier: <span id="tierv">Reconstructed</span></button>
   <label class="speed" for="rate">Speed
     <select id="rate">
       <option value="0.005">0.005× · 14 min</option>
@@ -288,8 +295,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <div class="pane-head"><span id="lbTier">Decoded from the audio</span><span id="lbFrames"></span>
         <span id="lbDecDim"></span>
         <span class="grow"></span>
-        <button id="lbTierBtn" class="tipbtn" aria-pressed="false"
-                title="Switch between the physics-only decode and the same decode denoised (T)">tier: recovered</button>
+        <button id="lbTierBtn" class="tipbtn" aria-pressed="true"
+                title="Switch between the physics-only decode and the same decode denoised (T)">tier: reconstructed</button>
         <button class="tipbtn" data-tip="dec" aria-describedby="tip">notes</button></div>
       <div class="pane-body" id="lbDecBody"><canvas id="lbCanvas"></canvas>
         <canvas id="lbMini" hidden title="The whole picture. The box is what you are looking at."></canvas>
@@ -567,7 +574,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='39';
+const ASSETV='40';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -612,7 +619,29 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 // Compose one image's separations into an UNROTATED offscreen canvas. Split out
 // from the blit so the lightbox can redraw a moving playhead sixty times a
 // second without re-fetching or re-compositing anything.
+// Compositing an RGB triplet is a per-pixel loop over 193k pixels x 3 planes,
+// and switching tiers redid it for all 116 images every time. Cache the result
+// per (tier, frames): flipping back to a tier you have already seen is then a
+// canvas blit, not a re-composite, which is what makes the A/B usable.
+const COMPCACHE=new Map();
+const compKey=(srcs,colour)=>srcs.join('|')+(colour?'#c':'#m');
+
 function composite(srcs,colour){
+  const key=compKey(srcs,colour);
+  const hit=COMPCACHE.get(key);
+  if(hit) return Promise.resolve(hit);
+  return _composite(srcs,colour).then(off=>{
+    if(off){
+      // Bounded so a long session cannot grow without limit; 156 frames plus
+      // both tiers plus the colour composites fits comfortably.
+      if(COMPCACHE.size>400) COMPCACHE.clear();
+      COMPCACHE.set(key,off);
+    }
+    return off;
+  });
+}
+
+function _composite(srcs,colour){
   return Promise.all(srcs.map(load)).then(imgs=>{
     imgs=imgs.filter(Boolean); if(!imgs.length) return null;
     const w=imgs[0].naturalWidth, h=imgs[0].naturalHeight;
@@ -725,7 +754,7 @@ function draw(cv,srcs,im,colour){
 // The switch is global and sticky rather than per-image, because the point of
 // having two tiers is comparing them, and a viewer must always be able to say
 // which one they are looking at.
-let TIER='recovered';
+let TIER='reconstructed';
 const thumbs=im=>im.frames.map(x=>
   `data/${TIER==='reconstructed'?'thumbs_ml':'thumbs'}/${x}.png?v=${ASSETV}`);
 
@@ -1791,6 +1820,11 @@ function paintPass(k){
 
 function endPaint(keepPicture){
   if(!LB.paint) return;
+  // STOP THE SOUND. Ending the paint only tore down the visual: the source node
+  // was left running, so the audio played on to the end of the separation as if
+  // nothing had been pressed -- and PENDING_DONE was still armed, so it tried to
+  // chain to the next one. Whatever "stop" means, it means the noise stops.
+  stopAudio();
   LB.paint=null;
   $('lbPaint').textContent='✦ Paint it from blank';
   $('lbPaint').setAttribute('aria-pressed','false');
@@ -2030,6 +2064,24 @@ function setTier(t){
   });
   if(!LB.el.hidden && LB.im){ loadDecoded(LB.im); fillText(LB.im); }
 }
+// Warm the other tier in the background once the page is idle, so the first
+// press is as fast as the second. Cheap: the images are already on disk and the
+// browser caches them; this just gets the fetch and the composite done early.
+function prefetchOtherTier(){
+  const other = TIER==='recovered' ? 'thumbs_ml' : 'thumbs';
+  const mine  = TIER==='recovered' ? 'thumbs' : 'thumbs_ml';
+  let i=0;
+  const step=()=>{
+    if(i>=images.length) return;
+    const im=images[i++];
+    const srcs=im.frames.map(x=>`data/${other}/${x}.png?v=${ASSETV}`);
+    composite(srcs, im.color).then(()=>setTimeout(step, 0));
+  };
+  // A few in flight, not all 116 at once: the point is to be ready, not to
+  // saturate the connection while someone is still looking at the first screen.
+  for(let k=0;k<3;k++) setTimeout(step, 400+k*120);
+}
+
 const toggleTier=()=>setTier(TIER==='recovered' ? 'reconstructed' : 'recovered');
 $('tier').onclick=e=>{ e.stopPropagation(); toggleTier(); };
 $('lbTierBtn').onclick=e=>{ e.stopPropagation(); toggleTier(); };
@@ -2082,6 +2134,8 @@ fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).then(m=>{
   // Honour a deep link, once the catalogue is in. replace:true so the link that
   // was followed stays the first history entry rather than becoming two.
   if(location.hash) openByHash(location.hash, true);
+  if('requestIdleCallback' in window) requestIdleCallback(prefetchOtherTier);
+  else setTimeout(prefetchOtherTier, 1200);
   // Counted from the map that actually loaded, never written into the prose by
   // hand: the reference set grows, and a stale number is a false claim.
   const missing=images.filter(im=>!REF[im.n]).length;
