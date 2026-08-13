@@ -19,6 +19,7 @@ yet.
 | **[What this decoder found](docs/findings.md)** | The seven measurements, in signal-processing detail. |
 | **[The machine learning](docs/ML_HANDOFF.md)** | Four methods, one shipped, four nulls, and the arbiter they were all judged by. |
 | **[What an alien could recover](ALIENS.md)** | Which parts of this a recipient could actually do, and where the record lets its reader down. |
+| **[What didn't work](docs/what-didnt-work.md)** | Nine ideas built, measured and rejected. A map of the holes in this signal. |
 | **[Corrections and retractions](docs/corrections.md)** | Everything we got wrong, and findings that bear on Wikipedia and Commons. |
 | **[Orientation](docs/orientation.md)** | Which way up each image goes, and how much of that the record encodes. |
 
@@ -135,13 +136,12 @@ Fitted on the mounts of 68 frames with the calibration frame excluded:
     white clipping                  5.99% → 0.12%
     circle geometry                 unmoved
 
-**And it costs something, which is why the pictures are offered two ways.** The inverse is a
-running sum, and integration cannot tell signal from an error in that trace's starting level — so
-the flat residual the clamp leaves emerges as a *ramp*, different per trace, which is a streak.
-Measured: droop −20 to −42%, streak **+24 to +96%**. On the calibration frame that is a clear win;
-on a photograph it is not, and the denoiser is what makes the correction worth having. The gallery
-therefore offers **no correction** and **denoised**, never blended, so you can judge rather than
-take our word.
+**It costs something, which is why the pictures are offered two ways.** The correction removes
+20–42% of the droop and *raises* the streak amplitude 24–96% — the inverse is a running sum, and
+integration cannot tell signal from an error in that trace's starting level. The denoiser is what
+makes the trade worth taking. The gallery offers **no correction** and **denoised**, never
+blended, so you can judge rather than take our word.
+[Why, and what was tried →](docs/what-didnt-work.md)
 
 ## The machine learning
 
@@ -149,14 +149,8 @@ Four methods were tried against one arbiter: **predict measurements the model wa
 Not image metrics — this project measured that its own quality composite *rewards blur*, and that
 every method's metrics keep improving past the correct setting.
 
-| method | result |
-|---|---|
-| forward operator + adjoint | verified to 2.8e-16 — and it caught a float32 underflow producing 189,166 NaNs silently |
-| neural field | qualified null: 1 of 6, and only on the calibration circle |
-| deep image prior | 3 of 3, +11% to +43% over neighbour-fill — but ~10 min/frame |
-| **Noise2Noise on the colour repeats** | **19 of 19 unseen scenes; beats a blur control on every one** |
-
-The last is what ships, and its premise is a property of the artifact nobody had used: **twenty
+**What ships is Noise2Noise on the colour repeats: 19 of 19 unseen scenes, beating a blur control
+on every one.** Its premise is a property of the artifact nobody had used: **twenty
 images were scanned three times**, through red, green and blue filters, which is twenty sets of
 three independent noisy observations of one scene. Noise2Noise proves a network trained to map one
 noisy observation to another converges on the clean-target estimator. The literature's stated
@@ -169,8 +163,42 @@ Gaussian blur reaches +7.46 dB**, because there is almost no camera signal above
 protect. What separates them is the low band, where blur is worse than doing nothing on 16 of 19
 scenes and the network is better on 16 of 19. The dB is not the evidence; the conjunction is.
 
-Four rigorous nulls are published alongside, including one of our own ideas killed by measurement.
-See [`docs/ML_HANDOFF.md`](docs/ML_HANDOFF.md) and [`docs/corrections.md`](docs/corrections.md).
+Nine other ideas were built, measured and rejected — including one of ours that would have looked
+like a success while doing nothing at all. **[What didn't work, and why →](docs/what-didnt-work.md)**
+That page is the first thing to read if you are picking this up: it is a map of the holes this
+particular signal has waiting in it.
+
+## Fork it — there is real headroom here
+
+**Please take this further.** The decode is good and it is not finished, and the parts most likely
+to yield are exactly the parts that want more compute and more ideas than one person brought.
+
+Everything you need is in the repository: the master is one command away
+(`python -m pipeline.fetch`), the arbiter is written down, and the tier system tells you
+immediately whether an idea is legitimate or is smuggling in knowledge a recipient of the record
+could not have.
+
+Where the headroom is, honestly:
+
+- **The 96 monochrome images have no held-out measurement.** A colour separation *is* a single
+  scan, so mono-ness is not the gap — the gap is that no scored scene was line art or a diagram.
+  Find an arbiter for those and a lot opens up.
+- **The chain correction amplifies streaks** by 24–96% while removing 20–42% of the droop. The
+  mechanism is understood and the inverse is exact; what is missing is a way to stop the
+  per-trace clamp residual being integrated into a ramp. One attempt is in the repository,
+  switched off, with its failure measured.
+- **An 8σ cross term** in the ring PSF is real and unexplained — and the same diagonal signature
+  turns up in the circle's residual ellipticity. That may be a coincidence. It may be the last
+  thing.
+- **Deep image prior scores better than what ships** (3/3 against 1/6 for the neural field) and
+  was not shipped only because it costs ~10 minutes a frame. A GPU and some patience would settle
+  whether it is actually better.
+
+Two rules, and they are the whole discipline: **judge by prediction of data the method never saw**,
+never by an image metric — this project measured that its own quality composite *rewards blur*.
+And **keep the tiers apart**: `python -m pipeline.provenance` will tell you if you have crossed the
+line. A prettier picture is not a truer one, and on a message meant for strangers the difference
+matters more than usual.
 
 ## What the decoder was allowed to know
 
