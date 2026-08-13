@@ -184,7 +184,17 @@ const load=src=>new Promise(res=>{
 
 // Barry's orientation table: 0 = upright, 1 and 2 are quarter turns.
 function draw(cv,srcs,orientation,colour){
-  const turn = orientation===1 ? -90 : orientation===2 ? 90 : 0;
+  // Thumbnails are ALREADY oriented at build time (pipeline/build.py calls
+  // orient() before writing the PNG), so rotating here a second time turns
+  // every portrait image 90 degrees too far.
+  //
+  // Barry's values are rotate-LEFT / rotate-RIGHT, not quarter-turn counts.
+  // build.py's np.rot90(k=-k) therefore gets o=1 right (90 CW, stored as a
+  // 377x512 portrait) but renders o=2 as 180 degrees, which leaves it still
+  // needing +90 CW. Verified by eye on all six o=2 frames: Jupiter's
+  // "142800 km" and Earth's "12756km" captions only read horizontally at
+  // stored+270. So: o=1 needs nothing more, o=2 still needs +90.
+  const turn = orientation===2 ? 90 : 0;
   return Promise.all(srcs.map(load)).then(imgs=>{
     imgs=imgs.filter(Boolean); if(!imgs.length) return;
     const w=imgs[0].naturalWidth, h=imgs[0].naturalHeight;
@@ -274,9 +284,9 @@ document.getElementById('ord').onclick=()=>{
 };
 
 let REF={};
-fetch('docs/reference/map.json?v=3').then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
+fetch('docs/reference/map.json?v=4').then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
  .catch(()=>{})
- .then(()=>fetch('web/public/data/catalog.json?v=3'))
+ .then(()=>fetch('web/public/data/catalog.json?v=4'))
  .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
  .then(cat=>{
   const orient={}; for(const fr of cat.frames) orient[fr.id]=fr.orientation??0;
