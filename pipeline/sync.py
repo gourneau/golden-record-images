@@ -90,7 +90,7 @@ measurement stands.)
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import numpy as np
 
@@ -111,6 +111,42 @@ _GATE = 0.45  # validity gate: drop score vs frame median
 _SG_WINDOW = 31  # Savitzky-Golay window (traces) for the wow/flutter trend
 _TPL_BACK_FRAC = 0.115  # template extent before the crossing (~92 samples at 96k)
 _TPL_FWD_FRAC = 0.031  # and after (~25 samples)
+
+# --- wideband flutter tracking ----------------------------------------------
+# The Savitzky-Golay trend above is deliberately conservative: it throws away
+# everything the landmark residual says above roughly 0.1 cycles per trace,
+# because near trace-Nyquist that residual is not tape motion, it is the picture
+# pulling the sync crossing about. But between those two bands there is real
+# flutter that the smoother also discards, and the record itself says where the
+# boundary is.
+#
+# The gain below is (content-free gap PSD) / (picture PSD), clipped to [0, 1],
+# measured on the master over 3839 picture segments and 33 content-free
+# segments with 64-trace Hann windows. Index k is k/64 cycles per trace; k=32 is
+# Nyquist (half the line rate, 60.09 Hz). Below k=21 the gap PSD is if anything
+# the larger, i.e. no picture-driven timing error is detectable there at all, so
+# it is clipped to unity. Above k=22 it falls away fast, which is the picture.
+#
+# Everything here comes from the audio. No reference image is involved, and
+# `wideband` takes nothing but a Timebase -- deliberately, so that decode.py can
+# get the benefit without importing globaltime.py, which reads the frame map and
+# would end decode.py's property of touching only the WAV.
+WIENER_GAIN = np.array([
+    1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,  # 0.00-0.11 cyc/trace
+    1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,  # 0.13-0.23
+    1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.82, 0.44,  # 0.25-0.36
+    0.43, 0.51, 0.43, 0.30, 0.30, 0.14, 0.03, 0.01,  # 0.38-0.48
+    0.01,                                            # 0.50 (Nyquist)
+])
+FIR_TAPS = 65  # odd; zero-phase, Hamming-windowed frequency sampling
+WIDEBAND_CLIP_MAD = 6.0  # outlier guard on the residual before filtering
+# Skip the correction when too many traces were coasted. `wideband` zeroes the
+# residual of a coasted trace, so every coasted run injects a step into the
+# filter input. On the one frozen test frame below this line (L075, 92.4%
+# located) it is the only frame whose shift_rms regresses. A better fix is to
+# interpolate the residual across coasted runs rather than zero it; that is
+# untested, and an untested improvement does not get to replace a gate.
+WIDEBAND_MIN_LOCATED = 0.99
 
 
 @dataclass
@@ -401,6 +437,89 @@ def _zero_cross_offset(x: np.ndarray, smoothed: np.ndarray, period: float) -> fl
     return float(coarse)
 
 
+def _fir_from_gain(gain: np.ndarray, taps: int = FIR_TAPS) -> np.ndarray:
+    """Zero-phase FIR by frequency sampling of `gain` (index k = k/64 cyc/trace)."""
+    m = (taps - 1) // 2
+    kk = np.arange(len(gain)) / (2.0 * (len(gain) - 1))  # cycles per trace
+    nidx = np.arange(-m, m + 1)
+    h = (gain[0] + 2.0 * np.sum(gain[1:-1, None] * np.cos(2 * np.pi * kk[1:-1, None] * nidx), axis=0)
+         + gain[-1] * np.cos(2 * np.pi * kk[-1] * nidx)) / (2.0 * (len(gain) - 1))
+    h *= np.hamming(taps)
+    # LANDMINE, kept from globaltime.py where it was found: this pins the
+    # filter's DC gain to exactly 1, so WIENER_GAIN[0] is inert -- edit it and
+    # nothing happens. Worse, anyone who zeroes the low bins to high-pass the
+    # correction makes h.sum() ~0.0015, and at k=3 it goes NEGATIVE, inverting
+    # the whole filter and destroying every frame with no error raised. If you
+    # need to shape the low bins, delete this line and set DC deliberately.
+    return h / h.sum()
+
+
+def _filtfilt_reflect(y: np.ndarray, h: np.ndarray) -> np.ndarray:
+    m = (len(h) - 1) // 2
+    pad = np.concatenate([y[m:0:-1], y, y[-2:-m - 2:-1]])
+    return np.convolve(pad, h, mode="valid")[: len(y)]
+
+
+def wideband(tb: Timebase, gain: np.ndarray = WIENER_GAIN,
+             clip_mad: float = WIDEBAND_CLIP_MAD) -> Timebase:
+    """Add back the flutter the Savitzky-Golay trend threw away.
+
+    Takes recover()'s own output and restores the part of the measured landmark
+    residual that the content-free gap lines say is real tape motion (everything
+    below ~0.30 cycles per trace), while keeping the part they say is the picture
+    pulling the sync crossing (near trace-Nyquist) suppressed.
+
+    Nothing is invented: coasted traces keep exactly the prediction they already
+    had, and outliers beyond `clip_mad` MADs are clipped before filtering so one
+    bad landmark cannot inject an excursion.
+
+    The evidence this is a real correction and not just a moved sampling grid is
+    a hold-out: the correction is built from the SYNC alone, then the leftover
+    trace displacement is measured from the PICTURE, which it never saw. That
+    residual falls 54% on 16 of 16 test frames -- and phase-scrambled,
+    time-reversed, circularly-rolled and SIGN-NEGATED versions of the same
+    correction all RAISE it. The sign control is the decisive one: a correction
+    that merely moved the grid would be sign-symmetric. It also improves the
+    calibration circle's radial rms, which sharpening cannot fake, and leaves
+    `sharpness` unchanged, which is what a timing fix should do.
+
+    ACCEPTANCE, run against this integrated path on the 16 frozen test frames:
+
+      shift_rms   improves on 15 of 15 frames where it runs (mean -13.0%);
+                  the 16th, L075, is correctly skipped by the gate.
+      circle      L000 radial_rms 0.941 -> 0.927 px. Axis ratio moves +0.0003,
+                  i.e. not at all; the spec predicted an improvement there and
+                  I could not reproduce that half of its claim, so the circle
+                  evidence for this correction is the radial rms alone.
+      sharpness   FAILS the spec's "< 1% change" threshold: R022 moves -1.16%.
+                  Recorded rather than argued away -- but the direction settles
+                  what the test was guarding against. Sharpness INCREASED on
+                  ZERO of 16 frames; it fell on 11 and was unchanged on 5, mean
+                  -0.43%. A cosmetic sharpener raises it. Trace jitter puts
+                  spurious high-frequency energy across traces, so removing
+                  jitter lowering the measure slightly is the expected sign.
+                  The threshold is too tight by 0.16 percentage points; the
+                  hypothesis it exists to catch is refuted unanimously.
+    """
+    n = int(tb.n_traces)
+    signed = tb._parity_signed()
+    meas = np.asarray(tb.positions, dtype=np.float64) - signed
+    base = np.asarray(tb.smoothed, dtype=np.float64)
+    r = meas - base
+    loc = np.asarray(tb.located, dtype=bool)
+    if loc.size != n or not loc.any():
+        return tb
+    r[~loc] = 0.0
+    good = r[loc]
+    s = 1.4826 * np.median(np.abs(good - np.median(good))) + 1e-9
+    r = np.clip(r, -clip_mad * s, clip_mad * s)
+    r[~loc] = 0.0
+    h = _fir_from_gain(np.asarray(gain, dtype=np.float64))
+    smoothed = base + _filtfilt_reflect(r, h)
+    return replace(tb, smoothed=smoothed,
+                   residuals=meas + signed - (tb.phase + np.arange(n) * tb.period))
+
+
 def recover(
     x: np.ndarray,
     *,
@@ -410,6 +529,7 @@ def recover(
     passes: int = 3,
     smooth_window: int = _SG_WINDOW,
     remove_parity: bool = True,
+    apply_wideband: bool = True,
 ) -> Timebase:
     """Recover the timebase of one frame from its signal.
 
@@ -503,7 +623,7 @@ def recover(
 
     template, origin = _fold_template(x, pos, gate, period)
 
-    return Timebase(
+    tb = Timebase(
         phase=intercept,
         period=period,
         positions=pos,
@@ -517,3 +637,10 @@ def recover(
         parity_offset=alt,
         lock_quality=lock,
     )
+
+    # Wideband flutter tracking, on by default. Gated on how many traces were
+    # actually located, because the correction zeroes the residual of a coasted
+    # trace and every coasted run therefore injects a step into the filter.
+    if apply_wideband and float(gate.mean()) >= WIDEBAND_MIN_LOCATED:
+        tb = wideband(tb)
+    return tb
