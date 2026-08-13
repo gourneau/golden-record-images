@@ -115,13 +115,13 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .lb{position:fixed;inset:0;z-index:60;background:rgba(6,7,9,.975);
   backdrop-filter:blur(6px);display:flex;flex-direction:column;overscroll-behavior:contain}
 .lb[hidden]{display:none}
-.lb-top{display:flex;gap:12px;align-items:baseline;padding:12px 18px 10px;
+.lb-top{display:flex;gap:12px;align-items:baseline;padding:9px 16px 8px;
   border-bottom:1px solid var(--line);flex-wrap:wrap}
 .lb-top .n{font-family:var(--mono);color:var(--gold);font-size:13px}
 .lb-top .t{font-size:17px;font-weight:600;letter-spacing:-.01em}
 .lb-top .m{font-family:var(--mono);font-size:11px;color:var(--dimmer)}
 .lb-top button{padding:5px 10px}
-.lb-panes{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px 16px 6px}
+.lb-panes{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 16px 4px}
 .pane{display:flex;flex-direction:column;min-width:0;min-height:0}
 .pane-head{display:flex;gap:8px;align-items:center;flex-wrap:wrap;
   font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
@@ -144,30 +144,21 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
    to a photograph and made it look broken. The decode has no more detail at 1:1
    than it does fitted; zoom is for looking closely, not for seeing pixels. */
 .pane-body.zoomed>canvas{image-rendering:auto}
-/* FIXED height, and as little of it as the text can be read in. The panes are a
-   flex column with the picture on flex:1, so every pixel here is a pixel taken
-   off the picture -- and a two-line caption and a six-line one would otherwise
-   give two different picture sizes, which is exactly what you must not do to
-   images people are comparing.
-   So: ONE line by default, the rest on demand. The picture is what people came
-   for; the notes are reference material and can wait to be asked for. */
-.pane-foot{padding-top:6px;font-size:12px;line-height:1.45;color:var(--dim);
-  height:26px;overflow:hidden;flex:0 0 auto;position:relative;
-  transition:height .16s ease}
-.pane-foot.open{height:150px;overflow:auto}
-.pane-foot .more{position:absolute;right:0;top:6px;z-index:2;font-size:10px;
-  font-family:var(--mono);padding:1px 7px;border-radius:5px;line-height:1.5;
-  background:var(--panel)}
-/* Collapsed: show the first line of the first block and nothing else. The
-   toggle lives outside .footbody so rewriting the content cannot delete it. */
-.pane-foot:not(.open) .footbody{white-space:nowrap;overflow:hidden;
-  text-overflow:ellipsis;padding-right:70px}
-.pane-foot:not(.open) .footbody > *:not(:first-child){display:none}
-.pane-foot.open .footbody{padding-right:70px}
-@media(max-width:860px){.pane-foot{height:24px}.pane-foot.open{height:auto;max-height:150px}}
-.pane-foot .mono{font-family:var(--mono);font-size:10.5px;color:var(--dimmer);
-  letter-spacing:.03em;display:block;margin-top:3px}
-.pane-foot .quote{color:var(--ink)}
+/* The panes have NO footer at all now. They are a flex column with the picture
+   on flex:1, so every pixel of caption was a pixel off the picture -- on every
+   image, permanently, for text that is reference material. It lives in a
+   tooltip instead, which costs zero layout and appears where you ask for it. */
+.tipbtn{font-size:10px;font-family:var(--mono);padding:1px 7px;border-radius:5px;
+  letter-spacing:.03em;text-transform:none;line-height:1.6}
+#tip{position:fixed;z-index:90;max-width:min(460px,72vw);background:#14161b;
+  border:1px solid var(--line2);border-radius:8px;padding:10px 12px;
+  font-size:12px;line-height:1.5;color:var(--dim);
+  box-shadow:0 10px 34px -8px rgba(0,0,0,.85)}
+#tip[hidden]{display:none}
+#tip .mono{display:block;margin-top:6px;font-family:var(--mono);font-size:10px;
+  color:var(--dimmer);letter-spacing:.02em}
+#tip .quote{color:var(--ink)}
+
 /* Information, not alarm. These were amber boxes; nothing here is an error or
    needs acting on, it is just provenance, so it reads as quiet marginal note. */
 .warn{border-left:2px solid #4a4326;padding:1px 0 1px 10px;color:var(--dimmer);
@@ -175,22 +166,27 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .warn b{color:#b9a86e;font-weight:600}
 .noref{margin:auto;color:var(--dimmer);font-size:13px;text-align:center;padding:24px;max-width:46ch}
 
-.lb-wave{border-top:1px solid var(--line);padding:7px 16px 9px}
+.lb-wave{border-top:1px solid var(--line);padding:7px 16px 9px;position:relative}
 .wrow{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:7px}
 .wrow .wstat{font-family:var(--mono);font-size:11px;color:var(--dimmer)}
 .wrow .seps{display:flex;gap:6px}
 .wrow .seps button{font-family:var(--mono);font-size:11px;padding:5px 9px}
 #lbWave{display:block;width:100%;height:64px;border:1px solid var(--line);border-radius:6px;
   background:#0c0e12;cursor:crosshair;touch-action:pan-y}
+/* FLOATING, not stacked. As a sibling in the flow it appeared the moment you
+   pressed play and shoved the picture smaller -- a layout jump at exactly the
+   moment you had started watching something. As an overlay above the waveform
+   it costs no layout at all, so nothing moves and nothing resizes. */
 #lbZoom[hidden]{display:none}
-#lbZoom{display:block;width:100%;height:132px;border:1px solid var(--line);border-radius:6px;
-  background:#0c0e12;margin-top:6px}
+#lbZoom{position:absolute;left:16px;right:16px;bottom:100%;width:auto;height:118px;
+  border:1px solid var(--line2);border-radius:8px;background:rgba(8,10,13,.96);
+  box-shadow:0 -8px 30px -10px rgba(0,0,0,.9);margin-bottom:8px;z-index:5}
 .whelp{font-family:var(--mono);font-size:10px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
 @media(max-width:860px){
   .lb-panes{grid-template-columns:1fr;overflow:auto}
   .pane-body{min-height:36vh}
   #lbWave{height:60px}
-  #lbZoom{height:96px}
+  #lbZoom{height:92px;left:8px;right:8px}
   .lb-top .t{font-size:15px}
   .lb-top .m{width:100%}
 }
@@ -253,22 +249,28 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 
   <div class="lb-panes">
     <section class="pane">
-      <div class="pane-head"><span>Decoded from the audio</span><span id="lbDecDim"></span></div>
+      <div class="pane-head"><span>Decoded from the audio</span><span id="lbDecDim"></span>
+        <span class="grow"></span>
+        <button class="tipbtn" data-tip="dec" aria-describedby="tip">notes</button></div>
       <div class="pane-body" id="lbDecBody"><canvas id="lbCanvas"></canvas>
         <canvas id="lbMini" hidden title="The whole picture. The box is what you are looking at."></canvas>
       </div>
-      <div class="pane-foot" id="lbDecFoot"><button class="more" data-foot="lbDecFoot">notes ▾</button><div class="footbody" id="lbDecFootBody"></div></div>
+      <div id="lbDecFootBody" hidden></div>
     </section>
     <section class="pane">
-      <div class="pane-head"><span>Original slide</span><span class="srcs" id="lbSrcBtns"></span></div>
+      <div class="pane-head"><span>Original slide</span><span class="srcs" id="lbSrcBtns"></span>
+        <span class="grow"></span>
+        <button class="tipbtn" data-tip="ref" aria-describedby="tip">notes</button></div>
       <div class="pane-body" id="lbRefBody">
         <img id="lbRef" alt="the original photograph this frame was scanned from" hidden>
         <canvas id="lbRefCrop" hidden></canvas>
         <div class="noref" id="lbNoRef" hidden></div>
       </div>
-      <div class="pane-foot" id="lbRefFoot"><button class="more" data-foot="lbRefFoot">notes ▾</button><div class="footbody" id="lbRefFootBody"></div></div>
+      <div id="lbRefFootBody" hidden></div>
     </section>
   </div>
+
+  <div id="tip" role="tooltip" hidden></div>
 
   <div class="lb-wave">
     <div class="wrow">
@@ -483,7 +485,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='26';
+const ASSETV='27';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -1165,18 +1167,31 @@ function unzoom(body){
 $('lbDecBody').addEventListener('click',e=>zoomToggle($('lbDecBody'),e));
 $('lbDecBody').addEventListener('scroll',()=>drawMini(),{passive:true});
 
-// Notes open on demand and stay open while you page through images, because
-// someone who wants the provenance wants it for more than one picture.
-let FOOT_OPEN={lbDecFoot:false, lbRefFoot:false};
-document.querySelectorAll('.pane-foot .more').forEach(b=>{
-  b.onclick=e=>{
-    e.stopPropagation();
-    const id=b.dataset.foot, el=$(id);
-    FOOT_OPEN[id]=!FOOT_OPEN[id];
-    el.classList.toggle('open', FOOT_OPEN[id]);
-    b.textContent=FOOT_OPEN[id]?'notes ▴':'notes ▾';
-    if(id==='lbDecFoot'){ showTrace(); drawMini(); }   // the picture just resized
-  };
+// The notes as a tooltip. The content is still rendered into hidden divs by the
+// same code as before -- fillText and fillRef do not know or care that nobody
+// can see them -- and the tooltip just borrows their HTML when asked. That
+// keeps one source of truth for the text.
+const TIPSRC={dec:'lbDecFootBody', ref:'lbRefFootBody'};
+function showTip(btn){
+  const src=$(TIPSRC[btn.dataset.tip]); if(!src) return;
+  const t=$('tip');
+  t.innerHTML=src.innerHTML;
+  t.hidden=false;
+  const r=btn.getBoundingClientRect(), tr=t.getBoundingClientRect();
+  // Prefer below-right of the button, but never off-screen: clamp both axes.
+  let x=Math.min(r.left, innerWidth-tr.width-10);
+  let y=r.bottom+8;
+  if(y+tr.height>innerHeight-10) y=Math.max(10, r.top-tr.height-8);
+  t.style.left=Math.max(10,x)+'px';
+  t.style.top=y+'px';
+}
+const hideTip=()=>{ $('tip').hidden=true; };
+document.querySelectorAll('.tipbtn').forEach(b=>{
+  b.addEventListener('mouseenter',()=>showTip(b));
+  b.addEventListener('focus',()=>showTip(b));
+  b.addEventListener('mouseleave',hideTip);
+  b.addEventListener('blur',hideTip);
+  b.addEventListener('click',e=>{ e.stopPropagation(); $('tip').hidden?showTip(b):hideTip(); });
 });
 $('lbRefBody').addEventListener('click',e=>{
   if(LB.sources.length) zoomToggle($('lbRefBody'),e);
@@ -1748,7 +1763,7 @@ LB.el.addEventListener('click',e=>{ if(e.target===LB.el) closeLB(); });
 
 addEventListener('keydown',e=>{
   if(LB.el.hidden) return;
-  if(e.key==='Escape'){ closeLB(); e.preventDefault(); }
+  if(e.key==='Escape'){ if(!$('tip').hidden){ hideTip(); } else closeLB(); e.preventDefault(); }
   else if(e.key==='ArrowRight'){ stepLB(1); e.preventDefault(); }
   else if(e.key==='ArrowLeft'){ stepLB(-1); e.preventDefault(); }
   else if(e.key===' '){ togglePlay(); e.preventDefault(); }
