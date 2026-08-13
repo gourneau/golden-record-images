@@ -213,7 +213,15 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
    metadata lives here rather than in the label strip above the picture, where a
    long title and three frame ids together were squeezing everything out. */
 .wrow{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:7px}
-.wrow .wstat{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+/* The separation buttons are back beside Play and Paint, where the controls
+   belong. That was originally a problem because the row WRAPPED when they
+   appeared, growing the section and shrinking the picture above -- so what
+   changed is not the placement but the row: it is nowrap now, and when space
+   runs short the STATUS TEXT gives way, never the controls and never the
+   picture. */
+.wrow .wstat{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
+.wrow .seps{display:flex;gap:6px;flex:0 0 auto}
+.wrow .seps button{font-family:var(--mono);font-size:11px;padding:5px 9px}
 /* ONE strip, spanning BOTH panes, below them. It used to live inside the
    decoded pane -- which made that pane 26px shorter than the reference pane, so
    the decoded image came out smaller than the thing it is meant to be compared
@@ -340,7 +348,6 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   </div>
 
   <div class="lb-strip">
-    <span class="seps" id="lbSeps"></span>
     <span class="grow"></span>
     <span id="lbFrames"></span>
     <span id="lbDecDim"></span>
@@ -368,6 +375,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
           <option value="4">4×</option>
         </select>
       </label>
+      <span class="seps" id="lbSeps"></span>
       <span class="wstat" id="lbWStat"></span>
     </div>
     <canvas id="lbWave"></canvas>
@@ -609,7 +617,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='45';
+const ASSETV='46';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
