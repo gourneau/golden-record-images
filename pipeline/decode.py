@@ -205,6 +205,35 @@ WHITE_REF = -0.75  # (holds picture to 0-4% tails on 10 frames measured)
 #     circle axis ratio                  1.0051 -> 1.0051  unchanged
 #     circle radial rms                  0.837 -> 0.841 px (+0.5%)
 UNCUMULATE_K = 9.4e-4
+
+# The accumulator's zero, SEPARATE from the black rail -- and that separation is
+# the fix for a degeneracy that looked unresolvable.
+#
+# Both quantities were UNCOUPLE_BLACK_REF, because both are "where black sits",
+# and sharing one number meant the accumulator's origin could not move without
+# also moving the levels. So the flat field and the slide mount appeared to
+# demand different values of an irreducible constant, and the disagreement read
+# as a broken model.
+#
+# They are not the same quantity. The black RAIL is where the decoder maps black
+# to on output; the accumulator's ORIGIN is the signal level at which the chain
+# stops accumulating, i.e. where light is actually zero. Nothing requires them to
+# coincide, and measured on the mount over 13 held-out frames they do not:
+#
+#   origin   mount gap (13 held-out)    L000 field flatness
+#     0.45          0.3880                   0.0466
+#     0.50          0.3230                   0.0441
+#     0.55          0.2830   <- minimum      0.0417
+#     0.60          0.2991                   0.0394
+#     0.65          0.3375   (the old        0.0370
+#                             shared value)
+#
+# The mount has a genuine INTERIOR minimum at 0.55, so it identifies the origin
+# rather than merely preferring an extreme -- which is what makes this a
+# measurement and not a trade. It costs the calibration field 13% of its
+# flatness, on one frame, against a 16% gain on thirteen frames the value was
+# not fitted to. Every origin in the table beats no correction on 13 of 13.
+UNCUMULATE_ORIGIN = 0.55
 # k is stated PER SQUARE-PIXEL ROW, because that is the grid it was fitted on
 # (caltarget.py works on the 377-row decode). The correction is applied on the
 # ~230-row DOT matrix, where the same physical accumulation has to be spread
@@ -769,7 +798,7 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
         # the dot grid, and the accumulator sums light FROM BLACK while `pic` is
         # referenced to the porch. The recursion is linear, so shifting the
         # origin is exactly subtract-run-add.
-        origin = (UNCOUPLE_BLACK_REF * anchors[1] if anchors is not None
+        origin = (UNCUMULATE_ORIGIN * anchors[1] if anchors is not None
                   else float(np.percentile(pic, 99.5)))  # fallback: the picture's own black
         k_dot = cfg.uncumulate * SQUARE_ROWS / pic.shape[1]
         pic = _uncumulate(pic - origin, k_dot) + origin
