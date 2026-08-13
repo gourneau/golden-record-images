@@ -1,0 +1,773 @@
+{
+ "what_this_is": "Per-frame min/max waveform envelopes for the gallery lightbox, measured from the shipped FLACs by pipeline/waveform.py.",
+ "buckets": 1200,
+ "frames": 156,
+ "written": 153,
+ "files": [
+  {
+   "id": "L001",
+   "buckets": 1200,
+   "bytes": 8170
+  },
+  {
+   "id": "L002",
+   "buckets": 1200,
+   "bytes": 8198
+  },
+  {
+   "id": "L003",
+   "buckets": 1200,
+   "bytes": 8098
+  },
+  {
+   "id": "L004",
+   "buckets": 1200,
+   "bytes": 8276
+  },
+  {
+   "id": "L005",
+   "buckets": 1200,
+   "bytes": 8661
+  },
+  {
+   "id": "L006",
+   "buckets": 1200,
+   "bytes": 7997
+  },
+  {
+   "id": "L007",
+   "buckets": 1200,
+   "bytes": 7612
+  },
+  {
+   "id": "L008",
+   "buckets": 1200,
+   "bytes": 7605
+  },
+  {
+   "id": "L009",
+   "buckets": 1200,
+   "bytes": 7621
+  },
+  {
+   "id": "L010",
+   "buckets": 1200,
+   "bytes": 8213
+  },
+  {
+   "id": "L011",
+   "buckets": 1200,
+   "bytes": 8125
+  },
+  {
+   "id": "L012",
+   "buckets": 1200,
+   "bytes": 7883
+  },
+  {
+   "id": "L013",
+   "buckets": 1200,
+   "bytes": 8036
+  },
+  {
+   "id": "L014",
+   "buckets": 1200,
+   "bytes": 8028
+  },
+  {
+   "id": "L015",
+   "buckets": 1200,
+   "bytes": 7881
+  },
+  {
+   "id": "L016",
+   "buckets": 1200,
+   "bytes": 8312
+  },
+  {
+   "id": "L017",
+   "buckets": 1200,
+   "bytes": 8321
+  },
+  {
+   "id": "L018",
+   "buckets": 1200,
+   "bytes": 8067
+  },
+  {
+   "id": "L019",
+   "buckets": 1200,
+   "bytes": 8370
+  },
+  {
+   "id": "L020",
+   "buckets": 1200,
+   "bytes": 8561
+  },
+  {
+   "id": "L021",
+   "buckets": 1200,
+   "bytes": 8409
+  },
+  {
+   "id": "L022",
+   "buckets": 1200,
+   "bytes": 8562
+  },
+  {
+   "id": "L024",
+   "buckets": 1200,
+   "bytes": 8392
+  },
+  {
+   "id": "L025",
+   "buckets": 1200,
+   "bytes": 7918
+  },
+  {
+   "id": "L026",
+   "buckets": 1200,
+   "bytes": 7903
+  },
+  {
+   "id": "L027",
+   "buckets": 1200,
+   "bytes": 8246
+  },
+  {
+   "id": "L028",
+   "buckets": 1200,
+   "bytes": 8179
+  },
+  {
+   "id": "L029",
+   "buckets": 1200,
+   "bytes": 8146
+  },
+  {
+   "id": "L030",
+   "buckets": 1200,
+   "bytes": 8139
+  },
+  {
+   "id": "L031",
+   "buckets": 1200,
+   "bytes": 8254
+  },
+  {
+   "id": "L032",
+   "buckets": 1200,
+   "bytes": 8065
+  },
+  {
+   "id": "L033",
+   "buckets": 1200,
+   "bytes": 8422
+  },
+  {
+   "id": "L034",
+   "buckets": 1200,
+   "bytes": 7856
+  },
+  {
+   "id": "L035",
+   "buckets": 1200,
+   "bytes": 8157
+  },
+  {
+   "id": "L036",
+   "buckets": 1200,
+   "bytes": 8631
+  },
+  {
+   "id": "L037",
+   "buckets": 1200,
+   "bytes": 8249
+  },
+  {
+   "id": "L038",
+   "buckets": 1200,
+   "bytes": 7999
+  },
+  {
+   "id": "L039",
+   "buckets": 1200,
+   "bytes": 8521
+  },
+  {
+   "id": "L040",
+   "buckets": 1200,
+   "bytes": 8252
+  },
+  {
+   "id": "L041",
+   "buckets": 1200,
+   "bytes": 8368
+  },
+  {
+   "id": "L042",
+   "buckets": 1200,
+   "bytes": 8302
+  },
+  {
+   "id": "L043",
+   "buckets": 1200,
+   "bytes": 8225
+  },
+  {
+   "id": "L044",
+   "buckets": 1200,
+   "bytes": 8299
+  },
+  {
+   "id": "L045",
+   "buckets": 1200,
+   "bytes": 8219
+  },
+  {
+   "id": "L046",
+   "buckets": 1200,
+   "bytes": 7834
+  },
+  {
+   "id": "L047",
+   "buckets": 1200,
+   "bytes": 8536
+  },
+  {
+   "id": "L048",
+   "buckets": 1200,
+   "bytes": 8235
+  },
+  {
+   "id": "L049",
+   "buckets": 1200,
+   "bytes": 8150
+  },
+  {
+   "id": "L050",
+   "buckets": 1200,
+   "bytes": 8152
+  },
+  {
+   "id": "L051",
+   "buckets": 1200,
+   "bytes": 8289
+  },
+  {
+   "id": "L052",
+   "buckets": 1200,
+   "bytes": 8262
+  },
+  {
+   "id": "L053",
+   "buckets": 1200,
+   "bytes": 8284
+  },
+  {
+   "id": "L054",
+   "buckets": 1200,
+   "bytes": 8672
+  },
+  {
+   "id": "L055",
+   "buckets": 1200,
+   "bytes": 8138
+  },
+  {
+   "id": "L056",
+   "buckets": 1200,
+   "bytes": 8211
+  },
+  {
+   "id": "L057",
+   "buckets": 1200,
+   "bytes": 8558
+  },
+  {
+   "id": "L058",
+   "buckets": 1200,
+   "bytes": 8390
+  },
+  {
+   "id": "L059",
+   "buckets": 1200,
+   "bytes": 8302
+  },
+  {
+   "id": "L060",
+   "buckets": 1200,
+   "bytes": 8193
+  },
+  {
+   "id": "L061",
+   "buckets": 1200,
+   "bytes": 8456
+  },
+  {
+   "id": "L062",
+   "buckets": 1200,
+   "bytes": 8404
+  },
+  {
+   "id": "L063",
+   "buckets": 1200,
+   "bytes": 8067
+  },
+  {
+   "id": "L064",
+   "buckets": 1200,
+   "bytes": 8300
+  },
+  {
+   "id": "L065",
+   "buckets": 1200,
+   "bytes": 8456
+  },
+  {
+   "id": "L066",
+   "buckets": 1200,
+   "bytes": 8374
+  },
+  {
+   "id": "L067",
+   "buckets": 1200,
+   "bytes": 8180
+  },
+  {
+   "id": "L068",
+   "buckets": 1200,
+   "bytes": 8416
+  },
+  {
+   "id": "L069",
+   "buckets": 1200,
+   "bytes": 8377
+  },
+  {
+   "id": "L070",
+   "buckets": 1200,
+   "bytes": 8156
+  },
+  {
+   "id": "L071",
+   "buckets": 1200,
+   "bytes": 8355
+  },
+  {
+   "id": "L072",
+   "buckets": 1200,
+   "bytes": 8312
+  },
+  {
+   "id": "L073",
+   "buckets": 1200,
+   "bytes": 8152
+  },
+  {
+   "id": "L074",
+   "buckets": 1200,
+   "bytes": 8233
+  },
+  {
+   "id": "L075",
+   "buckets": 1200,
+   "bytes": 8066
+  },
+  {
+   "id": "L076",
+   "buckets": 1200,
+   "bytes": 8329
+  },
+  {
+   "id": "L077",
+   "buckets": 1200,
+   "bytes": 8097
+  },
+  {
+   "id": "R001",
+   "buckets": 1200,
+   "bytes": 8264
+  },
+  {
+   "id": "R002",
+   "buckets": 1200,
+   "bytes": 8237
+  },
+  {
+   "id": "R003",
+   "buckets": 1200,
+   "bytes": 8434
+  },
+  {
+   "id": "R004",
+   "buckets": 1200,
+   "bytes": 8338
+  },
+  {
+   "id": "R005",
+   "buckets": 1200,
+   "bytes": 8158
+  },
+  {
+   "id": "R006",
+   "buckets": 1200,
+   "bytes": 8051
+  },
+  {
+   "id": "R007",
+   "buckets": 1200,
+   "bytes": 8572
+  },
+  {
+   "id": "R008",
+   "buckets": 1200,
+   "bytes": 8468
+  },
+  {
+   "id": "R009",
+   "buckets": 1200,
+   "bytes": 8395
+  },
+  {
+   "id": "R010",
+   "buckets": 1200,
+   "bytes": 8139
+  },
+  {
+   "id": "R011",
+   "buckets": 1200,
+   "bytes": 8225
+  },
+  {
+   "id": "R012",
+   "buckets": 1200,
+   "bytes": 8196
+  },
+  {
+   "id": "R013",
+   "buckets": 1200,
+   "bytes": 8340
+  },
+  {
+   "id": "R014",
+   "buckets": 1200,
+   "bytes": 8255
+  },
+  {
+   "id": "R015",
+   "buckets": 1200,
+   "bytes": 8133
+  },
+  {
+   "id": "R016",
+   "buckets": 1200,
+   "bytes": 8468
+  },
+  {
+   "id": "R017",
+   "buckets": 1200,
+   "bytes": 8403
+  },
+  {
+   "id": "R018",
+   "buckets": 1200,
+   "bytes": 8182
+  },
+  {
+   "id": "R019",
+   "buckets": 1200,
+   "bytes": 8141
+  },
+  {
+   "id": "R020",
+   "buckets": 1200,
+   "bytes": 8316
+  },
+  {
+   "id": "R021",
+   "buckets": 1200,
+   "bytes": 8210
+  },
+  {
+   "id": "R022",
+   "buckets": 1200,
+   "bytes": 8116
+  },
+  {
+   "id": "R023",
+   "buckets": 1200,
+   "bytes": 8286
+  },
+  {
+   "id": "R024",
+   "buckets": 1200,
+   "bytes": 8530
+  },
+  {
+   "id": "R025",
+   "buckets": 1200,
+   "bytes": 8456
+  },
+  {
+   "id": "R026",
+   "buckets": 1200,
+   "bytes": 8384
+  },
+  {
+   "id": "R027",
+   "buckets": 1200,
+   "bytes": 7553
+  },
+  {
+   "id": "R028",
+   "buckets": 1200,
+   "bytes": 8235
+  },
+  {
+   "id": "R029",
+   "buckets": 1200,
+   "bytes": 7665
+  },
+  {
+   "id": "R030",
+   "buckets": 1200,
+   "bytes": 8090
+  },
+  {
+   "id": "R031",
+   "buckets": 1200,
+   "bytes": 8280
+  },
+  {
+   "id": "R032",
+   "buckets": 1200,
+   "bytes": 8276
+  },
+  {
+   "id": "R033",
+   "buckets": 1200,
+   "bytes": 8106
+  },
+  {
+   "id": "R034",
+   "buckets": 1200,
+   "bytes": 8348
+  },
+  {
+   "id": "R035",
+   "buckets": 1200,
+   "bytes": 8522
+  },
+  {
+   "id": "R036",
+   "buckets": 1200,
+   "bytes": 8347
+  },
+  {
+   "id": "R037",
+   "buckets": 1200,
+   "bytes": 8420
+  },
+  {
+   "id": "R038",
+   "buckets": 1200,
+   "bytes": 8510
+  },
+  {
+   "id": "R039",
+   "buckets": 1200,
+   "bytes": 8450
+  },
+  {
+   "id": "R040",
+   "buckets": 1200,
+   "bytes": 8477
+  },
+  {
+   "id": "R041",
+   "buckets": 1200,
+   "bytes": 8374
+  },
+  {
+   "id": "R042",
+   "buckets": 1200,
+   "bytes": 8084
+  },
+  {
+   "id": "R043",
+   "buckets": 1200,
+   "bytes": 8155
+  },
+  {
+   "id": "R044",
+   "buckets": 1200,
+   "bytes": 8408
+  },
+  {
+   "id": "R045",
+   "buckets": 1200,
+   "bytes": 8239
+  },
+  {
+   "id": "R046",
+   "buckets": 1200,
+   "bytes": 8303
+  },
+  {
+   "id": "R047",
+   "buckets": 1200,
+   "bytes": 8128
+  },
+  {
+   "id": "R048",
+   "buckets": 1200,
+   "bytes": 8096
+  },
+  {
+   "id": "R049",
+   "buckets": 1200,
+   "bytes": 7731
+  },
+  {
+   "id": "R050",
+   "buckets": 1200,
+   "bytes": 8148
+  },
+  {
+   "id": "R051",
+   "buckets": 1200,
+   "bytes": 8424
+  },
+  {
+   "id": "R052",
+   "buckets": 1200,
+   "bytes": 8501
+  },
+  {
+   "id": "R053",
+   "buckets": 1200,
+   "bytes": 8457
+  },
+  {
+   "id": "R054",
+   "buckets": 1200,
+   "bytes": 8142
+  },
+  {
+   "id": "R055",
+   "buckets": 1200,
+   "bytes": 8130
+  },
+  {
+   "id": "R056",
+   "buckets": 1200,
+   "bytes": 8148
+  },
+  {
+   "id": "R057",
+   "buckets": 1200,
+   "bytes": 7945
+  },
+  {
+   "id": "R058",
+   "buckets": 1200,
+   "bytes": 8533
+  },
+  {
+   "id": "R059",
+   "buckets": 1200,
+   "bytes": 8427
+  },
+  {
+   "id": "R060",
+   "buckets": 1200,
+   "bytes": 8146
+  },
+  {
+   "id": "R061",
+   "buckets": 1200,
+   "bytes": 8329
+  },
+  {
+   "id": "R062",
+   "buckets": 1200,
+   "bytes": 8035
+  },
+  {
+   "id": "R063",
+   "buckets": 1200,
+   "bytes": 7864
+  },
+  {
+   "id": "R064",
+   "buckets": 1200,
+   "bytes": 8512
+  },
+  {
+   "id": "R065",
+   "buckets": 1200,
+   "bytes": 8366
+  },
+  {
+   "id": "R066",
+   "buckets": 1200,
+   "bytes": 8183
+  },
+  {
+   "id": "R067",
+   "buckets": 1200,
+   "bytes": 8022
+  },
+  {
+   "id": "R068",
+   "buckets": 1200,
+   "bytes": 8071
+  },
+  {
+   "id": "R069",
+   "buckets": 1200,
+   "bytes": 8199
+  },
+  {
+   "id": "R070",
+   "buckets": 1200,
+   "bytes": 8140
+  },
+  {
+   "id": "R071",
+   "buckets": 1200,
+   "bytes": 8021
+  },
+  {
+   "id": "R072",
+   "buckets": 1200,
+   "bytes": 8113
+  },
+  {
+   "id": "R073",
+   "buckets": 1200,
+   "bytes": 8482
+  },
+  {
+   "id": "R074",
+   "buckets": 1200,
+   "bytes": 8002
+  },
+  {
+   "id": "R075",
+   "buckets": 1200,
+   "bytes": 7455
+  },
+  {
+   "id": "R076",
+   "buckets": 1200,
+   "bytes": 8390
+  },
+  {
+   "id": "R077",
+   "buckets": 1200,
+   "bytes": 7934
+  }
+ ]
+}
