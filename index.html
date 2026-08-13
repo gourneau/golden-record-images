@@ -174,6 +174,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 </div></footer>
 
 <script>
+const ASSETV='5';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 let images=[], filter='all', rgbOrder=true;
 
@@ -238,7 +239,7 @@ function render(){
   const io=new IntersectionObserver((es,obs)=>{
     es.forEach(e=>{ if(!e.isIntersecting) return; obs.unobserve(e.target);
       const f=e.target, d=JSON.parse(f.dataset.im);
-      draw(f.querySelector('canvas'), d.frames.map(x=>`data/thumbs/${x}.png`), d.orientation, d.color);
+      draw(f.querySelector('canvas'), d.frames.map(x=>`data/thumbs/${x}.png?v=${ASSETV}`), d.orientation, d.color);
     });
   },{rootMargin:'400px'});
 
@@ -279,14 +280,14 @@ document.getElementById('ord').onclick=()=>{
   // grid and blank every canvas until the lazy loader caught up again.
   GRID.querySelectorAll('figure').forEach(f=>{
     const d=JSON.parse(f.dataset.im); if(!d.color) return;
-    draw(f.querySelector('canvas'), d.frames.map(x=>`data/thumbs/${x}.png`), d.orientation, true);
+    draw(f.querySelector('canvas'), d.frames.map(x=>`data/thumbs/${x}.png?v=${ASSETV}`), d.orientation, true);
   });
 };
 
 let REF={};
-fetch('docs/reference/map.json?v=4').then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
+fetch('docs/reference/map.json?v=5').then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
  .catch(()=>{})
- .then(()=>fetch('web/public/data/catalog.json?v=4'))
+ .then(()=>fetch('web/public/data/catalog.json?v=5'))
  .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
  .then(cat=>{
   const orient={}; for(const fr of cat.frames) orient[fr.id]=fr.orientation??0;
