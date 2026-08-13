@@ -178,6 +178,55 @@ WHITE_REF = -0.75  # (holds picture to 0-4% tails on 10 frames measured)
 # 275..430 (hum degeneracy). Converted to signal samples via the measured
 # line period, which scales exactly with sample rate (drift of the source
 # line rate itself contributes <0.2% -- negligible against the systematic).
+# --- the content-integrating error ---------------------------------------
+# The dominant remaining defect, and it is NOT shading and NOT a per-trace
+# offset. Discriminated by a tier-0 region the record supplies on every frame:
+# the slide MOUNT appears twice, before the picture and after it. One physical
+# object, one value, so the two readings must agree -- and the hypotheses
+# disagree about how. Shading is multiplicative and the mount is dark, so it
+# would move both ends alike; a per-trace gain or offset moves both ends
+# together; an error that accumulates in proportion to the light already sent
+# darkens only the END.
+#
+# Measured, regressing each mount reading on that trace's own mean level:
+#     bottom mount  median slope -0.284, negative on 12 of 12 frames
+#     top mount     median slope +0.054, negative on  3 of 12
+# The sign flip is the whole argument, and it rules out both alternatives at
+# once. The porch clamp resets the accumulation once per trace, which is why
+# what survives inside a trace starts near zero and grows downward -- and why
+# the same object is both the frame-mean droop AND the trace-to-trace streak.
+#
+# k is fitted on the mount regions of 68 frames, L000 excluded by construction.
+# Chosen at 9.4e-4 rather than the 1.07e-3 that best fits L000's own field,
+# because 9.4e-4 minimises the MOUNT CONVERGENCE test -- one object reading the
+# same at both ends -- which is measured on frames the coefficient never saw:
+#     mount gap over 10 held-out frames  1.478 -> 0.390   (-74%)
+#     L000 field rms                     0.14  -> 0.08    (-43%)
+#     circle axis ratio                  1.0051 -> 1.0051  unchanged
+#     circle radial rms                  0.837 -> 0.841 px (+0.5%)
+UNCUMULATE_K = 9.4e-4
+
+# NOT ON BY DEFAULT, and the reason is measured rather than cautious. Applied to
+# a finished decode the correction is large and clean:
+#     L000 field rms   0.14  -> 0.08   (-43%)
+#     mount gap        1.478 -> 0.390  (-74%, on ten frames k never saw)
+#     circle           axis 1.0051 unchanged, radial rms 0.837 -> 0.841 px
+# Applied INSIDE decode() it delivers only a third of that: field rms 0.14 ->
+# 0.118, mount gap 1.478 -> 1.322. The cause is not the correction, it is what
+# comes after it. `measure_levels` sets the black and white rails from the RAW
+# signal, i.e. from a picture that still has the error in it. Removing the error
+# makes the picture brighter, it overflows the stale white rail, and the
+# clipped fraction of L000 goes from 5.99% to 12.23% -- precisely in the bright
+# field where the improvement should show. Percentile levels clip less (2.2%)
+# and recover a little more, which confirms the diagnosis rather than fixing it.
+#
+# The right fix is to derive the rails from the CORRECTED picture, since the
+# accumulation darkened the reference the rails were measured against as much as
+# it darkened everything else. That is a change to the levels stage and it
+# deserves its own measurement pass, so it is written down rather than rushed.
+# Until then this ships off, and the finding stands on its own evidence.
+
+
 UNCOUPLE_TAU_384 = {"L": 530.0, "R": 295.0}
 _NOMINAL_PERIOD_384 = sync_mod.NOMINAL_PERIOD  # 3197.4 samples at 384 kHz
 # Rails for the UNDROOPED picture (see module docstring: re-measured on 20
@@ -211,6 +260,7 @@ class Settings:
 
     dehum: bool = True  # remove the scan-locked 60 Hz fixed pattern
     dc_restore: bool = True  # clamp each trace on its back porch
+    uncumulate: float = 0.0  # invert the content-integrating error; see UNCUMULATE_K
     # Invert the chain's one-pole high-pass (the decay bias) on the RAW
     # signal in raster order, before sampling. ON by default, but it only
     # acts when it knows the time constant: set `channel` ("L"/"R", per
@@ -448,6 +498,31 @@ def _hampel(x: np.ndarray, k: int, n_sigmas: float) -> np.ndarray:
     return out
 
 
+
+
+def _uncumulate(pic: np.ndarray, k: float) -> np.ndarray:
+    """Invert error(row) = -k * (light already sent down this trace).
+
+    Exact and stable: the forward error is a running sum along the trace, so
+    the inverse is the matching recursion. One parameter, no filter design, and
+    nothing to tune. Applied on the dot matrix in trace order, AFTER the porch
+    clamp -- the clamp is what defines where each trace's accumulation restarts,
+    so doing this before it would be inverting from the wrong origin.
+    """
+    if k <= 0.0:
+        return pic
+    out = np.empty_like(pic)
+    for i in range(pic.shape[0]):
+        row = pic[i]
+        acc = 0.0
+        o = out[i]
+        for j in range(row.shape[0]):
+            v = row[j] + k * acc
+            o[j] = v
+            acc += v
+    return out
+
+
 def undroop(x: np.ndarray, tau: float) -> np.ndarray:
     """Invert the chain's one-pole high-pass on the RAW signal, raster order.
 
@@ -643,6 +718,9 @@ def decode(x: np.ndarray, cfg: Settings, tb: sync_mod.Timebase | None = None) ->
         profile, hum_amp = measure_hum(pic)
         pic[1::2] -= profile
         pic[0::2] += profile
+
+    if cfg.uncumulate > 0.0:
+        pic = _uncumulate(pic, cfg.uncumulate)
 
     if cfg.repair_dropouts and dropouts.any() and (~dropouts).sum() > 4:
         good = np.where(~dropouts)[0]
