@@ -183,6 +183,35 @@ your timebase, the pulsar map checks your handedness.** Neither needs a word of 
 We have not yet run the comparison, because it needs a rectified image of the cover engraving,
 which is not in `docs/reference/`. It is recorded here as a specific thing to do, not as a result.
 
+### The colour encoding hands the recipient a noise-reduction tool
+
+Worth stating on its own, because it is the one place where this record gives a recipient
+strictly more than it was asked to, and it took us until 2026 to use it.
+
+Twenty of the 116 images are stored as three separations — the same slide scanned three times
+through three filters. Whatever else that is, it is **three independent noisy observations of one
+scene**, sixty frames of them. That is exactly the resource Noise2Noise needs: a network trained
+to map one noisy observation to another independent observation of the same scene cannot predict
+the other's noise, so what it learns is the scene. The literature's stated obstacle for the
+method is that independent noisy pairs are hard to obtain in practice.
+
+**A recipient could do all of this.** No Earth photograph is involved, no external corpus, not
+even the knowledge of which separation is red — the method is symmetric in the three planes and
+never asks. It needs only the artifact and the observation that three frames repeat one scene,
+which is detectable by correlation alone. Measured on scenes the network never saw: the denoised
+plane beats the raw plane on 19 of 19, and beats a blur control on every one.
+
+So this belongs in level 2, not level 3 — findable in the signal by anyone patient. It is also
+the only capability on this list that the designers appear to have provided **by accident**. They
+scanned three times because they wanted colour. They also, without saying so, gave every future
+recipient a way to see the pictures more clearly than a single scan allows.
+
+The obvious follow-on, which we are testing now: the calibration circle and the colour repeats
+calibrate *different* things — the circle measures the **chain** (its blur, its noise spectrum,
+its accumulating error, all on a frame whose true content is known), and the repeats measure what
+distinguishes **scene from noise** on twenty real photographs. Neither subsumes the other, and
+both are available to a recipient holding nothing but the record.
+
 ### Which separation is red, green and blue?
 
 Twenty images are stored as three monochrome scans through colour filters. Which is which?
