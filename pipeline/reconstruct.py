@@ -73,12 +73,13 @@ decode. The physics decode remains the archival product and the thing to cite,
 and this regression is published rather than buried, because a tier that only
 ever reports its wins is not evidence of anything.
 
-A LANDMINE, named: this runs on the SHIPPED 8-BIT THUMBNAILS, not on the
-float decode. That is deliberate -- they are what the page displays, so this is
-honest about what the viewer gets -- but it means the denoiser sees quantisation
-noise the float decode does not have. The noise being removed is larger than a
-level of 8-bit quantisation, so the effect is small, but a future version that
-re-decodes to float would be strictly better and this is the reason to do it.
+FLOAT, NOT 8-BIT. An earlier version ran on the shipped thumbnails, which are
+8-bit, and that was a real if small defect: the denoiser saw quantisation noise
+the decode does not have, and one grey level of quantisation is not nothing
+against a correction whose mean size is under two grey levels. `--float`
+re-decodes each frame from the master and denoises the float image, so the only
+quantisation left is the single one at the end when the PNG is written. It costs
+a full decode pass; it is the default because correctness is worth ten minutes.
 """
 
 from __future__ import annotations
@@ -132,6 +133,75 @@ def _load_model() -> torch.nn.Module:
     return model
 
 
+def decode_float(fid: str) -> np.ndarray | None:
+    """Re-decode one frame from the master, in float, exactly as build.py does.
+
+    Same Settings, same channel, same orientation, so the reconstructed tier is
+    the SAME decode as the recovered tier plus a denoiser -- and not, subtly, a
+    differently-configured decode that happens to also be denoised. If the two
+    tiers disagreed for any reason other than the network, every comparison a
+    viewer made between them would be measuring the wrong thing.
+    """
+    from . import sync as sync_mod, decode as decode_mod, wav, catalog as catalog_mod
+    from .build import orient
+
+    global _MM, _CAT
+    if _MM is None:
+        info = wav.probe(REPO / "data" / "master" / "384kHzStereo.wav")
+        _MM = wav.memmap(info)
+        _CAT = catalog_mod.build()
+    fr = _CAT.by_id(fid)
+    n = int(sync_mod.NOMINAL_PERIOD * 520)
+    if fr.seed_sample + n > _MM.shape[0]:
+        return None
+    seg = np.asarray(_MM[fr.seed_sample: fr.seed_sample + n, fr.channel], dtype=np.float64)
+    tb = sync_mod.recover(seg)
+    cfg = decode_mod.Settings(traces=512, rotate=fr.orientation, channel=fid[0])
+    dec = decode_mod.decode(seg, cfg, tb)
+    return orient(dec.image, cfg.rotate)
+
+
+_MM = None
+_CAT = None
+
+
+def reconstruct_frame_float(model: torch.nn.Module, fid: str) -> dict:
+    """Denoise the FLOAT decode, then quantise once, at the end."""
+    img = decode_float(fid)
+    if img is None:
+        return {"frame": fid, "ok": False, "reason": "could not decode"}
+    a = np.clip(np.asarray(img, dtype=np.float64), 0.0, 1.0) * 255.0
+    mu, sd = float(a.mean()), float(a.std())
+    if sd < 1e-6:
+        return {"frame": fid, "ok": False, "reason": "flat frame"}
+    rec = np.clip(n2n_mod.denoise_plane(model, (a - mu) / sd, n2n_mod._device()) * sd + mu, 0, 255)
+    OUT.mkdir(parents=True, exist_ok=True)
+    Image.fromarray((rec + 0.5).astype(np.uint8)).save(OUT / f"{fid}.png", optimize=True)
+    d = rec - a
+    return {"frame": fid, "ok": True, "source": "float",
+            "rms_change": round(float(np.sqrt(np.mean(d ** 2))), 4),
+            "max_change": round(float(np.abs(d).max()), 2),
+            "sd_before": round(sd, 3), "sd_after": round(float(rec.std()), 3)}
+
+
+def circle_check_float(model: torch.nn.Module) -> dict:
+    """The circle check, run on the float decode rather than an 8-bit copy.
+
+    Worth doing separately: if the regression measured on 8-bit thumbnails was
+    partly quantisation rather than the network, this is where that shows.
+    """
+    img = decode_float("L000")
+    a = np.clip(np.asarray(img, dtype=np.float64), 0.0, 1.0) * 255.0
+    mu, sd = a.mean(), a.std()
+    rec = np.clip(n2n_mod.denoise_plane(model, (a - mu) / sd, n2n_mod._device()) * sd + mu, 0, 255)
+    b4, af = quality.circle_metrics(a), quality.circle_metrics(rec)
+    return {"axis_ratio_before": round(float(b4["axis_ratio"]), 4),
+            "axis_ratio_after": round(float(af["axis_ratio"]), 4),
+            "radial_rms_before": round(float(b4["radial_rms"]), 3),
+            "radial_rms_after": round(float(af["radial_rms"]), 3),
+            "inliers_before": int(b4["inliers"]), "inliers_after": int(af["inliers"])}
+
+
 def reconstruct_frame(model: torch.nn.Module, fid: str) -> dict:
     """Denoise one shipped thumbnail and write the reconstructed version.
 
@@ -182,13 +252,22 @@ def circle_check(model: torch.nn.Module) -> dict:
     }
 
 
-def run(steps: int = 3000, retrain: bool = False, verbose: bool = True) -> dict:
+def run(steps: int = 3000, retrain: bool = False, verbose: bool = True,
+        use_float: bool = True) -> dict:
     model = train_final(steps=steps, verbose=verbose) if (retrain or not MODEL.exists()) \
         else _load_model()
 
-    rows = [reconstruct_frame(model, p.stem) for p in sorted(THUMBS.glob("*.png"))]
+    fids = [p.stem for p in sorted(THUMBS.glob("*.png"))]
+    if use_float:
+        rows = []
+        for k, fid in enumerate(fids):
+            rows.append(reconstruct_frame_float(model, fid))
+            if verbose and k % 20 == 0:
+                print(f"  {k}/{len(fids)} re-decoded and denoised")
+    else:
+        rows = [reconstruct_frame(model, fid) for fid in fids]
     ok = [r for r in rows if r.get("ok")]
-    circ = circle_check(model)
+    circ = circle_check_float(model) if use_float else circle_check(model)
 
     chg = np.array([r["rms_change"] for r in ok]) if ok else np.array([0.0])
     report = {
@@ -210,9 +289,11 @@ if __name__ == "__main__":  # pragma: no cover
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--steps", type=int, default=3000)
     ap.add_argument("--retrain", action="store_true")
+    ap.add_argument("--from-thumbs", action="store_true",
+                    help="denoise the 8-bit thumbnails instead of re-decoding to float")
     args = ap.parse_args()
 
-    rep = run(steps=args.steps, retrain=args.retrain)
+    rep = run(steps=args.steps, retrain=args.retrain, use_float=not args.from_thumbs)
     c = rep["circle"]
     print(f"\n{rep['n_ok']}/{rep['n_frames']} frames reconstructed -> data/thumbs_ml/")
     print(f"  change in grey levels: mean {rep['rms_change']['mean']:.3f}  "

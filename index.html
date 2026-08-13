@@ -288,6 +288,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <div class="pane-head"><span id="lbTier">Decoded from the audio</span><span id="lbFrames"></span>
         <span id="lbDecDim"></span>
         <span class="grow"></span>
+        <button id="lbTierBtn" class="tipbtn" aria-pressed="false"
+                title="Switch between the physics-only decode and the same decode denoised (T)">tier: recovered</button>
         <button class="tipbtn" data-tip="dec" aria-describedby="tip">notes</button></div>
       <div class="pane-body" id="lbDecBody"><canvas id="lbCanvas"></canvas>
         <canvas id="lbMini" hidden title="The whole picture. The box is what you are looking at."></canvas>
@@ -565,7 +567,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='38';
+const ASSETV='39';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -1999,16 +2001,25 @@ $('lbWHelp').textContent=
   '1200 precomputed peaks per frame · hover the strip to point at a trace · click it to play '+
   'from there · shaded ends are the lead-in and the tail lines, not picture · '+
   'P paints the picture from a blank screen as the audio plays, colour images one separation '+
-  'at a time · the lower strip is the real samples, two traces of them: shaded blanking, '+
+  'at a time · T flips between the physics decode and the denoised tier · '+
+  'the lower strip is the real samples, two traces of them: shaded blanking, '+
   'then the brightness profile that becomes one column of the photograph';
 
 // ---- lightbox wiring ------------------------------------------------------
 
-$('tier').onclick=e=>{
-  e.stopPropagation();
-  TIER = TIER==='recovered' ? 'reconstructed' : 'recovered';
-  $('tierv').textContent = TIER==='recovered' ? 'Recovered' : 'Reconstructed';
-  $('tier').setAttribute('aria-pressed', String(TIER==='reconstructed'));
+// The tier switch lives in TWO places for the same reason the speed control
+// does: the grid's copy is behind a full-screen overlay the moment you open an
+// image, and comparing the tiers is exactly what you do while looking closely.
+// The lightbox copy sits in the decoded pane's own label strip, directly above
+// the picture it changes. One setter, so they cannot disagree.
+function setTier(t){
+  TIER = t;
+  const on = TIER==='reconstructed';
+  $('tierv').textContent = on ? 'Reconstructed' : 'Recovered';
+  $('tier').setAttribute('aria-pressed', String(on));
+  const b=$('lbTierBtn');
+  if(b){ b.textContent = on ? 'tier: reconstructed' : 'tier: recovered';
+         b.setAttribute('aria-pressed', String(on)); }
   // Repaint in place rather than render(): rebuilding the grid would blank
   // every canvas until the lazy loader caught up, and the whole point is an
   // A/B you can flip back and forth without losing your place.
@@ -2018,7 +2029,10 @@ $('tier').onclick=e=>{
     f.dataset.painted='1';
   });
   if(!LB.el.hidden && LB.im){ loadDecoded(LB.im); fillText(LB.im); }
-};
+}
+const toggleTier=()=>setTier(TIER==='recovered' ? 'reconstructed' : 'recovered');
+$('tier').onclick=e=>{ e.stopPropagation(); toggleTier(); };
+$('lbTierBtn').onclick=e=>{ e.stopPropagation(); toggleTier(); };
 
 $('lbLink').onclick=async e=>{
   e.stopPropagation();
@@ -2049,6 +2063,7 @@ addEventListener('keydown',e=>{
   else if(e.key==='ArrowLeft'){ stepLB(-1); e.preventDefault(); }
   else if(e.key===' '){ togglePlay(); e.preventDefault(); }
   else if(e.key==='p'||e.key==='P'){ if(LB.paint) endPaint(false); else startPaint(); e.preventDefault(); }
+  else if(e.key==='t'||e.key==='T'){ toggleTier(); e.preventDefault(); }
   // Space pauses and resumes; it is the one control people reach for without
   // looking, so it must never be the one that throws the scan away.
 
