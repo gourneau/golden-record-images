@@ -53,12 +53,9 @@ figure:hover{border-color:#39414b;transform:translateY(-2px)}
 .tag{position:absolute;top:8px;left:8px;font-family:var(--mono);font-size:10px;
   padding:2px 6px;border-radius:4px;background:rgba(0,0,0,.72);color:var(--dim);letter-spacing:.04em}
 .tag.rgb{right:8px;left:auto;color:#0a0b0d;background:var(--gold);font-weight:700}
-.tag.cmp{bottom:8px;top:auto;left:8px;color:#0a0b0d;background:var(--cyan);font-weight:700;cursor:pointer}
-figure.has-ref{cursor:zoom-in}
-.ref{display:none;border-top:1px solid var(--line)}
-figure.open .ref{display:block}
-.ref img{width:100%;display:block;background:#000}
-.ref .cap{padding:8px 13px 11px;font-size:11px;color:var(--dimmer);font-family:var(--mono)}
+.tag.cmp{bottom:8px;top:auto;left:8px;color:#0a0b0d;background:var(--cyan);font-weight:700}
+.tag.cmp.none{background:#2c323b;color:var(--dim)}
+figure{cursor:zoom-in}
 figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
 .ttl{font-size:13.5px;line-height:1.35;color:var(--ink)}
 .sub{font-family:var(--mono);font-size:10.5px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
@@ -76,6 +73,52 @@ td.n{font-family:var(--mono);color:var(--gold)}
 footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);font-size:13.5px}
 .err{color:#e6a2a2;font-family:var(--mono);font-size:13px;padding:20px 0}
 @media(max-width:640px){.grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}}
+
+/* ---- lightbox --------------------------------------------------------- */
+.lb{position:fixed;inset:0;z-index:60;background:rgba(6,7,9,.975);
+  backdrop-filter:blur(6px);display:flex;flex-direction:column;overscroll-behavior:contain}
+.lb[hidden]{display:none}
+.lb-top{display:flex;gap:12px;align-items:baseline;padding:12px 18px 10px;
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.lb-top .n{font-family:var(--mono);color:var(--gold);font-size:13px}
+.lb-top .t{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.lb-top .m{font-family:var(--mono);font-size:11px;color:var(--dimmer)}
+.lb-top button{padding:5px 10px}
+.lb-panes{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:12px 18px}
+.pane{display:flex;flex-direction:column;min-width:0;min-height:0}
+.pane-head{display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dimmer);padding-bottom:6px}
+.pane-head .src{font-size:10px;padding:3px 8px;border-radius:5px;letter-spacing:.04em;
+  text-transform:none}
+.pane-body{flex:1;min-height:0;display:flex;background:#000;border:1px solid var(--line);
+  border-radius:8px;overflow:auto;position:relative}
+.pane-body>canvas,.pane-body>img{margin:auto;display:block;max-width:100%;max-height:100%}
+.pane-body.zoomed{cursor:zoom-out}
+.pane-body.zoomed>canvas,.pane-body.zoomed>img{max-width:none;max-height:none}
+.pane-body.zoomed>canvas{image-rendering:pixelated}
+.pane-body.can-zoom{cursor:zoom-in}
+.pane-foot{padding-top:7px;font-size:12px;line-height:1.5;color:var(--dim);min-height:1px}
+.pane-foot .mono{font-family:var(--mono);font-size:10.5px;color:var(--dimmer);
+  letter-spacing:.03em;display:block;margin-top:3px}
+.warn{border:1px solid #6d4b2f;background:#211610;color:#f0c08a;border-radius:6px;
+  padding:7px 10px;font-size:12px;line-height:1.45;margin-bottom:7px}
+.warn b{color:#ffd7a6}
+.noref{margin:auto;color:var(--dimmer);font-size:13px;text-align:center;padding:24px;max-width:44ch}
+
+.lb-wave{border-top:1px solid var(--line);padding:9px 18px 12px}
+.wrow{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:7px}
+.wrow .wstat{font-family:var(--mono);font-size:11px;color:var(--dimmer)}
+.wrow .sep{padding:5px 9px;font-family:var(--mono);font-size:11px}
+#lbWave{display:block;width:100%;height:88px;border:1px solid var(--line);border-radius:6px;
+  background:#0c0e12;cursor:crosshair}
+.whelp{font-family:var(--mono);font-size:10px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
+@media(max-width:860px){
+  .lb-panes{grid-template-columns:1fr;overflow:auto}
+  .pane-body{min-height:38vh}
+  #lbWave{height:60px}
+  .lb-top .t{font-size:15px}
+}
 </style>
 </head>
 <body>
@@ -174,7 +217,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 </div></footer>
 
 <script>
-const ASSETV='6';
+const ASSETV='7';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 let images=[], filter='all', rgbOrder=true;
 
@@ -282,19 +325,19 @@ function paint(f){
        d.orientation, d.color);
 }
 
-let sweepPending=false;
 function sweep(){
-  if(sweepPending) return;
-  sweepPending=true;
-  requestAnimationFrame(()=>{
-    sweepPending=false;
-    const h=innerHeight;
-    for(const f of GRID.children){
-      if(f.dataset.painted) continue;
-      const r=f.getBoundingClientRect();
-      if(r.bottom>-600 && r.top<h+600) paint(f);
-    }
-  });
+  // Deliberately synchronous. An earlier version deferred the work to
+  // requestAnimationFrame behind a `pending` flag -- but rAF does not fire in a
+  // throttled or backgrounded tab, so the flag latched true and every
+  // subsequent sweep returned early, permanently. That is also why the
+  // IntersectionObserver alone was unreliable: both are tied to rendering.
+  // 116 getBoundingClientRect calls are cheap; a latched flag is not.
+  const h=innerHeight;
+  for(const f of GRID.children){
+    if(f.dataset.painted) continue;
+    const r=f.getBoundingClientRect();
+    if(r.bottom>-600 && r.top<h+600) paint(f);
+  }
 }
 addEventListener('scroll', sweep, {passive:true});
 addEventListener('resize', sweep, {passive:true});
@@ -316,9 +359,9 @@ document.getElementById('ord').onclick=()=>{
 };
 
 let REF={};
-fetch('docs/reference/map.json?v=6').then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
+fetch('docs/reference/map.json?v=7').then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
  .catch(()=>{})
- .then(()=>fetch('web/public/data/catalog.json?v=6'))
+ .then(()=>fetch('web/public/data/catalog.json?v=7'))
  .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
  .then(cat=>{
   const orient={}; for(const fr of cat.frames) orient[fr.id]=fr.orientation??0;
