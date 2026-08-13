@@ -25,6 +25,38 @@ rewards blur and that every method's metrics keep improving past the correct
 setting. So the stopping point is chosen by a hold-out on the measurements, and
 the same hold-out decides whether the method was worth running at all.
 
+MEASURED RESULT (2026-08, data/master/384kHzStereo.wav; 2000 iterations, 15% of
+dots withheld, the stopping iterate chosen by those withheld dots alone):
+
+  frame   stopped at   train mse   held-out   neighbour-fill   vs baseline
+  L000       1800       0.0007      0.0351        0.0550          +36.2%
+  L055       1975       0.0010      0.0477        0.0538          +11.3%
+  L020       1925       0.0010      0.0620        0.1092          +43.2%
+
+Three of three beat the baseline on measurements the fit never saw. That is a
+better result than the neural field in `neuralfield.py` managed (one of six),
+and the difference is the expected one: a convolutional generator's inductive
+bias suits photographs, a coordinate MLP's does not.
+
+TWO THINGS THAT QUALIFY IT, both visible in the numbers above:
+
+  * THE BUDGET WAS BINDING ON TWO OF THREE FRAMES. L000 and L055 stopped at
+    1800 and 1975 of 2000 iterations, i.e. the held-out error was still at or
+    near its best when the run ended. Those gains are a floor, not a ceiling,
+    and equally the stopping point was not freely chosen -- it was cut off.
+  * L020 IS THE ONE THAT BEHAVED AS THE LITERATURE PREDICTS, and it is the most
+    informative frame here: held-out error fell to 0.0620 at iteration 1925 and
+    then rose to 0.4136 by 2000. That is the network starting to fit the noise,
+    caught by data it never saw. It is also the evidence that the early stopping
+    is doing real work rather than decorating a monotonic curve.
+
+WHAT THIS DOES NOT SHOW. The hold-out asks the model to predict dots that were
+withheld, which is interpolation. Doing that better than neighbour-fill means
+the model represents the image better, and that supports denoising -- but it is
+not the same measurement as denoising, and no claim of a denoising gain is made
+here. `n2n.py` measures that directly on the colour triplets, and it has a blur
+control, which this does not.
+
 WHAT IT CANNOT DO. Not resolution. The 1977 camera resolved 138-172 elements
 along a trace and we already sample 230; across traces it resolved 260-324 and
 we sample 512. There is no hidden detail to uncover, and any that appears is
