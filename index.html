@@ -475,7 +475,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='24';
+const ASSETV='25';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -1203,21 +1203,37 @@ function buildWaveLayer(){
     c.fillRect(0,0,xOf(d.leadIn),cssH);
     c.fillRect(xOf(endS),0,cssW-xOf(endS),cssH);
     // trace ruler
-    c.strokeStyle='rgba(255,255,255,.09)'; c.fillStyle='#5a626c';
+    c.strokeStyle='rgba(201,162,39,.14)'; c.fillStyle='#7d7048';
     c.font='9px ui-monospace,Menlo,monospace'; c.lineWidth=1;
     for(let t=0;t<=d.traces;t+=64){
       const x=Math.round(xOf(sampleOfTrace(d,t)))+.5;
       c.beginPath(); c.moveTo(x,0); c.lineTo(x,cssH); c.stroke();
       if(t<d.traces) c.fillText(String(t), x+3, cssH-3);
     }
-    // peaks
-    c.fillStyle='#4a9c93';
+    // Peaks, in the same metal as everything else. Scaled to the 90th percentile
+    // of the envelope rather than to full scale, for the reason the card strips
+    // were: the sync burst is the tallest thing in the frame, so scaling to it
+    // flattens the picture into a band. Clipping the few tallest buckets costs
+    // nothing and lets the picture's own modulation show.
     const B=d.buckets, w=Math.max(1,cssW/B);
+    const env=new Float64Array(B);
+    for(let i=0;i<B;i++) env[i]=(d.max[i]-d.min[i])/127;
+    const p90=Float64Array.from(env).sort()[Math.floor(B*0.90)]||1;
+    const a2=amp/(p90/2), clip=v=>Math.max(-amp,Math.min(amp,v));
+    c.fillStyle=goldFill(c,0,cssH);
     for(let i=0;i<B;i++){
       const x=i/B*cssW;
-      const y1=mid-(d.max[i]/127)*amp, y2=mid-(d.min[i]/127)*amp;
+      const y1=mid+clip(-(d.max[i]/127)*a2), y2=mid+clip(-(d.min[i]/127)*a2);
       c.fillRect(x, y1, w, Math.max(0.8, y2-y1));
     }
+    c.strokeStyle=goldStroke(c,0,cssH); c.lineWidth=1;
+    c.beginPath();
+    for(let i=0;i<B;i++){
+      const x=Math.round(i/B*cssW)+0.5;
+      c.moveTo(x, mid+clip(-(d.max[i]/127)*a2));
+      c.lineTo(x, mid+clip(-(d.min[i]/127)*a2));
+    }
+    c.stroke();
   }
   WSTATIC=off; WKEY=key;
 }
@@ -1239,7 +1255,7 @@ function drawWave(){
     const xOf=s=>s/d.samples*cssW;
     if(LB.hoverTrace!=null && LB.playSample==null){
       const x=Math.round(xOf(sampleOfTrace(d,LB.hoverTrace)))+.5;
-      c.strokeStyle='rgba(95,211,196,.85)'; c.lineWidth=1;
+      c.strokeStyle='rgba(240,214,130,.85)'; c.lineWidth=1;
       c.beginPath(); c.moveTo(x,0); c.lineTo(x,cssH); c.stroke();
     }
     if(LB.playSample!=null){
