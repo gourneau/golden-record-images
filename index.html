@@ -234,6 +234,48 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 </div></section>
 
 <section><div class="wrap">
+  <h2>What the decoder was allowed to know</h2>
+  <p>This project wants two things that pull against each other: a <strong>clean-room decode</strong>,
+  recovering the pictures from the artifact alone the way a recipient who has never heard of Earth
+  would have to — and the <strong>best pictures we can get</strong>, which means using the original
+  slides to check the work. Both are worth having. Mixing them silently would make the result
+  worthless, because you could not tell which claims survive without the answer key. So every
+  shipped artifact carries a tier, and the boundary is asserted in code rather than promised in
+  prose.</p>
+  <table>
+    <tr><th>Tier</th><th>May use</th><th>Covers</th></tr>
+    <tr><td class="n">0 · Record</td><td>the audio and the engraved cover — <em>what an alien has</em></td>
+        <td>every decoded pixel, timebase, dot clock, geometry, drift correction, the circle's self-check</td></tr>
+    <tr><td class="n">1 · Universal</td><td>priors any observer could hold without knowing Earth</td>
+        <td>denoising, colour-triplet fusion, deconvolution by the measured lens response</td></tr>
+    <tr><td class="n">2 · Earth</td><td>the original slides and their captions — <strong>cheating</strong></td>
+        <td>which edge is up, which reproductions are mirrored, every title, red/green/blue roles, all scoring</td></tr>
+    <tr><td class="n">3 · Oracle</td><td>settings chosen per image <em>by looking at the answer</em></td>
+        <td>not a decoder — a measurement of how much a better honest decoder could still gain</td></tr>
+  </table>
+  <p>The rule that makes this more than labelling: <strong>tier 0 and tier 1 output must be
+  reproducible with no tier 2 file on disk.</strong> A check walks the decoder's import graph and
+  fails if a tier 0 module can so much as reach reference material. The decoder imports three
+  modules and reads one file, the WAV.</p>
+  <p class="note"><b>Rotation is cheating, and always will be.</b> The record never says which edge
+  is the top. We tested whether it at least says which pictures were <em>turned</em> — a slide fed
+  in sideways ought to leave blank bands at the frame edges — and it does not: the 1977 operators
+  reframed each slide to fill the frame, so turning it left no trace in the signal. The detector
+  finds 1 of 66 turned frames. This gallery rotates the pictures anyway, so you needn't tilt your
+  head, but that turn happens <b>when the image is drawn, and is never written into a decoded
+  pixel</b>.</p>
+  <p class="note"><b>Known contamination, stated rather than hidden.</b> The thumbnails this page
+  loads are currently tier 2 and ought to be tier 0: the build step bakes a hand-made quarter turn
+  into 60 of the 156 files. It is logged as a defect with the fix written down, so the table above
+  cannot be read as a claim of purity that has not been earned.</p>
+  <p>There is one orientation check the record <em>does</em> provide, and it is the companion to
+  the circle. Four raster conventions fit the cover, and two of them are mirror images of the other
+  two — get it wrong and all 116 pictures are flipped, with nothing in the pictures to catch it.
+  But <strong>image 2 is the pulsar map, and the pulsar map is also engraved on the cover</strong>,
+  which is bolted to the record. Fourteen lines at fourteen angles is strongly handed, so comparing
+  the decode against the engraving pins the handedness of the whole raster at a stroke. The circle
+  checks your timing; the pulsar map checks your handedness. Neither needs a word of language.</p>
+
   <h2>Honest status</h2>
   <p>This page is a <strong>gallery</strong>, not the interactive decoder. The real thing — where
   the picture paints stripe by stripe under your control — is still being built. What you see here
@@ -244,10 +286,19 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   areas decay toward mid-grey and only edges survive. It is the same flaw the 2017 decoder's
   author documented and could not solve, and it remains unsolved here. Correcting it is the next
   piece of work, and the biggest single improvement still available.</p>
-  <p><strong>Reference images are for labelling only.</strong> Nothing on the reference side has
-  ever fed pixel recovery — the decoder's only input is the WAV. Where a book page has not been
-  confidently matched to one of our images, the panel says <em>match uncertain</em> rather than
-  showing a guess, and <span id="norefCount">some</span> images have no reference held at all.</p>
+  <p><strong>Reference images are for checking and labelling only.</strong> Nothing on the
+  reference side has ever fed pixel recovery — the decoder's only input is the WAV. Where a book
+  page has not been confidently matched to one of our images, the panel says <em>match
+  uncertain</em> rather than showing a guess, and <span id="norefCount">some</span> images have no
+  reference held at all.</p>
+  <p><strong>Fourteen published reproductions are printed backwards.</strong> Aligning each
+  reference to our decode needs a transform that can mirror, and once it could, fourteen plates
+  snapped into place that had never matched before — the Thai elephant went from 3 to 799 matching
+  features, the Cameroon house from 3 to 503. Bali, Guatemala, Japan, Greece, Turkey, Australia
+  and the whistling swans are all laterally inverted in print. Our decodes had them right. Since
+  the record is the authority on what it contains, it is the <em>reference</em> that has been
+  flipped to match, and the calibration circle — which "wins" a mirror test by one feature on
+  noise alone, being symmetric — was deliberately left alone.</p>
   <p><strong>Colour separation order: settled.</strong> Published decoders disagreed on whether
   the three scans run red-green-blue or the reverse, and nobody had shown evidence either way.
   Flipping the toggle above answers it by eye: under B&nbsp;G&nbsp;R the Earth's oceans turn
@@ -271,7 +322,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='11';
+const ASSETV='12';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -339,16 +390,27 @@ function composite(srcs,colour){
 // the unrotated column 0 with each edge of the stored PNG: it lands on column
 // 0, on row 0, and on the LAST column respectively -- mean |difference| 0.0005,
 // 0.0010 and 0.0004, against 0.14 to 0.30 for every other edge.
-function blit(cv,off,orientation,trace){
+// TWO different numbers, and conflating them is a bug I have already shipped
+// once: `im.displayRotate` is a display turn in DEGREES, while `im.orientation`
+// is Barry's quarter-turn CODE (0/1/2) describing how build.py laid the stored
+// PNG out. The first decides how to rotate; the second decides where a trace
+// line lands. Passing the code where degrees were expected turned Jupiter and
+// Earth by 2 degrees instead of 90 in the lightbox. Hence: pass the image.
+function blit(cv,off,im,trace){
   const w=off.width, h=off.height;
-    // Display rotation is MEASURED, not tabled. align_refs.py reports how far
+  // Display rotation is MEASURED, not tabled. align_refs.py reports how far
   // each published reference had to be rotated to land on our decode; rounded
   // to a quarter turn that is the correction our decode needs. It reproduces
   // the old hand rule everywhere the hand rule was right (Jupiter, Earth) and
   // catches what it missed -- images 27 and 28, and the pulsar map at 180.
   // Thumbnails are already oriented at build time, so this is the only
   // rotation applied here.
-  const turn = (typeof orientation === 'number' ? orientation : 0);
+  //
+  // NOTE this turn is Earth knowledge -- provenance tier 2. The record says
+  // nothing about which edge is up; see ALIENS.md. It is applied for the
+  // viewer's comfort and is deliberately NOT baked into any decoded pixel.
+  const turn = (im && typeof im.displayRotate === 'number') ? im.displayRotate : 0;
+  const orientation = (im && typeof im.orientation === 'number') ? im.orientation : 0;
   const swap = (turn===90 || turn===270);
   cv.width  = swap? h : w;
   cv.height = swap? w : h;
@@ -373,8 +435,8 @@ function blit(cv,off,orientation,trace){
   c.restore();
 }
 
-function draw(cv,srcs,orientation,colour){
-  return composite(srcs,colour).then(off=>{ if(off) blit(cv,off,orientation,null); return off; });
+function draw(cv,srcs,im,colour){
+  return composite(srcs,colour).then(off=>{ if(off) blit(cv,off,im,null); return off; });
 }
 
 const thumbs=im=>im.frames.map(x=>`data/thumbs/${x}.png?v=${ASSETV}`);
@@ -421,7 +483,7 @@ function paint(f){
   if(f.dataset.painted) return;
   f.dataset.painted='1';
   const d=JSON.parse(f.dataset.im);
-  draw(f.querySelector('canvas'), thumbs(d), (d.displayRotate||0), d.color);
+  draw(f.querySelector('canvas'), thumbs(d), d, d.color);
 }
 
 function sweep(){
@@ -452,7 +514,7 @@ $('ord').onclick=()=>{
   // grid and blank every canvas until the lazy loader caught up again.
   GRID.querySelectorAll('figure').forEach(f=>{
     const d=JSON.parse(f.dataset.im); if(!d.color) return;
-    draw(f.querySelector('canvas'), thumbs(d), (d.displayRotate||0), true);
+    draw(f.querySelector('canvas'), thumbs(d), d, true);
     f.dataset.painted='1';
   });
   if(!LB.el.hidden && LB.im && LB.im.color) loadDecoded(LB.im);
@@ -819,7 +881,7 @@ function showTrace(){
   let t=null;
   if(LB.playSample!=null && d) t=traceAt(d,LB.playSample);
   else if(LB.hoverTrace!=null) t=LB.hoverTrace;
-  blit($('lbCanvas'), LB.off, LB.im.orientation, t);
+  blit($('lbCanvas'), LB.off, LB.im, t);
 }
 
 function waveSampleAt(ev){

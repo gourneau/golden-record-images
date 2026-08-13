@@ -1,0 +1,602 @@
+{
+ "margin_threshold": 40,
+ "note": "Published reproductions found laterally inverted relative to the record. The record is authoritative; these crops were flipped to match it. Provenance tier 2 (Earth reference material), evaluation only.",
+ "flipped": [
+  35,
+  36,
+  56,
+  64,
+  65,
+  66,
+  67,
+  68,
+  73,
+  76,
+  79,
+  84,
+  102,
+  114
+ ],
+ "scores": [
+  {
+   "n": 1,
+   "direct": 11,
+   "mirrored": 12
+  },
+  {
+   "n": 2,
+   "direct": 70,
+   "mirrored": 35
+  },
+  {
+   "n": 3,
+   "direct": 50,
+   "mirrored": 30
+  },
+  {
+   "n": 4,
+   "direct": 73,
+   "mirrored": 12
+  },
+  {
+   "n": 5,
+   "direct": 85,
+   "mirrored": 8
+  },
+  {
+   "n": 6,
+   "direct": 93,
+   "mirrored": 5
+  },
+  {
+   "n": 7,
+   "direct": 146,
+   "mirrored": 3
+  },
+  {
+   "n": 8,
+   "direct": 37,
+   "mirrored": 36
+  },
+  {
+   "n": 9,
+   "direct": 435,
+   "mirrored": 0
+  },
+  {
+   "n": 10,
+   "direct": 106,
+   "mirrored": 5
+  },
+  {
+   "n": 11,
+   "direct": 39,
+   "mirrored": 5
+  },
+  {
+   "n": 12,
+   "direct": 519,
+   "mirrored": 4
+  },
+  {
+   "n": 13,
+   "direct": 482,
+   "mirrored": 3
+  },
+  {
+   "n": 14,
+   "direct": 61,
+   "mirrored": 8
+  },
+  {
+   "n": 15,
+   "direct": 54,
+   "mirrored": 5
+  },
+  {
+   "n": 16,
+   "direct": 116,
+   "mirrored": 5
+  },
+  {
+   "n": 17,
+   "direct": 613,
+   "mirrored": 4
+  },
+  {
+   "n": 18,
+   "direct": 286,
+   "mirrored": 7
+  },
+  {
+   "n": 19,
+   "direct": 249,
+   "mirrored": 4
+  },
+  {
+   "n": 20,
+   "direct": 172,
+   "mirrored": 9
+  },
+  {
+   "n": 21,
+   "direct": 112,
+   "mirrored": 14
+  },
+  {
+   "n": 22,
+   "direct": 285,
+   "mirrored": 5
+  },
+  {
+   "n": 23,
+   "direct": 30,
+   "mirrored": 4
+  },
+  {
+   "n": 24,
+   "direct": 185,
+   "mirrored": 5
+  },
+  {
+   "n": 25,
+   "direct": 86,
+   "mirrored": 5
+  },
+  {
+   "n": 26,
+   "direct": 95,
+   "mirrored": 41
+  },
+  {
+   "n": 27,
+   "direct": 30,
+   "mirrored": 5
+  },
+  {
+   "n": 28,
+   "direct": 903,
+   "mirrored": 3
+  },
+  {
+   "n": 29,
+   "direct": 321,
+   "mirrored": 4
+  },
+  {
+   "n": 30,
+   "direct": 71,
+   "mirrored": 5
+  },
+  {
+   "n": 31,
+   "direct": 40,
+   "mirrored": 5
+  },
+  {
+   "n": 32,
+   "direct": 40,
+   "mirrored": 11
+  },
+  {
+   "n": 33,
+   "direct": 389,
+   "mirrored": 6
+  },
+  {
+   "n": 34,
+   "direct": 268,
+   "mirrored": 3
+  },
+  {
+   "n": 35,
+   "direct": 4,
+   "mirrored": 81
+  },
+  {
+   "n": 36,
+   "direct": 5,
+   "mirrored": 218
+  },
+  {
+   "n": 37,
+   "direct": 55,
+   "mirrored": 8
+  },
+  {
+   "n": 38,
+   "direct": 194,
+   "mirrored": 3
+  },
+  {
+   "n": 39,
+   "direct": 177,
+   "mirrored": 17
+  },
+  {
+   "n": 40,
+   "direct": 96,
+   "mirrored": 5
+  },
+  {
+   "n": 41,
+   "direct": 80,
+   "mirrored": 4
+  },
+  {
+   "n": 42,
+   "direct": 249,
+   "mirrored": 3
+  },
+  {
+   "n": 43,
+   "direct": 222,
+   "mirrored": 5
+  },
+  {
+   "n": 44,
+   "direct": 420,
+   "mirrored": 0
+  },
+  {
+   "n": 45,
+   "direct": 448,
+   "mirrored": 4
+  },
+  {
+   "n": 46,
+   "direct": 609,
+   "mirrored": 4
+  },
+  {
+   "n": 47,
+   "direct": 257,
+   "mirrored": 6
+  },
+  {
+   "n": 48,
+   "direct": 397,
+   "mirrored": 0
+  },
+  {
+   "n": 49,
+   "direct": 490,
+   "mirrored": 5
+  },
+  {
+   "n": 50,
+   "direct": 483,
+   "mirrored": 6
+  },
+  {
+   "n": 51,
+   "direct": 297,
+   "mirrored": 16
+  },
+  {
+   "n": 52,
+   "direct": 95,
+   "mirrored": 13
+  },
+  {
+   "n": 53,
+   "direct": 73,
+   "mirrored": 3
+  },
+  {
+   "n": 54,
+   "direct": 148,
+   "mirrored": 3
+  },
+  {
+   "n": 55,
+   "direct": 87,
+   "mirrored": 4
+  },
+  {
+   "n": 56,
+   "direct": 0,
+   "mirrored": 131
+  },
+  {
+   "n": 57,
+   "direct": 234,
+   "mirrored": 2
+  },
+  {
+   "n": 58,
+   "direct": 230,
+   "mirrored": 3
+  },
+  {
+   "n": 59,
+   "direct": 242,
+   "mirrored": 4
+  },
+  {
+   "n": 60,
+   "direct": 589,
+   "mirrored": 3
+  },
+  {
+   "n": 61,
+   "direct": 26,
+   "mirrored": 24
+  },
+  {
+   "n": 62,
+   "direct": 356,
+   "mirrored": 2
+  },
+  {
+   "n": 63,
+   "direct": 98,
+   "mirrored": 10
+  },
+  {
+   "n": 64,
+   "direct": 4,
+   "mirrored": 434
+  },
+  {
+   "n": 65,
+   "direct": 4,
+   "mirrored": 474
+  },
+  {
+   "n": 66,
+   "direct": 26,
+   "mirrored": 228
+  },
+  {
+   "n": 67,
+   "direct": 3,
+   "mirrored": 799
+  },
+  {
+   "n": 68,
+   "direct": 3,
+   "mirrored": 159
+  },
+  {
+   "n": 69,
+   "direct": 339,
+   "mirrored": 4
+  },
+  {
+   "n": 70,
+   "direct": 224,
+   "mirrored": 5
+  },
+  {
+   "n": 71,
+   "direct": 152,
+   "mirrored": 7
+  },
+  {
+   "n": 72,
+   "direct": 461,
+   "mirrored": 28
+  },
+  {
+   "n": 73,
+   "direct": 4,
+   "mirrored": 112
+  },
+  {
+   "n": 74,
+   "direct": 275,
+   "mirrored": 5
+  },
+  {
+   "n": 75,
+   "direct": 521,
+   "mirrored": 3
+  },
+  {
+   "n": 76,
+   "direct": 10,
+   "mirrored": 328
+  },
+  {
+   "n": 77,
+   "direct": 432,
+   "mirrored": 4
+  },
+  {
+   "n": 78,
+   "direct": 182,
+   "mirrored": 9
+  },
+  {
+   "n": 79,
+   "direct": 5,
+   "mirrored": 257
+  },
+  {
+   "n": 80,
+   "direct": 364,
+   "mirrored": 3
+  },
+  {
+   "n": 81,
+   "direct": 374,
+   "mirrored": 12
+  },
+  {
+   "n": 82,
+   "direct": 171,
+   "mirrored": 5
+  },
+  {
+   "n": 83,
+   "direct": 178,
+   "mirrored": 11
+  },
+  {
+   "n": 84,
+   "direct": 3,
+   "mirrored": 503
+  },
+  {
+   "n": 85,
+   "direct": 537,
+   "mirrored": 5
+  },
+  {
+   "n": 86,
+   "direct": 317,
+   "mirrored": 4
+  },
+  {
+   "n": 87,
+   "direct": 451,
+   "mirrored": 6
+  },
+  {
+   "n": 88,
+   "direct": 249,
+   "mirrored": 2
+  },
+  {
+   "n": 89,
+   "direct": 283,
+   "mirrored": 4
+  },
+  {
+   "n": 90,
+   "direct": 223,
+   "mirrored": 12
+  },
+  {
+   "n": 91,
+   "direct": 514,
+   "mirrored": 3
+  },
+  {
+   "n": 92,
+   "direct": 153,
+   "mirrored": 5
+  },
+  {
+   "n": 93,
+   "direct": 222,
+   "mirrored": 4
+  },
+  {
+   "n": 94,
+   "direct": 319,
+   "mirrored": 6
+  },
+  {
+   "n": 95,
+   "direct": 115,
+   "mirrored": 12
+  },
+  {
+   "n": 96,
+   "direct": 248,
+   "mirrored": 7
+  },
+  {
+   "n": 97,
+   "direct": 325,
+   "mirrored": 3
+  },
+  {
+   "n": 98,
+   "direct": 425,
+   "mirrored": 4
+  },
+  {
+   "n": 99,
+   "direct": 76,
+   "mirrored": 3
+  },
+  {
+   "n": 100,
+   "direct": 121,
+   "mirrored": 11
+  },
+  {
+   "n": 101,
+   "direct": 429,
+   "mirrored": 2
+  },
+  {
+   "n": 102,
+   "direct": 6,
+   "mirrored": 400
+  },
+  {
+   "n": 103,
+   "direct": 81,
+   "mirrored": 6
+  },
+  {
+   "n": 104,
+   "direct": 79,
+   "mirrored": 7
+  },
+  {
+   "n": 105,
+   "direct": 204,
+   "mirrored": 7
+  },
+  {
+   "n": 106,
+   "direct": 100,
+   "mirrored": 4
+  },
+  {
+   "n": 107,
+   "direct": 459,
+   "mirrored": 10
+  },
+  {
+   "n": 108,
+   "direct": 337,
+   "mirrored": 4
+  },
+  {
+   "n": 109,
+   "direct": 234,
+   "mirrored": 14
+  },
+  {
+   "n": 110,
+   "direct": 124,
+   "mirrored": 30
+  },
+  {
+   "n": 111,
+   "direct": 34,
+   "mirrored": 29
+  },
+  {
+   "n": 112,
+   "direct": 299,
+   "mirrored": 4
+  },
+  {
+   "n": 113,
+   "direct": 67,
+   "mirrored": 10
+  },
+  {
+   "n": 114,
+   "direct": 3,
+   "mirrored": 112
+  },
+  {
+   "n": 115,
+   "direct": 298,
+   "mirrored": 11
+  },
+  {
+   "n": 116,
+   "direct": 138,
+   "mirrored": 5
+  }
+ ]
+}

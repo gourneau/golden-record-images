@@ -95,11 +95,49 @@ it forever.** The cover shows a grey scale, but the images do not contain a labe
 Barry's decoder carries a per-frame rotation table, hand-made by looking at the pictures. Nothing
 in the encoding says which edge is the top.
 
-A capable AI could guess statistically — skies are bright and above, faces have a canonical
+We tried to do better than that verdict and failed, which turned out to be the more useful result.
+The hypothesis was that being *turned* should leave a trace even if being *upright* does not: the
+scan converter scans a fixed 4:3 raster, so a portrait slide projected into it ought to leave
+featureless bands down the left and right. That is a property of the signal, not of the scene, so
+an alien could read it. It would at least tell you **which** images want a quarter turn, even if
+not which way.
+
+It is false. The detector finds 1 of the 66 turned frames — 1.5% recall — and one raw frame
+explains why: the human skeleton is a portrait subject lying on its side, filling the raster edge
+to edge, with no surround at all. The 1977 operators reframed every slide to fill the frame. The
+content-box aspect ratio settles it: 1.44 for turned slides against 1.40 for upright ones, where
+the hypothesis predicted 0.75 against 1.33. (`pipeline/orient_blind.py`.)
+
+So the honest verdict is worse than "the record does not say which edge is up." It is: **the
+record does not say which images were turned, either.** An alien recovers 116 correct photographs
+and cannot tell that 66 of them are lying on their side, because turning them left no trace.
+
+A capable AI could still guess statistically — skies are bright and above, faces have a canonical
 orientation, gravity organises built structures. But every one of those priors is Earth biology
 and Earth architecture. It is inference about *us*, not decoding.
 
 **One asymmetric orientation mark per frame would have cost nothing.**
+
+### The one orientation check the record *does* provide
+
+There is an escape we had not credited, and it is global rather than per-image.
+
+Four raster conventions are consistent with the cover: trace 0 on the left or the right, and the
+start of a trace at the top or the bottom. Two of those four are mirror images of the other two,
+so getting it wrong flips every one of the 116 pictures. Nothing in the picture data can catch
+that — a mirrored photograph of a stranger's world looks exactly as plausible as the real one.
+
+But **image 2 is the pulsar map, and the pulsar map is also engraved on the cover.** The cover is
+bolted to the record; a recipient has both. The map is strongly chiral — fourteen lines at
+fourteen distinct angles, each labelled with its pulsar's period in binary — so comparing the
+decoded image against the engraving pins the handedness of the entire raster at a stroke, and
+with it every mirror question for all 116 images.
+
+That is a real, designed-in self-test, and it is the companion to the circle: **the circle checks
+your timebase, the pulsar map checks your handedness.** Neither needs a word of language.
+
+We have not yet run the comparison, because it needs a rectified image of the cover engraving,
+which is not in `docs/reference/`. It is recorded here as a specific thing to do, not as a result.
 
 ### Which separation is red, green and blue?
 

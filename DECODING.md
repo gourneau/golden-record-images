@@ -195,7 +195,7 @@ there:
 
 | Defect | What it does | What to do |
 |---|---|---|
-| 60 Hz hum | fixed odd/even stripe pattern | subtract exactly (step 6) |
+| field-ID sync alternation | fixed odd/even stripe pattern | lock to the falling edge (step 6) |
 | wow and flutter | wavy, wobbling edges | time every trace separately |
 | AC-coupling droop | bright top, dark bottom, trailing shadows | clamp on the sync shelf |
 | dropouts | a stripe briefly loses signal | detect and flag; fill from neighbours |
@@ -237,7 +237,9 @@ Things that are measured and solid:
 
 - trace period 8.326 ms; sync timing to ~6 samples RMS, 65× better than peak-picking
 - active picture window 2873 samples, which makes the calibration circle round with no fudge
-- 60 Hz hum locked at exactly half the trace rate, ~70% of signal amplitude, removable
+- the odd/even alternation sits at exactly half the trace rate — the scan converter's field-ID
+  code, not mains hum, and 5–30% of picture amplitude rather than the 70% claimed above in the
+  version of this document that the correction box retracts
 - the quiet gap between images is a framing signal at exactly twice the trace period — not
   a sawtooth, and not, as far as we can tell, hidden data
 
@@ -253,7 +255,35 @@ Things still open, stated plainly:
 
 ---
 
-## 6. Why the circle is the best part
+## 6. What counts as cheating
+
+You have the original photographs. A recipient of the record does not. Those are two very
+different situations, and a decode that blurs them is not worth reading, because you cannot tell
+which of its claims would survive without the answer key.
+
+So everything here is labelled with what it was allowed to know:
+
+- **Record only.** The audio and the engraved cover, nothing else — what an alien has. Every
+  decoded pixel is in this tier, along with the timing, the geometry, the drift correction and
+  the circle's own self-check. The code enforces it: the decoder can only import three modules
+  and can only read the audio file.
+- **Universal priors.** Assumptions any observer anywhere could make — that images are mostly
+  smooth, that the three colour scans of one slide must agree. No Earth photograph involved, but
+  a prior can invent detail that was never measured, so it is kept separate.
+- **Earth knowledge.** The originals and their captions. This is cheating, and it is allowed for
+  exactly two things: **checking** our work, and **presentation** — which way up to show a
+  picture, and what to call it. It never touches a pixel.
+- **Oracle.** Tuning each image against its known answer. Not a decoder at all; it exists to
+  measure how much a better honest decoder could still gain. Currently **+41%**, which is the
+  most useful number in the project, because it says the work is not finished.
+
+The line matters most for rotation. **The record never says which edge is the top.** We even
+tested whether it says which pictures were *turned* — a slide fed in sideways might have left
+blank bands at the edges — and it does not: the operators reframed each slide to fill the frame,
+so turning left no trace. The gallery rotates the pictures anyway so you needn't tilt your head,
+but that turn is applied when the image is *displayed*, never written into the decoded file.
+
+## 7. Why the circle is the best part
 
 The engineers who cut this record in 1977 could not send a manual, a language, or a unit of
 measurement. So they sent a circle — and trusted that anyone who found it would understand

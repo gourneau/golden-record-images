@@ -1,0 +1,239 @@
+{
+ "tiers": [
+  {
+   "tier": 0,
+   "name": "record",
+   "label": "Record only \u2014 the audio and the cover. An alien could do this."
+  },
+  {
+   "tier": 1,
+   "name": "universal",
+   "label": "Universal priors \u2014 no Earth knowledge, but assumptions beyond the data."
+  },
+  {
+   "tier": 2,
+   "name": "earth",
+   "label": "Earth knowledge \u2014 the original slides or their captions. Cheating."
+  },
+  {
+   "tier": 3,
+   "name": "oracle",
+   "label": "Oracle \u2014 tuned per image against the answer. A headroom measurement."
+  }
+ ],
+ "artifacts": [
+  {
+   "name": "pixels",
+   "tier": 0,
+   "tier_name": "record",
+   "what": "every decoded pixel of all 156 frames",
+   "why": "decode.py imports numpy, dotclock and sync only; its sole data input is the WAV",
+   "module": "decode.py",
+   "consumes": [],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "timebase",
+   "tier": 0,
+   "tier_name": "record",
+   "what": "per-trace start times, trace period, wow and flutter",
+   "why": "matched filter on the blanking burst, which is in the audio",
+   "module": "sync.py",
+   "consumes": [],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "dot_clock",
+   "tier": 0,
+   "tier_name": "record",
+   "what": "262.519 sample-and-hold plateaus per trace",
+   "why": "measured from the audio; the cover's trace duration predicts 262.5 independently",
+   "module": "dotclock.py",
+   "consumes": [],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "geometry",
+   "tier": 0,
+   "tier_name": "record",
+   "what": "isotropy 7.4406 samples per trace-width, picture window, 4:3 span",
+   "why": "the cover states 512 traces, 8.34 ms and 4:3; the circle checks the result",
+   "module": "geometry.py",
+   "consumes": [],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "droop_inverse",
+   "tier": 0,
+   "tier_name": "record",
+   "what": "per-channel one-pole inverse, tau from a scene-free probe",
+   "why": "the probe is a content-free region of the record's own signal",
+   "module": "droop_inverse.py",
+   "consumes": [],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "circle_metrics",
+   "tier": 0,
+   "tier_name": "record",
+   "what": "axis ratio, radial rms, MTF50 of the calibration frame",
+   "why": "a circle is self-checking; the cover says the first image is one",
+   "module": "circle.py",
+   "consumes": [],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "colour_grouping",
+   "tier": 0,
+   "tier_name": "record",
+   "what": "which frames form a triplet (not which is red)",
+   "why": "three consecutive frames of one scene are detectable by correlation alone",
+   "module": "colour.py",
+   "consumes": [],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "denoise",
+   "tier": 1,
+   "tier_name": "universal",
+   "what": "noise suppression using image-statistics priors",
+   "why": "assumes natural-image smoothness; no Earth photograph is consulted",
+   "module": "enhance.py",
+   "consumes": [
+    "record"
+   ],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "triplet_fusion",
+   "tier": 1,
+   "tier_name": "universal",
+   "what": "registration and fusion across the three separations of a slide",
+   "why": "cross-separation agreement is a property of the artifact, not of Earth",
+   "module": "fuse.py",
+   "consumes": [
+    "record"
+   ],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "deconvolution",
+   "tier": 1,
+   "tier_name": "universal",
+   "what": "deconvolution by the measured camera PSF",
+   "why": "the PSF is measured from the record; the inversion prior is generic",
+   "module": "deconv.py",
+   "consumes": [
+    "record"
+   ],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "display_rotation",
+   "tier": 2,
+   "tier_name": "earth",
+   "what": "the quarter turn each image is shown at",
+   "why": "the record encodes no 'up'; measured against published reproductions",
+   "module": "align_refs.py",
+   "consumes": [
+    "record",
+    "earth"
+   ],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "mirror_correction",
+   "tier": 2,
+   "tier_name": "earth",
+   "what": "which published reproductions are laterally inverted",
+   "why": "decided by matching against our decode; the record is authoritative",
+   "module": "align_refs.py",
+   "consumes": [
+    "record",
+    "earth"
+   ],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "titles",
+   "tier": 2,
+   "tier_name": "earth",
+   "what": "the caption under each image",
+   "why": "from the Ozma catalogue and NASA/JPL, or from recognising the subject",
+   "module": "catalog.py",
+   "consumes": [
+    "earth"
+   ],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "colour_roles",
+   "tier": 2,
+   "tier_name": "earth",
+   "what": "which separation is red, green and blue",
+   "why": "intended to be tier 0 via the spectrum slides, but they are too faint; currently settled by oceans being blue, which is Earth knowledge",
+   "module": "colour.py",
+   "consumes": [
+    "record",
+    "earth"
+   ],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "thumbnails",
+   "tier": 2,
+   "tier_name": "earth",
+   "what": "the shipped PNG of every frame, as the gallery loads it",
+   "why": "the pixels are tier 0, but their LAYOUT is not: build.py applies Barry's hand-made quarter-turn table before writing the file",
+   "module": "build.py",
+   "consumes": [
+    "record",
+    "earth"
+   ],
+   "should_be": 0,
+   "contamination": "60 of 156 frames get a non-zero quarter turn from barry_tables.json['orientation'], a table made by looking at the pictures. Fix: write the PNG in the decoder's own raster frame and move the turn to display time, where the gallery already applies displayRotate. Requires recomputing displayRotate against unrotated thumbnails, since it is currently measured relative to the baked ones."
+  },
+  {
+   "name": "evaluation",
+   "tier": 2,
+   "tier_name": "earth",
+   "what": "gradient NCC against the original slides, dev / held-out split",
+   "why": "scoring only; no score is fed back into a tier 0 module",
+   "module": "evalset.py",
+   "consumes": [
+    "record",
+    "earth"
+   ],
+   "should_be": null,
+   "contamination": ""
+  },
+  {
+   "name": "oracle_settings",
+   "tier": 3,
+   "tier_name": "oracle",
+   "what": "per-image decoder settings chosen using the true slide",
+   "why": "measures the headroom a better blind decoder could still win",
+   "module": "oracle.py",
+   "consumes": [
+    "record",
+    "earth"
+   ],
+   "should_be": null,
+   "contamination": ""
+  }
+ ]
+}

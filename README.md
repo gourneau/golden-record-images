@@ -77,6 +77,40 @@ solved parts of this independently and better than I would have:
 
 ---
 
+## What the decoder was allowed to know
+
+This project wants two things that pull against each other: a **clean-room decode**, recovering
+the pictures from the artifact alone the way a recipient who has never heard of Earth would have
+to — and the **best pictures we can get**, which means using the original slides to check our work.
+
+Both are worth having. Mixing them silently is what would make the result worthless, because you
+could not tell which claims survive without Earth knowledge. So every shipped artifact carries a
+tier, and **the boundary is asserted in code, not promised in prose** (`pipeline/provenance.py`,
+run it to see the report and the check):
+
+| Tier | What it may use | Examples |
+|---|---|---|
+| **0 · Record** | the audio and the engraved cover. *This is what an alien has.* | every decoded pixel, the timebase, the dot clock, geometry, the droop inverse, the circle metrics |
+| **1 · Universal** | priors any observer could hold without knowing Earth | denoising, triplet fusion, deconvolution by the measured PSF |
+| **2 · Earth** | the original slides and their captions. **Cheating.** | which edge is up, which reproductions are mirrored, titles, red/green/blue roles, all evaluation |
+| **3 · Oracle** | settings chosen per image *by looking at the answer* | not a decoder — a measurement of remaining headroom |
+
+The rule that makes this more than labelling: **tier 0 and tier 1 outputs must be reproducible
+with no tier 2 file on disk.** `provenance.check()` walks the decode import graph and fails if a
+tier 0 module can reach reference material. `decode.py` imports `numpy`, `dotclock` and `sync`,
+and its only data input is the WAV.
+
+Two honest consequences, both recorded rather than hidden:
+
+- **Rotation is tier 2 and always will be.** The record encodes no "up", and it does not even
+  encode which images were *turned* — we tested that and the hypothesis failed (see `ALIENS.md`).
+  The gallery rotates anyway, so you needn't tilt your head, but the turn is applied at **display
+  time and never baked into a decoded pixel**.
+- **The shipped thumbnails are currently tier 2, and should be tier 0.** `build.py` bakes Barry's
+  hand-made quarter turn into 60 of the 156 PNGs. The registry flags this as known contamination
+  with the fix written down, so the tier table cannot be read as a claim of purity we have not
+  earned.
+
 ## What this adds
 
 Everything below is measured from the master, and the measurements are reproducible with the
