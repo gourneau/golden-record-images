@@ -176,3 +176,58 @@ four-point bounding-box fit; a proper ellipse fit disagreed. Withdrawn.
   this exists.
 - **Boing Boing's 2017 article**, which is how most people including us first learned the
   decode was possible.
+
+---
+
+## F. Decoder findings from the adversarial gap review (2026-08)
+
+Three gaps were attacked in parallel and each finding was then handed to a separate
+agent whose only instruction was to refute it. Two of the three headline claims did not
+survive contact, which is the reason for doing it that way.
+
+### F1. The per-frame picture gate is a null *(solid)*
+
+The picture window can be measured blindly on 156/156 frames — fold each frame onto its own
+grid and the gate close shows as a bump at 1.8–3.3× the blanking floor. It does **not move**:
+noise-corrected frame-to-frame spread is **1.36 bins = 0.18 of one output row in 377**. The
+single global constant was already right.
+
+**Consequence for a number this project has quoted.** `oracle.py` searches picture shifts of
+±9.6 and ±19.2 bins — 7 to 14× the entire measured variation — so those shifts are not
+recovering a gate. They are buying alignment against the *scanned reference slides*, whose crop
+and centring are properties of the scan and are tier 2. **That part of the 0.2181 → 0.3080
+oracle gap is not headroom and should not be cited as such.**
+
+### F2. Moving PICTURE_END: rejected, against the workflow's own verdict *(measured here)*
+
+The review found, unanimously over 156 frames, that moving the window end from 3040 to 3036.75
+reduces a contamination signature in the bottom row, and recommended it.
+
+Re-measured independently through the real code path — the module constant is bound into
+`Settings` at class-definition time, so patching it does nothing, which is worth knowing before
+anyone repeats this:
+
+| window | bottom-row deficit (mean, 8 frames) | circle axis ratio | circle radial rms |
+|---|---|---|---|
+| shipped, 232 … 3040 | −0.0334 | **1.0051** | **0.837 px** |
+| shorter, 232 … 3036.75 | −0.0196 | 1.0061 | 0.847 px |
+| shifted, 228.75 … 3036.75 | **−0.0145** | 1.0061 | 0.874 px |
+
+The bottom row does get cleaner. **But the calibration circle degrades in both variants**, and
+the circle is the record's own designed self-check and the one invariant that cannot be gamed.
+Trading 4.4% of the project's headline geometry metric for one row in 377 is the wrong trade.
+**Not shipped.**
+
+### F3. The aperture constant is frame-set dependent *(refuted)*
+
+`TRANSITION_1090 = 0.49` dots was re-derived as 0.479 (0.470–0.498) — until the verifier ran
+the same code on eight frames the method was not developed on and got **0.464 (0.449–0.471),
+which excludes the shipped value.** There is a per-channel systematic the fit does not model.
+The aperture correction stays unmerged, and its blocking condition stands.
+
+### F4. Line art needs no special handling *(confirmed, with the claim weakened)*
+
+On 31 blindly-identified line-art frames the denoiser does the same thing it does to
+photographs — the same edge cost for the same noise removal — so no gating rule is needed. The
+original claim of "identical to two decimals" was overstated by roughly 20×; the honest
+statement is that a frame-level bootstrap cannot distinguish the two classes.
