@@ -264,3 +264,50 @@ The live possibility is the one worth stating plainly: **the 1977 slide, or the 
 imaged it, may simply not have been round to 0.5%.** A calibration target certifies the decoder
 only as far as the target itself is true, and nothing on the record establishes the ring's own
 circularity beyond the cover's assertion that it is a circle.
+
+### F6. Two corrections to our own Noise2Noise numbers *(measured)*
+
+**The dB comparison was not like-for-like.** `n2n.py` reported the network at **+7.73 dB** in the
+chroma-free high band and its blur control at **+5.60 dB**, and we cited the gap. Those are
+different statistics: +7.73 is the *mean of the per-scene dB*, +5.60 is the *dB of the mean
+residuals*. Computed consistently over the same 19 scenes:
+
+| convention | network | blur control |
+|---|---|---|
+| dB of means | **+6.94** | +5.60 |
+| mean of per-scene dB | **+7.73** | +7.48 |
+
+So the high-band advantage is 1.34 dB or 0.25 dB depending on convention — not the 2.13 dB the
+mixed pair implied.
+
+**What survives is the claim that was always load-bearing:** on full-band MSE the network beats
+an *oracle-tuned* Gaussian sweep — best σ over the whole sweep is 0.50 at 0.03268, the network is
+0.03217. A blur tuned against the arbiter itself still loses. No convention choice touches that.
+
+### F7. A circle-calibrated Wiener filter works, and the circle is barely the reason *(measured)*
+
+Asked whether the calibration circle could replace the colour repeats as the denoiser's
+calibration. It can, partially, and the honest accounting is more interesting than the headline.
+
+| | full-band MSE | vs identity | beats blur sweep? |
+|---|---|---|---|
+| identity | 0.03410 | — | — |
+| circle-calibrated Wiener | 0.03283 | 19/19 | **no — lands exactly on the sweep's optimum** |
+| Noise2Noise | **0.03217** | 19/19 | **yes** |
+| best oracle-tuned Gaussian (σ=0.50) | 0.03268 | — | — |
+
+The Wiener route recovers **66%** of the network's gain, needs **no training data of any kind**,
+and works on **all 156 frames** rather than the 20 with repeats. But a matched-strength Gaussian
+suppresses the high band exactly as hard and is marginally *better* in the low band, so on this
+arbiter it is **indistinguishable from a well-chosen mild blur**.
+
+**And the circle contributes about 8% of even that.** Ablating it entirely — reading the noise
+level from each frame's own high-|fx| band and nothing else — gives 0.03293 against the shipped
+0.03283, with identical win counts. Against a total gain of 0.001272 over identity, the circle's
+measured spectrum is worth 0.0001. The honest statement is *"a per-frame blind Wiener filter
+works; the circle licenses its one free choice"* — not *"the circle route recovers two thirds of
+Noise2Noise"*.
+
+Where the Wiener is genuinely better: low band 17/19 against the network's 15/19, worst-case
+low-band cost +1.10% against +6.2%, chroma retention 0.99 against 0.93, and it composes with
+triplet averaging on 17/19 against 14/19. It is gentler, safer, universal — and weaker.

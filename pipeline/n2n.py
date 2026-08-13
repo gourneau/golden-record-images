@@ -134,6 +134,24 @@ The table below is the run.
                                                ceiling)
       n2n then 2-plane mean       1.93e-4   -> +8.82 dB
       blur control                3.26e-4   -> +5.60 dB  <- READ THIS ONE
+
+  A CONVENTION ERROR IN THE LINE ABOVE, found by a later audit and left visible
+  rather than silently rewritten. +7.73 dB is the MEAN OF THE PER-SCENE dB,
+  which is what this module prints. +5.60 dB for the blur is the dB OF THE MEAN
+  residuals. They are different statistics and must not be subtracted. Computed
+  consistently the same 19 scenes give:
+      network, dB of means        +6.94 dB     blur, dB of means   +5.60 dB
+      network, mean of per-scene  +7.73 dB     blur, mean of per-scene +7.48 dB
+  So the network's high-band advantage over a plain Gaussian is 1.34 dB or
+  0.25 dB depending on convention -- not the 2.13 dB that comparing +7.73 with
+  +5.60 implies. The high band was always the weak part of this case; this makes
+  it weaker still.
+
+  WHAT SURVIVES, and it is the claim that was always doing the work: on
+  FULL-BAND MSE the network beats an ORACLE-TUNED Gaussian sweep. Best sigma
+  over the whole sweep is 0.50 at 0.03268; the network is 0.03217. A blur tuned
+  against the arbiter itself -- which is cheating in the method's favour -- still
+  loses. That is something a blur cannot do, and no convention choice affects it.
   low band (0.02-0.35 cyc/px): n2n beats identity on 15/19; blur is WORSE
   than identity there on 17/19. Chroma retention 0.93 mean (0.78-1.16).
 
