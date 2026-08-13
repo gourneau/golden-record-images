@@ -6,8 +6,7 @@
   "credit": "Jon Lomberg",
   "licence": "Public domain",
   "book": "docs/reference/book/n024.jpg",
-  "bookPage": 24,
-  "ozma": "INTRODUCTION"
+  "bookPage": 24
  },
  "8": {
   "file": "docs/reference/008-voyager-golden-record-8-spectra-gif.jpg",
@@ -60,8 +59,7 @@
   "credit": "NASA",
   "licence": "Public domain",
   "book": "docs/reference/book/n028.jpg",
-  "bookPage": 28,
-  "ozma": "S62 4437 BRANCHTON RD."
+  "bookPage": 28
  },
  "42": {
   "file": "docs/reference/042-voyager-golden-record-42-adams-the-tetons-and-the-snake-rive.jpg",
@@ -118,8 +116,7 @@
   "credit": "National Astronomy and Ionosphere Center",
   "licence": "Public domain",
   "book": "docs/reference/book/n061.jpg",
-  "bookPage": 61,
-  "ozma": "OPE LTAE SYSTEM"
+  "bookPage": 61
  },
  "111": {
   "file": "docs/reference/111-voyager-golden-record-111-systemoftheworld-gif.jpg",
@@ -168,8 +165,7 @@
  },
  "3": {
   "book": "docs/reference/book/n026.jpg",
-  "bookPage": 26,
-  "ozma": "VOYAGERS IN SPACE & TIME"
+  "bookPage": 26
  },
  "4": {
   "book": "docs/reference/book/n026.jpg",
@@ -217,8 +213,7 @@
  },
  "25": {
   "book": "docs/reference/book/n032.jpg",
-  "bookPage": 32,
-  "ozma": "RECTUM"
+  "bookPage": 32
  },
  "20": {
   "book": "docs/reference/book/n033.jpg",
@@ -417,8 +412,7 @@
  },
  "67": {
   "book": "docs/reference/book/n046.jpg",
-  "bookPage": 46,
-  "ozma": "THE SOUNDS OF EARTH"
+  "bookPage": 46
  },
  "68": {
   "book": "docs/reference/book/n046.jpg",
@@ -507,8 +501,7 @@
  },
  "88": {
   "book": "docs/reference/book/n054.jpg",
-  "bookPage": 54,
-  "ozma": "ACKNOWLEDGEMENTS"
+  "bookPage": 54
  },
  "90": {
   "book": "docs/reference/book/n054.jpg",

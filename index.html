@@ -46,7 +46,7 @@ button[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));
   gap:18px;padding:36px 0 64px}
 figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;
-  overflow:hidden;transition:.16s}
+  overflow:hidden;transition:.16s;cursor:zoom-in}
 figure:hover{border-color:#39414b;transform:translateY(-2px)}
 .shot{position:relative;background:#000;aspect-ratio:512/377;display:block;width:100%}
 .shot canvas{width:100%;height:100%;display:block;object-fit:contain;image-rendering:auto}
@@ -54,8 +54,7 @@ figure:hover{border-color:#39414b;transform:translateY(-2px)}
   padding:2px 6px;border-radius:4px;background:rgba(0,0,0,.72);color:var(--dim);letter-spacing:.04em}
 .tag.rgb{right:8px;left:auto;color:#0a0b0d;background:var(--gold);font-weight:700}
 .tag.cmp{bottom:8px;top:auto;left:8px;color:#0a0b0d;background:var(--cyan);font-weight:700}
-.tag.cmp.none{background:#2c323b;color:var(--dim)}
-figure{cursor:zoom-in}
+.tag.cmp.none{background:rgba(0,0,0,.72);color:var(--dim);font-weight:400}
 figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
 .ttl{font-size:13.5px;line-height:1.35;color:var(--ink)}
 .sub{font-family:var(--mono);font-size:10.5px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
@@ -89,35 +88,43 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .pane-head{display:flex;gap:8px;align-items:center;flex-wrap:wrap;
   font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--dimmer);padding-bottom:6px}
-.pane-head .src{font-size:10px;padding:3px 8px;border-radius:5px;letter-spacing:.04em;
-  text-transform:none}
+.pane-head .srcs{display:flex;gap:6px;flex-wrap:wrap}
+.pane-head button{font-size:10px;padding:3px 8px;border-radius:5px;letter-spacing:.03em;
+  text-transform:none;font-family:var(--mono)}
 .pane-body{flex:1;min-height:0;display:flex;background:#000;border:1px solid var(--line);
   border-radius:8px;overflow:auto;position:relative}
 .pane-body>canvas,.pane-body>img{margin:auto;display:block;max-width:100%;max-height:100%}
+/* The rule above sets display on the very elements we hide with [hidden], and
+   would otherwise win against the UA stylesheet -- which showed the empty crop
+   canvas at its default 300x150 and put a scrollbar in the pane. */
+.lb [hidden]{display:none}
+.pane-body.can-zoom{cursor:zoom-in}
 .pane-body.zoomed{cursor:zoom-out}
 .pane-body.zoomed>canvas,.pane-body.zoomed>img{max-width:none;max-height:none}
 .pane-body.zoomed>canvas{image-rendering:pixelated}
-.pane-body.can-zoom{cursor:zoom-in}
 .pane-foot{padding-top:7px;font-size:12px;line-height:1.5;color:var(--dim);min-height:1px}
 .pane-foot .mono{font-family:var(--mono);font-size:10.5px;color:var(--dimmer);
   letter-spacing:.03em;display:block;margin-top:3px}
+.pane-foot .quote{color:var(--ink)}
 .warn{border:1px solid #6d4b2f;background:#211610;color:#f0c08a;border-radius:6px;
   padding:7px 10px;font-size:12px;line-height:1.45;margin-bottom:7px}
 .warn b{color:#ffd7a6}
-.noref{margin:auto;color:var(--dimmer);font-size:13px;text-align:center;padding:24px;max-width:44ch}
+.noref{margin:auto;color:var(--dimmer);font-size:13px;text-align:center;padding:24px;max-width:46ch}
 
 .lb-wave{border-top:1px solid var(--line);padding:9px 18px 12px}
 .wrow{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:7px}
 .wrow .wstat{font-family:var(--mono);font-size:11px;color:var(--dimmer)}
-.wrow .sep{padding:5px 9px;font-family:var(--mono);font-size:11px}
+.wrow .seps{display:flex;gap:6px}
+.wrow .seps button{font-family:var(--mono);font-size:11px;padding:5px 9px}
 #lbWave{display:block;width:100%;height:88px;border:1px solid var(--line);border-radius:6px;
-  background:#0c0e12;cursor:crosshair}
+  background:#0c0e12;cursor:crosshair;touch-action:none}
 .whelp{font-family:var(--mono);font-size:10px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
 @media(max-width:860px){
   .lb-panes{grid-template-columns:1fr;overflow:auto}
-  .pane-body{min-height:38vh}
+  .pane-body{min-height:36vh}
   #lbWave{height:60px}
   .lb-top .t{font-size:15px}
+  .lb-top .m{width:100%}
 }
 </style>
 </head>
@@ -129,7 +136,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   into it, alongside the music, are 116 images — not as pictures, but as <strong>sound</strong>.
   These were decoded from a 384&nbsp;kHz digitisation of the original master tapes.</p>
   <p class="lede">The colour images below are composited in your browser, right now, from their
-  three separate monochrome scans.</p>
+  three separate monochrome scans. Open any one to put the decode beside the original slide,
+  and to hear the audio it came out of.</p>
   <div class="stats">
     <div class="stat"><b>116</b><span>images</span></div>
     <div class="stat"><b>156</b><span>audio frames</span></div>
@@ -149,6 +157,45 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 </div></div>
 
 <div class="wrap"><div class="grid" id="grid"></div></div>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="image comparison">
+  <div class="lb-top">
+    <span class="n" id="lbNum"></span>
+    <span class="t" id="lbTitle"></span>
+    <span class="m" id="lbFrames"></span>
+    <span class="grow"></span>
+    <button id="lbPrev" title="Previous image (left arrow)">← Prev</button>
+    <button id="lbNext" title="Next image (right arrow)">Next →</button>
+    <button id="lbClose" title="Close (Esc)">Close ✕</button>
+  </div>
+
+  <div class="lb-panes">
+    <section class="pane">
+      <div class="pane-head"><span>Decoded from the audio</span><span id="lbDecDim"></span></div>
+      <div class="pane-body" id="lbDecBody"><canvas id="lbCanvas"></canvas></div>
+      <div class="pane-foot" id="lbDecFoot"></div>
+    </section>
+    <section class="pane">
+      <div class="pane-head"><span>Original slide</span><span class="srcs" id="lbSrcBtns"></span></div>
+      <div class="pane-body" id="lbRefBody">
+        <img id="lbRef" alt="the original photograph this frame was scanned from" hidden>
+        <canvas id="lbRefCrop" hidden></canvas>
+        <div class="noref" id="lbNoRef" hidden></div>
+      </div>
+      <div class="pane-foot" id="lbRefFoot"></div>
+    </section>
+  </div>
+
+  <div class="lb-wave">
+    <div class="wrow">
+      <button id="lbPlay" title="Play this frame's audio (space)">▶ Play the audio</button>
+      <span class="seps" id="lbSeps"></span>
+      <span class="wstat" id="lbWStat"></span>
+    </div>
+    <canvas id="lbWave"></canvas>
+    <div class="whelp" id="lbWHelp"></div>
+  </div>
+</div>
 
 <section><div class="wrap">
   <h2>What this decoder found</h2>
@@ -189,13 +236,18 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <section><div class="wrap">
   <h2>Honest status</h2>
   <p>This page is a <strong>gallery</strong>, not the interactive decoder. The real thing — where
-  the audio plays and the picture paints stripe by stripe under your control — is still being
-  built. What you see here was decoded offline and rendered to images.</p>
+  the picture paints stripe by stripe under your control — is still being built. What you see here
+  was decoded offline and rendered to images; the lightbox plays each frame's audio beside its
+  picture, but it is playing the shipped audio, not decoding it live.</p>
   <p>The images have a distinctly <em>embossed</em>, bas-relief look. That is a real, known,
   unfixed defect: nothing in the 1977 recording chain passed a constant brightness level, so flat
   areas decay toward mid-grey and only edges survive. It is the same flaw the 2017 decoder's
   author documented and could not solve, and it remains unsolved here. Correcting it is the next
   piece of work, and the biggest single improvement still available.</p>
+  <p><strong>Reference images are for labelling only.</strong> Nothing on the reference side has
+  ever fed pixel recovery — the decoder's only input is the WAV. Where a book page has not been
+  confidently matched to one of our images, the panel says <em>match uncertain</em> rather than
+  showing a guess, and thirteen images have no reference held at all.</p>
   <p><strong>Colour separation order: settled.</strong> Published decoders disagreed on whether
   the three scans run red-green-blue or the reverse, and nobody had shown evidence either way.
   Flipping the toggle above answers it by eye: under B&nbsp;G&nbsp;R the Earth's oceans turn
@@ -217,30 +269,27 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 </div></footer>
 
 <script>
-const ASSETV='7';
+// GitHub Pages caches aggressively, so every data and asset URL carries this.
+// Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
+const ASSETV='9';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
-let images=[], filter='all', rgbOrder=true;
+const $=id=>document.getElementById(id);
+const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
+let images=[], filter='all', rgbOrder=true, REF={};
+let VIEW=[];   // the currently filtered list -- what the arrow keys step through
 
 const load=src=>new Promise(res=>{
   const i=new Image(); i.crossOrigin='anonymous';
   i.onload=()=>res(i); i.onerror=()=>res(null); i.src=src;
 });
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-// Barry's orientation table: 0 = upright, 1 and 2 are quarter turns.
-function draw(cv,srcs,orientation,colour){
-  // Thumbnails are ALREADY oriented at build time (pipeline/build.py calls
-  // orient() before writing the PNG), so rotating here a second time turns
-  // every portrait image 90 degrees too far.
-  //
-  // Barry's values are rotate-LEFT / rotate-RIGHT, not quarter-turn counts.
-  // build.py's np.rot90(k=-k) therefore gets o=1 right (90 CW, stored as a
-  // 377x512 portrait) but renders o=2 as 180 degrees, which leaves it still
-  // needing +90 CW. Verified by eye on all six o=2 frames: Jupiter's
-  // "142800 km" and Earth's "12756km" captions only read horizontally at
-  // stored+270. So: o=1 needs nothing more, o=2 still needs +90.
-  const turn = orientation===2 ? 90 : 0;
+// Compose one image's separations into an UNROTATED offscreen canvas. Split out
+// from the blit so the lightbox can redraw a moving playhead sixty times a
+// second without re-fetching or re-compositing anything.
+function composite(srcs,colour){
   return Promise.all(srcs.map(load)).then(imgs=>{
-    imgs=imgs.filter(Boolean); if(!imgs.length) return;
+    imgs=imgs.filter(Boolean); if(!imgs.length) return null;
     const w=imgs[0].naturalWidth, h=imgs[0].naturalHeight;
     const off=document.createElement('canvas'); off.width=w; off.height=h;
     const oc=off.getContext('2d',{willReadFrequently:true});
@@ -265,48 +314,92 @@ function draw(cv,srcs,orientation,colour){
     } else {
       oc.drawImage(imgs[0],0,0,w,h);
     }
-
-    const swap = turn!==0;
-    cv.width  = swap? h : w;
-    cv.height = swap? w : h;
-    const c=cv.getContext('2d');
-    c.save(); c.translate(cv.width/2,cv.height/2); c.rotate(turn*Math.PI/180);
-    c.drawImage(off,-w/2,-h/2); c.restore();
+    return off;
   });
 }
 
+// Barry's orientation table: 0 = upright, 1 and 2 are quarter turns.
+//
+// Thumbnails are ALREADY oriented at build time (pipeline/build.py calls
+// orient() before writing the PNG), so rotating here a second time turns every
+// portrait image 90 degrees too far.
+//
+// Barry's values are rotate-LEFT / rotate-RIGHT, not quarter-turn counts.
+// build.py's np.rot90(k=-k) therefore gets o=1 right (90 CW, stored as a
+// 377x512 portrait) but renders o=2 as 180 degrees, which leaves it still
+// needing +90 CW. Verified by eye on all six o=2 frames: Jupiter's
+// "142800 km" and Earth's "12756km" captions only read horizontally at
+// stored+270. So: o=1 needs nothing more, o=2 still needs +90.
+//
+// `trace`, when given, marks one of the 512 traces on the picture. Where that
+// line goes depends on the orientation, because the stored PNG has already been
+// rotated. decode.py builds the picture as pic.T, so in an UNROTATED frame
+// trace t is column t; build.py's orient() then moves it. Checked by decoding
+// L000 (o=0), L023 (o=1) and L012 (o=2) from their shipped FLACs and comparing
+// the unrotated column 0 with each edge of the stored PNG: it lands on column
+// 0, on row 0, and on the LAST column respectively -- mean |difference| 0.0005,
+// 0.0010 and 0.0004, against 0.14 to 0.30 for every other edge.
+function blit(cv,off,orientation,trace){
+  const w=off.width, h=off.height;
+  const turn = orientation===2 ? 90 : 0;
+  const swap = turn!==0;
+  cv.width  = swap? h : w;
+  cv.height = swap? w : h;
+  const c=cv.getContext('2d');
+  c.save(); c.translate(cv.width/2,cv.height/2); c.rotate(turn*Math.PI/180);
+  c.drawImage(off,-w/2,-h/2);
+  if(trace!=null && trace>=0){
+    // Drawn INSIDE the rotation transform, in stored-image coordinates, so the
+    // display turn carries the line along with the picture automatically.
+    c.strokeStyle='rgba(201,162,39,.92)'; c.lineWidth=1.5;
+    c.beginPath();
+    if(orientation===1){                      // stored 377x512: traces run down
+      const y=-h/2+Math.min(h-1,trace)+0.5;
+      c.moveTo(-w/2,y); c.lineTo(w/2,y);
+    } else {                                  // stored 512x377: traces run across
+      const t=(orientation===2)? (w-1-trace) : trace;
+      const x=-w/2+Math.max(0,Math.min(w-1,t))+0.5;
+      c.moveTo(x,-h/2); c.lineTo(x,h/2);
+    }
+    c.stroke();
+  }
+  c.restore();
+}
+
+function draw(cv,srcs,orientation,colour){
+  return composite(srcs,colour).then(off=>{ if(off) blit(cv,off,orientation,null); return off; });
+}
+
+const thumbs=im=>im.frames.map(x=>`data/thumbs/${x}.png?v=${ASSETV}`);
+
+// --------------------------------------------------------------------------
+// the grid
+// --------------------------------------------------------------------------
+
 function render(){
-  const list=images.filter(im=> filter==='all' || (filter==='color')===!!im.color);
-  COUNT.textContent=`${list.length} shown`;
+  VIEW=images.filter(im=> filter==='all' || (filter==='color')===!!im.color);
+  COUNT.textContent=`${VIEW.length} shown`;
   GRID.innerHTML='';
   const io=new IntersectionObserver((es,obs)=>{
     es.forEach(e=>{ if(!e.isIntersecting) return; obs.unobserve(e.target); paint(e.target); });
   },{rootMargin:'400px'});
 
-  for(const im of list){
+  VIEW.forEach((im,i)=>{
     const f=document.createElement('figure');
     f.dataset.im=JSON.stringify(im);
+    f.dataset.i=i;
+    const hasRef=!!REF[im.n];
     f.innerHTML=`<div class="shot"><canvas></canvas>
         <span class="tag">${String(im.n).padStart(3,'0')}</span>
         ${im.color?'<span class="tag rgb">RGB</span>':''}
-        ${REF[im.n]?'<span class="tag cmp">compare</span>':''}</div>
-      ${REF[im.n]?(()=>{const r=REF[im.n];
-         const src=r.book||r.file;
-         const src2=(r.book&&r.file&&!r.mislabelled)?r.file:null;
-         const cap=r.book
-           ? `ORIGINAL SLIDE · Ozma Records book, page ${r.bookPage} · <a href="https://archive.org/details/voyager-golden-record-book-ozma" target="_blank" rel="noopener">Internet Archive</a>`
-           : `ORIGINAL SLIDE · <a href="${r.commons}" target="_blank" rel="noopener">Wikimedia Commons</a>${r.licence?' · '+r.licence:''}`;
-         const warn=r.mislabelled?`<div class="cap" style="color:#e6b0a2">The Wikimedia file numbered ${im.n} is mislabelled — it is image 43. The Ozma book is authoritative here.</div>`:'';
-         return `<div class="ref"><img loading="lazy" src="${src}" alt="original slide">
-           ${src2?`<img loading="lazy" src="${src2}" alt="original slide, Commons scan">`:''}
-           <div class="cap">${cap}${r.ozma?' · '+r.ozma.replace(/</g,'&lt;'):''}</div>${warn}</div>`;})():''}
-      <figcaption><div class="ttl">${im.title??'—'}</div>
+        <span class="tag cmp${hasRef?'':' none'}">${hasRef?'compare':'open'}</span></div>
+      <figcaption><div class="ttl">${esc(im.title??'—')}</div>
         <div class="sub">${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'}</div>
       </figcaption>`;
-    if(REF[im.n]){ f.classList.add('has-ref');
-      f.querySelector('.shot').addEventListener('click',()=>f.classList.toggle('open')); }
+    f.addEventListener('click',()=>openLB(i));
+    f.addEventListener('mouseenter',()=>waveOf(im.frames[0]),{once:true});
     GRID.appendChild(f); io.observe(f);
-  }
+  });
 
   // The IntersectionObserver alone proved unreliable here: on a reload with the
   // grid already scrolled, nothing drew at all -- 0 of 116 canvases, with draw()
@@ -321,8 +414,7 @@ function paint(f){
   if(f.dataset.painted) return;
   f.dataset.painted='1';
   const d=JSON.parse(f.dataset.im);
-  draw(f.querySelector('canvas'), d.frames.map(x=>`data/thumbs/${x}.png?v=${ASSETV}`),
-       d.orientation, d.color);
+  draw(f.querySelector('canvas'), thumbs(d), d.orientation, d.color);
 }
 
 function sweep(){
@@ -344,24 +436,489 @@ addEventListener('resize', sweep, {passive:true});
 
 document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('[data-f]').forEach(x=>x.setAttribute('aria-pressed', x===b));
-  filter=b.dataset.f; render();
+  filter=b.dataset.f; closeLB(); render();
 });
-document.getElementById('ord').onclick=()=>{
+$('ord').onclick=()=>{
   rgbOrder=!rgbOrder;
-  document.getElementById('ordv').textContent=rgbOrder?'R G B':'B G R';
+  $('ordv').textContent=rgbOrder?'R G B':'B G R';
   // Redraw the colour composites in place. Calling render() would rebuild the
   // grid and blank every canvas until the lazy loader caught up again.
   GRID.querySelectorAll('figure').forEach(f=>{
     const d=JSON.parse(f.dataset.im); if(!d.color) return;
-    draw(f.querySelector('canvas'), d.frames.map(x=>`data/thumbs/${x}.png?v=${ASSETV}`), d.orientation, true);
+    draw(f.querySelector('canvas'), thumbs(d), d.orientation, true);
     f.dataset.painted='1';
   });
+  if(!LB.el.hidden && LB.im && LB.im.color) loadDecoded(LB.im);
 };
 
-let REF={};
-fetch('docs/reference/map.json?v=7').then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
+// --------------------------------------------------------------------------
+// waveform peaks, precomputed by pipeline/waveform.py
+// --------------------------------------------------------------------------
+// Each frame ships ~8 KiB of min/max over 1200 buckets, so the strip is drawn
+// the instant the lightbox opens instead of waiting on a half-megabyte FLAC.
+// The file also carries leadIn, period and trace count, which is what turns an
+// x-position into a trace index:  trace = (sample - leadIn) / period.
+
+const WAVE=new Map();      // id -> data, or null if it could not be fetched
+const WAVEREQ=new Map();   // id -> in-flight promise
+
+function waveOf(id){
+  if(WAVE.has(id)) return Promise.resolve(WAVE.get(id));
+  if(WAVEREQ.has(id)) return WAVEREQ.get(id);
+  const p=fetch(`web/public/data/waves/${id}.json?v=${ASSETV}`)
+    .then(r=>r.ok?r.json():null).catch(()=>null)
+    .then(d=>{ WAVE.set(id,d); WAVEREQ.delete(id); return d; });
+  WAVEREQ.set(id,p); return p;
+}
+
+const traceAt=(d,sample)=>{
+  const t=Math.round((sample-d.leadIn)/d.period);
+  return (t>=0 && t<d.traces)? t : null;
+};
+const sampleOfTrace=(d,t)=>d.leadIn+t*d.period;
+
+// --------------------------------------------------------------------------
+// lightbox
+// --------------------------------------------------------------------------
+
+const LB={el:$('lb'), idx:-1, im:null, off:null, sep:0, frameId:null,
+          sources:[], srcIdx:0, hoverTrace:null, playSample:null,
+          raf:0, restoreFocus:null};
+
+function refOf(n){ return REF[n]||null; }
+function isUncertain(r){
+  return !!r && (r.status==='uncertain' || r.confidence==='uncertain' || r.uncertain===true);
+}
+
+// The map is written by the reference tooling and has grown fields over time.
+// Take whatever is there: a pre-cut detail, a normalised box on the page scan,
+// the whole page, and the Commons scan -- in that order of usefulness.
+function sourcesFor(r){
+  if(!r) return [];
+  const out=[], page=r.bookPage;
+  const box=r.cropBox||r.norm_box||r.box||null;
+  const boxOk=Array.isArray(box)&&box.length===4&&box.every(v=>v>=0&&v<=1);
+  if(r.crop)                 out.push({url:r.crop, label:`book p.${page} · detail`});
+  else if(r.book && boxOk)   out.push({url:r.book, box, label:`book p.${page} · detail`});
+  if(r.book)                 out.push({url:r.book, label:`book p.${page} · whole page`});
+  if(r.file && !r.mislabelled) out.push({url:r.file, label:'Commons scan'});
+  return out;
+}
+
+function openLB(i){
+  if(!VIEW.length) return;
+  const n=VIEW.length;
+  LB.idx=((i%n)+n)%n;
+  const im=VIEW[LB.idx];
+  LB.im=im; LB.sep=0; LB.frameId=im.frames[0];
+  LB.off=null; LB.hoverTrace=null; LB.playSample=null;
+  stopAudio();
+  if(LB.el.hidden){
+    LB.restoreFocus=document.activeElement;
+    LB.el.hidden=false;
+    document.body.style.overflow='hidden';
+  }
+  unzoom($('lbDecBody')); unzoom($('lbRefBody'));
+  fillText(im);
+  fillRef(im);
+  loadDecoded(im);
+  $('lbClose').focus();
+
+  drawWave();                                   // whatever is cached, now
+  waveOf(LB.frameId).then(()=>{ if(LB.frameId) drawWave(); });
+  // Peaks for the neighbours, so stepping never shows an empty strip.
+  [VIEW[(LB.idx+1)%n], VIEW[(LB.idx-1+n)%n]].forEach(x=>x&&waveOf(x.frames[0]));
+}
+
+function closeLB(){
+  if(LB.el.hidden) return;
+  stopAudio();
+  LB.el.hidden=true; LB.im=null; LB.off=null; LB.frameId=null;
+  document.body.style.overflow='';
+  if(LB.restoreFocus&&LB.restoreFocus.focus) LB.restoreFocus.focus();
+}
+const stepLB=d=>{ if(!LB.el.hidden) openLB(LB.idx+d); };
+
+function fillText(im){
+  $('lbNum').textContent=String(im.n).padStart(3,'0');
+  $('lbTitle').textContent=im.title??'—';
+  $('lbFrames').textContent=
+    `${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'} · ${LB.idx+1} of ${VIEW.length}`;
+  $('lbDecFoot').innerHTML=
+    `Decoded from the audio alone — no reference image has ever touched pixel recovery.` +
+    `<span class="mono">512 traces × 377 samples along each trace, shown at that native ` +
+    `sampling. The pixels are not square, so it is not stretched to 4:3. ` +
+    `Click the picture for 1:1 pixels.</span>`;
+
+  // Separation picker for the colour triplets: which of the three frames the
+  // waveform and the audio refer to.
+  const seps=$('lbSeps'); seps.innerHTML='';
+  if(im.frames.length>1){
+    im.frames.forEach((fid,k)=>{
+      const b=document.createElement('button');
+      const ch=(rgbOrder?['R','G','B']:['B','G','R'])[k];
+      b.textContent=`scan ${k+1} → ${ch}`;
+      b.title=`frame ${fid}`;
+      b.setAttribute('aria-pressed', String(k===LB.sep));
+      b.onclick=e=>{ e.stopPropagation(); selectSep(k); };
+      seps.appendChild(b);
+    });
+  }
+}
+
+function selectSep(k){
+  if(!LB.im) return;
+  LB.sep=k; LB.frameId=LB.im.frames[k];
+  stopAudio(); LB.hoverTrace=null;
+  fillText(LB.im);
+  drawWave();
+  waveOf(LB.frameId).then(()=>drawWave());
+}
+
+function loadDecoded(im){
+  const cv=$('lbCanvas');
+  composite(thumbs(im), im.color).then(off=>{
+    if(LB.im!==im||!off) return;
+    LB.off=off;
+    $('lbDecBody').classList.add('can-zoom');
+    showTrace();                       // sizes the canvas, so read it after
+    $('lbDecDim').textContent=`${cv.width}×${cv.height} as shown`;
+  });
+}
+
+function fillRef(im){
+  const r=refOf(im.n);
+  LB.sources=sourcesFor(r);
+  LB.srcIdx=0;
+  const btns=$('lbSrcBtns'); btns.innerHTML='';
+  LB.sources.forEach((s,k)=>{
+    const b=document.createElement('button');
+    b.textContent=s.label;
+    b.setAttribute('aria-pressed', String(k===0));
+    b.onclick=e=>{ e.stopPropagation(); setSource(k); };
+    btns.appendChild(b);
+  });
+
+  const foot=$('lbRefFoot');
+  let html='';
+  if(!r){
+    html=`<span class="mono">No reference held. Thirteen of the 116 have none: ` +
+         `nothing is shown rather than a guess.</span>`;
+  } else {
+    if(isUncertain(r)) html+=`<div class="warn"><b>Match uncertain.</b> This page has not been
+      confidently matched to image ${im.n}. It is shown as a candidate for you to judge, not as
+      a verified match.${r.note?' '+esc(r.note):''}</div>`;
+    if(r.mislabelled) html+=`<div class="warn">The Wikimedia file numbered ${im.n} is
+      mislabelled — it is image 43 — so it is not offered here. The Ozma book is authoritative.</div>`;
+    if(r.ozma) html+=`<div class="quote">“${esc(r.ozma)}”</div>`;
+    const bits=[];
+    if(r.bookPage) bits.push(`Ozma Records book, page ${r.bookPage}`);
+    if(r.credit) bits.push(esc(r.credit));
+    if(r.licence) bits.push(esc(r.licence));
+    bits.push(`<a href="${ARCHIVE}" target="_blank" rel="noopener">the book on the Internet Archive</a>`);
+    if(r.commons) bits.push(`<a href="${esc(r.commons)}" target="_blank" rel="noopener">Commons</a>`);
+    html+=`<span class="mono">${bits.join(' · ')}</span>`;
+  }
+  foot.innerHTML=html;
+
+  const noref=$('lbNoRef');
+  if(!LB.sources.length){
+    $('lbRef').hidden=true; $('lbRefCrop').hidden=true;
+    noref.hidden=false;
+    noref.innerHTML=`No reference image is held for image ${im.n}.<br>` +
+      `<a href="${ARCHIVE}" target="_blank" rel="noopener">The Ozma Records book</a> is where ` +
+      `the originals live; this one has not been located in it yet.`;
+    $('lbRefBody').classList.remove('can-zoom');
+  } else {
+    noref.hidden=true;
+    $('lbRefBody').classList.add('can-zoom');
+    setSource(0);
+  }
+}
+
+function setSource(k){
+  const s=LB.sources[k]; if(!s) return;
+  LB.srcIdx=k;
+  $('lbSrcBtns').querySelectorAll('button')
+    .forEach((b,j)=>b.setAttribute('aria-pressed', String(j===k)));
+  unzoom($('lbRefBody'));
+  const img=$('lbRef'), cvs=$('lbRefCrop');
+  const url=s.url+(s.url.indexOf('?')<0?`?v=${ASSETV}`:'');
+  if(s.box){
+    // A normalised rectangle on the page scan: cut it here rather than shipping
+    // a second copy of the same JPEG.
+    img.hidden=true;
+    load(url).then(i=>{
+      if(LB.srcIdx!==k||!i) return;
+      const W=i.naturalWidth, H=i.naturalHeight;
+      const x=Math.round(s.box[0]*W), y=Math.round(s.box[1]*H);
+      const w=Math.max(1,Math.round(s.box[2]*W)), h=Math.max(1,Math.round(s.box[3]*H));
+      cvs.width=w; cvs.height=h;
+      cvs.getContext('2d').drawImage(i,x,y,w,h,0,0,w,h);
+      cvs.hidden=false;
+    });
+  } else {
+    cvs.hidden=true; img.hidden=false; img.src=url;
+  }
+}
+
+// ---- 1:1 zoom -------------------------------------------------------------
+
+function zoomToggle(body,ev){
+  const el=[...body.children].find(c=>!c.hidden&&(c.tagName==='IMG'||c.tagName==='CANVAS'));
+  if(!el) return;
+  if(body.classList.contains('zoomed')){ unzoom(body); return; }
+  const nw=el.tagName==='IMG'? el.naturalWidth : el.width;
+  const nh=el.tagName==='IMG'? el.naturalHeight: el.height;
+  if(!nw||!nh) return;
+  const r=el.getBoundingClientRect();
+  const fx=(ev.clientX-r.left)/r.width, fy=(ev.clientY-r.top)/r.height;
+  body.classList.add('zoomed');
+  el.style.width=nw+'px'; el.style.height=nh+'px';
+  body.scrollLeft=fx*nw-body.clientWidth/2;
+  body.scrollTop =fy*nh-body.clientHeight/2;
+}
+function unzoom(body){
+  body.classList.remove('zoomed');
+  body.querySelectorAll('canvas,img').forEach(el=>{ el.style.width=''; el.style.height=''; });
+}
+$('lbDecBody').addEventListener('click',e=>zoomToggle($('lbDecBody'),e));
+$('lbRefBody').addEventListener('click',e=>{
+  if(LB.sources.length) zoomToggle($('lbRefBody'),e);
+});
+
+// ---- the waveform strip ---------------------------------------------------
+
+let WSTATIC=null, WKEY='';
+
+function waveMetrics(){
+  const cv=$('lbWave');
+  const dpr=Math.min(3, window.devicePixelRatio||1);
+  const cssW=Math.max(1, cv.clientWidth), cssH=Math.max(1, cv.clientHeight);
+  return {cv, dpr, cssW, cssH};
+}
+
+function buildWaveLayer(){
+  const {cv,dpr,cssW,cssH}=waveMetrics();
+  const d=WAVE.get(LB.frameId);
+  const key=[LB.frameId, cssW, cssH, dpr, d?'d':'-'].join('|');
+  if(WSTATIC && WKEY===key) return;
+  const off=document.createElement('canvas');
+  off.width=Math.round(cssW*dpr); off.height=Math.round(cssH*dpr);
+  const c=off.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
+  c.fillStyle='#0c0e12'; c.fillRect(0,0,cssW,cssH);
+
+  if(!d){
+    c.strokeStyle='#20242b'; c.beginPath();
+    c.moveTo(0,cssH/2); c.lineTo(cssW,cssH/2); c.stroke();
+    c.fillStyle='#6b737d'; c.font='11px ui-monospace,Menlo,monospace';
+    c.fillText(WAVE.has(LB.frameId)?'no precomputed peaks for this frame':'reading peaks…',10,cssH/2-6);
+  } else {
+    const xOf=s=>s/d.samples*cssW;
+    const mid=cssH/2, amp=cssH/2-3;
+    // The run-up before trace 0 and the tail lines past trace 511 are not
+    // picture; shade them so the strip is honest about what is what.
+    const endS=d.leadIn+d.traces*d.period;
+    c.fillStyle='rgba(255,255,255,.045)';
+    c.fillRect(0,0,xOf(d.leadIn),cssH);
+    c.fillRect(xOf(endS),0,cssW-xOf(endS),cssH);
+    // trace ruler
+    c.strokeStyle='rgba(255,255,255,.09)'; c.fillStyle='#5a626c';
+    c.font='9px ui-monospace,Menlo,monospace'; c.lineWidth=1;
+    for(let t=0;t<=d.traces;t+=64){
+      const x=Math.round(xOf(sampleOfTrace(d,t)))+.5;
+      c.beginPath(); c.moveTo(x,0); c.lineTo(x,cssH); c.stroke();
+      if(t<d.traces) c.fillText(String(t), x+3, cssH-3);
+    }
+    // peaks
+    c.fillStyle='#4a9c93';
+    const B=d.buckets, w=Math.max(1,cssW/B);
+    for(let i=0;i<B;i++){
+      const x=i/B*cssW;
+      const y1=mid-(d.max[i]/127)*amp, y2=mid-(d.min[i]/127)*amp;
+      c.fillRect(x, y1, w, Math.max(0.8, y2-y1));
+    }
+  }
+  WSTATIC=off; WKEY=key;
+}
+
+function drawWave(){
+  const {cv,dpr,cssW,cssH}=waveMetrics();
+  if(cv.width!==Math.round(cssW*dpr)||cv.height!==Math.round(cssH*dpr)){
+    cv.width=Math.round(cssW*dpr); cv.height=Math.round(cssH*dpr);
+  }
+  buildWaveLayer();
+  const c=cv.getContext('2d');
+  c.setTransform(1,0,0,1,0,0);
+  c.clearRect(0,0,cv.width,cv.height);
+  c.drawImage(WSTATIC,0,0);
+  c.setTransform(dpr,0,0,dpr,0,0);
+
+  const d=WAVE.get(LB.frameId);
+  if(d){
+    const xOf=s=>s/d.samples*cssW;
+    if(LB.hoverTrace!=null && LB.playSample==null){
+      const x=Math.round(xOf(sampleOfTrace(d,LB.hoverTrace)))+.5;
+      c.strokeStyle='rgba(95,211,196,.85)'; c.lineWidth=1;
+      c.beginPath(); c.moveTo(x,0); c.lineTo(x,cssH); c.stroke();
+    }
+    if(LB.playSample!=null){
+      const x=Math.round(xOf(LB.playSample))+.5;
+      c.strokeStyle='#c9a227'; c.lineWidth=1.5;
+      c.beginPath(); c.moveTo(x,0); c.lineTo(x,cssH); c.stroke();
+    }
+  }
+  if(!AUDIOSTATE.playing) setWStat(idleStat());
+}
+
+function idleStat(){
+  const d=WAVE.get(LB.frameId);
+  if(!d) return LB.frameId?`frame ${LB.frameId}`:'';
+  return `${LB.frameId} · ${d.traces} traces · ${d.period.toFixed(2)} samples per line · ` +
+         `${(d.samples/d.sampleRate).toFixed(2)} s at ${d.sampleRate/1000} kHz`;
+}
+const setWStat=t=>{ $('lbWStat').textContent=t; };
+
+function showTrace(){
+  if(!LB.off||!LB.im) return;
+  const d=WAVE.get(LB.frameId);
+  let t=null;
+  if(LB.playSample!=null && d) t=traceAt(d,LB.playSample);
+  else if(LB.hoverTrace!=null) t=LB.hoverTrace;
+  blit($('lbCanvas'), LB.off, LB.im.orientation, t);
+}
+
+function waveSampleAt(ev){
+  const d=WAVE.get(LB.frameId); if(!d) return null;
+  const cv=$('lbWave'), r=cv.getBoundingClientRect();
+  const f=Math.max(0,Math.min(1,(ev.clientX-r.left)/r.width));
+  return f*d.samples;
+}
+$('lbWave').addEventListener('mousemove',ev=>{
+  const s=waveSampleAt(ev); if(s==null) return;
+  const d=WAVE.get(LB.frameId);
+  LB.hoverTrace=traceAt(d,s);
+  showTrace(); drawWave();
+});
+$('lbWave').addEventListener('mouseleave',()=>{
+  LB.hoverTrace=null; showTrace(); drawWave();
+});
+$('lbWave').addEventListener('click',ev=>{
+  const s=waveSampleAt(ev); if(s==null) return;
+  playFrom(s);
+});
+addEventListener('resize',()=>{ if(!LB.el.hidden) drawWave(); },{passive:true});
+
+// ---- audio ----------------------------------------------------------------
+// The frames are 96 kHz mono FLAC and the whole timebase is built on that
+// oversampling, so the decode must not be resampled. AudioContext.decodeAudioData
+// resamples to the *context's* rate, which on most machines is 44.1 or 48 kHz --
+// three quarters of the samples silently thrown away. Ported from
+// web/src/audio/loader.ts: decode inside an OfflineAudioContext pinned to
+// 96 kHz, and then CHECK that both the context and the buffer really are at
+// 96 kHz rather than assuming the browser honoured the request.
+
+const AUDIOSTATE={playing:false};
+const BUFFERS=new Map();
+let OFFCTX=null, ACTX=null, SRCNODE=null, PLAYING=null;
+
+async function frameBuffer(id){
+  if(BUFFERS.has(id)) return BUFFERS.get(id);
+  const url=`web/public/data/frames/${id}.flac?v=${ASSETV}`;
+  const res=await fetch(url);
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
+  const bytes=await res.arrayBuffer();
+  const Ctor=window.OfflineAudioContext||window.webkitOfflineAudioContext;
+  if(!Ctor) throw new Error('no OfflineAudioContext');
+  if(!OFFCTX) OFFCTX=new Ctor(1,96000,96000);
+  if(OFFCTX.sampleRate!==96000) throw new Error(`context clamped to ${OFFCTX.sampleRate} Hz`);
+  const buf=await new Promise((ok,no)=>{
+    const r=OFFCTX.decodeAudioData(bytes.slice(0),ok,no);
+    if(r&&r.then) r.then(ok,no);
+  });
+  if(buf.sampleRate!==96000) throw new Error(`decoded at ${buf.sampleRate} Hz`);
+  BUFFERS.set(id,buf);
+  return buf;
+}
+
+function stopAudio(){
+  if(SRCNODE){ try{ SRCNODE.onended=null; SRCNODE.stop(); }catch(e){} SRCNODE=null; }
+  if(LB.raf){ cancelAnimationFrame(LB.raf); LB.raf=0; }
+  PLAYING=null; AUDIOSTATE.playing=false; LB.playSample=null;
+  $('lbPlay').textContent='▶ Play the audio';
+  showTrace();
+  if(!LB.el.hidden) drawWave();
+}
+
+async function playFrom(sample){
+  const id=LB.frameId; if(!id) return;
+  stopAudio();
+  setWStat('fetching the FLAC…');
+  let buf;
+  try{ buf=await frameBuffer(id); }
+  catch(err){
+    setWStat(`audio unavailable here: ${err.message}. The strip above is the precomputed envelope.`);
+    return;
+  }
+  if(LB.frameId!==id) return;          // stepped away while it loaded
+  try{
+    ACTX=ACTX||new (window.AudioContext||window.webkitAudioContext)();
+    if(ACTX.state==='suspended') await ACTX.resume();
+  }catch(err){ setWStat('audio unavailable here: '+err.message); return; }
+
+  const g=ACTX.createGain(); g.gain.value=0.5; g.connect(ACTX.destination);
+  const s=ACTX.createBufferSource(); s.buffer=buf; s.connect(g);
+  const offset=Math.max(0,Math.min(buf.duration-0.02, (sample||0)/buf.sampleRate));
+  s.start(0, offset);
+  SRCNODE=s;
+  PLAYING={t0:ACTX.currentTime, offset, rate:buf.sampleRate, dur:buf.duration};
+  AUDIOSTATE.playing=true;
+  s.onended=()=>{ if(SRCNODE===s) stopAudio(); };
+  $('lbPlay').textContent='■ Stop';
+  tick();
+}
+
+function tick(){
+  LB.raf=0;
+  if(!PLAYING||!ACTX) return;
+  const el=ACTX.currentTime-PLAYING.t0+PLAYING.offset;
+  if(el>=PLAYING.dur){ stopAudio(); return; }
+  LB.playSample=el*PLAYING.rate;
+  showTrace();
+  drawWave();
+  const d=WAVE.get(LB.frameId), t=d?traceAt(d,LB.playSample):null;
+  setWStat(`playing · ${el.toFixed(2)} / ${PLAYING.dur.toFixed(2)} s · ` +
+           (t==null?'lead-in/tail':`trace ${t}`) + ' · 96 kHz, not resampled');
+  LB.raf=requestAnimationFrame(tick);
+}
+
+const togglePlay=()=>{ if(AUDIOSTATE.playing) stopAudio(); else playFrom(0); };
+$('lbPlay').onclick=e=>{ e.stopPropagation(); togglePlay(); };
+
+$('lbWHelp').textContent=
+  '1200 precomputed peaks per frame · hover the strip to point at a trace · click it to play '+
+  'from there · shaded ends are the lead-in and the tail lines, not picture';
+
+// ---- lightbox wiring ------------------------------------------------------
+
+$('lbClose').onclick=e=>{ e.stopPropagation(); closeLB(); };
+$('lbPrev').onclick=e=>{ e.stopPropagation(); stepLB(-1); };
+$('lbNext').onclick=e=>{ e.stopPropagation(); stepLB(1); };
+LB.el.addEventListener('click',e=>{ if(e.target===LB.el) closeLB(); });
+
+addEventListener('keydown',e=>{
+  if(LB.el.hidden) return;
+  if(e.key==='Escape'){ closeLB(); e.preventDefault(); }
+  else if(e.key==='ArrowRight'){ stepLB(1); e.preventDefault(); }
+  else if(e.key==='ArrowLeft'){ stepLB(-1); e.preventDefault(); }
+  else if(e.key===' '){ togglePlay(); e.preventDefault(); }
+});
+
+// --------------------------------------------------------------------------
+
+fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
  .catch(()=>{})
- .then(()=>fetch('web/public/data/catalog.json?v=7'))
+ .then(()=>fetch(`web/public/data/catalog.json?v=${ASSETV}`))
  .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
  .then(cat=>{
   const orient={}; for(const fr of cat.frames) orient[fr.id]=fr.orientation??0;
