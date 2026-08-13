@@ -231,3 +231,36 @@ On 31 blindly-identified line-art frames the denoiser does the same thing it doe
 photographs — the same edge cost for the same noise removal — so no gating rule is needed. The
 original claim of "identical to two decimals" was overstated by roughly 20×; the honest
 statement is that a frame-level bootstrap cannot distinguish the two classes.
+
+### F5. The circle's residual 0.5% ellipticity is probably not ours to fix *(measured, with a caveat)*
+
+The decode makes the calibration ring an ellipse of axis ratio **1.0051**. The obvious reading is
+that our geometry is 0.5% wrong and the record is telling us so — that being exactly what a
+calibration circle is for. Two measurements say otherwise.
+
+**Scaling cannot remove it.** `SQUARE_ROWS = 377` sets the vertical scale, so if the residual
+were an aspect error some row count would make the ring round. Scanning 371–383:
+
+| rows | 371 | 373 | 375 | **377** | 379 | 381 | 383 |
+|---|---|---|---|---|---|---|---|
+| axis ratio | 1.0162 | 1.0110 | 1.0070 | **1.0051** | 1.0090 | 1.0136 | 1.0185 |
+
+The minimum sits at **377, the shipped value** — parabola vertex 376.7, implying an isotropy of
+7.4334 against the shipped 7.440, a shift of about twice the quoted ±0.0033. The aspect is
+already at its optimum and the residual survives it.
+
+**And the ellipse appears tilted.** Fitting a general conic to 1440 sub-pixel ring points puts
+the major axis near **44°** — diagonal. Every geometry constant we have scales the trace axis or
+the row axis; none of them can produce a diagonal distortion. If that tilt is real, the
+ellipticity is **not ours**, and forcing the ring round would inject an error rather than remove
+one.
+
+**The caveat, and it matters:** my conic fit returns 1.0076 where `quality.circle_metrics`
+returns 1.0051, so the two disagree by half the effect, and a near-circle has a weakly determined
+major axis by construction. The tilt is a hypothesis, not a result. What *is* solid is the row
+scan: **the residual is not a vertical scale error.**
+
+The live possibility is the one worth stating plainly: **the 1977 slide, or the vidicon that
+imaged it, may simply not have been round to 0.5%.** A calibration target certifies the decoder
+only as far as the target itself is true, and nothing on the record establishes the ring's own
+circularity beyond the cover's assertion that it is a circle.
