@@ -1,599 +1,1347 @@
 {
+ "_about": {
+  "what": "Per-image reference: the plate in the Ozma Records book that IS this picture, cut out of the page scan, plus the printed caption and any Wikimedia scan.",
+  "status": {
+   "confirmed": "our decode was put beside the shortlisted book crops and the plate was identified by eye; on most pages the small italic figure number printed beside the plate corroborates it",
+   "uncertain": "a candidate is held but the match is not settled; shown as a lead, never as an answer",
+   "none": "no reference held"
+  },
+  "crops": "docs/reference/crops/<n>.jpg, cut from the page scan at the decided rectangle, tightened to drop bare paper and the printed figure number, long side 900 px",
+  "captions": "transcribed from the caption block at the foot of the even page of each spread; the book's own spellings, and the italic J the DjVu layer reads as an F put back",
+  "credit": "credit is the photographer the Ozma book names for the photograph. licence describes the Wikimedia scan only, and is present only where there is one.",
+  "reference_images_never_feed_the_decode": true
+ },
  "1": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/1.jpg",
+  "candidate": "n023_0",
+  "book": "docs/reference/book/n023.jpg",
+  "bookPage": 23,
+  "captionPage": 24,
+  "ozma": "Calibration circle",
+  "credit": "Jon Lomberg",
+  "wikimedia": {
+   "file": "docs/reference/001-calibration-circle-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Calibration-circle.gif",
+   "title": "Calibration-circle.gif",
+   "credit": "Jon Lomberg",
+   "licence": "Public domain"
+  },
   "file": "docs/reference/001-calibration-circle-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Calibration-circle.gif",
-  "title": "Calibration-circle.gif",
-  "credit": "Jon Lomberg",
-  "licence": "Public domain",
+  "licence": "Public domain"
+ },
+ "2": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/2.jpg",
+  "candidate": "n024_0",
   "book": "docs/reference/book/n024.jpg",
-  "bookPage": 24
+  "bookPage": 24,
+  "captionPage": 24,
+  "ozma": "Pulsar map with the Andromeda galaxy as a landmark",
+  "credit": "Frank Drake"
+ },
+ "3": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/3.jpg",
+  "candidate": "n025_1",
+  "book": "docs/reference/book/n025.jpg",
+  "bookPage": 25,
+  "captionPage": 26,
+  "ozma": "Definitions of mathematical notation",
+  "credit": "Frank Drake"
+ },
+ "4": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/4.jpg",
+  "candidate": "n025_2",
+  "book": "docs/reference/book/n025.jpg",
+  "bookPage": 25,
+  "captionPage": 26,
+  "ozma": "Definitions of physical units of measurement",
+  "credit": "Frank Drake"
+ },
+ "5": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/5.jpg",
+  "candidate": "n026_1",
+  "book": "docs/reference/book/n026.jpg",
+  "bookPage": 26,
+  "captionPage": 26,
+  "ozma": "Solar system with planetary measurements",
+  "credit": "Frank Drake"
+ },
+ "6": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/6.jpg",
+  "candidate": "n026_3",
+  "book": "docs/reference/book/n026.jpg",
+  "bookPage": 26,
+  "captionPage": 26,
+  "ozma": "Solar system with planetary measurements",
+  "credit": "Frank Drake"
+ },
+ "7": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/7.jpg",
+  "candidate": "n026_4",
+  "book": "docs/reference/book/n026.jpg",
+  "bookPage": 26,
+  "captionPage": 26,
+  "ozma": "The sun",
+  "credit": "Hale Telescope"
  },
  "8": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/8.jpg",
+  "candidate": "n027_1",
+  "book": "docs/reference/book/n027.jpg",
+  "bookPage": 27,
+  "captionPage": 28,
+  "ozma": "Solar spectrum",
+  "credit": "Valentin Boriakoff and Dan Mitler",
+  "wikimedia": {
+   "file": "docs/reference/008-voyager-golden-record-8-spectra-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_8_spectra.gif",
+   "title": "Voyager golden record 8 spectra.gif",
+   "credit": "National Astronomy and Ionosphere Center",
+   "licence": "Public domain"
+  },
   "file": "docs/reference/008-voyager-golden-record-8-spectra-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_8_spectra.gif",
-  "title": "Voyager golden record 8 spectra.gif",
-  "credit": "National Astronomy and Ionosphere Center",
   "licence": "Public domain"
  },
  "9": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/9.jpg",
+  "candidate": "n027_3",
+  "book": "docs/reference/book/n027.jpg",
+  "bookPage": 27,
+  "captionPage": 28,
+  "ozma": "Mercury",
+  "credit": "NASA",
+  "wikimedia": {
+   "file": "docs/reference/009-voyager-golden-record-9-mercury-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_9_mercury.gif",
+   "title": "Voyager golden record 9 mercury.gif",
+   "credit": "NASA",
+   "licence": "Public domain"
+  },
   "file": "docs/reference/009-voyager-golden-record-9-mercury-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_9_mercury.gif",
-  "title": "Voyager golden record 9 mercury.gif",
-  "credit": "NASA",
-  "licence": "Public domain",
-  "book": "docs/reference/book/n054.jpg",
-  "bookPage": 54,
-  "ozma": "In Retrospect"
+  "licence": "Public domain"
  },
  "10": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/10.jpg",
+  "candidate": "n027_4",
+  "book": "docs/reference/book/n027.jpg",
+  "bookPage": 27,
+  "captionPage": 28,
+  "ozma": "Mars",
+  "credit": "NASA",
+  "wikimedia": {
+   "file": "docs/reference/010-voyager-golden-record-10-mars-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_10_mars.gif",
+   "title": "Voyager golden record 10 mars.gif",
+   "credit": "NASA",
+   "licence": "Public domain"
+  },
   "file": "docs/reference/010-voyager-golden-record-10-mars-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_10_mars.gif",
-  "title": "Voyager golden record 10 mars.gif",
-  "credit": "NASA",
-  "licence": "Public domain",
-  "book": "docs/reference/book/n028.jpg",
-  "bookPage": 28,
-  "ozma": "Mars (NASA)"
+  "licence": "Public domain"
  },
  "11": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/11.jpg",
+  "candidate": "n027_5",
+  "book": "docs/reference/book/n027.jpg",
+  "bookPage": 27,
+  "captionPage": 28,
+  "ozma": "Jupiter",
+  "credit": "NASA",
+  "wikimedia": {
+   "file": "docs/reference/011-voyager-golden-record-11-jupiter-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_11_jupiter.gif",
+   "title": "Voyager golden record 11 jupiter.gif",
+   "credit": "NASA",
+   "licence": "Public domain"
+  },
   "file": "docs/reference/011-voyager-golden-record-11-jupiter-gif.jpg",
   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_11_jupiter.gif",
-  "title": "Voyager golden record 11 jupiter.gif",
-  "credit": "NASA",
   "licence": "Public domain"
  },
  "12": {
-  "file": "docs/reference/012-voyager-golden-record-12-earth-gif.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_12_earth.gif",
-  "title": "Voyager golden record 12 earth.gif",
-  "credit": "NASA",
-  "licence": "Public domain",
+  "status": "confirmed",
+  "crop": "docs/reference/crops/12.jpg",
+  "candidate": "n028_0",
   "book": "docs/reference/book/n028.jpg",
   "bookPage": 28,
-  "ozma": "Earth (NASA)"
- },
- "13": {
-  "file": "docs/reference/013-voyager-golden-record-13-earth-gif.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_13_earth.gif",
-  "title": "Voyager golden record 13 earth.gif",
+  "captionPage": 28,
+  "ozma": "Earth",
   "credit": "NASA",
-  "licence": "Public domain",
-  "book": "docs/reference/book/n028.jpg",
-  "bookPage": 28
- },
- "42": {
-  "file": "docs/reference/042-voyager-golden-record-42-adams-the-tetons-and-the-snake-rive.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_42_Adams_The_Tetons_and_the_Snake_River.gif",
-  "title": "Voyager golden record 42 Adams The Tetons and the Snake River.gif",
-  "credit": "Ansel Adams",
-  "licence": "Public domain",
-  "mislabelled": true,
-  "book": "docs/reference/book/n038.jpg",
-  "bookPage": 38,
-  "ozma": "Cape Neddick, Maine (Dick Smith)"
- },
- "77": {
-  "file": "docs/reference/077-voyager-golden-record-77-supermarket-gif.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_77_supermarket.gif",
-  "title": "Voyager golden record 77 supermarket.gif",
-  "credit": "National Astronomy and Ionosphere Center",
+  "wikimedia": {
+   "file": "docs/reference/012-voyager-golden-record-12-earth-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_12_earth.gif",
+   "title": "Voyager golden record 12 earth.gif",
+   "credit": "NASA",
+   "licence": "Public domain"
+  },
+  "file": "docs/reference/012-voyager-golden-record-12-earth-gif.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_12_earth.gif",
   "licence": "Public domain"
  },
- "82": {
-  "file": "docs/reference/082-voyager-golden-record-82-feeding-gif.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_82_feeding.gif",
-  "title": "Voyager golden record 82 feeding.gif",
-  "credit": "National Astronomy and Ionosphere Center",
-  "licence": "Public domain",
-  "book": "docs/reference/book/n052.jpg",
-  "bookPage": 52,
-  "ozma": "Demonstration of licking, eating, and"
- },
- "99": {
-  "file": "docs/reference/099-voyager-golden-record-99-xray-gif.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_99_xray.gif",
-  "title": "Voyager golden record 99 xray.gif",
-  "credit": "National Astronomy and Ionosphere Center",
-  "licence": "Public domain",
-  "book": "docs/reference/book/n056.jpg",
-  "bookPage": 56,
-  "ozma": "X-ray of a hand (Herman Eckelmann)"
- },
- "103": {
-  "file": "docs/reference/103-voyager-golden-record-103-highway-gif.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_103_highway.gif",
-  "title": "Voyager golden record 103 highway.gif",
-  "credit": "National Astronomy and Ionosphere Center",
-  "licence": "Public domain",
-  "book": "docs/reference/book/n057.jpg",
-  "bookPage": 57,
-  "ozma": "Route 13, Ithaca, New York"
- },
- "110": {
-  "file": "docs/reference/110-voyager-golden-record-110-arecibo-gif.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_110_arecibo.gif",
-  "title": "Voyager golden record 110 arecibo.gif",
-  "credit": "National Astronomy and Ionosphere Center",
-  "licence": "Public domain",
-  "book": "docs/reference/book/n061.jpg",
-  "bookPage": 61
- },
- "111": {
-  "file": "docs/reference/111-voyager-golden-record-111-systemoftheworld-gif.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_111_systemoftheworld.gif",
-  "title": "Voyager golden record 111 systemoftheworld.gif",
-  "credit": "National Astronomy and Ionosphere Center",
-  "licence": "Public domain",
-  "book": "docs/reference/book/n062.jpg",
-  "bookPage": 62,
-  "ozma": "Pages from Sir Isaac Newton\u2019s Philosophiz"
- },
- "112": {
-  "file": "docs/reference/112-voyager-golden-record-112-astronaut-gif.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_112_astronaut.gif",
-  "title": "Voyager golden record 112 astronaut.gif",
+ "13": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/13.jpg",
+  "candidate": "n028_2",
+  "book": "docs/reference/book/n028.jpg",
+  "bookPage": 28,
+  "captionPage": 28,
+  "ozma": "Egypt, the Red Sea, the Sinai Peninsula, and the Nile with the composition of Earth's atmosphere",
   "credit": "NASA",
-  "licence": "Public domain",
-  "book": "docs/reference/book/n062.jpg",
-  "bookPage": 62,
-  "ozma": "Gemini 4 astronaut Ed White, the first"
- },
- "113": {
-  "file": "docs/reference/113-voyager-golden-record-113-launch-gif.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_113_launch.gif",
-  "title": "Voyager golden record 113 launch.gif",
-  "credit": "NASA",
-  "licence": "Public domain",
-  "book": "docs/reference/book/n063.jpg",
-  "bookPage": 63,
-  "ozma": "Liftoff of Titan IIIE-Centaur rocket (NASA)"
- },
- "116": {
-  "file": "docs/reference/116-voyager-golden-record-116-score-gif.jpg",
-  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_116_score.gif",
-  "title": "Voyager golden record 116 score.gif",
-  "credit": "National Astronomy and Ionosphere Center",
-  "licence": "Public domain",
-  "book": "docs/reference/book/n064.jpg",
-  "bookPage": 64,
-  "ozma": "Beethoven's String Quartet No. 13"
- },
- "2": {
-  "book": "docs/reference/book/n024.jpg",
-  "bookPage": 24,
-  "ozma": "How the Golden Record Came to Be"
- },
- "3": {
-  "book": "docs/reference/book/n026.jpg",
-  "bookPage": 26
- },
- "4": {
-  "book": "docs/reference/book/n026.jpg",
-  "bookPage": 26,
-  "ozma": "Sounds of Earth"
- },
- "5": {
-  "book": "docs/reference/book/n026.jpg",
-  "bookPage": 26,
-  "ozma": "Oc +m"
- },
- "6": {
-  "book": "docs/reference/book/n026.jpg",
-  "bookPage": 26
- },
- "7": {
-  "book": "docs/reference/book/n026.jpg",
-  "bookPage": 26,
-  "ozma": "The sun (Hale Telescope)"
- },
- "45": {
-  "book": "docs/reference/book/n026.jpg",
-  "bookPage": 26,
-  "ozma": "Monument Valley, Arizona (Ray Manley)"
- },
- "100": {
-  "book": "docs/reference/book/n026.jpg",
-  "bookPage": 26,
-  "ozma": "Woman with microscope in a Mogadishu"
+  "wikimedia": {
+   "file": "docs/reference/013-voyager-golden-record-13-earth-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_13_earth.gif",
+   "title": "Voyager golden record 13 earth.gif",
+   "credit": "NASA",
+   "licence": "Public domain"
+  },
+  "file": "docs/reference/013-voyager-golden-record-13-earth-gif.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_13_earth.gif",
+  "licence": "Public domain"
  },
  "14": {
-  "book": "docs/reference/book/n030.jpg",
-  "bookPage": 30,
-  "ozma": "Saturn\u2019s rings with \u201cspokes\u201d of dust particles"
+  "status": "confirmed",
+  "crop": "docs/reference/crops/14.jpg",
+  "candidate": "n029_1",
+  "book": "docs/reference/book/n029.jpg",
+  "bookPage": 29,
+  "captionPage": 30,
+  "ozma": "DNA structure and replication",
+  "credit": "Jon Lomberg"
+ },
+ "15": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/15.jpg",
+  "candidate": "n029_3",
+  "book": "docs/reference/book/n029.jpg",
+  "bookPage": 29,
+  "captionPage": 30,
+  "ozma": "DNA structure and replication",
+  "credit": "Jon Lomberg"
  },
  "16": {
-  "book": "docs/reference/book/n030.jpg",
-  "bookPage": 30,
-  "ozma": "Saturn C-ring and B-ring with ringlets"
+  "status": "confirmed",
+  "crop": "docs/reference/crops/16.jpg",
+  "candidate": "n029_4",
+  "book": "docs/reference/book/n029.jpg",
+  "bookPage": 29,
+  "captionPage": 30,
+  "ozma": "DNA structure and replication",
+  "credit": "Jon Lomberg"
  },
  "17": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/17.jpg",
+  "candidate": "n030_0",
   "book": "docs/reference/book/n030.jpg",
   "bookPage": 30,
-  "ozma": "Cell division 23"
+  "captionPage": 30,
+  "ozma": "Cell division"
  },
- "25": {
-  "book": "docs/reference/book/n032.jpg",
-  "bookPage": 32
+ "18": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/18.jpg",
+  "candidate": "n031_0",
+  "book": "docs/reference/book/n031.jpg",
+  "bookPage": 31,
+  "captionPage": 32,
+  "ozma": "Human anatomy"
+ },
+ "19": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/19.jpg",
+  "candidate": "n031_1",
+  "book": "docs/reference/book/n031.jpg",
+  "bookPage": 31,
+  "captionPage": 32,
+  "ozma": "Human anatomy"
  },
  "20": {
-  "book": "docs/reference/book/n033.jpg",
-  "bookPage": 33,
-  "ozma": "Fupiter and two moons"
- },
- "30": {
-  "book": "docs/reference/book/n033.jpg",
-  "bookPage": 33,
-  "ozma": "Fetus silhouette (fon Lomberg)"
- },
- "26": {
-  "book": "docs/reference/book/n034.jpg",
-  "bookPage": 34,
-  "ozma": "Diagram of human sex organs"
- },
- "28": {
-  "book": "docs/reference/book/n034.jpg",
-  "bookPage": 34,
-  "ozma": "Conception (Lennart Nilsson)"
- },
- "29": {
-  "book": "docs/reference/book/n034.jpg",
-  "bookPage": 34,
-  "ozma": "Fertilized ovum (Lennart Nilsson)"
- },
- "31": {
-  "book": "docs/reference/book/n034.jpg",
-  "bookPage": 34,
-  "ozma": "Fetus (Frank Allan)"
- },
- "32": {
-  "book": "docs/reference/book/n034.jpg",
-  "bookPage": 34,
-  "ozma": "Silhouette of male and female"
- },
- "33": {
-  "book": "docs/reference/book/n036.jpg",
-  "bookPage": 36,
-  "ozma": "Birth (Wayne Miller)"
- },
- "34": {
-  "book": "docs/reference/book/n036.jpg",
-  "bookPage": 36,
-  "ozma": "Nursing mother (United Nations)"
- },
- "35": {
-  "book": "docs/reference/book/n036.jpg",
-  "bookPage": 36,
-  "ozma": "Malaysian man and his daughter"
- },
- "36": {
-  "book": "docs/reference/book/n036.jpg",
-  "bookPage": 36,
-  "ozma": "Group of children at the United Nations"
- },
- "37": {
-  "book": "docs/reference/book/n036.jpg",
-  "bookPage": 36,
-  "ozma": "Family portrait silhouette (fon Lomberg)"
- },
- "38": {
-  "book": "docs/reference/book/n036.jpg",
-  "bookPage": 36,
-  "ozma": "Family portrait (Nina Leen)"
- },
- "39": {
-  "book": "docs/reference/book/n038.jpg",
-  "bookPage": 38,
-  "ozma": "Diagram of continental drift (fon Lomberg)"
- },
- "40": {
-  "book": "docs/reference/book/n038.jpg",
-  "bookPage": 38,
-  "ozma": "Structure of the Earth with abundance of"
- },
- "41": {
-  "book": "docs/reference/book/n038.jpg",
-  "bookPage": 38,
-  "ozma": "Heron Island (Fay M. Pasachoff)"
- },
- "43": {
-  "book": "docs/reference/book/n038.jpg",
-  "bookPage": 38,
-  "ozma": "The Tetons and the Snake River,"
- },
- "44": {
-  "book": "docs/reference/book/n038.jpg",
-  "bookPage": 38,
-  "ozma": "A horseman and his dog cross the desert,"
- },
- "46": {
-  "book": "docs/reference/book/n040.jpg",
-  "bookPage": 40,
-  "ozma": "Forest scene with mushrooms,"
- },
- "47": {
-  "book": "docs/reference/book/n040.jpg",
-  "bookPage": 40,
-  "ozma": "Strawherry leaf (F. Arthur Herrick)"
- },
- "48": {
-  "book": "docs/reference/book/n040.jpg",
-  "bookPage": 40,
-  "ozma": "Fallen leaves, White Sulphur Springs,"
- },
- "49": {
-  "book": "docs/reference/book/n040.jpg",
-  "bookPage": 40,
-  "ozma": "Sequoia and snowflake"
- },
- "50": {
-  "book": "docs/reference/book/n040.jpg",
-  "bookPage": 40,
-  "ozma": "Tree and daffodils (Gottlieb Hampfler)"
- },
- "51": {
-  "book": "docs/reference/book/n042.jpg",
-  "bookPage": 42,
-  "ozma": "Ichneumon fly (Stephen Dalton)"
- },
- "52": {
-  "book": "docs/reference/book/n042.jpg",
-  "bookPage": 42,
-  "ozma": "Diagram of vertebrate evolution"
- },
- "53": {
-  "book": "docs/reference/book/n042.jpg",
-  "bookPage": 42,
-  "ozma": "Turbinellidae seashell"
- },
- "54": {
-  "book": "docs/reference/book/n042.jpg",
-  "bookPage": 42,
-  "ozma": "Dolphins (Thomas Nebbia)"
- },
- "55": {
-  "book": "docs/reference/book/n042.jpg",
-  "bookPage": 42,
-  "ozma": "Sweeper fish and diver in the Red Sea"
- },
- "56": {
-  "book": "docs/reference/book/n044.jpg",
-  "bookPage": 44,
-  "ozma": "Tree toad (David Wickstrom)"
- },
- "57": {
-  "book": "docs/reference/book/n044.jpg",
-  "bookPage": 44,
-  "ozma": "Crocodile in Alia Bay,"
- },
- "58": {
-  "book": "docs/reference/book/n044.jpg",
-  "bookPage": 44,
-  "ozma": "Short-toed eagle, Donana National Park,"
- },
- "59": {
-  "book": "docs/reference/book/n044.jpg",
-  "bookPage": 44,
-  "ozma": "Watering hole (South African Tourism)"
- },
- "60": {
-  "book": "docs/reference/book/n044.jpg",
-  "bookPage": 44,
-  "ozma": "Fane Goodall observing chimpanzees,"
- },
- "61": {
-  "book": "docs/reference/book/n044.jpg",
-  "bookPage": 44,
-  "ozma": "Bushmen hunters in Botswana silhouette"
- },
- "62": {
-  "book": "docs/reference/book/n044.jpg",
-  "bookPage": 44,
-  "ozma": "Bushmen hunters in Botswana"
- },
- "63": {
-  "book": "docs/reference/book/n046.jpg",
-  "bookPage": 46,
-  "ozma": "Man from Nicaragua (Yutaka Nagata)"
- },
- "64": {
-  "book": "docs/reference/book/n046.jpg",
-  "bookPage": 46,
-  "ozma": "Dancer from Bali (Donna Grosvenor)"
- },
- "65": {
-  "book": "docs/reference/book/n046.jpg",
-  "bookPage": 46,
-  "ozma": "Women in Santiago Atitlan,"
- },
- "66": {
-  "book": "docs/reference/book/n046.jpg",
-  "bookPage": 46,
-  "ozma": "Craftsman carving elephants from teak,"
- },
- "67": {
-  "book": "docs/reference/book/n046.jpg",
-  "bookPage": 46
- },
- "68": {
-  "book": "docs/reference/book/n046.jpg",
-  "bookPage": 46,
-  "ozma": "Elderly farmer from Cappadocia,"
- },
- "69": {
-  "book": "docs/reference/book/n046.jpg",
-  "bookPage": 46,
-  "ozma": "Man searching for herbs in Owen"
- },
- "70": {
-  "book": "docs/reference/book/n048.jpg",
-  "bookPage": 48,
-  "ozma": "Gaston R\u00e9buffat atop Aiguille de Roc,"
- },
- "71": {
-  "book": "docs/reference/book/n048.jpg",
-  "bookPage": 48,
-  "ozma": "Gymnast Cathy Rigby (Phillip Leonian)"
- },
- "72": {
-  "book": "docs/reference/book/n050.jpg",
-  "bookPage": 50,
-  "ozma": "Valeriy Borzov winning gold, 1972 Olympic"
- },
- "73": {
-  "book": "docs/reference/book/n050.jpg",
-  "bookPage": 50,
-  "ozma": "School in Eastern Hokkaido, fapan"
- },
- "74": {
-  "book": "docs/reference/book/n050.jpg",
-  "bookPage": 50,
-  "ozma": "Children with globe at the United Nations"
- },
- "75": {
-  "book": "docs/reference/book/n052.jpg",
-  "bookPage": 52,
-  "ozma": "Cotton harvesting, New South Wales,"
- },
- "76": {
-  "book": "docs/reference/book/n052.jpg",
-  "bookPage": 52,
-  "ozma": "Grape picker near Griffith, New South Wales,"
- },
- "78": {
-  "book": "docs/reference/book/n052.jpg",
-  "bookPage": 52,
-  "ozma": "Diver and fish, Buck Island Reef National"
- },
- "79": {
-  "book": "docs/reference/book/n052.jpg",
-  "bookPage": 52,
-  "ozma": "Fishermen at Evia, Greece (Tsagris)"
- },
- "80": {
-  "book": "docs/reference/book/n052.jpg",
-  "bookPage": 52,
-  "ozma": "Cooking fish (Brian Seed)"
- },
- "81": {
-  "book": "docs/reference/book/n052.jpg",
-  "bookPage": 52,
-  "ozma": "Chinese dinner party (Michael Rougier)"
- },
- "83": {
-  "book": "docs/reference/book/n052.jpg",
-  "bookPage": 52,
-  "ozma": "The Great Wall of China (Edward Kim)"
- },
- "85": {
-  "book": "docs/reference/book/n054.jpg",
-  "bookPage": 54,
-  "ozma": "Amish barn raising (William Albert Allard)"
- },
- "86": {
-  "book": "docs/reference/book/n054.jpg",
-  "bookPage": 54,
-  "ozma": "Rural house in Bishoftu, Ethiopia"
- },
- "87": {
-  "book": "docs/reference/book/n054.jpg",
-  "bookPage": 54,
-  "ozma": "House in Provincetown, Massachusetts"
- },
- "88": {
-  "book": "docs/reference/book/n054.jpg",
-  "bookPage": 54
- },
- "90": {
-  "book": "docs/reference/book/n054.jpg",
-  "bookPage": 54,
-  "ozma": "Taj Mahal (David Carroll)"
- },
- "91": {
-  "book": "docs/reference/book/n054.jpg",
-  "bookPage": 54,
-  "ozma": "Oxford, England (Douglas R. Gilbert)"
- },
- "92": {
-  "book": "docs/reference/book/n054.jpg",
-  "bookPage": 54,
-  "ozma": "Sailboats in the Charles River Basin,"
- },
- "94": {
-  "book": "docs/reference/book/n056.jpg",
-  "bookPage": 56
- },
- "95": {
-  "book": "docs/reference/book/n056.jpg",
-  "bookPage": 56,
-  "ozma": "Sydney Opera House (Michael E. Long)"
- },
- "96": {
-  "book": "docs/reference/book/n056.jpg",
-  "bookPage": 56,
-  "ozma": "Artisan with drill (Frank Hewlett)"
- },
- "97": {
-  "book": "docs/reference/book/n056.jpg",
-  "bookPage": 56,
-  "ozma": "Factory interior (Fred Ward)"
- },
- "98": {
-  "book": "docs/reference/book/n056.jpg",
-  "bookPage": 56,
-  "ozma": "Visitors at a museum (David Cupp)"
- },
- "101": {
-  "book": "docs/reference/book/n056.jpg",
-  "bookPage": 56,
-  "ozma": "Street scene in Lahore, Pakistan (B. Wolff)"
- },
- "102": {
-  "book": "docs/reference/book/n057.jpg",
-  "bookPage": 57,
-  "ozma": "Rush hour in Bangkok, Thailand (UN)"
- },
- "104": {
-  "book": "docs/reference/book/n058.jpg",
-  "bookPage": 58,
-  "ozma": "The Golden Gate and Bridge from"
- },
- "105": {
-  "book": "docs/reference/book/n058.jpg",
-  "bookPage": 58,
-  "ozma": "TurboTrain linking Boston to New York"
- },
- "106": {
-  "book": "docs/reference/book/n058.jpg",
-  "bookPage": 58,
-  "ozma": "Airplane from runway at Syracuse Hancock"
- },
- "107": {
-  "book": "docs/reference/book/n058.jpg",
-  "bookPage": 58,
-  "ozma": "Toronto Pearson International Airport"
- },
- "108": {
-  "book": "docs/reference/book/n059.jpg",
-  "bookPage": 59,
-  "ozma": "Sno-Cat hanging over crevasse,"
- },
- "109": {
-  "book": "docs/reference/book/n060.jpg",
-  "bookPage": 60
- },
- "114": {
-  "book": "docs/reference/book/n063.jpg",
-  "bookPage": 63,
-  "ozma": "Whistling swans at sunset, Back Bay"
- },
- "115": {
-  "book": "docs/reference/book/n064.jpg",
-  "bookPage": 64,
-  "ozma": "Quartetto Italiano"
+  "status": "confirmed",
+  "crop": "docs/reference/crops/20.jpg",
+  "candidate": "n032_7",
+  "book": "docs/reference/book/n032.jpg",
+  "bookPage": 32,
+  "captionPage": 32,
+  "ozma": "Human anatomy"
+ },
+ "21": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/21.jpg",
+  "candidate": "n032_4",
+  "book": "docs/reference/book/n032.jpg",
+  "bookPage": 32,
+  "captionPage": 32,
+  "ozma": "Human anatomy"
+ },
+ "22": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/22.jpg",
+  "candidate": "n032_6",
+  "book": "docs/reference/book/n032.jpg",
+  "bookPage": 32,
+  "captionPage": 32,
+  "ozma": "Human anatomy"
+ },
+ "23": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/23.jpg",
+  "candidate": "n032_10",
+  "book": "docs/reference/book/n032.jpg",
+  "bookPage": 32,
+  "captionPage": 32,
+  "ozma": "Human anatomy"
  },
  "24": {
-  "book": "docs/reference/book/n070.jpg",
-  "bookPage": 70,
-  "ozma": "Fupiter\u2019s Great Red Spot"
+  "status": "confirmed",
+  "crop": "docs/reference/crops/24.jpg",
+  "candidate": "n032_9",
+  "book": "docs/reference/book/n032.jpg",
+  "bookPage": 32,
+  "captionPage": 32,
+  "ozma": "Human anatomy"
+ },
+ "25": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/25.jpg",
+  "candidate": "n032_8",
+  "book": "docs/reference/book/n032.jpg",
+  "bookPage": 32,
+  "captionPage": 32,
+  "ozma": "Human anatomy"
+ },
+ "26": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/26.jpg",
+  "candidate": "n033_1",
+  "book": "docs/reference/book/n033.jpg",
+  "bookPage": 33,
+  "captionPage": 34,
+  "ozma": "Diagram of human sex organs",
+  "credit": "Sarah Landry"
+ },
+ "27": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/27.jpg",
+  "candidate": "n033_4",
+  "book": "docs/reference/book/n033.jpg",
+  "bookPage": 33,
+  "captionPage": 34,
+  "ozma": "Conception silhouette",
+  "credit": "Jon Lomberg"
+ },
+ "28": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/28.jpg",
+  "candidate": "n033_6",
+  "book": "docs/reference/book/n033.jpg",
+  "bookPage": 33,
+  "captionPage": 34,
+  "ozma": "Conception",
+  "credit": "Lennart Nilsson"
+ },
+ "29": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/29.jpg",
+  "candidate": "n033_7",
+  "book": "docs/reference/book/n033.jpg",
+  "bookPage": 33,
+  "captionPage": 34,
+  "ozma": "Fertilized ovum",
+  "credit": "Lennart Nilsson"
+ },
+ "30": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/30.jpg",
+  "candidate": "n033_3",
+  "book": "docs/reference/book/n033.jpg",
+  "bookPage": 33,
+  "captionPage": 34,
+  "ozma": "Fetus silhouette",
+  "credit": "Jon Lomberg"
+ },
+ "31": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/31.jpg",
+  "candidate": "n034_0",
+  "book": "docs/reference/book/n034.jpg",
+  "bookPage": 34,
+  "captionPage": 34,
+  "ozma": "Fetus",
+  "credit": "Frank Allan"
+ },
+ "32": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/32.jpg",
+  "candidate": "n034_1",
+  "book": "docs/reference/book/n034.jpg",
+  "bookPage": 34,
+  "captionPage": 34,
+  "ozma": "Silhouette of male and female",
+  "credit": "Jon Lomberg"
+ },
+ "33": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/33.jpg",
+  "candidate": "n035_3",
+  "book": "docs/reference/book/n035.jpg",
+  "bookPage": 35,
+  "captionPage": 36,
+  "ozma": "Birth",
+  "credit": "Wayne Miller"
+ },
+ "34": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/34.jpg",
+  "candidate": "n035_2",
+  "book": "docs/reference/book/n035.jpg",
+  "bookPage": 35,
+  "captionPage": 36,
+  "ozma": "Nursing mother",
+  "credit": "United Nations"
+ },
+ "35": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/35.jpg",
+  "candidate": "n035_1",
+  "book": "docs/reference/book/n035.jpg",
+  "bookPage": 35,
+  "captionPage": 36,
+  "ozma": "Malaysian man and his daughter",
+  "credit": "David Alan Harvey"
+ },
+ "36": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/36.jpg",
+  "candidate": "n036_0",
+  "book": "docs/reference/book/n036.jpg",
+  "bookPage": 36,
+  "captionPage": 36,
+  "ozma": "Group of children at the United Nations International School",
+  "credit": "Ruby Mera"
+ },
+ "37": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/37.jpg",
+  "candidate": "n036_2",
+  "book": "docs/reference/book/n036.jpg",
+  "bookPage": 36,
+  "captionPage": 36,
+  "ozma": "Family portrait silhouette",
+  "credit": "Jon Lomberg"
+ },
+ "38": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/38.jpg",
+  "candidate": "n036_3",
+  "book": "docs/reference/book/n036.jpg",
+  "bookPage": 36,
+  "captionPage": 36,
+  "ozma": "Family portrait",
+  "credit": "Nina Leen"
+ },
+ "39": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/39.jpg",
+  "candidate": "n037_0",
+  "book": "docs/reference/book/n037.jpg",
+  "bookPage": 37,
+  "captionPage": 38,
+  "ozma": "Diagram of continental drift",
+  "credit": "Jon Lomberg"
+ },
+ "40": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/40.jpg",
+  "candidate": "n038_1",
+  "book": "docs/reference/book/n038.jpg",
+  "bookPage": 38,
+  "captionPage": 38,
+  "ozma": "Structure of the Earth with abundance of elements",
+  "credit": "Jon Lomberg with Steven Soter"
+ },
+ "41": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/41.jpg",
+  "candidate": "n038_3",
+  "book": "docs/reference/book/n038.jpg",
+  "bookPage": 38,
+  "captionPage": 38,
+  "ozma": "Heron Island",
+  "credit": "Jay M. Pasachoff"
+ },
+ "42": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/42.jpg",
+  "candidate": "n038_5",
+  "book": "docs/reference/book/n038.jpg",
+  "bookPage": 38,
+  "captionPage": 38,
+  "ozma": "Cape Neddick, Maine",
+  "credit": "Dick Smith",
+  "wikimedia": {
+   "file": "docs/reference/042-voyager-golden-record-42-adams-the-tetons-and-the-snake-rive.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_42_Adams_The_Tetons_and_the_Snake_River.gif",
+   "title": "Voyager golden record 42 Adams The Tetons and the Snake River.gif",
+   "credit": "Ansel Adams",
+   "licence": "Public domain",
+   "mislabelled": true
+  },
+  "file": "docs/reference/042-voyager-golden-record-42-adams-the-tetons-and-the-snake-rive.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_42_Adams_The_Tetons_and_the_Snake_River.gif",
+  "licence": "Public domain",
+  "mislabelled": true
+ },
+ "43": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/43.jpg",
+  "candidate": "n038_4",
+  "book": "docs/reference/book/n038.jpg",
+  "bookPage": 38,
+  "captionPage": 38,
+  "ozma": "The Tetons and the Snake River, Wyoming",
+  "credit": "Ansel Adams",
+  "wikimedia": {
+   "file": "docs/reference/042-voyager-golden-record-42-adams-the-tetons-and-the-snake-rive.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_42_Adams_The_Tetons_and_the_Snake_River.gif",
+   "title": "Voyager golden record 42 Adams The Tetons and the Snake River.gif",
+   "credit": "Ansel Adams",
+   "licence": "Public domain",
+   "note": "filed on Commons as image 42; the Ozma book prints this photograph as 43 and 42 as Cape Neddick"
+  },
+  "file": "docs/reference/042-voyager-golden-record-42-adams-the-tetons-and-the-snake-rive.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_42_Adams_The_Tetons_and_the_Snake_River.gif",
+  "licence": "Public domain"
+ },
+ "44": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/44.jpg",
+  "candidate": "n038_6",
+  "book": "docs/reference/book/n038.jpg",
+  "bookPage": 38,
+  "captionPage": 38,
+  "ozma": "A horseman and his dog cross the desert, Pisco, Peru",
+  "credit": "George Mobley"
+ },
+ "45": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/45.jpg",
+  "candidate": "n038_7",
+  "book": "docs/reference/book/n038.jpg",
+  "bookPage": 38,
+  "captionPage": 38,
+  "ozma": "Monument Valley, Arizona",
+  "credit": "Ray Manley"
+ },
+ "46": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/46.jpg",
+  "candidate": "n039_1",
+  "book": "docs/reference/book/n039.jpg",
+  "bookPage": 39,
+  "captionPage": 40,
+  "ozma": "Forest scene with mushrooms, Petersburg, Virginia",
+  "credit": "Bruce Dale"
+ },
+ "47": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/47.jpg",
+  "candidate": "n039_2",
+  "book": "docs/reference/book/n039.jpg",
+  "bookPage": 39,
+  "captionPage": 40,
+  "ozma": "Strawberry leaf",
+  "credit": "J. Arthur Herrick"
+ },
+ "48": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/48.jpg",
+  "candidate": "n040_0",
+  "book": "docs/reference/book/n040.jpg",
+  "bookPage": 40,
+  "captionPage": 40,
+  "ozma": "Fallen leaves, White Sulphur Springs, West Virginia",
+  "credit": "Jodi Cobb"
+ },
+ "49": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/49.jpg",
+  "candidate": "n040_2",
+  "book": "docs/reference/book/n040.jpg",
+  "bookPage": 40,
+  "captionPage": 40,
+  "ozma": "Sequoia and snowflake",
+  "credit": "Josef Muench/Robert Sisson"
+ },
+ "50": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/50.jpg",
+  "candidate": "n040_1",
+  "book": "docs/reference/book/n040.jpg",
+  "bookPage": 40,
+  "captionPage": 40,
+  "ozma": "Tree and daffodils",
+  "credit": "Gottlieb Hampfler"
+ },
+ "51": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/51.jpg",
+  "candidate": "n041_1",
+  "book": "docs/reference/book/n041.jpg",
+  "bookPage": 41,
+  "captionPage": 42,
+  "ozma": "Ichneumon fly",
+  "credit": "Stephen Dalton"
+ },
+ "52": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/52.jpg",
+  "candidate": "n041_2",
+  "book": "docs/reference/book/n041.jpg",
+  "bookPage": 41,
+  "captionPage": 42,
+  "ozma": "Diagram of vertebrate evolution",
+  "credit": "Jon Lomberg"
+ },
+ "53": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/53.jpg",
+  "candidate": "n041_3",
+  "book": "docs/reference/book/n041.jpg",
+  "bookPage": 41,
+  "captionPage": 42,
+  "ozma": "Turbinellidae seashell",
+  "credit": "Hermann Landshoff"
+ },
+ "54": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/54.jpg",
+  "candidate": "n042_0",
+  "book": "docs/reference/book/n042.jpg",
+  "bookPage": 42,
+  "captionPage": 42,
+  "ozma": "Dolphins",
+  "credit": "Thomas Nebbia"
+ },
+ "55": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/55.jpg",
+  "candidate": "n042_1",
+  "book": "docs/reference/book/n042.jpg",
+  "bookPage": 42,
+  "captionPage": 42,
+  "ozma": "Sweeper fish and diver in the Red Sea",
+  "credit": "David Doubilet"
+ },
+ "56": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/56.jpg",
+  "candidate": "n043_1",
+  "book": "docs/reference/book/n043.jpg",
+  "bookPage": 43,
+  "captionPage": 44,
+  "ozma": "Tree toad",
+  "credit": "David Wickstrom"
+ },
+ "57": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/57.jpg",
+  "candidate": "n043_3",
+  "book": "docs/reference/book/n043.jpg",
+  "bookPage": 43,
+  "captionPage": 44,
+  "ozma": "Crocodile in Alia Bay, Lake Rudolf, Kenya",
+  "credit": "Peter Beard"
+ },
+ "58": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/58.jpg",
+  "candidate": "n043_5",
+  "book": "docs/reference/book/n043.jpg",
+  "bookPage": 43,
+  "captionPage": 44,
+  "ozma": "Short-toed eagle, Doñana National Park, Spain",
+  "credit": "José Ramón Pons"
+ },
+ "59": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/59.jpg",
+  "candidate": "n043_4",
+  "book": "docs/reference/book/n043.jpg",
+  "bookPage": 43,
+  "captionPage": 44,
+  "ozma": "Watering hole",
+  "credit": "South African Tourism"
+ },
+ "60": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/60.jpg",
+  "candidate": "n044_0",
+  "book": "docs/reference/book/n044.jpg",
+  "bookPage": 44,
+  "captionPage": 44,
+  "ozma": "Jane Goodall observing chimpanzees, Gombe Stream National Park, Tanzania",
+  "credit": "Vanne Morris-Goodall"
+ },
+ "61": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/61.jpg",
+  "candidate": "n044_2",
+  "book": "docs/reference/book/n044.jpg",
+  "bookPage": 44,
+  "captionPage": 44,
+  "ozma": "Bushmen hunters in Botswana silhouette",
+  "credit": "Jon Lomberg"
+ },
+ "62": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/62.jpg",
+  "candidate": "n044_4",
+  "book": "docs/reference/book/n044.jpg",
+  "bookPage": 44,
+  "captionPage": 44,
+  "ozma": "Bushmen hunters in Botswana",
+  "credit": "Nat Farbman"
+ },
+ "63": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/63.jpg",
+  "candidate": "n045_1",
+  "book": "docs/reference/book/n045.jpg",
+  "bookPage": 45,
+  "captionPage": 46,
+  "ozma": "Man from Nicaragua",
+  "credit": "Yutaka Nagata"
+ },
+ "64": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/64.jpg",
+  "candidate": "n045_2",
+  "book": "docs/reference/book/n045.jpg",
+  "bookPage": 45,
+  "captionPage": 46,
+  "ozma": "Dancer from Bali",
+  "credit": "Donna Grosvenor"
+ },
+ "65": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/65.jpg",
+  "candidate": "n045_3",
+  "book": "docs/reference/book/n045.jpg",
+  "bookPage": 45,
+  "captionPage": 46,
+  "ozma": "Women in Santiago Atitlan, Guatemala",
+  "credit": "Joe Schershel"
+ },
+ "66": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/66.jpg",
+  "candidate": "n046_1",
+  "book": "docs/reference/book/n046.jpg",
+  "bookPage": 46,
+  "captionPage": 46,
+  "ozma": "Craftsman carving elephants from teak, Chiang Mai, Thailand",
+  "credit": "Dean Conger"
+ },
+ "67": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/67.jpg",
+  "candidate": "n046_2",
+  "book": "docs/reference/book/n046.jpg",
+  "bookPage": 46,
+  "captionPage": 46,
+  "ozma": "Elephant, Mae Sariang, Thailand",
+  "credit": "Peter Kunstadter"
+ },
+ "68": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/68.jpg",
+  "candidate": "n046_5",
+  "book": "docs/reference/book/n046.jpg",
+  "bookPage": 46,
+  "captionPage": 46,
+  "ozma": "Elderly farmer from Cappadocia, Turkey",
+  "credit": "Jonathan Blair"
+ },
+ "69": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/69.jpg",
+  "candidate": "n046_4",
+  "book": "docs/reference/book/n046.jpg",
+  "bookPage": 46,
+  "captionPage": 46,
+  "ozma": "Man searching for herbs in Owen County, Indiana",
+  "credit": "Bruce Baumann"
+ },
+ "70": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/70.jpg",
+  "candidate": "n047_0",
+  "book": "docs/reference/book/n047.jpg",
+  "bookPage": 47,
+  "captionPage": 48,
+  "ozma": "Gaston Rébuffat atop Aiguille de Roc, Mont Blanc massif, France",
+  "credit": "Georges Tairraz"
+ },
+ "71": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/71.jpg",
+  "candidate": "n048_0",
+  "book": "docs/reference/book/n048.jpg",
+  "bookPage": 48,
+  "captionPage": 48,
+  "ozma": "Gymnast Cathy Rigby",
+  "credit": "Phillip Leonian"
+ },
+ "72": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/72.jpg",
+  "candidate": "n049_1",
+  "book": "docs/reference/book/n049.jpg",
+  "bookPage": 49,
+  "captionPage": 50,
+  "ozma": "Valeriy Borzov winning gold, 1972 Olympic Games, Munich, Germany",
+  "credit": "Topham Picturepoint"
+ },
+ "73": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/73.jpg",
+  "candidate": "n049_2",
+  "book": "docs/reference/book/n049.jpg",
+  "bookPage": 49,
+  "captionPage": 50,
+  "ozma": "School in Eastern Hokkaido, Japan",
+  "credit": "Yutaka Nagata"
+ },
+ "74": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/74.jpg",
+  "candidate": "n050_0",
+  "book": "docs/reference/book/n050.jpg",
+  "bookPage": 50,
+  "captionPage": 50,
+  "ozma": "Children with globe at the United Nations International School",
+  "credit": "Yutaka Nagata"
+ },
+ "75": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/75.jpg",
+  "candidate": "n051_2",
+  "book": "docs/reference/book/n051.jpg",
+  "bookPage": 51,
+  "captionPage": 52,
+  "ozma": "Cotton harvesting, New South Wales, Australia",
+  "credit": "Howell Walker"
+ },
+ "76": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/76.jpg",
+  "candidate": "n051_5",
+  "book": "docs/reference/book/n051.jpg",
+  "bookPage": 51,
+  "captionPage": 52,
+  "ozma": "Grape picker near Griffith, New South Wales, Australia",
+  "credit": "David Moore"
+ },
+ "77": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/77.jpg",
+  "candidate": "n051_9",
+  "book": "docs/reference/book/n051.jpg",
+  "bookPage": 51,
+  "captionPage": 52,
+  "ozma": "Supermarket",
+  "credit": "Herman Eckelmann",
+  "wikimedia": {
+   "file": "docs/reference/077-voyager-golden-record-77-supermarket-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_77_supermarket.gif",
+   "title": "Voyager golden record 77 supermarket.gif",
+   "credit": "National Astronomy and Ionosphere Center",
+   "licence": "Public domain"
+  },
+  "file": "docs/reference/077-voyager-golden-record-77-supermarket-gif.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_77_supermarket.gif",
+  "licence": "Public domain"
+ },
+ "78": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/78.jpg",
+  "candidate": "n051_4",
+  "book": "docs/reference/book/n051.jpg",
+  "bookPage": 51,
+  "captionPage": 52,
+  "ozma": "Diver and fish, Buck Island Reef National Monument, St. Croix, U.S. Virgin Islands",
+  "credit": "Jerry Greenberg"
+ },
+ "79": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/79.jpg",
+  "candidate": "n051_6",
+  "book": "docs/reference/book/n051.jpg",
+  "bookPage": 51,
+  "captionPage": 52,
+  "ozma": "Fishermen at Evia, Greece",
+  "credit": "Tsagris"
+ },
+ "80": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/80.jpg",
+  "candidate": "n051_10",
+  "book": "docs/reference/book/n051.jpg",
+  "bookPage": 51,
+  "captionPage": 52,
+  "ozma": "Cooking fish",
+  "credit": "Brian Seed"
+ },
+ "81": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/81.jpg",
+  "candidate": "n051_8",
+  "book": "docs/reference/book/n051.jpg",
+  "bookPage": 51,
+  "captionPage": 52,
+  "ozma": "Chinese dinner party",
+  "credit": "Michael Rougier"
+ },
+ "82": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/82.jpg",
+  "candidate": "n051_11",
+  "book": "docs/reference/book/n051.jpg",
+  "bookPage": 51,
+  "captionPage": 52,
+  "ozma": "Demonstration of licking, eating, and drinking",
+  "credit": "Herman Eckelmann",
+  "wikimedia": {
+   "file": "docs/reference/082-voyager-golden-record-82-feeding-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_82_feeding.gif",
+   "title": "Voyager golden record 82 feeding.gif",
+   "credit": "National Astronomy and Ionosphere Center",
+   "licence": "Public domain"
+  },
+  "file": "docs/reference/082-voyager-golden-record-82-feeding-gif.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_82_feeding.gif",
+  "licence": "Public domain"
+ },
+ "83": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/83.jpg",
+  "candidate": "n052_0",
+  "book": "docs/reference/book/n052.jpg",
+  "bookPage": 52,
+  "captionPage": 52,
+  "ozma": "The Great Wall of China",
+  "credit": "Edward Kim"
+ },
+ "84": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/84.jpg",
+  "candidate": "n053_1",
+  "book": "docs/reference/book/n053.jpg",
+  "bookPage": 53,
+  "captionPage": 54,
+  "ozma": "Home construction in Sangmélima, Republic of Cameroon",
+  "credit": "UN"
+ },
+ "85": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/85.jpg",
+  "candidate": "n053_2",
+  "book": "docs/reference/book/n053.jpg",
+  "bookPage": 53,
+  "captionPage": 54,
+  "ozma": "Amish barn raising",
+  "credit": "William Albert Allard"
+ },
+ "86": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/86.jpg",
+  "candidate": "n053_3",
+  "book": "docs/reference/book/n053.jpg",
+  "bookPage": 53,
+  "captionPage": 54,
+  "ozma": "Rural house in Bishoftu, Ethiopia",
+  "credit": "Ray Witlin"
+ },
+ "87": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/87.jpg",
+  "candidate": "n053_4",
+  "book": "docs/reference/book/n053.jpg",
+  "bookPage": 53,
+  "captionPage": 54,
+  "ozma": "House in Provincetown, Massachusetts",
+  "credit": "Robert Sisson"
+ },
+ "88": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/88.jpg",
+  "candidate": "n054_3",
+  "book": "docs/reference/book/n054.jpg",
+  "bookPage": 54,
+  "captionPage": 54,
+  "ozma": "House in Cloudcroft, New Mexico",
+  "credit": "Frank Drake"
+ },
+ "89": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/89.jpg",
+  "candidate": "n054_7",
+  "book": "docs/reference/book/n054.jpg",
+  "bookPage": 54,
+  "captionPage": 54,
+  "ozma": "Home interior",
+  "credit": "James L. Amos"
+ },
+ "90": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/90.jpg",
+  "candidate": "n054_6",
+  "book": "docs/reference/book/n054.jpg",
+  "bookPage": 54,
+  "captionPage": 54,
+  "ozma": "Taj Mahal",
+  "credit": "David Carroll"
+ },
+ "91": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/91.jpg",
+  "candidate": "n054_4",
+  "book": "docs/reference/book/n054.jpg",
+  "bookPage": 54,
+  "captionPage": 54,
+  "ozma": "Oxford, England",
+  "credit": "Douglas R. Gilbert"
+ },
+ "92": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/92.jpg",
+  "candidate": "n054_5",
+  "book": "docs/reference/book/n054.jpg",
+  "bookPage": 54,
+  "captionPage": 54,
+  "ozma": "Sailboats in the Charles River Basin, Boston, Massachusetts",
+  "credit": "Ted Spiegel"
+ },
+ "93": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/93.jpg",
+  "candidate": "n055_1",
+  "book": "docs/reference/book/n055.jpg",
+  "bookPage": 55,
+  "captionPage": 56,
+  "ozma": "Headquarters of the United Nations, day and night",
+  "credit": "UN/Yutaka Nagata"
+ },
+ "94": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/94.jpg",
+  "candidate": "n055_2",
+  "book": "docs/reference/book/n055.jpg",
+  "bookPage": 55,
+  "captionPage": 56,
+  "ozma": "Headquarters of the United Nations, day and night",
+  "credit": "UN/Yutaka Nagata"
+ },
+ "95": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/95.jpg",
+  "candidate": "n056_5",
+  "book": "docs/reference/book/n056.jpg",
+  "bookPage": 56,
+  "captionPage": 56,
+  "ozma": "Sydney Opera House",
+  "credit": "Michael E. Long"
+ },
+ "96": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/96.jpg",
+  "candidate": "n056_8",
+  "book": "docs/reference/book/n056.jpg",
+  "bookPage": 56,
+  "captionPage": 56,
+  "ozma": "Artisan with drill",
+  "credit": "Frank Hewlett"
+ },
+ "97": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/97.jpg",
+  "candidate": "n056_4",
+  "book": "docs/reference/book/n056.jpg",
+  "bookPage": 56,
+  "captionPage": 56,
+  "ozma": "Factory interior",
+  "credit": "Fred Ward"
+ },
+ "98": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/98.jpg",
+  "candidate": "n056_7",
+  "book": "docs/reference/book/n056.jpg",
+  "bookPage": 56,
+  "captionPage": 56,
+  "ozma": "Visitors at a museum",
+  "credit": "David Cupp"
+ },
+ "99": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/99.jpg",
+  "candidate": "n056_3",
+  "book": "docs/reference/book/n056.jpg",
+  "bookPage": 56,
+  "captionPage": 56,
+  "ozma": "X-ray of a hand",
+  "credit": "Herman Eckelmann",
+  "wikimedia": {
+   "file": "docs/reference/099-voyager-golden-record-99-xray-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_99_xray.gif",
+   "title": "Voyager golden record 99 xray.gif",
+   "credit": "National Astronomy and Ionosphere Center",
+   "licence": "Public domain"
+  },
+  "file": "docs/reference/099-voyager-golden-record-99-xray-gif.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_99_xray.gif",
+  "licence": "Public domain"
+ },
+ "100": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/100.jpg",
+  "candidate": "n056_9",
+  "book": "docs/reference/book/n056.jpg",
+  "bookPage": 56,
+  "captionPage": 56,
+  "ozma": "Woman with microscope in a Mogadishu health center",
+  "credit": "Rice"
+ },
+ "101": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/101.jpg",
+  "candidate": "n056_10",
+  "book": "docs/reference/book/n056.jpg",
+  "bookPage": 56,
+  "captionPage": 56,
+  "ozma": "Street scene in Lahore, Pakistan",
+  "credit": "B. Wolff"
+ },
+ "102": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/102.jpg",
+  "candidate": "n057_0",
+  "book": "docs/reference/book/n057.jpg",
+  "bookPage": 57,
+  "captionPage": 58,
+  "ozma": "Rush hour in Bangkok, Thailand",
+  "credit": "UN"
+ },
+ "103": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/103.jpg",
+  "candidate": "n057_1",
+  "book": "docs/reference/book/n057.jpg",
+  "bookPage": 57,
+  "captionPage": 58,
+  "ozma": "Route 13, Ithaca, New York",
+  "credit": "Herman Eckelmann",
+  "wikimedia": {
+   "file": "docs/reference/103-voyager-golden-record-103-highway-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_103_highway.gif",
+   "title": "Voyager golden record 103 highway.gif",
+   "credit": "National Astronomy and Ionosphere Center",
+   "licence": "Public domain"
+  },
+  "file": "docs/reference/103-voyager-golden-record-103-highway-gif.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_103_highway.gif",
+  "licence": "Public domain"
+ },
+ "104": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/104.jpg",
+  "candidate": "n058_0",
+  "book": "docs/reference/book/n058.jpg",
+  "bookPage": 58,
+  "captionPage": 58,
+  "ozma": "The Golden Gate and Bridge from Baker Beach, San Francisco, California",
+  "credit": "Ansel Adams"
+ },
+ "105": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/105.jpg",
+  "candidate": "n058_3",
+  "book": "docs/reference/book/n058.jpg",
+  "bookPage": 58,
+  "captionPage": 58,
+  "ozma": "TurboTrain linking Boston to New York",
+  "credit": "Gordon Gahan"
+ },
+ "106": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/106.jpg",
+  "candidate": "n058_4",
+  "book": "docs/reference/book/n058.jpg",
+  "bookPage": 58,
+  "captionPage": 58,
+  "ozma": "Airplane from runway at Syracuse Hancock International Airport",
+  "credit": "Frank Drake"
+ },
+ "107": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/107.jpg",
+  "candidate": "n058_2",
+  "book": "docs/reference/book/n058.jpg",
+  "bookPage": 58,
+  "captionPage": 58,
+  "ozma": "Toronto Pearson International Airport Terminal 1",
+  "credit": "Ray Manley"
+ },
+ "108": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/108.jpg",
+  "candidate": "n059_0",
+  "book": "docs/reference/book/n059.jpg",
+  "bookPage": 59,
+  "captionPage": 60,
+  "ozma": "Sno-Cat hanging over crevasse, Trans-Antarctic Expedition, 1955-1958",
+  "credit": "George Lowe"
+ },
+ "109": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/109.jpg",
+  "candidate": "n060_0",
+  "book": "docs/reference/book/n060.jpg",
+  "bookPage": 60,
+  "captionPage": 60,
+  "ozma": "The Westerbork Synthesis Radio Telescope, The Netherlands",
+  "credit": "James P. Blair"
+ },
+ "110": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/110.jpg",
+  "candidate": "n061_2",
+  "book": "docs/reference/book/n061.jpg",
+  "bookPage": 61,
+  "captionPage": 62,
+  "ozma": "Arecibo Observatory, Puerto Rico",
+  "credit": "Herman Eckelmann",
+  "wikimedia": {
+   "file": "docs/reference/110-voyager-golden-record-110-arecibo-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_110_arecibo.gif",
+   "title": "Voyager golden record 110 arecibo.gif",
+   "credit": "National Astronomy and Ionosphere Center",
+   "licence": "Public domain"
+  },
+  "file": "docs/reference/110-voyager-golden-record-110-arecibo-gif.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_110_arecibo.gif",
+  "licence": "Public domain"
+ },
+ "111": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/111.jpg",
+  "candidate": "n061_4",
+  "book": "docs/reference/book/n061.jpg",
+  "bookPage": 61,
+  "captionPage": 62,
+  "ozma": "Pages from Sir Isaac Newton's Philosophiæ Naturalis Principia Mathematica, Book 3: De Mundi Systemate",
+  "credit": "Jon Lomberg",
+  "wikimedia": {
+   "file": "docs/reference/111-voyager-golden-record-111-systemoftheworld-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_111_systemoftheworld.gif",
+   "title": "Voyager golden record 111 systemoftheworld.gif",
+   "credit": "National Astronomy and Ionosphere Center",
+   "licence": "Public domain"
+  },
+  "file": "docs/reference/111-voyager-golden-record-111-systemoftheworld-gif.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_111_systemoftheworld.gif",
+  "licence": "Public domain"
+ },
+ "112": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/112.jpg",
+  "candidate": "n062_0",
+  "book": "docs/reference/book/n062.jpg",
+  "bookPage": 62,
+  "captionPage": 62,
+  "ozma": "Gemini 4 astronaut Ed White, the first American to conduct a spacewalk",
+  "credit": "James McDivitt",
+  "wikimedia": {
+   "file": "docs/reference/112-voyager-golden-record-112-astronaut-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_112_astronaut.gif",
+   "title": "Voyager golden record 112 astronaut.gif",
+   "credit": "NASA",
+   "licence": "Public domain"
+  },
+  "file": "docs/reference/112-voyager-golden-record-112-astronaut-gif.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_112_astronaut.gif",
+  "licence": "Public domain"
+ },
+ "113": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/113.jpg",
+  "candidate": "n063_1",
+  "book": "docs/reference/book/n063.jpg",
+  "bookPage": 63,
+  "captionPage": 64,
+  "ozma": "Liftoff of Titan IIIE-Centaur rocket",
+  "credit": "NASA",
+  "wikimedia": {
+   "file": "docs/reference/113-voyager-golden-record-113-launch-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_113_launch.gif",
+   "title": "Voyager golden record 113 launch.gif",
+   "credit": "NASA",
+   "licence": "Public domain"
+  },
+  "file": "docs/reference/113-voyager-golden-record-113-launch-gif.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_113_launch.gif",
+  "licence": "Public domain"
+ },
+ "114": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/114.jpg",
+  "candidate": "n063_0",
+  "book": "docs/reference/book/n063.jpg",
+  "bookPage": 63,
+  "captionPage": 64,
+  "ozma": "Whistling swans at sunset, Back Bay National Wildlife Refuge, Virginia",
+  "credit": "David Alan Harvey"
+ },
+ "115": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/115.jpg",
+  "candidate": "n064_0",
+  "book": "docs/reference/book/n064.jpg",
+  "bookPage": 64,
+  "captionPage": 64,
+  "ozma": "Quartetto Italiano"
+ },
+ "116": {
+  "status": "confirmed",
+  "crop": "docs/reference/crops/116.jpg",
+  "candidate": "n064_1",
+  "book": "docs/reference/book/n064.jpg",
+  "bookPage": 64,
+  "captionPage": 64,
+  "ozma": "Beethoven's String Quartet No. 13 in B-flat Major, Opus 130: V. Cavatina, the closing piece of music on the Voyager Interstellar Record",
+  "credit": "Jon Lomberg",
+  "wikimedia": {
+   "file": "docs/reference/116-voyager-golden-record-116-score-gif.jpg",
+   "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_116_score.gif",
+   "title": "Voyager golden record 116 score.gif",
+   "credit": "National Astronomy and Ionosphere Center",
+   "licence": "Public domain"
+  },
+  "file": "docs/reference/116-voyager-golden-record-116-score-gif.jpg",
+  "commons": "https://commons.wikimedia.org/wiki/File:Voyager_golden_record_116_score.gif",
+  "licence": "Public domain"
  }
 }
