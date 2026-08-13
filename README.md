@@ -7,6 +7,16 @@ pressed into a gold-plated copper phonograph record.
 This decoder turns that sound back into pictures.
 
 <p align="center">
+  <img src="docs/img/plaque.png" width="46%" alt="The engraved cover of the Voyager Golden Record">
+</p>
+
+<p align="center"><i>The cover is the instruction manual, engraved for someone who shares no
+language, no units, and no mathematics beyond physics. The glyph at centre-right — vertical scan
+lines above a circle — states that the pictures are built from traces, and that the first one is a
+circle so you can check your own work. That is what this decoder reads.<br>
+<a href="docs/img/cover-explained.png">What every engraving means →</a></i></p>
+
+<p align="center">
   <img src="docs/img/hero.png" width="100%" alt="Six photographs decoded from the record: Earth, dolphins, a Maine lighthouse, the Taj Mahal, a spacewalk, a climber on Mont Blanc">
 </p>
 
@@ -223,6 +233,10 @@ Record (with Timothy Daly and Lawrence Azerrad), and gave Barry the high-fidelit
 makes any of this possible. Without that, everyone would still be decoding a lossy MP3. He
 wrote up Barry's work at Boing Boing:
 **[How to decode the images on the Voyager Golden Record](https://boingboing.net/2017/09/05/how-to-decode-the-images-on-th.html)**.
+
+**The cover artwork** on this page is NASA's own, public domain, vendored in
+[`docs/img/vendor/`](docs/img/vendor/) rather than hot-linked. The annotated version was revised
+for historical accuracy by Brian Krent in 2015.
 
 **The [Internet Archive](https://archive.org/details/voyager.decode)** hosts the 384 kHz
 master digitisation, Barry's decoder, and his essay. That item is the source of every number
