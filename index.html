@@ -485,11 +485,21 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   <p class="note"><b>What is measured, and what is not.</b> On the colour images there is a
   held-out scan to score against, and the result is real: 19 of 19, with a blur control failing
   the same test. <b>The 96 monochrome images have no held-out measurement</b>, so applying the
-  denoiser there is an extrapolation — checked only against criteria that cannot be gamed, chiefly
-  that the calibration circle's geometry must not move. And one correction worth keeping: the
-  headline +7.7 dB in the noise band sounded better than it is, because a plain Gaussian blur
-  reaches +5.6 dB there. What the evidence earns is the conjunction — blur-level noise suppression
-  <em>while the low band improves</em>, where blur makes it worse.</p>
+  denoiser there is an extrapolation. And one correction worth keeping: the headline +7.7 dB in
+  the noise band sounded better than it is, because a plain Gaussian blur reaches +5.6 dB there.
+  What the evidence earns is the conjunction — blur-level noise suppression <em>while the low band
+  improves</em>, where blur makes it worse.</p>
+  <p class="note"><b>And it costs something, which is why there are two tiers rather than one.</b>
+  Run the reconstructed tier past the calibration circle — the one check a denoiser cannot game —
+  and it <b>regresses</b>: radial rms 0.861&nbsp;→&nbsp;0.886&nbsp;px, axis ratio
+  1.0053&nbsp;→&nbsp;1.0057. That is not a bug. The ring is a dark line one to two pixels wide and
+  the denoiser has a 17-pixel receptive field, so it softens that line and the fitted edge moves;
+  radial rms measures <em>edge localisation</em>, which is exactly what a denoiser spends. On a
+  photograph the trade is a good one — the vertical streaking in Cape Neddick's sky disappears
+  while the lighthouse, the rocks and the spray survive. On the calibration frame it is a bad one,
+  because that frame exists to be an edge-localisation test and nothing else. So the physics decode
+  stays the default and the thing to cite, and the regression is published rather than buried: a
+  tier that only ever reports its wins is not evidence of anything.</p>
 
   <h2>Honest status</h2>
   <p>This page is a <strong>gallery</strong>. The decoder itself is Python, it lives in
@@ -555,7 +565,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='37';
+const ASSETV='38';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
