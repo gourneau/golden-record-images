@@ -284,6 +284,48 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
     <tr><td>falling edge, at zero crossing</td><td class="n">±6</td></tr>
   </table>
 
+  <h3>The embossed look, solved</h3>
+  <p>Every previously published decode of this record has the same flaw: a hammered-metal,
+  bas-relief quality where flat areas sag toward mid-grey and only edges survive. The 2017
+  decoder's author documented it precisely and could not fix it. It is the single most visible
+  difference between these images and the ones that were on the web before.</p>
+  <p>The cause is an AC-coupled recording chain — a one-pole high-pass that no analogue path
+  of that era avoided. The fix is its exact inverse,
+  <span class="mono" style="display:inline">y[n] = y[n−1] + x[n] − a·x[n−1]</span>, and two
+  details decide whether it works. It must run in <strong>raster order</strong> — along each
+  trace and straight across every trace boundary — because that is how time ran in the
+  recording; a per-trace version is a different filter and a bug, and it shipped here once
+  before it was caught. And the time constant is <em>measured, per channel</em>, from a
+  scene-free part of the record's own signal: 530 samples on the left channel, 295 on the
+  right. Nothing about the pictures is assumed.</p>
+
+  <h3>The scan direction is an orientation test</h3>
+  <p>The converter scanned every slide the same way, so trace 0 is always the same physical
+  edge and every image paints in the same direction. That makes a 180° turn special: it is the
+  one rotation that <em>reverses</em> the scan while keeping its axis. A quarter turn does not
+  — it moves the scan to the other axis, which is exactly what a portrait slide needs.</p>
+  <p>So a 180° turn is a checkable claim that a slide was mounted upside down in 1977 — and it
+  is checkable <strong>with no reference image at all.</strong> It is the only per-image
+  orientation evidence the record offers, and it caught a real error here: the pulsar map was
+  the only image carrying a 180, and the only one that played backwards. It had been turned to
+  match a printed plate. The record's orientation is restored and the plate was rotated instead.</p>
+
+  <h3>Fifteen published plates are printed backwards</h3>
+  <p>Aligning each decode against its published reproduction needs a transform that can mirror.
+  Once it could, fifteen plates snapped into place that had never matched: the Thai elephant
+  went from 3 matching features to 799, the Cameroon house from 3 to 503. Bali, Guatemala,
+  Japan, Greece, Turkey, Australia and the whistling swans are all laterally inverted in print.
+  <strong>The record had them right.</strong></p>
+
+  <h3>What is not a breakthrough, stated plainly</h3>
+  <p>The resolution ceiling is measured and it is not ours to move. The recording chain could
+  have carried more than 1000 elements along a stripe; the 1977 <em>camera</em> resolved
+  138–172. We already sample 1.4 to 1.9 times finer than the camera could see, in both
+  directions. Everything the camera captured is in these pictures, and anything sharper that a
+  program might now produce would be <strong>invented, not recovered</strong> — which is why
+  this decoder does not do it, and why every machine-learning method here is judged by whether
+  it predicts measurements it was not shown, rather than by whether it looks better.</p>
+
   <div class="note"><b>Two corrections, kept on the record.</b> An earlier version of this work
   claimed the stripe alternation was 60&nbsp;Hz mains hum at ~70% of picture amplitude. Both
   halves were wrong — measuring the whole record at 25× finer resolution puts it at 60.0436 Hz,
@@ -398,7 +440,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='19';
+const ASSETV='20';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';

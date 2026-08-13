@@ -32,6 +32,7 @@ looks.
 
 from __future__ import annotations
 
+import warnings
 from dataclasses import dataclass
 
 import numpy as np
@@ -98,10 +99,18 @@ class FitResult:
     heldout_rmse: float
     baseline_rmse: float
     iters: int
+    train_mse: float = float("nan")
 
     @property
     def beats_baseline(self) -> bool:
         return self.heldout_rmse < self.baseline_rmse
+
+    @property
+    def operator_fits(self) -> bool:
+        """Did the model explain the data it was shown? Data is unit variance,
+        so a train MSE anywhere near 1.0 means the operator cannot represent the
+        measurement at all and no hold-out conclusion may be drawn."""
+        return self.train_mse < 0.25
 
 
 def _checker_mask(h: int, w: int, keep: float, seed: int) -> np.ndarray:
@@ -129,10 +138,37 @@ def _baseline_predict(y: np.ndarray, mask: np.ndarray) -> np.ndarray:
             break
         pad = np.pad(out, 1, mode="edge")
         stack = np.stack([pad[:-2, 1:-1], pad[2:, 1:-1], pad[1:-1, :-2], pad[1:-1, 2:]])
-        with np.errstate(invalid="ignore"):
+        with np.errstate(invalid="ignore"), warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)  # all-NaN slices early on
             avg = np.nanmean(stack, axis=0)
         out = np.where(holes, avg, out)
     return np.nan_to_num(out, nan=float(np.nanmean(y[mask])))
+
+
+def residual_params(rows: int = 377, dots: int = 230) -> fwd.ChainParams:
+    """The physics that is still IN a decoded image, and nothing else.
+
+    This is the correction to a mistake worth recording, because the failure
+    mode was silent and the numbers it produced looked like a scientific result.
+
+    `decode()` already inverts the AC-coupling droop and already undoes the
+    negative. So a decoded image is NOT "what the record carries" -- it is the
+    latent slide seen through only the parts of the chain the decoder cannot
+    invert. Fitting it through the FULL forward operator applies droop and
+    negation a second time, and asks the optimiser to produce a scene whose
+    high-passed negative matches an already-high-pass-corrected positive. It
+    cannot, so it diverges: held-out RMSE 6.8 to 18.3 against data normalised to
+    unit variance, which read as "the neural field is a null" and was nothing of
+    the kind.
+
+    What remains is the camera aperture. The sample-and-hold is dropped too:
+    it acts along the DOT axis, and `_rows_from_dots` has since resampled that
+    axis from ~230 dots to `rows` rows, so a one-dot boxcar no longer describes
+    it. The PSF width is scaled into row units for the same reason.
+    """
+    return fwd.ChainParams(
+        psf_sigma=fwd.TRANSITION_1090 * fwd.GAUSS_PER_1090 * (rows / dots),
+        hold=False, droop_a=0.0, negative=False)
 
 
 def fit(dots: np.ndarray, params: fwd.ChainParams | None = None, *,
@@ -173,11 +209,17 @@ def fit(dots: np.ndarray, params: fwd.ChainParams | None = None, *,
         pred = fwd.forward(scene, params).cpu().numpy().astype(np.float64)
         scene_np = scene.cpu().numpy().astype(np.float64)
 
+    # Can the model explain the dots it was ALLOWED to see? If not, the operator
+    # is wrong and the hold-out number is meaningless -- it is not evidence
+    # about the method, it is evidence about the model. Reported explicitly so
+    # a mismatch cannot be mistaken for a null a second time.
+    train_mse = float(np.mean((pred[mask] - y[mask]) ** 2))
+
     held = ~mask
     hr = float(np.sqrt(np.mean((pred[held] - y[held]) ** 2))) if held.any() else float("nan")
     br = float(np.sqrt(np.mean((_baseline_predict(y, mask)[held] - y[held]) ** 2))) if held.any() else float("nan")
     return FitResult(scene=scene_np, loss_history=hist, heldout_rmse=hr,
-                     baseline_rmse=br, iters=iters)
+                     baseline_rmse=br, iters=iters, train_mse=train_mse)
 
 
 if __name__ == "__main__":  # pragma: no cover
@@ -209,18 +251,28 @@ if __name__ == "__main__":  # pragma: no cover
         tb = sync_mod.recover(seg)
         dec = decode_mod.decode(seg, decode_mod.Settings(traces=512, rotate=0), tb=tb)
         dots = dec.image
-        p = fwd.ChainParams.for_channel(fid[0], period_samples=float(tb.period))
+        p = residual_params(rows=dots.shape[0], dots=int(dec.diagnostics.get("n_dots", 230)))
         print(f"  {fid}  {dots.shape[0]}x{dots.shape[1]}")
         for sc in (float(s) for s in args.scales.split(",")):
             r = fit(dots, p, iters=args.iters, ff_scale=sc)
             gain = (r.baseline_rmse - r.heldout_rmse) / r.baseline_rmse * 100
             rows.append((fid, sc, r))
-            print(f"     ff_scale {sc:4.1f}   held-out rmse {r.heldout_rmse:.4f}   "
+            flag = ("BEATS" if r.beats_baseline else "loses to") if r.operator_fits \
+                   else "OPERATOR MISMATCH -- no conclusion from"
+            print(f"     ff_scale {sc:4.1f}   train mse {r.train_mse:.4f}   "
+                  f"held-out rmse {r.heldout_rmse:.4f}   "
                   f"neighbour-fill {r.baseline_rmse:.4f}   "
-                  f"{gain:+6.1f}%   {'BEATS' if r.beats_baseline else 'loses to'} baseline")
+                  f"{gain:+7.1f}%   {flag} baseline")
         print()
 
-    wins = sum(1 for _, _, r in rows if r.beats_baseline)
-    print(f"{wins}/{len(rows)} configurations beat neighbour-fill on withheld measurements.")
-    if wins == 0:
-        print("VERDICT: no support for the neural field on this signal. Report it as a null.")
+    usable = [r for _, _, r in rows if r.operator_fits]
+    wins = sum(1 for r in usable if r.beats_baseline)
+    print(f"\n{len(usable)}/{len(rows)} configurations produced a usable fit "
+          f"(the rest could not explain the dots they were shown).")
+    if not usable:
+        print("VERDICT: the operator does not represent the measurement. This says nothing")
+        print("about the method -- fix the operator before drawing any conclusion.")
+    else:
+        print(f"{wins}/{len(usable)} beat neighbour-fill on WITHHELD measurements.")
+        if wins == 0:
+            print("VERDICT: no support for the neural field on this signal. A real null.")
