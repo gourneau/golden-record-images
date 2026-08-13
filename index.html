@@ -271,7 +271,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='10';
+const ASSETV='11';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -341,8 +341,15 @@ function composite(srcs,colour){
 // 0.0010 and 0.0004, against 0.14 to 0.30 for every other edge.
 function blit(cv,off,orientation,trace){
   const w=off.width, h=off.height;
-  const turn = orientation===2 ? 90 : 0;
-  const swap = turn!==0;
+    // Display rotation is MEASURED, not tabled. align_refs.py reports how far
+  // each published reference had to be rotated to land on our decode; rounded
+  // to a quarter turn that is the correction our decode needs. It reproduces
+  // the old hand rule everywhere the hand rule was right (Jupiter, Earth) and
+  // catches what it missed -- images 27 and 28, and the pulsar map at 180.
+  // Thumbnails are already oriented at build time, so this is the only
+  // rotation applied here.
+  const turn = (typeof orientation === 'number' ? orientation : 0);
+  const swap = (turn===90 || turn===270);
   cv.width  = swap? h : w;
   cv.height = swap? w : h;
   const c=cv.getContext('2d');
@@ -414,7 +421,7 @@ function paint(f){
   if(f.dataset.painted) return;
   f.dataset.painted='1';
   const d=JSON.parse(f.dataset.im);
-  draw(f.querySelector('canvas'), thumbs(d), d.orientation, d.color);
+  draw(f.querySelector('canvas'), thumbs(d), (d.displayRotate||0), d.color);
 }
 
 function sweep(){
@@ -445,7 +452,7 @@ $('ord').onclick=()=>{
   // grid and blank every canvas until the lazy loader caught up again.
   GRID.querySelectorAll('figure').forEach(f=>{
     const d=JSON.parse(f.dataset.im); if(!d.color) return;
-    draw(f.querySelector('canvas'), thumbs(d), d.orientation, true);
+    draw(f.querySelector('canvas'), thumbs(d), (d.displayRotate||0), true);
     f.dataset.painted='1';
   });
   if(!LB.el.hidden && LB.im && LB.im.color) loadDecoded(LB.im);

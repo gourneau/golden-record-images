@@ -2511,7 +2511,8 @@
    "color": false,
    "title_ours": "Calibration circle",
    "title_ozma": "Calibration circle",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 2,
@@ -2522,7 +2523,8 @@
    "color": false,
    "title_ours": "Solar location map",
    "title_ozma": "Pulsar map with the Andromeda galaxy as a landmark",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 180
   },
   {
    "n": 3,
@@ -2533,7 +2535,8 @@
    "color": false,
    "title_ours": "Mathematical definitions",
    "title_ozma": "Definitions of mathematical notation",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 4,
@@ -2544,7 +2547,8 @@
    "color": false,
    "title_ours": "Physical unit definitions",
    "title_ozma": "Definitions of physical units of measurement",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 5,
@@ -2555,7 +2559,8 @@
    "color": false,
    "title_ours": "Solar System parameters",
    "title_ozma": "Solar system with planetary measurements",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 6,
@@ -2566,7 +2571,8 @@
    "color": false,
    "title_ours": "Solar System parameters",
    "title_ozma": "Solar system with planetary measurements",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 7,
@@ -2577,7 +2583,8 @@
    "color": false,
    "title_ours": "The Sun",
    "title_ozma": "The sun",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 8,
@@ -2590,7 +2597,8 @@
    "color": true,
    "title_ours": "Solar spectrum",
    "title_ozma": "Solar spectrum",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 9,
@@ -2601,7 +2609,8 @@
    "color": false,
    "title_ours": "Mercury",
    "title_ozma": "Mercury",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 10,
@@ -2612,7 +2621,8 @@
    "color": false,
    "title_ours": "Mars",
    "title_ozma": "Mars",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 11,
@@ -2623,7 +2633,8 @@
    "color": false,
    "title_ours": "Jupiter",
    "title_ozma": "Jupiter",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 12,
@@ -2636,7 +2647,8 @@
    "color": true,
    "title_ours": "Earth",
    "title_ozma": "Earth",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 90
   },
   {
    "n": 13,
@@ -2649,7 +2661,8 @@
    "color": true,
    "title_ours": "Egypt, Red Sea, Sinai Peninsula, and the Nile",
    "title_ozma": "Egypt, the Red Sea, the Sinai Peninsula, and the Nile with the composition of Earth's atmosphere",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 14,
@@ -2660,7 +2673,8 @@
    "color": false,
    "title_ours": "Chemical definitions",
    "title_ozma": "DNA structure and replication",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 15,
@@ -2671,7 +2685,8 @@
    "color": false,
    "title_ours": "DNA Structure",
    "title_ozma": "DNA structure and replication",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 16,
@@ -2682,7 +2697,8 @@
    "color": false,
    "title_ours": "DNA Structure magnified, light hit",
    "title_ozma": "DNA structure and replication",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 17,
@@ -2693,7 +2709,8 @@
    "color": false,
    "title_ours": "Cells and cell division",
    "title_ozma": "Cell division",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 18,
@@ -2704,7 +2721,8 @@
    "color": false,
    "title_ours": "Anatomy 1 (Skeleton front)",
    "title_ozma": "Human anatomy",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 19,
@@ -2715,7 +2733,8 @@
    "color": false,
    "title_ours": "Anatomy 2 (Skeleton and muscles back)",
    "title_ozma": "Human anatomy",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 20,
@@ -2726,7 +2745,8 @@
    "color": false,
    "title_ours": "Anatomy 3 (Heart, lungs, kidneys and main blood vessels back)",
    "title_ozma": "Human anatomy",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 21,
@@ -2737,7 +2757,8 @@
    "color": false,
    "title_ours": "Anatomy 4 (Heart, lungs, kidneys and main blood vessels front)",
    "title_ozma": "Human anatomy",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 22,
@@ -2748,7 +2769,8 @@
    "color": false,
    "title_ours": "Anatomy 5 (Internal organs back)",
    "title_ozma": "Human anatomy",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 23,
@@ -2761,7 +2783,8 @@
    "color": true,
    "title_ours": "Anatomy 6 (Internal organs front)",
    "title_ozma": "Human anatomy",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 24,
@@ -2772,7 +2795,8 @@
    "color": false,
    "title_ours": "Anatomy 7 (Ribcage)",
    "title_ozma": "Human anatomy",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 25,
@@ -2783,7 +2807,8 @@
    "color": false,
    "title_ours": "Anatomy 8 (Muscles front)",
    "title_ozma": "Human anatomy",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 26,
@@ -2794,7 +2819,8 @@
    "color": false,
    "title_ours": "Human sex organs",
    "title_ozma": "Diagram of human sex organs",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 27,
@@ -2805,7 +2831,8 @@
    "color": false,
    "title_ours": "Diagram of conception",
    "title_ozma": "Conception silhouette",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 270
   },
   {
    "n": 28,
@@ -2816,7 +2843,8 @@
    "color": false,
    "title_ours": "Conception",
    "title_ozma": "Conception",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 270
   },
   {
    "n": 29,
@@ -2827,7 +2855,8 @@
    "color": false,
    "title_ours": "Fertilized ovum",
    "title_ozma": "Fertilized ovum",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 30,
@@ -2838,7 +2867,8 @@
    "color": false,
    "title_ours": "Fetus diagram",
    "title_ozma": "Fetus silhouette",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 31,
@@ -2849,7 +2879,8 @@
    "color": false,
    "title_ours": "Fetus",
    "title_ozma": "Fetus",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 32,
@@ -2860,7 +2891,8 @@
    "color": false,
    "title_ours": "Diagram of male and female",
    "title_ozma": "Silhouette of male and female",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 33,
@@ -2871,7 +2903,8 @@
    "color": false,
    "title_ours": "Birth",
    "title_ozma": "Birth",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 34,
@@ -2884,7 +2917,8 @@
    "color": true,
    "title_ours": "Nursing mother (Philippines)",
    "title_ozma": "Nursing mother",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 35,
@@ -2897,7 +2931,8 @@
    "color": true,
    "title_ours": "Father and daughter (Malaysia)",
    "title_ozma": "Malaysian man and his daughter",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 36,
@@ -2910,7 +2945,8 @@
    "color": true,
    "title_ours": "Group of children",
    "title_ozma": "Group of children at the United Nations International School",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 37,
@@ -2921,7 +2957,8 @@
    "color": false,
    "title_ours": "Diagram of family ages",
    "title_ozma": "Family portrait silhouette",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 38,
@@ -2932,7 +2969,8 @@
    "color": false,
    "title_ours": "Family portrait",
    "title_ozma": "Family portrait",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 39,
@@ -2943,7 +2981,8 @@
    "color": false,
    "title_ours": "Diagram of continental drift (derived from LAGEOS plaque)",
    "title_ozma": "Diagram of continental drift",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 40,
@@ -2954,7 +2993,8 @@
    "color": false,
    "title_ours": "Structure of the Earth",
    "title_ozma": "Structure of the Earth with abundance of elements",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 41,
@@ -2965,7 +3005,8 @@
    "color": false,
    "title_ours": "Heron Island (Great Barrier Reef of Australia)",
    "title_ozma": "Heron Island",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 42,
@@ -2976,7 +3017,8 @@
    "color": false,
    "title_ours": "Seashore (Cape Neddick, Maine)",
    "title_ozma": "Cape Neddick, Maine",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 43,
@@ -2987,7 +3029,8 @@
    "color": false,
    "title_ours": "Snake River and Grand Tetons",
    "title_ozma": "The Tetons and the Snake River, Wyoming",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 44,
@@ -2998,7 +3041,8 @@
    "color": false,
    "title_ours": "Sand dunes",
    "title_ozma": "A horseman and his dog cross the desert, Pisco, Peru",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 45,
@@ -3011,7 +3055,8 @@
    "color": true,
    "title_ours": "Monument Valley",
    "title_ozma": "Monument Valley, Arizona",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 46,
@@ -3024,7 +3069,8 @@
    "color": true,
    "title_ours": "Forest scene with mushrooms",
    "title_ozma": "Forest scene with mushrooms, Petersburg, Virginia",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 47,
@@ -3035,7 +3081,8 @@
    "color": false,
    "title_ours": "Leaf (Fragaria)",
    "title_ozma": "Strawberry leaf",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 48,
@@ -3048,7 +3095,8 @@
    "color": true,
    "title_ours": "Autumn Fallen leaves",
    "title_ozma": "Fallen leaves, White Sulphur Springs, West Virginia",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 49,
@@ -3061,7 +3109,8 @@
    "color": true,
    "title_ours": "Snowflakes over Sequoia",
    "title_ozma": "Sequoia and snowflake",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 50,
@@ -3074,7 +3123,8 @@
    "color": true,
    "title_ours": "Tree with daffodils",
    "title_ozma": "Tree and daffodils",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 51,
@@ -3085,7 +3135,8 @@
    "color": false,
    "title_ours": "Flying insect with flowers (Ichneumonidae)",
    "title_ozma": "Ichneumon fly",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 90
   },
   {
    "n": 52,
@@ -3096,7 +3147,8 @@
    "color": false,
    "title_ours": "Diagram of vertebrate evolution",
    "title_ozma": "Diagram of vertebrate evolution",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 53,
@@ -3107,7 +3159,8 @@
    "color": false,
    "title_ours": "Seashell (Xancidae)",
    "title_ozma": "Turbinellidae seashell",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 54,
@@ -3118,7 +3171,8 @@
    "color": false,
    "title_ours": "Dolphins",
    "title_ozma": "Dolphins",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 55,
@@ -3131,7 +3185,8 @@
    "color": true,
    "title_ours": "School of fish",
    "title_ozma": "Sweeper fish and diver in the Red Sea",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 56,
@@ -3142,7 +3197,8 @@
    "color": false,
    "title_ours": "Tree toad",
    "title_ozma": "Tree toad",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 57,
@@ -3153,7 +3209,8 @@
    "color": false,
    "title_ours": "Crocodile",
    "title_ozma": "Crocodile in Alia Bay, Lake Rudolf, Kenya",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 58,
@@ -3164,7 +3221,8 @@
    "color": false,
    "title_ours": "Eagle",
    "title_ozma": "Short-toed eagle, Do\u00f1ana National Park, Spain",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 59,
@@ -3175,7 +3233,8 @@
    "color": false,
    "title_ours": "Waterhole",
    "title_ozma": "Watering hole",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 60,
@@ -3188,7 +3247,8 @@
    "color": true,
    "title_ours": "Jane Goodall and chimps",
    "title_ozma": "Jane Goodall observing chimpanzees, Gombe Stream National Park, Tanzania",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 61,
@@ -3199,7 +3259,8 @@
    "color": false,
    "title_ours": "Sketch of bushmen",
    "title_ozma": "Bushmen hunters in Botswana silhouette",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 62,
@@ -3210,7 +3271,8 @@
    "color": false,
    "title_ours": "Bushmen hunters",
    "title_ozma": "Bushmen hunters in Botswana",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 63,
@@ -3221,7 +3283,8 @@
    "color": false,
    "title_ours": "Man from Guatemala",
    "title_ozma": "Man from Nicaragua",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 64,
@@ -3232,7 +3295,8 @@
    "color": false,
    "title_ours": "Dancer from Bali",
    "title_ozma": "Dancer from Bali",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 65,
@@ -3243,7 +3307,8 @@
    "color": false,
    "title_ours": "Andean girls",
    "title_ozma": "Women in Santiago Atitlan, Guatemala",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 66,
@@ -3254,7 +3319,8 @@
    "color": false,
    "title_ours": "Thailand master craftsman",
    "title_ozma": "Craftsman carving elephants from teak, Chiang Mai, Thailand",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 67,
@@ -3265,7 +3331,8 @@
    "color": false,
    "title_ours": "Elephant",
    "title_ozma": "Elephant, Mae Sariang, Thailand",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 68,
@@ -3276,7 +3343,8 @@
    "color": false,
    "title_ours": "Old man with beard and glasses (Turkey)",
    "title_ozma": "Elderly farmer from Cappadocia, Turkey",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 69,
@@ -3287,7 +3355,8 @@
    "color": false,
    "title_ours": "Old man with dog and flowers",
    "title_ozma": "Man searching for herbs in Owen County, Indiana",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 70,
@@ -3298,7 +3367,8 @@
    "color": false,
    "title_ours": "Mountain climber",
    "title_ozma": "Gaston R\u00e9buffat atop Aiguille de Roc, Mont Blanc massif, France",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 71,
@@ -3309,7 +3379,8 @@
    "color": false,
    "title_ours": "Gymnast (Cathy Rigby)",
    "title_ozma": "Gymnast Cathy Rigby",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 72,
@@ -3320,7 +3391,8 @@
    "color": false,
    "title_ours": "Sprinters \"Valeriy Borzov of the U.S.S.R. in lead\"",
    "title_ozma": "Valeriy Borzov winning gold, 1972 Olympic Games, Munich, Germany",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 73,
@@ -3331,7 +3403,8 @@
    "color": false,
    "title_ours": "Schoolroom (Japan)",
    "title_ozma": "School in Eastern Hokkaido, Japan",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 74,
@@ -3342,7 +3415,8 @@
    "color": false,
    "title_ours": "Children with globe (United Nations International School)",
    "title_ozma": "Children with globe at the United Nations International School",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 75,
@@ -3353,7 +3427,8 @@
    "color": false,
    "title_ours": "Cotton harvest",
    "title_ozma": "Cotton harvesting, New South Wales, Australia",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 76,
@@ -3364,7 +3439,8 @@
    "color": false,
    "title_ours": "Grape picker",
    "title_ozma": "Grape picker near Griffith, New South Wales, Australia",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 77,
@@ -3375,7 +3451,8 @@
    "color": false,
    "title_ours": "Supermarket",
    "title_ozma": "Supermarket",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 78,
@@ -3388,7 +3465,8 @@
    "color": true,
    "title_ours": "Underwater scene with diver and fish",
    "title_ozma": "Diver and fish, Buck Island Reef National Monument, St. Croix, U.S. Virgin Islands",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 79,
@@ -3399,7 +3477,8 @@
    "color": false,
    "title_ours": "Fishing boat with nets (Greece)",
    "title_ozma": "Fishermen at Evia, Greece",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 80,
@@ -3410,7 +3489,8 @@
    "color": false,
    "title_ours": "Cooking fish",
    "title_ozma": "Cooking fish",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 81,
@@ -3421,7 +3501,8 @@
    "color": false,
    "title_ours": "Chinese dinner party",
    "title_ozma": "Chinese dinner party",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 82,
@@ -3432,7 +3513,8 @@
    "color": false,
    "title_ours": "Demonstration of licking, eating and drinking",
    "title_ozma": "Demonstration of licking, eating, and drinking",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 83,
@@ -3443,7 +3525,8 @@
    "color": false,
    "title_ours": "Great Wall of China",
    "title_ozma": "The Great Wall of China",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 84,
@@ -3454,7 +3537,8 @@
    "color": false,
    "title_ours": "House construction (Cameroon)",
    "title_ozma": "Home construction in Sangm\u00e9lima, Republic of Cameroon",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 85,
@@ -3465,7 +3549,8 @@
    "color": false,
    "title_ours": "Construction scene (Amish country)",
    "title_ozma": "Amish barn raising",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 86,
@@ -3476,7 +3561,8 @@
    "color": false,
    "title_ours": "House (Ethiopia)",
    "title_ozma": "Rural house in Bishoftu, Ethiopia",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 87,
@@ -3487,7 +3573,8 @@
    "color": false,
    "title_ours": "House (New England)",
    "title_ozma": "House in Provincetown, Massachusetts",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 88,
@@ -3498,7 +3585,8 @@
    "color": false,
    "title_ours": "Modern house (Cloudcroft, New Mexico)",
    "title_ozma": "House in Cloudcroft, New Mexico",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 89,
@@ -3511,7 +3599,8 @@
    "color": true,
    "title_ours": "House interior with artist and fire",
    "title_ozma": "Home interior",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 90,
@@ -3522,7 +3611,8 @@
    "color": false,
    "title_ours": "Taj Mahal",
    "title_ozma": "Taj Mahal",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 91,
@@ -3533,7 +3623,8 @@
    "color": false,
    "title_ours": "English city (Oxford)",
    "title_ozma": "Oxford, England",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 92,
@@ -3544,7 +3635,8 @@
    "color": false,
    "title_ours": "Boston",
    "title_ozma": "Sailboats in the Charles River Basin, Boston, Massachusetts",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 93,
@@ -3555,7 +3647,8 @@
    "color": false,
    "title_ours": "UN Building Day",
    "title_ozma": "Headquarters of the United Nations, day and night",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 94,
@@ -3568,7 +3661,8 @@
    "color": true,
    "title_ours": "UN Building Night",
    "title_ozma": "Headquarters of the United Nations, day and night",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 95,
@@ -3579,7 +3673,8 @@
    "color": false,
    "title_ours": "Sydney Opera House",
    "title_ozma": "Sydney Opera House",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 96,
@@ -3590,7 +3685,8 @@
    "color": false,
    "title_ours": "Artisan with drill",
    "title_ozma": "Artisan with drill",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 97,
@@ -3603,7 +3699,8 @@
    "color": true,
    "title_ours": "Factory interior",
    "title_ozma": "Factory interior",
-   "title_source": "ours"
+   "title_source": "ours",
+   "displayRotate": 0
   },
   {
    "n": 98,
@@ -3614,7 +3711,8 @@
    "color": false,
    "title_ours": "Museum",
    "title_ozma": "Visitors at a museum",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 99,
@@ -3625,7 +3723,8 @@
    "color": false,
    "title_ours": "X-ray of hand",
    "title_ozma": "X-ray of a hand",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 100,
@@ -3636,7 +3735,8 @@
    "color": false,
    "title_ours": "Woman with microscope (Somalia)",
    "title_ozma": "Woman with microscope in a Mogadishu health center",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 101,
@@ -3647,7 +3747,8 @@
    "color": false,
    "title_ours": "Street scene (Pakistan)",
    "title_ozma": "Street scene in Lahore, Pakistan",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 102,
@@ -3658,7 +3759,8 @@
    "color": false,
    "title_ours": "Rush hour traffic (Thailand)",
    "title_ozma": "Rush hour in Bangkok, Thailand",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 103,
@@ -3669,7 +3771,8 @@
    "color": false,
    "title_ours": "Modern highway (Ithaca, New York)",
    "title_ozma": "Route 13, Ithaca, New York",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 104,
@@ -3680,7 +3783,8 @@
    "color": false,
    "title_ours": "Golden Gate Bridge",
    "title_ozma": "The Golden Gate and Bridge from Baker Beach, San Francisco, California",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 105,
@@ -3691,7 +3795,8 @@
    "color": false,
    "title_ours": "Train (United Aircraft Corporation Turbotrain)",
    "title_ozma": "TurboTrain linking Boston to New York",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 106,
@@ -3702,7 +3807,8 @@
    "color": false,
    "title_ours": "Airplane in flight",
    "title_ozma": "Airplane from runway at Syracuse Hancock International Airport",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 107,
@@ -3713,7 +3819,8 @@
    "color": false,
    "title_ours": "Airport (Toronto)",
    "title_ozma": "Toronto Pearson International Airport Terminal 1",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 108,
@@ -3724,7 +3831,8 @@
    "color": false,
    "title_ours": "Antarctic expedition (Commonwealth Trans-Antarctic Expedition)",
    "title_ozma": "Sno-Cat hanging over crevasse, Trans-Antarctic Expedition, 1955-1958",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 109,
@@ -3735,7 +3843,8 @@
    "color": false,
    "title_ours": "Radio telescope (Westerbork)",
    "title_ozma": "The Westerbork Synthesis Radio Telescope, The Netherlands",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 110,
@@ -3746,7 +3855,8 @@
    "color": false,
    "title_ours": "Radio telescope (Arecibo)",
    "title_ozma": "Arecibo Observatory, Puerto Rico",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 111,
@@ -3757,7 +3867,8 @@
    "color": false,
    "title_ours": "Page of book (Newton, On the System of the World)",
    "title_ozma": "Pages from Sir Isaac Newton's Philosophi\u00e6 Naturalis Principia Mathematica, Book 3: De Mundi Systemate",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 112,
@@ -3770,7 +3881,8 @@
    "color": true,
    "title_ours": "Astronaut in space (Ed White)",
    "title_ozma": "Gemini 4 astronaut Ed White, the first American to conduct a spacewalk",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 113,
@@ -3781,7 +3893,8 @@
    "color": false,
    "title_ours": "Titan Centaur launch",
    "title_ozma": "Liftoff of Titan IIIE-Centaur rocket",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 114,
@@ -3794,7 +3907,8 @@
    "color": true,
    "title_ours": "Sunset with birds",
    "title_ozma": "Whistling swans at sunset, Back Bay National Wildlife Refuge, Virginia",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 115,
@@ -3805,7 +3919,8 @@
    "color": false,
    "title_ours": "String Quartet (Quartetto Italiano)",
    "title_ozma": "Quartetto Italiano",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 0
   },
   {
    "n": 116,
@@ -3816,7 +3931,8 @@
    "color": false,
    "title_ours": "Violin with music score (Cavatina)",
    "title_ozma": "Beethoven's String Quartet No. 13 in B-flat Major, Opus 130: V. Cavatina, the closing piece of music on the Voyager Interstellar Record",
-   "title_source": "ozma"
+   "title_source": "ozma",
+   "displayRotate": 90
   }
  ]
 }

@@ -51,11 +51,20 @@ def estimate(decode: np.ndarray, ref: np.ndarray) -> tuple[np.ndarray | None, in
     d8 = _prep(decode)
     kd, dd = sift.detectAndCompute(d8, None)
     if dd is None or len(kd) < 8:
-        return None, 0, False
+        return None, 0, False, False
 
-    best = (None, 0, False)
-    for inv in (False, True):
-        r = 255 - ref if inv else ref
+    # Search reflections too. estimateAffinePartial2D fits rotation, uniform
+    # scale and translation -- 4 degrees of freedom, which CANNOT represent a
+    # mirror. Several published reproductions of these slides are laterally
+    # inverted relative to the record (the elephant faces the other way), so
+    # without trying a flip those pairs can never align and simply score badly.
+    # The record is the authority on orientation; the reference is what gets
+    # flipped to match it.
+    best = (None, 0, False, False)
+    for mirror in (False, True):
+      base = ref[:, ::-1] if mirror else ref
+      for inv in (False, True):
+        r = 255 - base if inv else base
         r8 = _prep(r.astype(np.float32) / 255.0)
         kr, dr = sift.detectAndCompute(r8, None)
         if dr is None or len(kr) < 8:
@@ -71,7 +80,7 @@ def estimate(decode: np.ndarray, ref: np.ndarray) -> tuple[np.ndarray | None, in
         )
         n_in = int(mask.sum()) if mask is not None else 0
         if M is not None and n_in > best[1]:
-            best = (M, n_in, inv)
+            best = (M, n_in, inv, mirror)
     return best
 
 
@@ -86,7 +95,7 @@ def align_one(n: int, frame_id: str) -> dict:
     if dec is None or ref is None:
         return {"n": n, "ok": False, "reason": "unreadable"}
 
-    M, n_in, inv = estimate(dec, ref)
+    M, n_in, inv, mirror = estimate(dec, ref)
     ALIGNED.mkdir(parents=True, exist_ok=True)
     out = ALIGNED / f"{n}.jpg"
 
@@ -104,7 +113,8 @@ def align_one(n: int, frame_id: str) -> dict:
         return {"n": n, "ok": False, "reason": f"only {n_in} inliers", "inliers": n_in,
                 "file": f"docs/reference/aligned/{n}.jpg", "warped": False}
 
-    src_img = 255 - ref if inv else ref
+    base = ref[:, ::-1] if mirror else ref
+    src_img = 255 - base if inv else base
     warped = cv2.warpAffine(
         src_img, M, (dec.shape[1], dec.shape[0]),
         flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_CONSTANT,
@@ -115,6 +125,7 @@ def align_one(n: int, frame_id: str) -> dict:
     rot = float(np.degrees(np.arctan2(M[1, 0], M[0, 0])))
     return {"n": n, "ok": True, "inliers": n_in, "scale": round(scale, 4),
             "rotation_deg": round(rot, 2), "polarity_inverted": bool(inv),
+            "mirrored": bool(mirror),
             "file": f"docs/reference/aligned/{n}.jpg", "warped": True}
 
 
