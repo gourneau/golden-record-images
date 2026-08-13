@@ -574,7 +574,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='40';
+const ASSETV='41';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -1090,6 +1090,37 @@ function openLB(i, opts){
   waveOf(LB.frameId).then(()=>{ if(LB.frameId) drawWave(); });
   // Peaks for the neighbours, so stepping never shows an empty strip.
   [VIEW[(LB.idx+1)%n], VIEW[(LB.idx-1+n)%n]].forEach(x=>x&&waveOf(x.frames[0]));
+  prefetchNeighbours();
+}
+
+// Arrow keys were slow because each new image fetched and composited its PNGs
+// only once you had asked for it. Bandwidth here is GitHub's and the files are
+// small, so there is no reason to be shy: walk outwards from where you are and
+// warm BOTH tiers, so stepping is a cache hit and so is flipping the tier once
+// you get there.
+//
+// Outwards from the current index rather than a fixed block, because the next
+// thing someone does after pressing right is press right again -- and the one
+// after that is the one they will wait on if it is not ready.
+const PREFETCH_SPAN=4;
+
+function prefetchNeighbours(){
+  const n=VIEW.length; if(!n) return;
+  const order=[];
+  for(let d=1; d<=PREFETCH_SPAN; d++){ order.push(LB.idx+d, LB.idx-d); }
+  order.forEach((raw,k)=>{
+    const im=VIEW[((raw%n)+n)%n]; if(!im) return;
+    setTimeout(()=>{
+      // The tier being viewed first, the other one after: if someone is
+      // stepping fast, the picture they are about to see matters more than the
+      // comparison they might make later.
+      for(const dir of [TIER, TIER==='recovered'?'reconstructed':'recovered']){
+        const d = dir==='reconstructed' ? 'thumbs_ml' : 'thumbs';
+        composite(im.frames.map(x=>`data/${d}/${x}.png?v=${ASSETV}`), im.color);
+      }
+      waveOf(im.frames[0]);
+    }, k*40);
+  });
 }
 
 function closeLB(){
