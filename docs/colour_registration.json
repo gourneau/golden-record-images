@@ -1,14 +1,14 @@
 {
  "n_colour_images": 20,
  "n_registered": 20,
- "n_improved": 19,
+ "n_improved": 18,
  "n_rejected": 1,
  "rejected_images": [
   8
  ],
- "max_shift_px": 104.24,
- "mean_disagreement_before": 0.55334,
- "mean_disagreement_after": 0.47666,
+ "max_shift_px": 97.21,
+ "mean_disagreement_before": 0.54432,
+ "mean_disagreement_after": 0.46136,
  "images": [
   {
    "n": 8,
@@ -20,19 +20,19 @@
    ],
    "shifts": [
     [
-     -0.11,
-     -104.13
+     -0.56,
+     -96.65
     ],
     [
-     0.76,
-     82.66
+     -0.25,
+     0.66
     ]
    ],
-   "max_shift_px": 104.24,
+   "max_shift_px": 97.21,
    "rejected": true,
    "reason": "estimate implausible (> 8 px); shipped unregistered",
-   "disagreement_before": 0.98217,
-   "disagreement_after": 0.98217,
+   "disagreement_before": 0.93972,
+   "disagreement_after": 0.93972,
    "improved": false
   },
   {
@@ -45,20 +45,20 @@
    ],
    "shifts": [
     [
-     -0.18,
-     -0.6
+     -0.15,
+     -0.63
     ],
     [
-     0.45,
-     0.4
+     0.44,
+     0.39
     ]
    ],
-   "max_shift_px": 0.85,
+   "max_shift_px": 0.83,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.48563,
-   "disagreement_after": 0.4804,
-   "improved": true
+   "disagreement_before": 0.48665,
+   "disagreement_after": 0.4931,
+   "improved": false
   },
   {
    "n": 13,
@@ -70,19 +70,19 @@
    ],
    "shifts": [
     [
-     0.11,
+     0.1,
      -0.38
     ],
     [
      -0.06,
-     -0.14
+     -0.13
     ]
    ],
-   "max_shift_px": 0.49,
+   "max_shift_px": 0.48,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.41508,
-   "disagreement_after": 0.40061,
+   "disagreement_before": 0.4064,
+   "disagreement_after": 0.39301,
    "improved": true
   },
   {
@@ -95,19 +95,19 @@
    ],
    "shifts": [
     [
-     -0.73,
-     -0.25
+     -0.67,
+     -0.26
     ],
     [
-     0.53,
-     0.19
+     0.55,
+     0.18
     ]
    ],
-   "max_shift_px": 0.98,
+   "max_shift_px": 0.93,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.53445,
-   "disagreement_after": 0.50111,
+   "disagreement_before": 0.51187,
+   "disagreement_after": 0.47605,
    "improved": true
   },
   {
@@ -121,18 +121,18 @@
    "shifts": [
     [
      -0.51,
-     -0.36
+     -0.34
     ],
     [
      0.33,
-     0.31
+     0.29
     ]
    ],
-   "max_shift_px": 0.87,
+   "max_shift_px": 0.85,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.49671,
-   "disagreement_after": 0.45501,
+   "disagreement_before": 0.51805,
+   "disagreement_after": 0.48561,
    "improved": true
   },
   {
@@ -145,19 +145,19 @@
    ],
    "shifts": [
     [
-     0.02,
-     -0.44
+     0.03,
+     -0.4
     ],
     [
-     0.11,
-     0.31
+     0.09,
+     0.29
     ]
    ],
-   "max_shift_px": 0.46,
+   "max_shift_px": 0.43,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.5491,
-   "disagreement_after": 0.53555,
+   "disagreement_before": 0.54715,
+   "disagreement_after": 0.53248,
    "improved": true
   },
   {
@@ -171,18 +171,18 @@
    "shifts": [
     [
      0.29,
-     0.17
+     0.12
     ],
     [
      -0.24,
-     -0.4
+     -0.34
     ]
    ],
-   "max_shift_px": 0.64,
+   "max_shift_px": 0.58,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.48799,
-   "disagreement_after": 0.457,
+   "disagreement_before": 0.46218,
+   "disagreement_after": 0.43502,
    "improved": true
   },
   {
@@ -195,19 +195,19 @@
    ],
    "shifts": [
     [
-     0.36,
-     0.85
+     0.32,
+     0.91
     ],
     [
-     -0.33,
-     -0.35
+     -0.32,
+     -0.31
     ]
    ],
-   "max_shift_px": 1.21,
+   "max_shift_px": 1.23,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.52054,
-   "disagreement_after": 0.49441,
+   "disagreement_before": 0.49529,
+   "disagreement_after": 0.45315,
    "improved": true
   },
   {
@@ -220,19 +220,19 @@
    ],
    "shifts": [
     [
-     0.35,
-     -0.32
+     0.36,
+     -0.31
     ],
     [
-     -0.48,
+     -0.47,
      0.53
     ]
    ],
-   "max_shift_px": 1.01,
+   "max_shift_px": 1.0,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.37274,
-   "disagreement_after": 0.26376,
+   "disagreement_before": 0.3569,
+   "disagreement_after": 0.23279,
    "improved": true
   },
   {
@@ -245,19 +245,19 @@
    ],
    "shifts": [
     [
-     0.21,
-     -0.46
+     0.19,
+     -0.45
     ],
     [
-     -0.05,
+     -0.06,
      0.61
     ]
    ],
    "max_shift_px": 0.67,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.49019,
-   "disagreement_after": 0.4577,
+   "disagreement_before": 0.49991,
+   "disagreement_after": 0.46228,
    "improved": true
   },
   {
@@ -270,19 +270,19 @@
    ],
    "shifts": [
     [
-     1.42,
-     -0.21
+     1.44,
+     -0.2
     ],
     [
-     1.03,
-     0.26
+     1.06,
+     0.28
     ]
    ],
-   "max_shift_px": 1.63,
+   "max_shift_px": 1.64,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.61234,
-   "disagreement_after": 0.41585,
+   "disagreement_before": 0.59884,
+   "disagreement_after": 0.37843,
    "improved": true
   },
   {
@@ -295,19 +295,19 @@
    ],
    "shifts": [
     [
-     -0.42,
-     -0.15
+     -0.4,
+     -0.16
     ],
     [
-     -0.89,
+     -0.84,
      0.37
     ]
    ],
-   "max_shift_px": 1.26,
+   "max_shift_px": 1.21,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.46171,
-   "disagreement_after": 0.36124,
+   "disagreement_before": 0.44252,
+   "disagreement_after": 0.33814,
    "improved": true
   },
   {
@@ -320,19 +320,19 @@
    ],
    "shifts": [
     [
-     0.29,
-     -0.12
+     0.27,
+     -0.11
     ],
     [
-     0.18,
-     0.18
+     0.19,
+     0.19
     ]
    ],
-   "max_shift_px": 0.41,
+   "max_shift_px": 0.38,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.52087,
-   "disagreement_after": 0.51442,
+   "disagreement_before": 0.53205,
+   "disagreement_after": 0.52991,
    "improved": true
   },
   {
@@ -345,19 +345,19 @@
    ],
    "shifts": [
     [
-     -2.26,
-     -0.2
+     -2.27,
+     -0.21
     ],
     [
-     0.0,
-     0.62
+     -0.05,
+     0.55
     ]
    ],
-   "max_shift_px": 2.46,
+   "max_shift_px": 2.48,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.71727,
-   "disagreement_after": 0.34169,
+   "disagreement_before": 0.70673,
+   "disagreement_after": 0.30431,
    "improved": true
   },
   {
@@ -370,19 +370,19 @@
    ],
    "shifts": [
     [
-     -0.15,
-     -1.12
+     -0.16,
+     -1.13
     ],
     [
-     -0.21,
-     -0.11
+     -0.23,
+     -0.06
     ]
    ],
-   "max_shift_px": 1.27,
+   "max_shift_px": 1.29,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.56597,
-   "disagreement_after": 0.53564,
+   "disagreement_before": 0.55581,
+   "disagreement_after": 0.52504,
    "improved": true
   },
   {
@@ -396,18 +396,18 @@
    "shifts": [
     [
      0.3,
-     0.41
+     0.45
     ],
     [
      -0.44,
-     0.08
+     0.05
     ]
    ],
-   "max_shift_px": 0.71,
+   "max_shift_px": 0.75,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.48079,
-   "disagreement_after": 0.45321,
+   "disagreement_before": 0.46178,
+   "disagreement_after": 0.43038,
    "improved": true
   },
   {
@@ -420,19 +420,19 @@
    ],
    "shifts": [
     [
-     -1.33,
+     -1.34,
      -0.46
     ],
     [
-     -0.49,
-     0.4
+     -0.52,
+     0.41
     ]
    ],
-   "max_shift_px": 1.79,
+   "max_shift_px": 1.8,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.68422,
-   "disagreement_after": 0.4759,
+   "disagreement_before": 0.67819,
+   "disagreement_after": 0.46619,
    "improved": true
   },
   {
@@ -445,19 +445,19 @@
    ],
    "shifts": [
     [
-     0.29,
-     -0.29
+     0.28,
+     -0.28
     ],
     [
-     -0.57,
-     0.61
+     -0.54,
+     0.54
     ]
    ],
-   "max_shift_px": 1.18,
+   "max_shift_px": 1.08,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.38758,
-   "disagreement_after": 0.32123,
+   "disagreement_before": 0.37275,
+   "disagreement_after": 0.3072,
    "improved": true
   },
   {
@@ -470,19 +470,19 @@
    ],
    "shifts": [
     [
-     0.23,
-     -0.15
+     0.25,
+     -0.18
     ],
     [
-     -0.6,
-     -0.89
+     -0.61,
+     -0.85
     ]
    ],
-   "max_shift_px": 1.49,
+   "max_shift_px": 1.46,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.43167,
-   "disagreement_after": 0.33667,
+   "disagreement_before": 0.42136,
+   "disagreement_after": 0.31733,
    "improved": true
   },
   {
@@ -495,19 +495,19 @@
    ],
    "shifts": [
     [
-     0.51,
-     0.93
+     0.54,
+     0.92
     ],
     [
-     -0.68,
-     1.02
+     -0.7,
+     1.13
     ]
    ],
-   "max_shift_px": 1.7,
+   "max_shift_px": 1.83,
    "rejected": false,
    "reason": null,
-   "disagreement_before": 0.86983,
-   "disagreement_after": 0.74961,
+   "disagreement_before": 0.89217,
+   "disagreement_after": 0.72706,
    "improved": true
   }
  ]
