@@ -43,17 +43,29 @@ button[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:
 .grow{flex:1}
 .count{font-family:var(--mono);font-size:12px;color:var(--dimmer)}
 .speed{font-size:13px;color:var(--dimmer);display:flex;align-items:center;gap:7px}
+/* A <select> does not size like a <button>. Browsers apply their own internal
+   metrics -- line-height, an inner padding box, and room for the arrow -- and
+   they win over `padding` alone, which is why matching the padding was not
+   enough and the control still sat shorter than the buttons beside it.
+   appearance:none takes those metrics off, and then an explicit height set to
+   the buttons' own computed box (13px text x 1.6 line-height + 14px padding +
+   2px border = 36.8px) makes them identical rather than approximately equal.
+   The arrow is drawn back as a background, since removing the appearance
+   removes that too. */
 .speed select{font:inherit;font-size:13px;font-family:var(--mono);color:var(--gold);
-  background:var(--panel);border:1px solid var(--line2);border-radius:7px;padding:7px 13px;
-  cursor:pointer;line-height:inherit}
+  background:var(--panel);border:1px solid var(--line2);border-radius:7px;
+  cursor:pointer;appearance:none;-webkit-appearance:none;
+  height:36.8px;line-height:1.6;padding:0 28px 0 12px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c9a227' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center}
 .speed select:hover{border-color:#5a4a1e}
+.speed select:focus-visible{outline:1px solid var(--gold);outline-offset:1px}
 /* In the lightbox it sits in the play row at the BOTTOM, beside Play and Paint
    -- the controls belong next to the thing they control, and that row stays put
    while a zoomed picture scrolls above it. Matched to the buttons it sits with:
    same font size, same vertical padding, same border radius, so the row has one
    height instead of two. */
 .lb-wave .speed{font-size:13px;gap:7px}
-.lb-wave .speed select{font-size:13px;padding:7px 10px;border-radius:7px}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));
   gap:18px;padding:36px 0 64px}
@@ -486,7 +498,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='29';
+const ASSETV='30';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
