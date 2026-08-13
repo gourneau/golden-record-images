@@ -23,8 +23,10 @@ could actually recover, and where the record lets its reader down
 </p>
 
 *Image 1 on the record is a circle — a self-checking test pattern, so recipients can tell
-whether they've decoded it correctly. Left: the 2017 method, which produced an ellipse that
-had to be corrected by hand. Right: this decoder, round with no fudge factor.*
+whether they've decoded it correctly. Left: the 2017 method, decoded here with its 2680-sample
+picture window, which produces an ellipse of axis ratio **1.0485** that had to be nudged by hand.
+Right: this decoder at **1.0054**, with no fudge factor. Both are regenerated from the master by
+`python -m pipeline.figures`, so neither can drift away from what the code actually does.*
 
 <p align="center">
   <img src="docs/img/chain-correction.png" width="92%" alt="The calibration field before and after the chain correction">
@@ -456,6 +458,8 @@ Each of these prints measurements, not opinions, and each runs in seconds to min
 ```bash
 python -m pipeline.provenance            # what the decoder was allowed to know, and the
                                          # check that it stayed inside those bounds
+python -m pipeline.figures --check       # are the figures in this README older than the
+                                         # decode they claim to show? (they were, once)
 python -m pipeline.forward               # the recording chain as a differentiable operator,
                                          # with its adjoint verified to machine precision
 python -m pipeline.orient_blind          # a falsified hypothesis, kept: can you tell from
