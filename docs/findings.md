@@ -11,8 +11,73 @@ Related: [how the decoding works](../DECODING.md) for a general audience ·
 
 ---
 
-Everything below is measured from the master, and the measurements are reproducible with the
-code in `pipeline/`.
+## The chain error, and how the record proves it
+
+Every previously published decode of this record sags: flat areas drift toward mid-grey down each
+trace, and vertical streaks run through the picture. Barry documented it in 2017 and could not
+solve it.
+
+It is **one** defect, not two: an error that accumulates down each trace in proportion to the
+light already sent, reset once per trace by the porch clamp.
+
+**The record contains its own proof, in a place nothing here had used.** The slide mount appears
+twice on every frame — before the picture and after it. It is one physical object, so both
+readings must agree, and the candidate explanations disagree about *how*:
+
+| explanation | prediction |
+|---|---|
+| shading (multiplicative) | the mount is dark, so **both ends read alike** |
+| a per-trace gain or offset | **both ends move together** |
+| an accumulating error | **only the end darkens**, in proportion to that trace's light |
+
+Measured over twelve frames spanning both channels and the whole record, regressing each mount
+reading on its own trace's mean level:
+
+| | median slope | negative on |
+|---|---|---|
+| bottom mount | **−0.284** | **12 of 12** |
+| top mount | +0.054 | 3 of 12 |
+
+The sign flip rules out both alternatives at once. The inverse is exact — the forward error is a
+running sum, so the inverse is the matching recursion, one measured parameter and nothing tuned.
+Fitted on the mounts of 68 frames with the calibration frame excluded:
+
+    mount gap, 13 held-out frames   1.404 → 0.283   (−80%)
+    L000 level fall                 88 → 20 grey levels
+    white clipping                  5.99% → 0.12%
+    circle geometry                 unmoved
+
+**It costs something, which is why the pictures are offered two ways.** The correction removes
+20–42% of the droop and *raises* the streak amplitude 24–96% — the inverse is a running sum, and
+integration cannot tell signal from an error in that trace's starting level. The denoiser is what
+makes the trade worth taking. The gallery offers **no correction** and **denoised**, never
+blended, so you can judge rather than take our word.
+[Why, and what was tried →](what-didnt-work.md)
+
+## The machine learning
+
+Four methods were tried against one arbiter: **predict measurements the model was never shown.**
+Not image metrics — this project measured that its own quality composite *rewards blur*, and that
+every method's metrics keep improving past the correct setting.
+
+**What ships is Noise2Noise on the colour repeats: 19 of 19 unseen scenes, beating a blur control
+on every one.** Its premise is a property of the artifact nobody had used: **twenty
+images were scanned three times**, through red, green and blue filters, which is twenty sets of
+three independent noisy observations of one scene. Noise2Noise proves a network trained to map one
+noisy observation to another converges on the clean-target estimator. The literature's stated
+obstacle is that independent noisy pairs are hard to obtain; this record carries sixty frames of
+them — and **a recipient could do all of it**, since no Earth photograph is involved and the method
+never asks which separation is red.
+
+Read the high-band figure with its control beside it: the network reaches +7.74 dB and **a plain
+Gaussian blur reaches +7.46 dB**, because there is almost no camera signal above 0.40 cyc/px to
+protect. What separates them is the low band, where blur is worse than doing nothing on 16 of 19
+scenes and the network is better on 16 of 19. The dB is not the evidence; the conjunction is.
+
+Nine other ideas were built, measured and rejected — including one of ours that would have looked
+like a success while doing nothing at all. **[What didn't work, and why →](what-didnt-work.md)**
+That page is the first thing to read if you are picking this up: it is a map of the holes this
+particular signal has waiting in it.
 
 ### The trace is sampled, not swept
 

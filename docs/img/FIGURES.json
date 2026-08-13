@@ -3,7 +3,8 @@
  "figures": {
   "calibration-barry.png": "03873d5ccce6955b",
   "calibration-restored.png": "9d787f490849068c",
-  "chain-correction.png": "182fbe91e334ce1a"
+  "chain-correction.png": "182fbe91e334ce1a",
+  "hero.png": "175670934a76af2c"
  },
  "note": "Regenerate with `python -m pipeline.figures`. The fingerprint is a hash of the code that determines what these images look like, so a stale figure is detectable in any clone -- which mtimes are not."
 }
