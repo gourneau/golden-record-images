@@ -117,7 +117,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .wrow .seps{display:flex;gap:6px}
 .wrow .seps button{font-family:var(--mono);font-size:11px;padding:5px 9px}
 #lbWave{display:block;width:100%;height:88px;border:1px solid var(--line);border-radius:6px;
-  background:#0c0e12;cursor:crosshair;touch-action:none}
+  background:#0c0e12;cursor:crosshair;touch-action:pan-y}
 .whelp{font-family:var(--mono);font-size:10px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
 @media(max-width:860px){
   .lb-panes{grid-template-columns:1fr;overflow:auto}
@@ -247,7 +247,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   <p><strong>Reference images are for labelling only.</strong> Nothing on the reference side has
   ever fed pixel recovery — the decoder's only input is the WAV. Where a book page has not been
   confidently matched to one of our images, the panel says <em>match uncertain</em> rather than
-  showing a guess, and thirteen images have no reference held at all.</p>
+  showing a guess, and <span id="norefCount">some</span> images have no reference held at all.</p>
   <p><strong>Colour separation order: settled.</strong> Published decoders disagreed on whether
   the three scans run red-green-blue or the reverse, and nobody had shown evidence either way.
   Flipping the toggle above answers it by eye: under B&nbsp;G&nbsp;R the Earth's oceans turn
@@ -483,7 +483,7 @@ const sampleOfTrace=(d,t)=>d.leadIn+t*d.period;
 
 const LB={el:$('lb'), idx:-1, im:null, off:null, sep:0, frameId:null,
           sources:[], srcIdx:0, hoverTrace:null, playSample:null,
-          raf:0, restoreFocus:null};
+          timer:0, restoreFocus:null};
 
 function refOf(n){ return REF[n]||null; }
 function isUncertain(r){
@@ -498,10 +498,10 @@ function sourcesFor(r){
   const out=[], page=r.bookPage;
   const box=r.cropBox||r.norm_box||r.box||null;
   const boxOk=Array.isArray(box)&&box.length===4&&box.every(v=>v>=0&&v<=1);
-  if(r.crop)                 out.push({url:r.crop, label:`book p.${page} · detail`});
-  else if(r.book && boxOk)   out.push({url:r.book, box, label:`book p.${page} · detail`});
-  if(r.book)                 out.push({url:r.book, label:`book p.${page} · whole page`});
-  if(r.file && !r.mislabelled) out.push({url:r.file, label:'Commons scan'});
+  if(r.crop)                 out.push({url:r.crop, kind:'crop', label:`book p.${page} · detail`});
+  else if(r.book && boxOk)   out.push({url:r.book, box, kind:'crop', label:`book p.${page} · detail`});
+  if(r.book)                 out.push({url:r.book, kind:'page', label:`book p.${page} · whole page`});
+  if(r.file && !r.mislabelled) out.push({url:r.file, kind:'commons', label:'Commons scan'});
   return out;
 }
 
@@ -599,28 +599,6 @@ function fillRef(im){
     btns.appendChild(b);
   });
 
-  const foot=$('lbRefFoot');
-  let html='';
-  if(!r){
-    html=`<span class="mono">No reference held. Thirteen of the 116 have none: ` +
-         `nothing is shown rather than a guess.</span>`;
-  } else {
-    if(isUncertain(r)) html+=`<div class="warn"><b>Match uncertain.</b> This page has not been
-      confidently matched to image ${im.n}. It is shown as a candidate for you to judge, not as
-      a verified match.${r.note?' '+esc(r.note):''}</div>`;
-    if(r.mislabelled) html+=`<div class="warn">The Wikimedia file numbered ${im.n} is
-      mislabelled — it is image 43 — so it is not offered here. The Ozma book is authoritative.</div>`;
-    if(r.ozma) html+=`<div class="quote">“${esc(r.ozma)}”</div>`;
-    const bits=[];
-    if(r.bookPage) bits.push(`Ozma Records book, page ${r.bookPage}`);
-    if(r.credit) bits.push(esc(r.credit));
-    if(r.licence) bits.push(esc(r.licence));
-    bits.push(`<a href="${ARCHIVE}" target="_blank" rel="noopener">the book on the Internet Archive</a>`);
-    if(r.commons) bits.push(`<a href="${esc(r.commons)}" target="_blank" rel="noopener">Commons</a>`);
-    html+=`<span class="mono">${bits.join(' · ')}</span>`;
-  }
-  foot.innerHTML=html;
-
   const noref=$('lbNoRef');
   if(!LB.sources.length){
     $('lbRef').hidden=true; $('lbRefCrop').hidden=true;
@@ -629,11 +607,59 @@ function fillRef(im){
       `<a href="${ARCHIVE}" target="_blank" rel="noopener">The Ozma Records book</a> is where ` +
       `the originals live; this one has not been located in it yet.`;
     $('lbRefBody').classList.remove('can-zoom');
+    renderRefFoot();
   } else {
     noref.hidden=true;
     $('lbRefBody').classList.add('can-zoom');
     setSource(0);
   }
+}
+
+// The caption block. Rebuilt per source, because what can honestly be said
+// about the picture on the right depends on WHICH picture is on the right.
+function renderRefFoot(){
+  const im=LB.im; if(!im) return;
+  const r=refOf(im.n), s=LB.sources[LB.srcIdx];
+  let html='';
+  if(!r){
+    const n=images.filter(x=>!REF[x.n]).length;
+    html=`<span class="mono">No reference held. ${n} of the 116 have none: ` +
+         `nothing is shown rather than a guess.</span>`;
+  } else {
+    if(isUncertain(r)){
+      html+=`<div class="warn"><b>Match uncertain.</b> This has not been confidently matched to `+
+            `image ${im.n}. It is shown as a candidate for you to judge, not as a verified `+
+            `match.${r.note?' '+esc(r.note):''}</div>`;
+    }
+    if(s && s.kind==='page'){
+      // The book prints its pictures several to a page. Showing the page and
+      // calling it "the original" would leave the reader to guess which one is
+      // meant -- so say plainly that it has not been narrowed down.
+      html+=`<div class="warn"><b>Whole page, not a crop.</b> Which photograph on this page is `+
+            `image ${im.n} has not been isolated yet, so the page is shown as printed rather `+
+            `than a crop that might be the wrong picture.</div>`;
+    }
+    if(r.mislabelled){
+      html+=`<div class="warn">The Wikimedia file numbered ${im.n} is mislabelled — it is `+
+            `image 43 — so it is not offered here. The Ozma book is authoritative.</div>`;
+    }
+    if(r.ozma) html+=`<div class="quote">“${esc(r.ozma)}” <span class="mono" `+
+      `style="display:inline">— as printed in the book</span></div>`;
+    const bits=[];
+    if(r.bookPage) bits.push(`Ozma Records book, page ${r.bookPage}`);
+    // credit, licence and the Commons link all describe the Wikimedia file. If
+    // the map says that file is the wrong image, they describe the wrong image
+    // too, and printing them beside the book's own caption would put two
+    // contradictory attributions on the same panel.
+    if(!r.mislabelled){
+      if(r.credit) bits.push(esc(r.credit));
+      if(r.licence) bits.push(esc(r.licence));
+    }
+    bits.push(`<a href="${ARCHIVE}" target="_blank" rel="noopener">the book on the Internet Archive</a>`);
+    if(r.commons && !r.mislabelled) bits.push(`<a href="${esc(r.commons)}" target="_blank" rel="noopener">Commons</a>`);
+    html+=`<span class="mono">${bits.join(' · ')}</span>`;
+  }
+  $('lbRefFoot').innerHTML=html;
 }
 
 function setSource(k){
@@ -642,6 +668,7 @@ function setSource(k){
   $('lbSrcBtns').querySelectorAll('button')
     .forEach((b,j)=>b.setAttribute('aria-pressed', String(j===k)));
   unzoom($('lbRefBody'));
+  renderRefFoot();
   const img=$('lbRef'), cvs=$('lbRefCrop');
   const url=s.url+(s.url.indexOf('?')<0?`?v=${ASSETV}`:'');
   if(s.box){
@@ -843,7 +870,7 @@ async function frameBuffer(id){
 
 function stopAudio(){
   if(SRCNODE){ try{ SRCNODE.onended=null; SRCNODE.stop(); }catch(e){} SRCNODE=null; }
-  if(LB.raf){ cancelAnimationFrame(LB.raf); LB.raf=0; }
+  if(LB.timer){ clearInterval(LB.timer); LB.timer=0; }
   PLAYING=null; AUDIOSTATE.playing=false; LB.playSample=null;
   $('lbPlay').textContent='▶ Play the audio';
   showTrace();
@@ -875,11 +902,16 @@ async function playFrom(sample){
   AUDIOSTATE.playing=true;
   s.onended=()=>{ if(SRCNODE===s) stopAudio(); };
   $('lbPlay').textContent='■ Stop';
+  // A timer, not requestAnimationFrame. rAF does not fire in a backgrounded or
+  // throttled tab -- measured here: document.hidden true, 0 rAF callbacks in
+  // 800 ms while the audio kept playing -- and the playhead would then freeze
+  // and never recover. setInterval is throttled in the background but always
+  // resumes. Same lesson the grid's sweep already learned.
+  LB.timer=setInterval(tick, 33);
   tick();
 }
 
 function tick(){
-  LB.raf=0;
   if(!PLAYING||!ACTX) return;
   const el=ACTX.currentTime-PLAYING.t0+PLAYING.offset;
   if(el>=PLAYING.dur){ stopAudio(); return; }
@@ -889,7 +921,6 @@ function tick(){
   const d=WAVE.get(LB.frameId), t=d?traceAt(d,LB.playSample):null;
   setWStat(`playing · ${el.toFixed(2)} / ${PLAYING.dur.toFixed(2)} s · ` +
            (t==null?'lead-in/tail':`trace ${t}`) + ' · 96 kHz, not resampled');
-  LB.raf=requestAnimationFrame(tick);
 }
 
 const togglePlay=()=>{ if(AUDIOSTATE.playing) stopAudio(); else playFrom(0); };
@@ -924,6 +955,10 @@ fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).then(m=>{
   const orient={}; for(const fr of cat.frames) orient[fr.id]=fr.orientation??0;
   images=cat.images.map(im=>({...im, orientation:orient[im.frames[0]]??0}));
   render();
+  // Counted from the map that actually loaded, never written into the prose by
+  // hand: the reference set grows, and a stale number is a false claim.
+  const missing=images.filter(im=>!REF[im.n]).length;
+  $('norefCount').textContent=missing?String(missing):'no';
 }).catch(e=>{
   GRID.innerHTML=`<p class="err">Could not load the catalog (${e.message}).</p>`;
 });
