@@ -43,35 +43,31 @@ reference and cannot be gamed:
     per-frame change is reported, so a frame the denoiser mangles is visible
       rather than averaged away.
 
-MEASURED RESULT (2026-08, all 156 frames, denoiser trained 3000 steps on all
-19 triplets):
+MEASURED RESULT (2026-08, all 156 frames re-decoded in float, denoiser trained
+3000 steps on all 19 triplets):
 
   change from the physics decode, in grey levels out of 255:
-      mean 1.88   median 1.79   max 3.77      (0.7% of range, mean)
-  most changed: the silhouettes and the flat-field diagrams (L050 3.77,
-      L051 3.59, R010 3.57) -- large smooth areas, which is where streak noise
-      is most visible and most removable.
+      mean 1.62   median 1.65   max 2.64
+  CALIBRATION CIRCLE -- the check a denoiser cannot game:
+      axis ratio   1.0051 -> 1.0051     unchanged
+      radial rms   0.837  -> 0.834 px   slightly BETTER
+      inliers      190    -> 190
+      PASS
 
-  CALIBRATION CIRCLE -- and it REGRESSES:
-      axis ratio   1.0053 -> 1.0057
-      radial rms   0.861  -> 0.886 px      (+2.9%)
-      inliers      189    -> 189
+A CORRECTION TO THIS MODULE'S OWN PREVIOUS EXPLANATION. Run on the 8-bit
+thumbnails the circle regressed -- radial rms 0.861 -> 0.886 -- and this
+docstring explained it confidently as the denoiser's 17-pixel receptive field
+softening a ring one to two pixels wide, "real and not a bug", the price of
+denoising. THAT EXPLANATION WAS WRONG. Re-decoding in float and denoising that
+instead, the regression disappears entirely: the metric is unchanged on axis
+ratio and marginally better on radial rms.
 
-THE REGRESSION IS REAL AND IT IS NOT A BUG. The ring is a dark line one to two
-pixels wide; the denoiser has a 17-pixel receptive field, so it softens that
-line slightly, and the fitted edge position moves. radial_rms is a measure of
-EDGE LOCALISATION, so it is precisely the quantity a denoiser costs you.
-
-Which is the whole argument for two tiers rather than one. The trade is a little
-edge precision for a lot of streak removal: on a photograph that is a good deal
--- the vertical streaking in Cape Neddick's sky disappears while the lighthouse,
-the rocks and the spray survive -- and on the calibration frame it is a bad one,
-because that frame exists to be an edge-localisation test and nothing else.
-
-So the reconstructed tier is OFFERED, never default, and never blended into the
-decode. The physics decode remains the archival product and the thing to cite,
-and this regression is published rather than buried, because a tier that only
-ever reports its wins is not evidence of anything.
+So the cost was QUANTISATION, not the network. The 8-bit input carried noise the
+decode never had, the denoiser attacked it along with everything else, and the
+edge moved. It is a good reminder that a plausible mechanism is not evidence: the
+receptive-field story fit the numbers, explained why the effect should exist, and
+was simply not what was happening. The measurement that settled it was changing
+the input, not reasoning harder about the output.
 
 FLOAT, NOT 8-BIT. An earlier version ran on the shipped thumbnails, which are
 8-bit, and that was a real if small defect: the denoiser saw quantisation noise
