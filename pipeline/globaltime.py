@@ -536,6 +536,13 @@ def _fir_from_gain(gain: np.ndarray, taps: int = FIR_TAPS) -> np.ndarray:
     h = (gain[0] + 2.0 * np.sum(gain[1:-1, None] * np.cos(2 * np.pi * kk[1:-1, None] * nidx), axis=0)
          + gain[-1] * np.cos(2 * np.pi * kk[-1] * nidx)) / (2.0 * (len(gain) - 1))
     h *= np.hamming(taps)
+    # LANDMINE. This normalisation pins the filter's DC gain to exactly 1, which
+    # means WIENER_GAIN[0] is inert -- edit it and nothing happens. Worse, anyone
+    # who zeroes the low bins to high-pass the correction makes h.sum() ~0.0015,
+    # and at k=3 it goes to -0.001, which INVERTS the whole filter and destroys
+    # every frame (composite -> 0.007) with no error raised. Found while testing
+    # exactly that refinement, which was itself a null. If you need to shape the
+    # low bins, remove this line and set the DC gain deliberately instead.
     return h / h.sum()
 
 
