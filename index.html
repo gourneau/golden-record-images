@@ -183,8 +183,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
    tooltip instead, which costs zero layout and appears where you ask for it. */
 .tipbtn{font-size:10px;font-family:var(--mono);padding:1px 7px;border-radius:5px;
   letter-spacing:.03em;text-transform:none;line-height:1.6;flex:0 0 auto;white-space:nowrap}
-/* Fixed width on BOTH tier buttons. "Recovered" and "Reconstructed" differ by
-   five characters, so the button resized every time it was pressed -- which
+/* Fixed width on BOTH tier buttons. "Decoded" and "Denoised" differ in width, so
+   the button resized every time it was pressed -- which
    shoved its neighbours, and next to a long title left nothing for the title.
    A control that changes size when you use it is a control that moves the
    thing you were about to click. */
@@ -261,7 +261,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   <button data-f="color">Colour only</button>
   <button data-f="mono">Monochrome</button>
   <span class="grow"></span>
-  <button id="tier" aria-pressed="true" title="Physics-only decode, or the same decode with a denoiser trained on the record's own colour repeats">Tier: <span id="tierv">Reconstructed</span></button>
+  <button id="tier" aria-pressed="true" title="Physics-only decode, or the same decode with a denoiser trained on the record's own colour repeats">Tier: <span id="tierv">Denoised</span></button>
   <label class="speed" for="rate">Speed
     <select id="rate">
       <option value="0.005">0.005× · 14 min</option>
@@ -300,7 +300,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <div class="pane-head"><span id="lbTier">Decoded from the audio</span>
         <span class="grow"></span>
         <button id="lbTierBtn" class="tipbtn" aria-pressed="true"
-                title="Switch between the physics-only decode and the same decode denoised (T)">tier: reconstructed</button>
+                title="Switch between the physics-only decode and the same decode denoised (T)">tier: denoised</button>
         <button class="tipbtn" data-tip="dec" aria-describedby="tip">notes</button></div>
       <div class="pane-body" id="lbDecBody"><canvas id="lbCanvas"></canvas>
         <canvas id="lbMini" hidden title="The whole picture. The box is what you are looking at."></canvas>
@@ -475,6 +475,12 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   checks your timing; the pulsar map checks your handedness. Neither needs a word of language.</p>
 
   <h2>The machine learning, and what it earned</h2>
+  <p class="note"><b>A note on the word.</b> These two tiers were briefly labelled
+  <em>recovered</em> and <em>reconstructed</em>, and the second was the wrong word.
+  Reconstruction implies filling in what is not there. The denoiser here never sees anything but
+  this record: it is trained on the twenty scenes the record itself scanned three times, so its
+  entire notion of what a scene looks like comes from the artifact and from nowhere else. Nothing
+  is invented. They are now <em>decoded</em> and <em>denoised</em>, which is what they are.</p>
   <p>Four methods were tried against the same arbiter: <strong>predict measurements the model was
   never shown.</strong> Not image metrics — this project has measured that its own quality
   composite rewards blur, and every method's metrics keep improving past the correct setting. A
@@ -505,7 +511,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   What the evidence earns is the conjunction — blur-level noise suppression <em>while the low band
   improves</em>, where blur makes it worse.</p>
   <p class="note"><b>And it costs something, which is why there are two tiers rather than one.</b>
-  Run the reconstructed tier past the calibration circle — the one check a denoiser cannot game —
+  Run the denoised tier past the calibration circle — the one check a denoiser cannot game —
   and it <b>regresses</b>: radial rms 0.861&nbsp;→&nbsp;0.886&nbsp;px, axis ratio
   1.0053&nbsp;→&nbsp;1.0057. That is not a bug. The ring is a dark line one to two pixels wide and
   the denoiser has a 17-pixel receptive field, so it softens that line and the fitted edge moves;
@@ -580,7 +586,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='42';
+const ASSETV='43';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -749,14 +755,20 @@ function draw(cv,srcs,im,colour){
 }
 
 // TWO TIERS, NEVER BLENDED.
-//   recovered      physics only -- timebase, dot clock, geometry, droop
-//                  inverse. Every pixel traceable to the audio. The default,
-//                  and the thing to cite.
-//   reconstructed  the same decode, then a denoiser whose whole training
-//                  corpus is this record's own colour repeats. Provenance
-//                  tier 1: no Earth photograph involved, so an alien could
-//                  run it -- but it is prior-based, and a prior can smooth
-//                  away something real.
+//   decoded    physics only -- timebase, dot clock, geometry, droop inverse.
+//   denoised   the same decode, then a denoiser.
+//
+// They were called "recovered" and "reconstructed", and the second word was
+// wrong. Reconstruction implies filling in what is not there. This denoiser
+// never sees anything but the record: it is trained on the twenty scenes the
+// record itself scanned three times, so its whole notion of what a scene looks
+// like comes from this artifact and from nowhere else. Nothing is invented, and
+// calling it reconstruction invited a reader to distrust it for the wrong
+// reason -- and to trust the physics tier for the wrong reason too, since a
+// denoiser can still smooth away something real, which is why both are offered.
+//
+// The internal identifiers stay 'recovered'/'reconstructed' so the tier the
+// code selects and the directory it reads cannot drift apart from a rename.
 // The switch is global and sticky rather than per-image, because the point of
 // having two tiers is comparing them, and a viewer must always be able to say
 // which one they are looking at.
@@ -1182,7 +1194,7 @@ function fillText(im){
 function provenanceDebts(im){
   const out=[];
   if(TIER==='reconstructed') out.push(
-    `you are looking at the <b>reconstructed</b> tier: the decode with a denoiser applied, ` +
+    `you are looking at the <b>denoised</b> tier: the decode with a denoiser applied, ` +
     `trained only on this record's own colour repeats. Measured on the 20 colour images against ` +
     `a held-out scan — <b>on the 96 monochrome images there is no held-out measurement, so it is ` +
     `an extrapolation</b>`);
@@ -2087,10 +2099,10 @@ $('lbWHelp').textContent=
 function setTier(t){
   TIER = t;
   const on = TIER==='reconstructed';
-  $('tierv').textContent = on ? 'Reconstructed' : 'Recovered';
+  $('tierv').textContent = on ? 'Denoised' : 'Decoded';
   $('tier').setAttribute('aria-pressed', String(on));
   const b=$('lbTierBtn');
-  if(b){ b.textContent = on ? 'tier: reconstructed' : 'tier: recovered';
+  if(b){ b.textContent = on ? 'tier: denoised' : 'tier: decoded';
          b.setAttribute('aria-pressed', String(on)); }
   // Repaint in place rather than render(): rebuilding the grid would blank
   // every canvas until the lazy loader caught up, and the whole point is an
