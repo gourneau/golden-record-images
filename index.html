@@ -134,7 +134,11 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .pane-body.can-zoom{cursor:zoom-in}
 .pane-body.zoomed{cursor:zoom-out}
 .pane-body.zoomed>canvas,.pane-body.zoomed>img{max-width:none;max-height:none}
-.pane-body.zoomed>canvas{image-rendering:pixelated}
+/* Smooth, not pixelated. At 512x377 zoomed to 1:1 the scale factor is barely
+   above 1, so `pixelated` did not reveal structure -- it just added hard edges
+   to a photograph and made it look broken. The decode has no more detail at 1:1
+   than it does fitted; zoom is for looking closely, not for seeing pixels. */
+.pane-body.zoomed>canvas{image-rendering:auto}
 /* FIXED height, and as little of it as the text can be read in. The panes are a
    flex column with the picture on flex:1, so every pixel here is a pixel taken
    off the picture -- and a two-line caption and a six-line one would otherwise
@@ -455,7 +459,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='22';
+const ASSETV='23';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -893,9 +897,9 @@ function fillText(im){
   $('lbDecFootBody').innerHTML=
     `<div>Decoded from the audio alone — no reference image has ever touched pixel recovery.</div>` +
     provenanceNote(im) +
-    `<span class="mono">512 traces × 377 samples along each trace, shown at that native ` +
-    `sampling. The pixels are not square, so it is not stretched to 4:3. ` +
-    `Click the picture for 1:1 pixels.</span>`;
+    `<span class="mono">512 traces wide × 377 rows. That row count is chosen so the ` +
+    `PIXELS ARE SQUARE — nothing is stretched. The 4:3 picture is the first ~503 traces; ` +
+    `the last few are scan beyond the picture gate. Click to zoom to actual size.</span>`;
 
   // ---- per-image provenance -------------------------------------------------
 // The claim "decoded from the audio alone" is true of the PIXELS and only of
