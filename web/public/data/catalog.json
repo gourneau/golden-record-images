@@ -2634,7 +2634,8 @@
    "title_ours": "Jupiter",
    "title_ozma": "Jupiter",
    "title_source": "ours",
-   "displayRotate": 0
+   "displayRotate": 90,
+   "rotation_evidence": "caption '142800 km / 318 e' reads horizontally only at +90; alignment agrees (-91.24 deg, 39 inliers)"
   },
   {
    "n": 12,
