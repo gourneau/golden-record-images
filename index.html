@@ -232,14 +232,15 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   <span class="grow"></span>
   <label class="speed" for="rate">Speed
     <select id="rate">
+      <option value="0.005">0.005× · 14 min</option>
       <option value="0.01">0.01× · 7 min</option>
-      <option value="0.02">0.02×</option>
-      <option value="0.05">0.05×</option>
-      <option value="0.1">0.1×</option>
-      <option value="0.25">0.25×</option>
-      <option value="0.5">0.5×</option>
+      <option value="0.02">0.02× · 4 min</option>
+      <option value="0.05">0.05× · 86 s</option>
+      <option value="0.1">0.1× · 43 s</option>
+      <option value="0.25">0.25× · 17 s</option>
+      <option value="0.5">0.5× · 9 s</option>
       <option value="0.75">0.75×</option>
-      <option value="1" selected>1×</option>
+      <option value="1" selected>1× · 4.3 s</option>
       <option value="1.5">1.5×</option>
       <option value="2">2×</option>
       <option value="4">4×</option>
@@ -292,14 +293,15 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <button id="lbPaint" title="Start from a blank screen and paint the picture line by line as the audio plays (P)">✦ Paint it from blank</button>
       <label class="speed" for="lbRate">Speed
         <select id="lbRate">
+          <option value="0.005">0.005× · 14 min</option>
           <option value="0.01">0.01× · 7 min</option>
-          <option value="0.02">0.02×</option>
-          <option value="0.05">0.05×</option>
-          <option value="0.1">0.1×</option>
-          <option value="0.25">0.25×</option>
-          <option value="0.5">0.5×</option>
+          <option value="0.02">0.02× · 4 min</option>
+          <option value="0.05">0.05× · 86 s</option>
+          <option value="0.1">0.1× · 43 s</option>
+          <option value="0.25">0.25× · 17 s</option>
+          <option value="0.5">0.5× · 9 s</option>
           <option value="0.75">0.75×</option>
-          <option value="1" selected>1×</option>
+          <option value="1" selected>1× · 4.3 s</option>
           <option value="1.5">1.5×</option>
           <option value="2">2×</option>
           <option value="4">4×</option>
@@ -499,7 +501,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='31';
+const ASSETV='32';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
