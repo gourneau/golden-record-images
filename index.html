@@ -44,14 +44,16 @@ button[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:
 .count{font-family:var(--mono);font-size:12px;color:var(--dimmer)}
 .speed{font-size:13px;color:var(--dimmer);display:flex;align-items:center;gap:7px}
 .speed select{font:inherit;font-size:13px;font-family:var(--mono);color:var(--gold);
-  background:var(--panel);border:1px solid var(--line2);border-radius:7px;padding:6px 8px;
-  cursor:pointer}
+  background:var(--panel);border:1px solid var(--line2);border-radius:7px;padding:7px 13px;
+  cursor:pointer;line-height:inherit}
 .speed select:hover{border-color:#5a4a1e}
 /* In the lightbox it sits in the play row at the BOTTOM, beside Play and Paint
    -- the controls belong next to the thing they control, and that row stays put
-   while a zoomed picture scrolls above it. Sized down to match the bar. */
-.lb-wave .speed{font-size:11px;font-family:var(--mono);letter-spacing:.02em;gap:5px}
-.lb-wave .speed select{font-size:11px;padding:4px 6px;border-radius:6px}
+   while a zoomed picture scrolls above it. Matched to the buttons it sits with:
+   same font size, same vertical padding, same border radius, so the row has one
+   height instead of two. */
+.lb-wave .speed{font-size:13px;gap:7px}
+.lb-wave .speed select{font-size:13px;padding:7px 10px;border-radius:7px}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));
   gap:18px;padding:36px 0 64px}
@@ -173,20 +175,19 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .wrow .seps button{font-family:var(--mono);font-size:11px;padding:5px 9px}
 #lbWave{display:block;width:100%;height:64px;border:1px solid var(--line);border-radius:6px;
   background:#0c0e12;cursor:crosshair;touch-action:pan-y}
-/* FLOATING, not stacked. As a sibling in the flow it appeared the moment you
-   pressed play and shoved the picture smaller -- a layout jump at exactly the
-   moment you had started watching something. As an overlay above the waveform
-   it costs no layout at all, so nothing moves and nothing resizes. */
-#lbZoom[hidden]{display:none}
-#lbZoom{position:absolute;left:16px;right:16px;bottom:100%;width:auto;height:118px;
-  border:1px solid var(--line2);border-radius:8px;background:rgba(8,10,13,.96);
-  box-shadow:0 -8px 30px -10px rgba(0,0,0,.9);margin-bottom:8px;z-index:5}
+/* In the flow, below the overview, and ALWAYS PRESENT. The jarring part was
+   never where it sat -- it was that it appeared on play and shoved the picture
+   smaller mid-watch. Reserving the space permanently costs those pixels once
+   instead of moving everything at the worst moment, and a stable layout is
+   worth more than the pixels. It draws a placeholder until there is audio. */
+#lbZoom{display:block;width:100%;height:112px;border:1px solid var(--line);
+  border-radius:6px;background:#0c0e12;margin-top:6px}
 .whelp{font-family:var(--mono);font-size:10px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
 @media(max-width:860px){
   .lb-panes{grid-template-columns:1fr;overflow:auto}
   .pane-body{min-height:36vh}
   #lbWave{height:60px}
-  #lbZoom{height:92px;left:8px;right:8px}
+  #lbZoom{height:84px}
   .lb-top .t{font-size:15px}
   .lb-top .m{width:100%}
 }
@@ -295,7 +296,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <span class="wstat" id="lbWStat"></span>
     </div>
     <canvas id="lbWave"></canvas>
-    <canvas id="lbZoom" hidden title="The actual samples around the playhead"></canvas>
+    <canvas id="lbZoom" title="The actual samples around the playhead"></canvas>
     <div class="whelp" id="lbWHelp"></div>
   </div>
 </div>
@@ -485,7 +486,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='28';
+const ASSETV='29';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -1354,10 +1355,16 @@ function drawZoom(){
   const centre = LB.playSample!=null ? LB.playSample
                : (LB.hoverTrace!=null && d) ? sampleOfTrace(d,LB.hoverTrace)
                : (d? d.leadIn + d.traces*d.period*0.5 : null);
-  // Nothing to show until the audio is in memory, and 132px of empty box is
-  // 132px stolen from the picture. The strip appears when it has content.
-  if(!buf||!d||centre==null){ cv.hidden=true; return; }
-  cv.hidden=false;
+  if(!buf||!d||centre==null){
+    // Draw the empty state rather than collapsing the box: the strip keeps its
+    // place in the layout so that pressing play never moves anything.
+    c.strokeStyle='rgba(201,162,39,.16)'; c.lineWidth=1;
+    c.beginPath(); c.moveTo(0,cssH/2+.5); c.lineTo(cssW,cssH/2+.5); c.stroke();
+    c.fillStyle='#6b737d'; c.font='11px ui-monospace,Menlo,monospace';
+    c.fillText('the real samples appear here — press play, or hover the strip above',
+               12, cssH/2 - 8);
+    return;
+  }
   const span=ZOOM_TRACES*d.period;
   let a=Math.round(centre-span/2), b=Math.round(centre+span/2);
   const ch=buf.getChannelData(0);
