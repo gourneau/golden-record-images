@@ -159,6 +159,32 @@ Honesty requires listing these too. On these points we are exactly as stuck as a
 
 ---
 
+## A newer line, drawn deliberately
+
+Since this document was written the project acquired the original photographs — 47 slides from
+NASA, and the whole set from the reissue's book. That creates a temptation and a boundary.
+
+The boundary: **the decoder never sees them.** `decode.py` imports three numeric modules and
+reads one WAV file, and an automated check walks its import graph and fails the build if any
+reference path appears. The photographs are used to *score* the decoder, never to produce it.
+
+Even scoring is split. Half the references are a development set, used freely; the other half is
+held out and looked at once. Tuning against all of them would be overfitting the test set — the
+same error as cheating, only slower and easier to miss.
+
+And there is a third, deliberately dishonest tier: an **oracle** decoder allowed to pick its
+settings per image by consulting the true slide. It is useless as a decoder, since it needs the
+answer to produce the answer, but the gap between it and the blind decoder measures exactly what
+outside knowledge is worth. Currently that gap is **+41%**, and the largest single cause is that
+our picture-gate position is one global constant where it should be measured per frame — which
+is recoverable from the signal alone. In other words, most of what cheating buys is not knowledge
+an alien lacks. It is work we have not finished.
+
+The calibration circle sits on the honest side of this line, which is worth saying plainly: using
+it is sanctioned by the record's own cover, which draws the circle and says image 1 is one. A
+recipient who read the cover can calibrate geometry, sharpness, noise and black-and-white levels
+from that frame exactly as we do.
+
 ## The irony worth stating plainly
 
 Our decode is *better* than the 2017 one and *less* alien-reproducible. We used a patent, a

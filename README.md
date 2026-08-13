@@ -145,6 +145,41 @@ a brainless heuristic. Twelve samples is *one dot*: one NTSC line period at the 
 It was never a fudge factor. It was the scan converter's own clock showing through, and he was
 compensating for it without knowing what it was.
 
+**And an honest deflation, because this was oversold.** The dot clock is correct science — the
+measurement survived the hardest test we could design, in that widening the search from ±0.6 to
+±3.0 dots returns the identical peak on all 156 frames, and no frame lands within 0.02 of the
+line-rate integers that would indicate a false lock. But it buys **no measurable image quality**.
+Forcing a deliberately wrong rate, 0.6 dots off, changes sharpness by less than 1%, because the
+phase tracker absorbs rate error. It is a true description of the hardware and a dead end for
+picture quality, and both halves of that deserve saying.
+
+### The decode is at the physical limit
+
+The most consequential measurement in this project, and the one that ends the search for more
+detail. Reconstructing the resolution actually present, in both axes:
+
+| axis | we sample | the 1977 camera resolves | oversampling |
+|---|---|---|---|
+| along a trace | 230 dots | 138–172 elements | 1.4× |
+| across traces | 512 traces | 260–324 | 1.6–1.9× |
+
+The **recording chain** could have carried more than 1000 elements per trace — its own edge
+response is 1.75–2.37 samples. The **camera** could not. We are already sampling 1.4–1.9× above
+the camera's Nyquist frequency in both directions, which means the pictures contain every element
+the 1977 television camera was able to resolve, and no deconvolution, neural network or
+super-resolution scheme can recover detail that was never captured. Anything that appears to is
+inventing it.
+
+Measured independently on the calibration ring: MTF50 of 0.102 cycles/px, a line-spread function
+5.1 px wide, giving ~77 resolvable elements per trace at the ring's own contrast.
+
+One real defect remains unrecovered: a slow tilt below 120 Hz, +0.011 to +0.023 per trace, which
+is 4–9% of the black-to-white range. The calibration slide is a uniform white field by design and
+ours still comes out with a −0.57 tilt across it. An earlier attempt to explain this as a
+low-frequency "shelf" in the chain's response turned out to be an artefact of the estimator's
+normalisation band — |S(180 Hz)| moves from 0.558 to 1.089 depending purely on where that band is
+put — so the tilt is real but its cause is still open.
+
 ### The alternating sync pulse — and a correction
 
 Every other trace behaves differently. Barry saw it in 2017 as traces alternating ~3100 and

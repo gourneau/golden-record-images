@@ -210,6 +210,29 @@ invents detail is worse than one that admits uncertainty.
 
 ## 5. Honest limits
 
+### How good can this possibly get?
+
+Settled, and the answer is: **this is as good as it gets.**
+
+The recording chain — tape, disc, stylus, digitiser — could have carried more than 1000
+brightness elements along each stripe. Its own edges are that sharp. But the 1977 television
+camera that looked at the slide could not. Measuring what is actually resolvable:
+
+| direction | how finely we sample | what the camera resolved |
+|---|---|---|
+| down a stripe | 230 dots | 138–172 elements |
+| across stripes | 512 stripes | 260–324 |
+
+We are already sampling 1.4 to 1.9 times finer than the camera could see, in both directions.
+Everything the camera captured is in these pictures. Anything sharper that a program might now
+produce would be **invented**, not recovered — which is why this decoder does not do it.
+
+One flaw is genuinely left. The calibration slide is a uniform white field by design, and ours
+still comes out with a slow tilt across it, about 4–9% of the black-to-white range. We know it is
+there and we cannot yet explain it. A promising theory — that the recording chain has a second,
+slower droop on top of the one we fixed — turned out to be an artefact of how it was measured,
+and was discarded rather than shipped.
+
 Things that are measured and solid:
 
 - trace period 8.326 ms; sync timing to ~6 samples RMS, 65× better than peak-picking
