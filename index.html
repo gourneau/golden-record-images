@@ -159,14 +159,14 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .wrow .seps button{font-family:var(--mono);font-size:11px;padding:5px 9px}
 #lbWave{display:block;width:100%;height:88px;border:1px solid var(--line);border-radius:6px;
   background:#0c0e12;cursor:crosshair;touch-action:pan-y}
-#lbZoom{display:block;width:100%;height:66px;border:1px solid var(--line);border-radius:6px;
+#lbZoom{display:block;width:100%;height:132px;border:1px solid var(--line);border-radius:6px;
   background:#0c0e12;margin-top:6px}
 .whelp{font-family:var(--mono);font-size:10px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
 @media(max-width:860px){
   .lb-panes{grid-template-columns:1fr;overflow:auto}
   .pane-body{min-height:36vh}
   #lbWave{height:60px}
-  #lbZoom{height:52px}
+  #lbZoom{height:96px}
   .lb-top .t{font-size:15px}
   .lb-top .m{width:100%}
 }
@@ -440,7 +440,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='20';
+const ASSETV='21';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -660,13 +660,13 @@ function cardWave(fig, im){
     const p90=sorted[Math.floor(n*0.90)]||d.peak||1;
     const a2=(h/2-1)/(p90/2);
     const clip=v=>Math.max(-h/2+1,Math.min(h/2-1,v));
-    c.fillStyle='rgba(201,162,39,.30)';
+    c.fillStyle=goldFill(c,0,h);
     c.beginPath();
     c.moveTo(0,mid);
     for(let i=0;i<n;i++) c.lineTo(i/n*w, mid+clip(-d.max[i]*d.scale*a2));
     for(let i=n-1;i>=0;i--) c.lineTo(i/n*w, mid+clip(-d.min[i]*d.scale*a2));
     c.closePath(); c.fill();
-    c.strokeStyle='rgba(201,162,39,.72)'; c.lineWidth=1;
+    c.strokeStyle=goldStroke(c,0,h); c.lineWidth=1;
     c.beginPath();
     for(let i=0;i<n;i++){
       const x=Math.round(i/n*w)+0.5;
@@ -1216,7 +1216,39 @@ function drawWave(){
 // them, one stripe of the photograph per cycle. The FLAC is already decoded
 // and in memory once you have played anything, so this costs nothing.
 
-const ZOOM_TRACES=3;
+// Two traces, not three. At three the stripes are too narrow to read, and the
+// thing worth seeing is the shape of ONE stripe: the sync burst, then the
+// brightness profile that becomes one column of the photograph.
+const ZOOM_TRACES=2;
+// The picture occupies this fraction of a trace; the rest is blanking. Measured
+// in pipeline/geometry.py, and used here only to shade the two regions so the
+// strip is legible as structure rather than as a wiggly line.
+const PIC_START=232/3200, PIC_END=3040/3200;
+
+// Gold that behaves like metal rather than like the colour yellow. A single
+// flat hue reads as plastic; what makes metal look like metal is a narrow bright
+// specular band with darker body above and below it, so the eye reads a curved
+// reflective surface. Vertical, because the strip is lit from the front.
+function goldStroke(c,y0,y1){
+  const g=c.createLinearGradient(0,y0,0,y1);
+  g.addColorStop(0.00,'#6d5214');
+  g.addColorStop(0.18,'#a8811f');
+  g.addColorStop(0.40,'#e8c559');
+  g.addColorStop(0.50,'#fff3c4');   // the specular highlight
+  g.addColorStop(0.60,'#e8c559');
+  g.addColorStop(0.82,'#a8811f');
+  g.addColorStop(1.00,'#6d5214');
+  return g;
+}
+function goldFill(c,y0,y1){
+  const g=c.createLinearGradient(0,y0,0,y1);
+  g.addColorStop(0.00,'rgba(109,82,20,.10)');
+  g.addColorStop(0.45,'rgba(232,197,89,.30)');
+  g.addColorStop(0.50,'rgba(255,243,196,.42)');
+  g.addColorStop(0.55,'rgba(232,197,89,.30)');
+  g.addColorStop(1.00,'rgba(109,82,20,.10)');
+  return g;
+}
 
 function drawZoom(){
   const cv=$('lbZoom'); if(!cv) return;
@@ -1245,16 +1277,27 @@ function drawZoom(){
   a=Math.max(0,a); b=Math.min(ch.length,b);
   if(b-a<8) return;
 
-  // Trace boundaries first, so the picture reads as stripes rather than noise.
-  c.strokeStyle='rgba(201,162,39,.18)'; c.lineWidth=1;
+  // Shade blanking against picture, so the strip reads as structure rather than
+  // as a wiggly line: you can see the sync burst, then the brightness profile
+  // that becomes one column of the photograph, then the next burst.
+  const xAt=sm=>(sm-a)/(b-a)*cssW;
   const t0=Math.floor((a-d.leadIn)/d.period), t1=Math.ceil((b-d.leadIn)/d.period);
   for(let t=t0;t<=t1;t++){
-    const x=Math.round((d.leadIn+t*d.period-a)/(b-a)*cssW)+0.5;
-    if(x<0||x>cssW) continue;
-    c.beginPath(); c.moveTo(x,0); c.lineTo(x,cssH); c.stroke();
+    const s0=d.leadIn+t*d.period;
+    c.fillStyle='rgba(255,255,255,.035)';
+    c.fillRect(xAt(s0), 0, xAt(s0+PIC_START*d.period)-xAt(s0), cssH);
+    c.fillRect(xAt(s0+PIC_END*d.period), 0, xAt(s0+d.period)-xAt(s0+PIC_END*d.period), cssH);
+    const x=Math.round(xAt(s0))+0.5;
+    if(x>=0&&x<=cssW){
+      c.strokeStyle='rgba(201,162,39,.26)'; c.lineWidth=1;
+      c.beginPath(); c.moveTo(x,0); c.lineTo(x,cssH); c.stroke();
+    }
     if(t>=0&&t<d.traces){
-      c.fillStyle='rgba(201,162,39,.45)'; c.font='9px ui-monospace,monospace';
-      c.fillText(String(t), x+3, 10);
+      const lx=xAt(s0+PIC_START*d.period)+4;
+      if(lx>0&&lx<cssW-40){
+        c.fillStyle='rgba(201,162,39,.55)'; c.font='9px ui-monospace,monospace';
+        c.fillText(`trace ${t} · picture`, lx, 11);
+      }
     }
   }
 
@@ -1264,15 +1307,20 @@ function drawZoom(){
   lo-=pad; hi+=pad;
   const yOf=v=>cssH-(v-lo)/(hi-lo)*cssH;
 
-  c.strokeStyle='rgba(201,162,39,.92)'; c.lineWidth=1;
-  c.beginPath();
-  const step=Math.max(1,Math.floor((b-a)/(cssW*2)));
-  let first=true;
-  for(let i=a;i<b;i+=step){
-    const x=(i-a)/(b-a)*cssW, y=yOf(ch[i]);
-    if(first){ c.moveTo(x,y); first=false; } else c.lineTo(x,y);
-  }
-  c.stroke();
+  const step=Math.max(1,Math.floor((b-a)/(cssW*3)));
+  const pts=[];
+  for(let i=a;i<b;i+=step) pts.push([(i-a)/(b-a)*cssW, yOf(ch[i])]);
+
+  // Filled body under the trace, then the trace itself, both in the metal.
+  c.fillStyle=goldFill(c,0,cssH);
+  c.beginPath(); c.moveTo(pts[0][0],cssH);
+  for(const [x,y] of pts) c.lineTo(x,y);
+  c.lineTo(pts[pts.length-1][0],cssH); c.closePath(); c.fill();
+
+  c.strokeStyle='rgba(0,0,0,.55)'; c.lineWidth=2.4;
+  c.beginPath(); pts.forEach(([x,y],k)=>k?c.lineTo(x,y):c.moveTo(x,y)); c.stroke();
+  c.strokeStyle=goldStroke(c,0,cssH); c.lineWidth=1.3;
+  c.beginPath(); pts.forEach(([x,y],k)=>k?c.lineTo(x,y):c.moveTo(x,y)); c.stroke();
 
   if(LB.playSample!=null){
     const x=Math.round((LB.playSample-a)/(b-a)*cssW)+0.5;
@@ -1574,7 +1622,8 @@ $('lbWHelp').textContent=
   '1200 precomputed peaks per frame · hover the strip to point at a trace · click it to play '+
   'from there · shaded ends are the lead-in and the tail lines, not picture · '+
   'P paints the picture from a blank screen as the audio plays, colour images one separation '+
-  'at a time';
+  'at a time · the lower strip is the real samples, two traces of them: shaded blanking, '+
+  'then the brightness profile that becomes one column of the photograph';
 
 // ---- lightbox wiring ------------------------------------------------------
 
