@@ -61,6 +61,14 @@ figure:hover{border-color:#39414b;transform:translateY(-2px)}
 figure:hover .scanbtn,.scanbtn:focus-visible,.scanbtn[aria-pressed="true"]{opacity:1}
 .scanbtn[aria-pressed="true"]{background:var(--gold);color:#0a0b0d;border-color:var(--gold)}
 .cardwave{display:block;width:100%;height:26px;background:#07080a;border-top:1px solid var(--line)}
+.prov{border:1px solid #4a4326;background:#1b190f;border-radius:6px;padding:7px 10px;
+  margin:7px 0 0;font-size:12px;line-height:1.5;color:#ddd0a4}
+.prov b{color:var(--gold)}
+.prov .sep{color:#6b6244}
+.prov .mono{display:block;margin-top:5px;font-family:var(--mono);font-size:10px;
+  color:#8d8460;letter-spacing:.02em}
+.tag.tier{right:8px;left:auto;top:auto;bottom:8px;background:rgba(201,162,39,.9);
+  color:#0a0b0d;font-weight:700}
 @media(hover:none){.scanbtn{opacity:1}}
 .tag.cmp.none{background:rgba(0,0,0,.72);color:var(--dim);font-weight:400}
 figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
@@ -340,7 +348,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='16';
+const ASSETV='17';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -759,11 +767,52 @@ function fillText(im){
     `${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'} · ${LB.idx+1} of ${VIEW.length}`;
   $('lbDecFoot').innerHTML=
     `Decoded from the audio alone — no reference image has ever touched pixel recovery.` +
+    provenanceNote(im) +
     `<span class="mono">512 traces × 377 samples along each trace, shown at that native ` +
     `sampling. The pixels are not square, so it is not stretched to 4:3. ` +
     `Click the picture for 1:1 pixels.</span>`;
 
-  // Separation picker for the colour triplets: which of the three frames the
+  // ---- per-image provenance -------------------------------------------------
+// The claim "decoded from the audio alone" is true of the PIXELS and only of
+// the pixels. Several things you are looking at are not: which way up it is
+// shown, what it is called, and which scan was called red. Those come from
+// Earth knowledge -- the original slides and their captions -- which a
+// recipient of the record would not have.
+//
+// Saying so once in a section further down the page is not enough, because the
+// person looking at a particular picture is not reading that section. So each
+// image states its own debts, here, next to itself. See pipeline/provenance.py
+// for the tiers and the check that enforces them.
+
+function provenanceDebts(im){
+  const out=[];
+  if(im.displayRotate) out.push(
+    `it is turned ${im.displayRotate}° to show it upright, and <b>the record does not say ` +
+    `which edge is the top</b> — it does not even say which images were turned`);
+  if(im.orientation) out.push(
+    `the stored file was already rotated at build time from a hand-made table, so this ` +
+    `frame's pixel <i>layout</i> is not purely decoded either (a known defect, logged)`);
+  if(im.color) out.push(
+    `which of the three scans is red was settled by knowing what colour an ocean is — ` +
+    `the record's own key, the solar spectrum, gives the order but not the direction`);
+  if(im.title && im.title !== '—') out.push(
+    `the caption is from the published catalogue${im.title_source==='ours'?' or from recognising the subject':''}, ` +
+    `not from anything encoded`);
+  return out;
+}
+
+function provenanceNote(im){
+  const d=provenanceDebts(im);
+  if(!d.length) return `<span class="mono">Nothing on this image needed Earth knowledge: ` +
+                       `it is shown exactly as decoded.</span>`;
+  return `<div class="prov"><b>Not purely decoded:</b> ` +
+         d.map(x=>`<span>${x}</span>`).join('<span class="sep"> · </span>') +
+         `<span class="mono">The pixels are still audio-only. These are choices about how the ` +
+         `picture is presented, and every one of them is knowledge a recipient of the record ` +
+         `would not have had.</span></div>`;
+}
+
+// Separation picker for the colour triplets: which of the three frames the
   // waveform and the audio refer to.
   const seps=$('lbSeps'); seps.innerHTML='';
   if(im.frames.length>1){
