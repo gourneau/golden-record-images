@@ -217,7 +217,13 @@ def build_frame(frame: dict, cat: dict, buckets: int, data_dir: Path) -> dict:
 # drift away from the strips the lightbox draws.
 
 CARD_BUCKETS = 300
-CARDS = "_cards.json"
+
+# NOT "_cards.json". GitHub Pages runs Jekyll, which silently drops every path
+# beginning with an underscore -- the bundle deployed and returned 404, and so
+# does the _index.json manifest beside it, which nothing had ever fetched so
+# nobody noticed. The repo now carries a .nojekyll, and this name does not
+# depend on that file being honoured.
+CARDS = "cards.json"
 
 
 def downsample(vals: list[int], buckets: int, reduce) -> np.ndarray:

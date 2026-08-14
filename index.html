@@ -925,7 +925,10 @@ function paint(f){
 // all 1200 buckets for one frame rather than 300 for all of them.
 
 let CARDWAVES=null;             // id -> envelope, once the bundle is in
-const cardBundle=fetch(`web/public/data/waves/_cards.json?v=${ASSETV}`)
+// Not an underscore name: GitHub Pages runs Jekyll, which drops those, and the
+// first deploy of this file 404'd for exactly that reason. There is a .nojekyll
+// now too, but a name that needs no build flag to survive is the better one.
+const cardBundle=fetch(`web/public/data/waves/cards.json?v=${ASSETV}`)
   .then(r=>r.ok?r.json():null)
   .then(b=>{
     if(!b||!b.frames) return null;
