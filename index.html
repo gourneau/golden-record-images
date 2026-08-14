@@ -636,7 +636,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <script>
 // GitHub Pages caches aggressively, so every data and asset URL carries this.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='54';
+const ASSETV='55';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -907,13 +907,60 @@ function paint(f){
 // The same precomputed peaks the lightbox uses, at card width. Worth having on
 // the grid because the pictures and the sound are the same object: a diagram
 // with big flat areas looks nothing like a photograph, and you can see that in
-// the envelope before you open anything. Drawn only when the card is painted,
-// so scrolling does not fetch 116 JSON files at once.
+// the envelope before you open anything.
+//
+// ONE request for all 116, not one per card. The first version fetched each
+// strip when its card was painted, which is 116 requests racing 232 thumbnails,
+// and it was reported as "the waveforms only load for the first few images".
+// Two things made that permanent rather than slow: a failed fetch was cached as
+// a null and never retried, and the strip was drawn exactly once, in the
+// .then() of that fetch. So a single lost request on a slow connection meant
+// that card never got a strip again however far you scrolled -- while its
+// thumbnail, an <img> the browser retries and paints on its own, arrived fine.
+// The asymmetry is what made it look like a waveform bug rather than a
+// network one.
+//
+// pipeline/waveform.py --cards bundles every grid strip into ~100 KiB, less
+// than one thumbnail. The per-frame files stay for the lightbox, which wants
+// all 1200 buckets for one frame rather than 300 for all of them.
+
+let CARDWAVES=null;             // id -> envelope, once the bundle is in
+const cardBundle=fetch(`web/public/data/waves/_cards.json?v=${ASSETV}`)
+  .then(r=>r.ok?r.json():null)
+  .then(b=>{
+    if(!b||!b.frames) return null;
+    const un=s=>{ const raw=atob(s), a=new Int8Array(raw.length);
+                  for(let i=0;i<raw.length;i++) a[i]=raw.charCodeAt(i)<<24>>24; return a; };
+    CARDWAVES=new Map(Object.entries(b.frames).map(([id,f])=>
+      [id, {...f, min:un(f.min), max:un(f.max)}]));
+    redrawCardWaves();          // cards painted before it landed
+    return CARDWAVES;
+  })
+  .catch(()=>null);
+
+// Redraw every strip on the grid. Cheap -- it is a few hundred lines per card
+// off an array already in memory -- and it is what lets a strip heal: from the
+// bundle arriving late, from a resize that changed the card width, from a tier
+// switch that rebuilt the grid.
+function redrawCardWaves(){
+  for(const f of GRID.children) if(f.dataset.painted) cardWave(f, JSON.parse(f.dataset.im));
+}
+
+let waveResizeTimer=0;
+addEventListener('resize',()=>{
+  clearTimeout(waveResizeTimer);
+  waveResizeTimer=setTimeout(redrawCardWaves,150);
+},{passive:true});
 
 function cardWave(fig, im){
   const cv=fig.querySelector('.cardwave'); if(!cv) return;
-  waveOf(im.frames[0]).then(()=>{
-    const d=WAVE.get(im.frames[0]); if(!d||!cv.isConnected) return;
+  const id=im.frames[0];
+  // From the bundle if it is here, from this frame's own file if it is not --
+  // so an older deployment, or a bundle that failed to load, still draws.
+  const ready=(CARDWAVES&&CARDWAVES.has(id)) ? Promise.resolve(CARDWAVES.get(id))
+            : cardBundle.then(m=>(m&&m.get(id)) || waveOf(id));
+  ready.then(d=>{
+    if(!d||!cv.isConnected) return;
     const dpr=Math.min(2,devicePixelRatio||1);
     const w=cv.clientWidth||220, h=26;
     cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr);
@@ -1068,15 +1115,25 @@ document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{
 // The file also carries leadIn, period and trace count, which is what turns an
 // x-position into a trace index:  trace = (sample - leadIn) / period.
 
-const WAVE=new Map();      // id -> data, or null if it could not be fetched
+const WAVE=new Map();      // id -> data, once a fetch has succeeded
 const WAVEREQ=new Map();   // id -> in-flight promise
+const WAVEFAIL=new Map();  // id -> consecutive failures
+const WAVE_TRIES=3;
 
+// A FAILURE IS NOT AN ANSWER. The first version cached the null too, which
+// turned one dropped request into a strip that was missing for the rest of the
+// session -- the bug behind "the waveforms only load for the first few images".
+// A transient failure now leaves no trace beyond a counter, so the next time
+// anything asks for this frame it asks the network again. The counter stops it
+// hammering a file that genuinely is not there: three tries, then it is absent.
 function waveOf(id){
   if(WAVE.has(id)) return Promise.resolve(WAVE.get(id));
   if(WAVEREQ.has(id)) return WAVEREQ.get(id);
+  if((WAVEFAIL.get(id)||0)>=WAVE_TRIES) return Promise.resolve(null);
   const p=fetch(`web/public/data/waves/${id}.json?v=${ASSETV}`)
-    .then(r=>r.ok?r.json():null).catch(()=>null)
-    .then(d=>{ WAVE.set(id,d); WAVEREQ.delete(id); return d; });
+    .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(d=>{ WAVE.set(id,d); WAVEFAIL.delete(id); WAVEREQ.delete(id); return d; })
+    .catch(()=>{ WAVEFAIL.set(id,(WAVEFAIL.get(id)||0)+1); WAVEREQ.delete(id); return null; });
   WAVEREQ.set(id,p); return p;
 }
 
@@ -2214,11 +2271,14 @@ function setTier(t){
   // Repaint in place rather than render(): rebuilding the grid would blank
   // every canvas until the lazy loader caught up, and the whole point is an
   // A/B you can flip back and forth without losing your place.
-  GRID.querySelectorAll('figure').forEach(f=>{
-    const d=JSON.parse(f.dataset.im);
-    draw(f.querySelector('canvas'), thumbs(d), d, d.color);
-    f.dataset.painted='1';
-  });
+  //
+  // paint(), not draw(): this marks all 116 cards painted, so the lazy loader
+  // will never touch them again and ANYTHING it would have done later has to
+  // be done here. It used to draw the picture and skip the waveform, which is
+  // how one press of this button left every card below the fold with a
+  // thumbnail and no strip -- for the rest of the session, since the loader
+  // then skipped them all. That is the bug that was reported.
+  GRID.querySelectorAll('figure').forEach(f=>{ f.dataset.painted=''; paint(f); });
   if(!LB.el.hidden && LB.im){ loadDecoded(LB.im); fillText(LB.im); }
 }
 // Warm the other tier in the background once the page is idle, so the first

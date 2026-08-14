@@ -64,6 +64,12 @@ jobs:
       - name: the README figures match the code committed beside them
         run: python -m pipeline.figures --check
 
+      # The grid's waveform bundle is derived from the per-frame envelopes. If
+      # frames are rebuilt and it is not, every card shows the wrong sound under
+      # the right picture and nothing looks broken. Needs no audio.
+      - name: the grid's waveform bundle matches the frames it was made from
+        run: python -m pipeline.waveform --check-cards
+
       - name: every internal link resolves
         run: |
           python - <<'PY'

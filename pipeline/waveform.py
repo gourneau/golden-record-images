@@ -194,6 +194,141 @@ def build_frame(frame: dict, cat: dict, buckets: int, data_dir: Path) -> dict:
 
 
 # --------------------------------------------------------------------------
+# the grid bundle
+# --------------------------------------------------------------------------
+# The per-frame files above are right for the lightbox, which draws one frame at
+# a time and wants every bucket. They were wrong for the grid, and the failure
+# was reported as "the waveforms only load for the first few images".
+#
+# The grid drew each strip from its own fetch, fired when the card was painted.
+# That is 116 requests racing 232 thumbnails, and the page cached a failure as a
+# permanent null -- one lost request meant that strip never appeared again, no
+# matter how much you scrolled, while the thumbnail beside it loaded fine. The
+# tail of a slow or flaky connection is exactly the part that goes missing, and
+# exactly the part you reach by scrolling down.
+#
+# So the grid gets ONE file instead of 116. It is a fourfold downsample of the
+# envelopes already committed here, base64 int8 rather than JSON numbers, which
+# is about 90 KiB for the whole gallery -- less than one thumbnail. There is no
+# per-card request left to lose.
+#
+# Built from the per-frame JSON, not from the audio: it needs no FLACs, no
+# master and no `flac` binary, so it can be regenerated in any clone and cannot
+# drift away from the strips the lightbox draws.
+
+CARD_BUCKETS = 300
+CARDS = "_cards.json"
+
+
+def downsample(vals: list[int], buckets: int, reduce) -> np.ndarray:
+    """Reduce an envelope to `buckets` spans, the same way `envelope` cut it.
+
+    Min and max must be reduced with their own operator: averaging them, or
+    subsampling, would pull the two rails together and quietly shrink every
+    loud passage on the strip.
+    """
+    a = np.asarray(vals, dtype=np.int8)
+    n = len(a)
+    if n <= buckets:
+        return a
+    edges = np.floor(np.arange(buckets, dtype=np.float64) * n / buckets).astype(np.int64)
+    return reduce.reduceat(a, edges).astype(np.int8)
+
+
+def _b64(a: np.ndarray) -> str:
+    import base64
+    return base64.b64encode(np.ascontiguousarray(a, dtype=np.int8).tobytes()).decode()
+
+
+def build_cards(out: Path, catalog: Path, buckets: int = CARD_BUCKETS) -> dict:
+    """Bundle the envelopes the grid needs into one file. Returns a summary."""
+    cat = json.loads(catalog.read_text())
+    # Only the frames the grid actually draws: a card shows its first frame, so
+    # a colour image contributes one strip and not three.
+    wanted = [im["frames"][0] for im in cat["images"]]
+
+    frames, missing = {}, []
+    for fid in wanted:
+        src = out / f"{fid}.json"
+        if not src.exists():
+            missing.append(fid)
+            continue
+        d = json.loads(src.read_text())
+        frames[fid] = {
+            "samples": d["samples"],
+            "leadIn": d["leadIn"],
+            "period": d["period"],
+            "traces": d["traces"],
+            "scale": d["scale"],
+            "min": _b64(downsample(d["min"], buckets, np.minimum)),
+            "max": _b64(downsample(d["max"], buckets, np.maximum)),
+        }
+
+    rec = {
+        "what_this_is": (
+            "Every grid strip in one file. The gallery drew these from 116 separate "
+            "fetches and the tail of them went missing on a slow connection, so the "
+            "grid now makes one request and the per-frame files serve the lightbox "
+            "alone. Downsampled from those files by pipeline/waveform.py --cards."
+        ),
+        "buckets": buckets,
+        "encoding": "min and max are base64 int8, full scale +-127; multiply by scale for master units",
+        "frames": frames,
+    }
+    if missing:
+        rec["missing"] = missing
+    (out / CARDS).write_text(json.dumps(rec, separators=(",", ":")))
+    return {"frames": len(frames), "missing": missing,
+            "bytes": (out / CARDS).stat().st_size}
+
+
+def check_cards(out: Path = WAVES, catalog: Path = CATALOG,
+                buckets: int = CARD_BUCKETS) -> list[str]:
+    """Is the shipped grid bundle what the per-frame files say it should be?
+
+    The bundle is DERIVED data, which on this repository is the thing that
+    quietly goes wrong: build.py dropped the presentation metadata, a docstring
+    outlived its model, a figure outlived its decode. Each was caught by someone
+    looking. A bundle regenerated from stale frames -- or not regenerated at all
+    -- would show the wrong sound under the right picture, and nothing on the
+    page would look broken. So it is compared byte for byte here.
+
+    Needs no audio, so CI can run it.
+    """
+    if not (out / CARDS).exists():
+        return [f"{CARDS} missing -- run `python -m pipeline.waveform --cards`"]
+    cat = json.loads(catalog.read_text())
+    have = json.loads((out / CARDS).read_text())
+    frames = have.get("frames") or {}
+    if have.get("buckets") != buckets:
+        return [f"{CARDS} has {have.get('buckets')} buckets, this code writes {buckets}"]
+
+    problems = []
+    for im in cat["images"]:
+        fid = im["frames"][0]
+        if fid not in frames:
+            problems.append(f"{CARDS} has no strip for {fid} (image {im.get('n')})")
+            continue
+        src = out / f"{fid}.json"
+        if not src.exists():
+            continue                       # already reported by the build
+        d = json.loads(src.read_text())
+        want = {"samples": d["samples"], "leadIn": d["leadIn"], "period": d["period"],
+                "traces": d["traces"], "scale": d["scale"],
+                "min": _b64(downsample(d["min"], buckets, np.minimum)),
+                "max": _b64(downsample(d["max"], buckets, np.maximum))}
+        for k, v in want.items():
+            if frames[fid].get(k) != v:
+                problems.append(f"{CARDS}: {fid}.{k} does not match {fid}.json")
+                break
+    extra = set(frames) - {im["frames"][0] for im in cat["images"]}
+    if extra:
+        problems.append(f"{CARDS} carries {len(extra)} strips no card draws: "
+                        f"{', '.join(sorted(extra)[:5])}")
+    return problems
+
+
+# --------------------------------------------------------------------------
 # CLI
 # --------------------------------------------------------------------------
 
@@ -205,7 +340,24 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--buckets", type=int, default=DEFAULT_BUCKETS)
     ap.add_argument("--frames", default="", help="comma-separated frame ids")
     ap.add_argument("--force", action="store_true", help="rewrite files that already exist")
+    ap.add_argument("--cards", action="store_true",
+                    help="only rebuild the grid bundle, from the per-frame files already here")
+    ap.add_argument("--check-cards", action="store_true",
+                    help="verify the shipped grid bundle against the per-frame files")
     args = ap.parse_args(argv)
+
+    if args.check_cards:
+        bad = check_cards(args.out, args.catalog)
+        print("\n".join(f"  STALE: {b}" for b in bad) if bad
+              else f"  {CARDS} matches the per-frame envelopes beside it")
+        return 1 if bad else 0
+
+    if args.cards:
+        s = build_cards(args.out, args.catalog)
+        print(f"waveform: {CARDS} has {s['frames']} strips, {s['bytes'] / 1024:.0f} KiB")
+        for fid in s["missing"]:
+            print(f"  MISSING {fid}.json", file=sys.stderr)
+        return 1 if s["missing"] else 0
 
     cat = json.loads(args.catalog.read_text())
     data_dir = args.catalog.parent
@@ -257,6 +409,16 @@ def main(argv: list[str] | None = None) -> int:
                 indent=1,
             )
         )
+
+    # Always after the per-frame files, never conditionally: the grid bundle is
+    # derived from them, so a run that rewrites one frame and leaves the bundle
+    # alone would ship a strip that disagrees with the lightbox beside it.
+    if written or skipped:
+        s = build_cards(args.out, args.catalog)
+        print(f"  {CARDS}: {s['frames']} grid strips, {s['bytes'] / 1024:.0f} KiB "
+              f"(one request, replacing {s['frames']})")
+        for fid in s["missing"]:
+            print(f"  MISSING {fid}.json for the grid bundle", file=sys.stderr)
 
     dt = time.time() - t0
     print(
