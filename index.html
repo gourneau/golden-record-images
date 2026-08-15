@@ -33,7 +33,7 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='60';
+const ASSETV='61';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -186,7 +186,9 @@ figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
 .readon:hover{border-color:#5a4a1e;background:#141720}
 .readon b{display:block;color:var(--gold);font-size:15px;font-weight:600;margin-bottom:3px}
 .readon span{display:block;color:var(--dim);font-size:13.5px;line-height:1.5;max-width:74ch}
-.readon.back{margin:40px 0 0}
+/* Air before the footer's rule. Flush against it, the card read as part of the
+   footer rather than as the end of the writing. */
+.readon.back{margin:40px 0 56px}
 @media(max-width:760px){
   .anav{order:3;width:100%}
   .anav button{font-size:11.5px;padding:4px 8px}
@@ -203,6 +205,8 @@ td.n{font-family:var(--mono);color:var(--gold)}
 .note{border-left:2px solid var(--line2);padding:2px 0 2px 16px;margin:20px 0;color:var(--dimmer);font-size:14.5px}
 .note b{color:var(--dim)}
 footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);font-size:13.5px}
+.sig{color:var(--dim);font-size:15px;margin-bottom:18px}
+.sig strong{color:var(--ink);font-weight:600}
 .err{color:#e6a2a2;font-family:var(--mono);font-size:13px;padding:20px 0}
 @media(max-width:640px){.grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}}
 
@@ -371,13 +375,15 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 
 <header><div class="wrap">
   <img class="disc" src="docs/img/plaque.png" alt="" aria-hidden="true">
-  <h1>116 photographs, recovered from <em>eight minutes of noise</em></h1>
-  <p class="lede">In 1977 two spacecraft left Earth carrying a gold-plated copper record. Pressed
-  into it, alongside the music, are 116 images — not as pictures, but as <strong>sound</strong>.
-  These were decoded from a 384&nbsp;kHz digitisation of the original master tapes.</p>
+  <h1>The 116 pictures on the <em>Voyager Golden Record</em></h1>
+  <p class="lede">Voyager 2 left Earth on 20 August 1977 and Voyager 1 on 5 September 1977, each
+  carrying a gold-plated copper record bolted to its side. Alongside the music and the greetings,
+  116 photographs are stored on it — not as pictures, but as <strong>sound</strong>. These were
+  decoded here from a <a href="https://archive.org/details/voyager.decode">384&nbsp;kHz
+  digitisation of the original master tapes</a>.</p>
   <p class="lede">The colour images below are composited in your browser, right now, from their
-  three separate monochrome scans. Open any one to put the decode beside the original slide,
-  and to hear the audio it came out of.</p>
+  three separate monochrome scans. Open any one to put the decode beside the original slide, and
+  to hear the 4.3 seconds of sound it came out of.</p>
   <div class="stats">
     <div class="stat"><b>116</b><span>images</span></div>
     <div class="stat"><b>156</b><span>audio frames</span></div>
@@ -395,13 +401,12 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
     <button data-f="mono">Monochrome</button>
   </span>
   <nav class="anav" id="aboutNav" hidden aria-label="sections">
-    <button data-s="a-found">What it found</button>
+    <button data-s="a-found">How it works</button>
     <button data-s="a-knew">What it was allowed to know</button>
-    <button data-s="a-ml">The machine learning</button>
-    <button data-s="a-status">Honest status</button>
+    <button data-s="a-status">What is solid</button>
   </nav>
   <span class="grow"></span>
-  <button id="tier" class="gonly" aria-pressed="true" title="Physics-only decode, or the same decode with a denoiser trained on the record's own colour repeats">Tier: <span id="tierv">Denoised</span></button>
+  <button id="tier" class="gonly" aria-pressed="true" title="Loading…">Tier: <span id="tierv">Denoised</span></button>
   <label class="speed gonly" for="rate">Speed
     <select id="rate">
       <option value="0.005">0.005× · 14 min</option>
@@ -434,8 +439,9 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
        line and a door. -->
   <div class="wrap"><button class="readon" id="readOn">
     <b>How this was decoded</b>
-    <span>The sampled trace, the accumulating error, what the decoder was allowed to know,
-    and the nine things that did not work.</span>
+    <span>How a photograph is stored as sound, why every earlier version of these pictures looks
+    hammered into foil, the fourteen published plates that are printed backwards, and what the
+    decoder was and was not allowed to know.</span>
   </button></div>
 </div>
 
@@ -456,7 +462,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <div class="pane-head"><span id="lbTier">Decoded from the audio</span>
         <span class="grow"></span>
         <button id="lbTierBtn" class="tipbtn" aria-pressed="true"
-                title="Switch between the physics-only decode and the same decode denoised (T)">tier: denoised</button>
+                title="Loading…">tier: denoised</button>
         <button class="tipbtn" data-tip="dec" aria-describedby="tip">notes</button></div>
       <div class="pane-body" id="lbDecBody">
         <canvas id="lbCanvas" class="pane-canvas" role="img"
@@ -531,236 +537,183 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 
 <div id="about" hidden>
 <section><div class="wrap">
-  <h2 id="a-found">What this decoder found</h2>
+  <h2 id="a-found">How a picture is stored as sound</h2>
+  <p>Each photograph on the record is 512 vertical stripes, played one after another. A stylus
+  running the groove produces a warbling tone; the <em>loudness</em> of that tone, moment by
+  moment, is the brightness of the picture. Lay the stripes side by side in the right order, at
+  exactly the right spacing, and the photograph appears. Get the spacing wrong by a fraction of a
+  percent and it shears into diagonal mush. That is the whole problem, and everything below is
+  about getting the spacing right and then undoing what the 1977 equipment did on the way in.</p>
 
-  <h3>The trace is sampled, not swept</h3>
-  <p>Every decoder written for this record treats each stripe as a continuous brightness sweep,
-  chopped into equal bins. It isn't. The 1977 scan converter sampled the source picture
-  <em>once per television scan line</em> and held each value — so a stripe is a staircase of
-  262.5 plateaus, not a ramp. Looking for that clock in the audio finds it exactly where the
-  hardware's patent says it should be:</p>
+  <h3>A stripe is a staircase, not a sweep</h3>
+  <p>Every decoder written for this record, including the ones this project started from, treats a
+  stripe as a smooth brightness sweep chopped into equal bins. It isn't. The 1977 hardware sampled
+  the slide <em>once per television scan line</em> and held each value until the next — so a
+  stripe is a staircase of flat steps. Looking for that step rate in the audio finds it exactly
+  where the hardware's own patent says it should be.</p>
   <table>
-    <tr><th>measurement</th><th>value</th></tr>
-    <tr><td>dots per trace, measured</td><td class="n">262.519 ± 0.043</td></tr>
-    <tr><td>predicted from the hardware spec</td><td class="n">262.500</td></tr>
-    <tr><td>error</td><td class="n">0.007%</td></tr>
+    <tr><th>steps per stripe</th><th>value</th></tr>
+    <tr><td>measured, from the audio</td><td class="n">262.519 ± 0.043</td></tr>
+    <tr><td>predicted by the 1977 hardware spec</td><td class="n">262.500</td></tr>
+    <tr><td>disagreement</td><td class="n">0.007%</td></tr>
   </table>
-  <p>It also dissolves a long-standing mystery: the 2017 decoder carried a hardcoded
-  “−12 samples on even traces” that its author called a brainless heuristic. Twelve samples is
-  <em>one dot</em>. It was the scan converter's own clock showing through.</p>
-
-  <h3>Lock to the falling edge, not the peak</h3>
-  <p>The sync pulse changes width between alternate stripes — deliberately, to signal which
-  television field a line came from. So its peak moves, but its falling edge does not.</p>
-  <table>
-    <tr><th>landmark</th><th>timing wander</th></tr>
-    <tr><td>peak of the pulse (most decoders)</td><td class="n">±100 samples</td></tr>
-    <tr><td>the trough after it</td><td class="n">±7</td></tr>
-    <tr><td>falling edge, at zero crossing</td><td class="n">±6</td></tr>
-  </table>
+  <p>It also explains a fudge that had sat unexplained for years. The 2017 decoder carried a
+  hardcoded nudge of “−12 samples on even stripes” that its own author called a brainless
+  heuristic. Twelve samples is <strong>exactly one step</strong>. It was the 1977 sampling clock
+  showing through, and once you know the staircase is there, the nudge stops being a fudge and
+  becomes a measurement.</p>
 
   <h3>The embossed look, solved</h3>
-  <p>Every previously published decode of this record has the same flaw: a hammered-metal,
-  bas-relief quality where flat areas sag toward mid-grey and only edges survive. The 2017
-  decoder's author documented it precisely and could not fix it. It is the single most visible
-  difference between these images and the ones that were on the web before.</p>
-  <p>The cause is an AC-coupled recording chain — a one-pole high-pass that no analogue path
-  of that era avoided. The fix is its exact inverse,
-  <span class="mono" style="display:inline">y[n] = y[n−1] + x[n] − a·x[n−1]</span>, and two
-  details decide whether it works. It must run in <strong>raster order</strong> — along each
-  trace and straight across every trace boundary — because that is how time ran in the
-  recording; a per-trace version is a different filter and a bug, and it shipped here once
-  before it was caught. And the time constant is <em>measured, per channel</em>, from a
-  scene-free part of the record's own signal: 530 samples on the left channel, 295 on the
-  right. Nothing about the pictures is assumed.</p>
+  <p>Every previously published version of these pictures has the same flaw: a hammered-metal,
+  bas-relief quality, as if the photograph had been stamped into foil. Large flat areas — a sky, a
+  wall, a page — sag towards grey, and only the edges survive. The author of the 2017 decoder
+  described it precisely and could not fix it. <strong>It is the biggest visible difference
+  between these images and the ones that were on the web before.</strong></p>
+  <p>The cause is that nothing in the 1977 recording chain could hold a steady brightness level.
+  Every analogue path of that era slowly forgets a constant and drifts back to the middle, so a
+  long stretch of unchanging brightness fades out while edges, which change fast, come through
+  fine. It is not damage to the record; it is what the equipment did on the way in.</p>
+  <p>So it can be undone — exactly, not approximately — if you know how fast the drift was. Two
+  details decide whether it works. It has to run <strong>in the order the sound was recorded</strong>,
+  straight across the boundary from one stripe into the next, because that is how time ran on the
+  tape; doing it stripe by stripe is a different operation and a bug, and it shipped here once
+  before it was caught. And the drift rate is <strong>measured from the record's own signal</strong>,
+  from a stretch that carries no picture at all — 530 samples on one channel, 295 on the other.
+  Nothing about what the photographs should look like is assumed anywhere in it.</p>
 
-  <h3>The scan direction is an orientation test</h3>
-  <p>The converter scanned every slide the same way, so trace 0 is always the same physical
-  edge and every image paints in the same direction. That makes a 180° turn special: it is the
-  one rotation that <em>reverses</em> the scan while keeping its axis. A quarter turn does not
-  — it moves the scan to the other axis, which is exactly what a portrait slide needs.</p>
-  <p>So a 180° turn is a checkable claim that a slide was mounted upside down in 1977 — and it
-  is checkable <strong>with no reference image at all.</strong> It is the only per-image
-  orientation evidence the record offers, and it caught a real error here: the pulsar map was
-  the only image carrying a 180, and the only one that played backwards. It had been turned to
-  match a printed plate. The record's orientation is restored and the plate was rotated instead.</p>
+  <h3>Fourteen of the published plates are printed backwards</h3>
+  <p>Every decode here was lined up against the published reproduction of the same photograph, as
+  a check. Fourteen of them refused to match — until mirroring was allowed, at which point they
+  snapped into place: the elephant at Mae Sariang, the house being built in Cameroon, and the
+  plates from Bali, Guatemala, Japan, Greece, Turkey, Australia, the tree toad and the whistling
+  swans among them.</p>
+  <p><strong>The record had them the right way round and the printed copies have them backwards.</strong>
+  Since the record is the authority on what is on the record, it is the reproductions that get
+  flipped here to match, never the decode. A fifteenth was too close to call and was left alone.</p>
 
-  <h3>Fifteen published plates are printed backwards</h3>
-  <p>Aligning each decode against its published reproduction needs a transform that can mirror.
-  Once it could, fifteen plates snapped into place that had never matched: the Thai elephant
-  went from 3 matching features to 799, the Cameroon house from 3 to 503. Bali, Guatemala,
-  Japan, Greece, Turkey, Australia and the whistling swans are all laterally inverted in print.
-  <strong>The record had them right.</strong></p>
+  <h3>The record can tell you when a slide went in upside down</h3>
+  <p>The 1977 operator scanned every slide the same way, so the first stripe is always the same
+  physical edge of the frame. That makes a half turn special: it is the one rotation that
+  <em>reverses</em> the scan while keeping it on the same axis, and reversal is audible in the
+  signal. So “this slide was mounted upside down” is a claim you can check <strong>without any
+  reference picture at all</strong> — the only per-image orientation evidence the record offers.</p>
+  <p>It caught a real mistake. The pulsar map was the one image marked as a half turn, and the one
+  image that played backwards. It had been rotated at some point to match a printed plate. The
+  record's own orientation is restored here, and the plate is the thing that got turned.</p>
 
-  <h3>What is not a breakthrough, stated plainly</h3>
-  <p>The resolution ceiling is measured and it is not ours to move. The recording chain could
-  have carried more than 1000 elements along a stripe; the 1977 <em>camera</em> resolved
-  138–172. We already sample 1.4 to 1.9 times finer than the camera could see, in both
-  directions. Everything the camera captured is in these pictures, and anything sharper that a
-  program might now produce would be <strong>invented, not recovered</strong> — which is why
-  this decoder does not do it, and why every machine-learning method here is judged by whether
-  it predicts measurements it was not shown, rather than by whether it looks better.</p>
-
-  <div class="note"><b>Two corrections, kept on the record.</b> An earlier version of this work
-  claimed the stripe alternation was 60&nbsp;Hz mains hum at ~70% of picture amplitude. Both
-  halves were wrong — measuring the whole record at 25× finer resolution puts it at 60.0436 Hz,
-  which is half the scan rate and <em>not</em> mains. It also claimed the frame geometry was
-  self-contradictory; that was a bad measurement of my own. Full details are in the repository.</div>
+  <p class="note">The full measurements behind all of this — including the sync-timing work that
+  makes the spacing hold, and two published claims of ours that turned out to be wrong and are
+  kept on the record — are in
+  <a href="https://github.com/gourneau/golden-record-images/blob/main/docs/findings.md">the
+  repository</a>.</p>
 </div></section>
 
 <section><div class="wrap">
   <h2 id="a-knew">What the decoder was allowed to know</h2>
-  <p>This project wants two things that pull against each other: a <strong>clean-room decode</strong>,
-  recovering the pictures from the artifact alone the way a recipient who has never heard of Earth
-  would have to — and the <strong>best pictures we can get</strong>, which means using the original
-  slides to check the work. Both are worth having. Mixing them silently would make the result
-  worthless, because you could not tell which claims survive without the answer key. So every
-  shipped artifact carries a tier, and the boundary is asserted in code rather than promised in
-  prose.</p>
+  <p>This project wants two things that pull against each other. One is a <strong>clean-room
+  decode</strong>: recover the pictures from the artifact alone, the way a recipient who had never
+  heard of Earth would have to. The other is simply the <strong>best pictures we can get</strong>,
+  which means checking the work against the original slides. Both are worth having. Mixing them
+  quietly would make the result worthless, because you could no longer tell which claims survive
+  without the answer key.</p>
+  <p>So everything here carries a label saying what it was allowed to see.</p>
   <table>
     <tr><th>Tier</th><th>May use</th><th>Covers</th></tr>
-    <tr><td class="n">0 · Record</td><td>the audio and the engraved cover — <em>what an alien has</em></td>
-        <td>every decoded pixel, timebase, dot clock, geometry, drift correction, the circle's self-check</td></tr>
-    <tr><td class="n">1 · Universal</td><td>priors any observer could hold without knowing Earth</td>
-        <td>denoising, colour-triplet fusion, deconvolution by the measured lens response</td></tr>
+    <tr><td class="n">0 · Record</td><td>the audio and the engraved cover — <em>what a recipient has</em></td>
+        <td>every decoded pixel: timing, spacing, geometry, the brightness fix above</td></tr>
+    <tr><td class="n">1 · Universal</td><td>things any observer could work out without knowing Earth</td>
+        <td>the denoiser, and combining the three colour scans</td></tr>
     <tr><td class="n">2 · Earth</td><td>the original slides and their captions — <strong>cheating</strong></td>
-        <td>which edge is up, which reproductions are mirrored, every title, red/green/blue roles, all scoring</td></tr>
-    <tr><td class="n">3 · Oracle</td><td>settings chosen per image <em>by looking at the answer</em></td>
-        <td>not a decoder — a measurement of how much a better honest decoder could still gain</td></tr>
+        <td>which edge is up, which reproductions are mirrored, the titles, which scan is red, and all scoring</td></tr>
   </table>
-  <p>The rule that makes this more than labelling: <strong>tier 0 and tier 1 output must be
-  reproducible with no tier 2 file on disk.</strong> A check walks the decoder's import graph and
-  fails if a tier 0 module can so much as reach reference material. The decoder imports three
-  modules and reads one file, the WAV.</p>
+  <p>The rule that makes this more than a label: <strong>the decoded pixels have to be reproducible
+  with no reference material on the disk at all.</strong> A check walks the decoder's imports and
+  fails if any part of it can so much as reach a reference file. The decoder reads exactly one
+  input, the WAV.</p>
   <p class="note"><b>Rotation is cheating, and always will be.</b> The record never says which edge
-  is the top. We tested whether it at least says which pictures were <em>turned</em> — a slide fed
-  in sideways ought to leave blank bands at the frame edges — and it does not: the 1977 operators
-  reframed each slide to fill the frame, so turning it left no trace in the signal. The detector
-  finds 1 of 66 turned frames. This gallery rotates the pictures anyway, so you needn't tilt your
-  head, but that turn happens <b>when the image is drawn, and is never written into a decoded
-  pixel</b>.</p>
-  <p class="note"><b>Known contamination, stated rather than hidden.</b> The thumbnails this page
-  loads are currently tier 2 and ought to be tier 0: the build step bakes a hand-made quarter turn
-  into 60 of the 156 files. It is logged as a defect with the fix written down, so the table above
-  cannot be read as a claim of purity that has not been earned.</p>
-  <p>There is one orientation check the record <em>does</em> provide, and it is the companion to
-  the circle. Four raster conventions fit the cover, and two of them are mirror images of the other
-  two — get it wrong and all 116 pictures are flipped, with nothing in the pictures to catch it.
-  But <strong>image 2 is the pulsar map, and the pulsar map is also engraved on the cover</strong>,
-  which is bolted to the record. Fourteen lines at fourteen angles is strongly handed, so comparing
-  the decode against the engraving pins the handedness of the whole raster at a stroke. The circle
-  checks your timing; the pulsar map checks your handedness. Neither needs a word of language.</p>
+  is the top, and we tested whether it at least says which slides were <em>turned</em> — it does
+  not, because the 1977 operators reframed each slide to fill the frame. This gallery rotates the
+  pictures anyway, so you needn't tilt your head. That turn is presentation rather than decoding,
+  though it is currently baked into the thumbnail files instead of applied when they are drawn,
+  which is logged as a defect rather than glossed over.</p>
+  <p>There is one orientation check the record <em>does</em> give you, and it is rather beautiful.
+  Four ways of reading the stripes fit the instructions on the cover, and two of them are mirror
+  images of the other two — get that wrong and all 116 pictures come out flipped, with nothing
+  inside the pictures to catch it. But <strong>image 2 is the pulsar map, and the pulsar map is
+  also engraved on the cover</strong> that is bolted to the record. Fourteen lines radiating at
+  fourteen different angles is strongly handed, so holding the decode against the engraving settles
+  the handedness of all 116 at a stroke. The calibration circle checks your timing; the pulsar map
+  checks your handedness. Neither needs a word of language.</p>
+</div></section>
 
-  <h2 id="a-ml">The machine learning, and what it earned</h2>
-  <p class="note"><b>A note on the word.</b> These two tiers were briefly labelled
-  <em>recovered</em> and <em>reconstructed</em>, and the second was the wrong word.
-  Reconstruction implies filling in what is not there. The denoiser here never sees anything but
-  this record: it is trained on the twenty scenes the record itself scanned three times, so its
-  entire notion of what a scene looks like comes from the artifact and from nowhere else. Nothing
-  is invented. They are now <em>decoded</em> and <em>denoised</em>, which is what they are.</p>
-  <p>Four methods were tried against the same arbiter: <strong>predict measurements the model was
-  never shown.</strong> Not image metrics — this project has measured that its own quality
-  composite rewards blur, and every method's metrics keep improving past the correct setting. A
-  prettier picture is not a truer one, and only a hold-out can tell them apart.</p>
-  <table>
-    <tr><th>method</th><th>result</th></tr>
-    <tr><td>Forward operator + adjoint</td><td>verified to 2.8e-16 — and it caught a float32
-      underflow producing 189,166 NaNs with nothing raised</td></tr>
-    <tr><td>Neural field (coordinate MLP)</td><td>a qualified null: 1 of 6, and only on the
-      calibration circle, which is what a smoothness prior wins</td></tr>
-    <tr><td>Deep image prior</td><td>3 of 3 frames, +11% to +43% over neighbour-fill on withheld
-      dots — but ~10 minutes a frame</td></tr>
-    <tr><td>Noise2Noise on the colour repeats</td><td>19 of 19 unseen scenes; beats a blur control
-      on every one</td></tr>
-  </table>
-  <p>The last of those is what ships, because it trains once and then runs in milliseconds. Its
-  premise is a property of the artifact nobody had used: <strong>twenty of these images were
-  scanned three times</strong>, through red, green and blue filters, which is twenty sets of three
-  independent noisy observations of one scene. Noise2Noise proves a network trained to map one
-  noisy observation to another converges on the clean-target estimator — it cannot predict the
-  other scan's noise, so what it learns is the scene. The literature's stated obstacle is that
-  independent noisy pairs are hard to obtain; this record carries sixty frames of them.</p>
-  <p class="note"><b>What is measured, and what is not.</b> On the colour images there is a
-  held-out scan to score against, and the result is real: 19 of 19, with a blur control failing
-  the same test. <b>The 96 monochrome images have no held-out measurement</b>, so applying the
-  denoiser there is an extrapolation. And one correction worth keeping: the headline +7.7 dB in
-  the noise band sounded better than it is, because a plain Gaussian blur reaches +5.6 dB there.
-  What the evidence earns is the conjunction — blur-level noise suppression <em>while the low band
-  improves</em>, where blur makes it worse.</p>
-  <p class="note"><b>And it costs something, which is why there are two tiers rather than one.</b>
-  Run the denoised tier past the calibration circle — the one check a denoiser cannot game —
-  and it <b>regresses</b>: radial rms 0.861&nbsp;→&nbsp;0.886&nbsp;px, axis ratio
-  1.0053&nbsp;→&nbsp;1.0057. That is not a bug. The ring is a dark line one to two pixels wide and
-  the denoiser has a 17-pixel receptive field, so it softens that line and the fitted edge moves;
-  radial rms measures <em>edge localisation</em>, which is exactly what a denoiser spends. On a
-  photograph the trade is a good one — the vertical streaking in Cape Neddick's sky disappears
-  while the lighthouse, the rocks and the spray survive. On the calibration frame it is a bad one,
-  because that frame exists to be an edge-localisation test and nothing else. So the physics decode
-  stays the default and the thing to cite, and the regression is published rather than buried: a
-  tier that only ever reports its wins is not evidence of anything.</p>
+<section><div class="wrap">
+  <h2 id="a-status">What is solid, and what isn't</h2>
 
-  <h2 id="a-status">Honest status</h2>
-  <p>This page is a <strong>gallery</strong>. The decoder itself is Python, it lives in
-  <a href="https://github.com/gourneau/golden-record-images">the repository</a>, and you can run
-  it on the master tape in about ten minutes — the README says how, and the first thing it hands
-  you is the calibration circle, which tells you whether your own timebase is right. What you see
-  here was decoded offline. The <b>Paint it from blank</b> button replays a frame's audio and
-  paints the picture in step with it, one trace at a time, exactly as the scan ran; it is
-  faithful, but it is replaying a decode rather than performing one. A browser port is planned
-  and deliberately parked.</p>
-  <p><strong>The embossed look is fixed.</strong> Earlier versions of these images had a
-  bas-relief, hammered-metal quality: nothing in the 1977 chain passed a constant brightness
-  level, so flat areas decayed toward mid-grey and only edges survived. It is the defect the
-  2017 decoder's author documented and could not solve. It is solved here, by inverting the
-  chain's one-pole high-pass in raster order with a time constant measured per channel from a
-  scene-free part of the record's own signal — 530 samples on the left channel, 295 on the
-  right. The inverse runs along each trace and straight across every trace boundary, because
-  that is how time ran in the recording; a per-trace version of the same filter is a bug, and
-  it shipped here once before it was caught.</p>
-  <p><strong>Reference images are for checking and labelling only.</strong> Nothing on the
-  reference side has ever fed pixel recovery — the decoder's only input is the WAV. Where a book
-  page has not been confidently matched to one of our images, the panel says <em>match
-  uncertain</em> rather than showing a guess, and <span id="norefCount">some</span> images have no
-  reference held at all.</p>
-  <p><strong>Fourteen published reproductions are printed backwards.</strong> Aligning each
-  reference to our decode needs a transform that can mirror, and once it could, fourteen plates
-  snapped into place that had never matched before — the Thai elephant went from 3 to 799 matching
-  features, the Cameroon house from 3 to 503. Bali, Guatemala, Japan, Greece, Turkey, Australia
-  and the whistling swans are all laterally inverted in print. Our decodes had them right. Since
-  the record is the authority on what it contains, it is the <em>reference</em> that has been
-  flipped to match, and the calibration circle — which "wins" a mirror test by one feature on
-  noise alone, being symmetric — was deliberately left alone.</p>
-  <p><strong>Colour separation order: settled, and the toggle is gone.</strong> Published
-  decoders disagreed on whether the three scans run red-green-blue or the reverse. It is
-  answerable by eye: under B&nbsp;G&nbsp;R the Earth's oceans turn brown and the Sinai desert
-  blue-grey; under R&nbsp;G&nbsp;B the oceans are blue, the desert tan and the Red Sea reads
-  correctly. R&nbsp;G&nbsp;B is right, confirming Ron Barry's 2017 table.</p>
-  <p>But notice what settled it: <strong>knowing what colour an ocean is</strong> — Earth
-  knowledge, tier 2. The record carries its own key and it is a lovely idea: photograph the
-  solar spectrum, and any chemist anywhere recognises hydrogen's absorption lines and can
-  attach wavelengths to positions. We measured how well it works. It gives the
-  <em>ordering</em> — our three separations peak at 84.2%, 60.4% and 39.3% across the frame,
-  cleanly monotonic, so a recipient learns the filters run in wavelength sequence. It does not
-  give the <em>direction</em>: after removing the smooth envelope the residual line structure
-  is 0.6–1.9 grey levels against an envelope of 60–124, half a percent to 1.6%. The Fraunhofer
-  lines are not readable. So on the record's own evidence R&nbsp;G&nbsp;B versus B&nbsp;G&nbsp;R
-  is a coin flip — which is precisely why humans disagreed about it.
-  <strong>A key that its own designers' species cannot read is not yet a key.</strong></p>
+  <h3>There is a ceiling, and it is not ours to move</h3>
+  <p>The recording chain could have carried more than a thousand elements along a stripe, but the
+  1977 <em>camera</em> resolved 138 to 172. We already sample well finer than the camera could
+  see, in both directions. Everything the camera captured is in these pictures — and anything
+  sharper that a program might now produce would be <strong>invented, not recovered</strong>.
+  That is why this decoder does not do it, and why every method here is judged by whether it can
+  predict measurements it was never shown, rather than by whether the result looks nicer.</p>
+
+  <h3>What “denoised” means</h3>
+  <p>Twenty of these images were scanned three times — once through a red filter, once green, once
+  blue. That is twenty sets of <strong>three independent noisy looks at one scene</strong>. Train a
+  network to turn one scan into another and it cannot possibly predict the other scan's noise, so
+  the only thing it can learn is the scene underneath. It is trained on this record and on nothing
+  else: no photographs from anywhere, no outside image collection. Nothing is invented, which is
+  why the word here is <em>denoised</em> and not <em>enhanced</em> or <em>reconstructed</em>.</p>
+  <p>Scored on nineteen scenes it had never seen, it beats the raw decode every time, and beats a
+  simple blur every time. But it costs something, which is why both versions ship and you can flip
+  between them with the tier button. Run it past the calibration circle — the one check a denoiser
+  cannot game — and it slightly <em>regresses</em>, because the ring is a line one or two pixels
+  wide and softening lines is exactly what a denoiser does. On a photograph that trade is a good
+  one; on a test pattern it is a bad one. And the 96 black-and-white images have no third scan to
+  check against, so using the denoiser there is an extrapolation rather than a measurement.</p>
+
+  <h3>The record carries its own colour key, and it is not quite readable</h3>
+  <p>The three colour scans could run red-green-blue or the reverse, and published decoders
+  disagreed. The record's designers thought of this: one of the images is a photograph of the solar
+  spectrum, and any chemist anywhere would recognise hydrogen's absorption lines in it and be able
+  to attach wavelengths to positions. We measured how well that works. It gives the
+  <em>ordering</em> — the three scans peak in a clean sequence across the frame — but the lines
+  themselves come out at half a percent to 1.6% of the signal, which is not readable. So the
+  direction was settled instead by knowing what colour an ocean is, which is Earth knowledge and
+  therefore cheating. <strong>A key that its own designers' species cannot read is not yet a
+  key.</strong></p>
+
+  <h3>The rest of it</h3>
+  <p>This page is a <strong>gallery</strong>. The decoder itself is Python, it lives in the
+  repository, and it runs on the master tape in about ten minutes — the first thing it hands you is
+  the calibration circle, which tells you whether your own timing is right. What you see here was
+  decoded offline; <b>Paint it from blank</b> replays a frame's audio and paints the picture in
+  step with it, exactly as the 1977 scan ran, but it is replaying a decode rather than performing
+  one.</p>
+  <p><strong>The reference images are for checking and labelling only.</strong> Nothing on the
+  reference side has ever fed pixel recovery. Where a plate has not been confidently matched to one
+  of our images the panel says <em>match uncertain</em> rather than showing a guess.
+  <span id="norefCount"></span></p>
+  <p class="note">Everything above in more detail — the measurements, the corrections we have made
+  to our own published numbers, and the nine approaches that were tried and did not work — is in
+  <a href="https://github.com/gourneau/golden-record-images">the repository</a>. Forks and better
+  ideas are welcome.</p>
 </div></section>
 
 <div class="wrap"><button class="readon back" id="backBottom"><b>← Back to the 116 images</b><span>The gallery, where every claim above can be looked at.</span></button></div>
 </div>
 
 <footer><div class="wrap">
+  <p class="sig">Decoded and built by <strong>Joshua Gourneau</strong> ·
+  <a href="https://x.com/gourneau" target="_blank" rel="noopener">@gourneau</a> ·
+  <a href="https://github.com/gourneau/golden-record-images">source and method on GitHub</a></p>
   <p>Decoded from the <a href="https://archive.org/details/voyager.decode">384&nbsp;kHz master
-  digitisation</a> made available by Ron Barry and David Pescovitz. Built on
+  digitisation</a> made available by Ron Barry and David Pescovitz, and built on
   <a href="https://github.com/foodini/voyager">Ron Barry's 2017 decoder</a> and his essay
   <em>The Voyager Image Decoding Method</em>, which is where all of this starts.</p>
   <p>The Voyager Golden Record and its contents are not mine. NASA material is generally public
   domain; a number of the photographs are third-party works licensed for the record itself.
   Images are shown here for the technical purpose of demonstrating the decoding.</p>
-  <p><a href="https://github.com/gourneau/golden-record-images">Source, method and full
-  corrections →</a></p>
 </div></footer>
 
 <script>
@@ -1004,6 +957,26 @@ function draw(cv,srcs,im,colour,priority){
 const TIER_ORDER=['plain','denoised'];
 const TIER_DIR={plain:'thumbs_nc', denoised:'thumbs_ml'};
 const TIER_LABEL={plain:'No correction', denoised:'Denoised'};
+
+// WHAT THE BUTTON IS SHOWING YOU, not a description of the control. Both tier
+// buttons carried a fixed tooltip that never changed when pressed, so it said
+// what the button was FOR and never what you were currently looking at -- and
+// the two buttons said it differently, which made "denoised" mean two things.
+// One text per tier, set from one place, describing the state you are in and
+// what pressing it does next. The numbers are the measured brightness fall down
+// the calibration circle in each tier, so this is checkable on image 1.
+const TIER_HELP={
+  denoised:'Showing the corrected, denoised decode: the 1977 brightness sag removed, then a '
+          +'denoiser trained only on this record’s own repeat scans — nothing invented. '
+          +'Press to see the same frames with no brightness correction (T).',
+  plain:'Showing the decode with NO brightness correction: flat areas fall away down the frame, '
+       +'88 grey levels on the calibration circle against 21 corrected. Press to go back to the '
+       +'corrected and denoised version (T).'
+};
+// Applied once at load as well, so the very first hover is right without having
+// to press the button to make the tooltip true.
+$('tier').title = TIER_HELP.denoised;
+$('lbTierBtn').title = TIER_HELP.denoised;
 let TIER='denoised';
 const thumbs=im=>im.frames.map(x=>`data/${TIER_DIR[TIER]}/${x}.png?v=${ASSETV}`);
 
@@ -2867,9 +2840,11 @@ function setTier(t){
   TIER = TIER_ORDER.indexOf(t)>=0 ? t : 'denoised';
   $('tierv').textContent = TIER_LABEL[TIER];
   $('tier').setAttribute('aria-pressed', String(TIER!=='plain'));
+  $('tier').title = TIER_HELP[TIER];
   const b=$('lbTierBtn');
   if(b){ b.textContent = 'tier: '+TIER_LABEL[TIER].toLowerCase();
-         b.setAttribute('aria-pressed', String(TIER!=='plain')); }
+         b.setAttribute('aria-pressed', String(TIER!=='plain'));
+         b.title = TIER_HELP[TIER]; }
   // Repaint in place rather than render(): rebuilding the grid would blank
   // every canvas until the lazy loader caught up, and the whole point is an
   // A/B you can flip back and forth without losing your place.
@@ -3003,7 +2978,12 @@ let REFIN=false;
 function countNoRef(){
   if(!REFIN || !images.length) return;
   const missing=images.filter(im=>!REF[im.n]).length;
-  $('norefCount').textContent=missing?String(missing):'no';
+  // The whole clause, not just the number: with zero missing the sentence
+  // around it read "no images have no reference held at all", which is a
+  // double negative saying the opposite of what is true.
+  $('norefCount').textContent = missing
+    ? `${missing} of the 116 have no reference held at all.`
+    : 'Every one of the 116 has a reference held against it.';
 }
 
 BOOT.refmap.then(m=>{
