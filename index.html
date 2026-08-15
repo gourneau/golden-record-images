@@ -6,6 +6,32 @@
 <title>Golden Record · 116 images decoded from audio</title>
 <meta name="description" content="The 116 images encoded as audio on the Voyager Golden Record, decoded from the 384 kHz master tape digitisation.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%230a0b0d'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%23c9a227' stroke-width='1.3'/%3E%3C/svg%3E">
+
+<!-- THE THREE FILES NOTHING CAN BE DRAWN WITHOUT, STARTED HERE.
+     The gallery's script is one big inline block at the end of the document,
+     so nothing it fetches could begin until the whole page had been parsed:
+     measured, the catalogue was requested at 560 ms on a warm connection when
+     the HTML itself had arrived at 231 ms.
+
+     Worse, the two JSON fetches were CHAINED -- map.json .then(catalog.json) --
+     for no reason beyond how the code read. The catalogue could not start until
+     the reference map had finished, so first paint carried two serial round
+     trips where one would do. Measured: catalog started at 707 ms, four ms
+     after the map ended at 703.
+
+     Six lines here, and all three start during head parse and in parallel. The
+     main script picks the promises up instead of issuing its own fetches.
+     `preload` would also work but has to match the eventual request's mode
+     exactly or the browser quietly fetches twice; issuing the real request is
+     simpler and cannot mismatch itself. -->
+<script>
+const ASSETV='56';
+const BOOT={
+  catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
+  refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
+  cards:   fetch(`web/public/data/waves/cards.json?v=${ASSETV}`).then(r=>r.ok?r.json():null).catch(()=>null),
+};
+</script>
 <style>
 :root{
   --bg:#0a0b0d; --panel:#101216; --line:#20242b; --line2:#2c323b;
@@ -634,9 +660,9 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 </div></footer>
 
 <script>
-// GitHub Pages caches aggressively, so every data and asset URL carries this.
+// ASSETV lives in the head block now, with the three fetches it versions.
+// GitHub Pages caches aggressively, so every data and asset URL carries it.
 // Bump it on ANY change to the catalog, the map, the thumbnails or the waves.
-const ASSETV='55';
 const GRID=document.getElementById('grid'), COUNT=document.getElementById('count');
 const $=id=>document.getElementById(id);
 const ARCHIVE='https://archive.org/details/voyager-golden-record-book-ozma';
@@ -664,8 +690,16 @@ let VIEW=[];   // the currently filtered list -- what the arrow keys step throug
 // decode, which is never missing. Silent by design at the image level; the tier
 // label still says which tier was ASKED for, and the console says which frames
 // fell back.
-const load=src=>new Promise(res=>{
+// `priority` is 'high' for the thing on screen and 'low' for anything warmed
+// ahead of time. Without it the browser cannot tell the difference: a step to
+// the next image fires the reference you are waiting for and up to eight
+// speculative ones in the same tick, all equal, so the one you are actually
+// looking at waits behind guesses. Ignored by browsers that do not implement
+// it, which costs nothing.
+const load=(src,priority)=>new Promise(res=>{
   const i=new Image(); i.crossOrigin='anonymous';
+  if(priority) i.fetchPriority=priority;
+  i.decoding='async';
   i.onload=()=>res(i);
   i.onerror=()=>{
     if(src.indexOf('/thumbs_ml/')<0 && src.indexOf('/thumbs_nc/')<0) return res(null);
@@ -686,25 +720,42 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 // per (tier, frames): flipping back to a tier you have already seen is then a
 // canvas blit, not a re-composite, which is what makes the A/B usable.
 const COMPCACHE=new Map();
+const MONOKEYS=[];         // insertion order of the cheap-to-rebuild entries
 const compKey=(srcs,colour)=>srcs.join('|')+(colour?'#c':'#m');
 
-function composite(srcs,colour){
+function composite(srcs,colour,priority){
   const key=compKey(srcs,colour);
   const hit=COMPCACHE.get(key);
   if(hit) return Promise.resolve(hit);
-  return _composite(srcs,colour).then(off=>{
+  return _composite(srcs,colour,priority).then(off=>{
     if(off){
-      // Bounded so a long session cannot grow without limit; 156 frames plus
-      // both tiers plus the colour composites fits comfortably.
-      if(COMPCACHE.size>400) COMPCACHE.clear();
+      // BOUNDED BY WHAT IT COSTS TO REBUILD, not by a count.
+      //
+      // The old rule was `if(size>400) clear()`, which is wrong twice. A
+      // composite is a 512x377 canvas -- about 770 KiB of backing store -- so
+      // 400 of them is the better part of 300 MiB held by a gallery. And
+      // dropping all 400 at once means the next tier flip re-composites every
+      // visible card, a stall you can watch.
+      //
+      // The two kinds are not alike. Rebuilding a MONO composite is one
+      // drawImage from an image the browser still has decoded: measured 5 ms.
+      // Rebuilding a COLOUR one is three getImageData calls and a loop over
+      // 193k pixels: measured 47 ms cold, 9 ms warm. So colour is kept for all
+      // twenty images in both tiers -- which is what makes the tier A/B
+      // instant, the reason this cache exists -- and mono is kept only for the
+      // recent few, evicting oldest first rather than emptying.
       COMPCACHE.set(key,off);
+      if(!colour){
+        MONOKEYS.push(key);
+        while(MONOKEYS.length>24){ COMPCACHE.delete(MONOKEYS.shift()); }
+      }
     }
     return off;
   });
 }
 
-function _composite(srcs,colour){
-  return Promise.all(srcs.map(load)).then(imgs=>{
+function _composite(srcs,colour,priority){
+  return Promise.all(srcs.map(s=>load(s,priority))).then(imgs=>{
     imgs=imgs.filter(Boolean); if(!imgs.length) return null;
     const w=imgs[0].naturalWidth, h=imgs[0].naturalHeight;
     const off=document.createElement('canvas'); off.width=w; off.height=h;
@@ -800,8 +851,8 @@ function blit(cv,off,im,trace){
   c.restore();
 }
 
-function draw(cv,srcs,im,colour){
-  return composite(srcs,colour).then(off=>{ if(off) blit(cv,off,im,null); return off; });
+function draw(cv,srcs,im,colour,priority){
+  return composite(srcs,colour,priority).then(off=>{ if(off) blit(cv,off,im,null); return off; });
 }
 
 // TWO TIERS, NEVER BLENDED.
@@ -877,10 +928,16 @@ function render(){
       <figcaption><div class="ttl">${esc(im.title??'—')}</div>
         <div class="sub">${im.frames.join(' · ')} · ${im.color?'3 separations':'mono'}</div>
       </figcaption>`;
-    f.querySelector('.scanbtn').addEventListener('click',ev=>{
+    const scan=f.querySelector('.scanbtn');
+    scan.addEventListener('click',ev=>{
       ev.stopPropagation();               // do not also open the lightbox
       toggleCardScan(f, im);
     });
+    // Reaching for the play button is the least ambiguous signal on the page
+    // that this frame's audio is about to be wanted. Warming on hover buys the
+    // whole travel-and-click time -- a few hundred milliseconds -- for one
+    // file, and only for cards a pointer has actually visited.
+    scan.addEventListener('pointerenter',()=>warmAudio(im.frames[0]),{once:true});
     f.addEventListener('click',()=>openLB(i));
     f.addEventListener('mouseenter',()=>waveOf(im.frames[0]),{once:true});
     GRID.appendChild(f); io.observe(f);
@@ -899,8 +956,12 @@ function paint(f){
   if(f.dataset.painted) return;
   f.dataset.painted='1';
   const d=JSON.parse(f.dataset.im);
-  draw(f.querySelector('canvas'), thumbs(d), d, d.color);
+  // 'high': a card is only painted when it is on or near the screen, so this is
+  // always something the viewer is about to look at, and it must outrank the
+  // background tier warming and the lightbox's speculative neighbours.
+  draw(f.querySelector('canvas'), thumbs(d), d, d.color, 'high');
   cardWave(f, d);
+  scheduleTierWarm();
 }
 
 // ---- the waveform strip under each card -----------------------------------
@@ -925,11 +986,11 @@ function paint(f){
 // all 1200 buckets for one frame rather than 300 for all of them.
 
 let CARDWAVES=null;             // id -> envelope, once the bundle is in
-// Not an underscore name: GitHub Pages runs Jekyll, which drops those, and the
-// first deploy of this file 404'd for exactly that reason. There is a .nojekyll
-// now too, but a name that needs no build flag to survive is the better one.
-const cardBundle=fetch(`web/public/data/waves/cards.json?v=${ASSETV}`)
-  .then(r=>r.ok?r.json():null)
+// Started in the head, alongside the catalogue, so the strips are already on
+// the wire while this script is still being parsed. (The file is not an
+// underscore name because GitHub Pages runs Jekyll, which drops those, and the
+// first deploy of it 404'd for exactly that reason.)
+const cardBundle=BOOT.cards
   .then(b=>{
     if(!b||!b.frames) return null;
     const un=s=>{ const raw=atob(s), a=new Int8Array(raw.length);
@@ -1162,6 +1223,14 @@ function isUncertain(r){
 // The map is written by the reference tooling and has grown fields over time.
 // Take whatever is there: a pre-cut detail, a normalised box on the page scan,
 // the whole page, and the Commons scan -- in that order of usefulness.
+// One place that turns a source into a URL. It was written out three times,
+// each with its own copy of the "does it already have a query string" test,
+// which is how a prefetch and the load it was meant to warm can end up asking
+// for two different URLs and sharing no cache entry at all.
+function refUrl(s){
+  return s.url + (s.url.indexOf('?')<0 ? `?v=${ASSETV}` : '');
+}
+
 function sourcesFor(r){
   if(!r) return [];
   const out=[], page=r.bookPage;
@@ -1238,9 +1307,15 @@ function openLB(i, opts){
   // Kick the reference fetch off BEFORE fillText does its work, so the two
   // panes race rather than queue. load() is cached by URL, so fillRef asking
   // again a moment later is free.
-  { const r=REF[im.n];
-    if(r) sourcesFor(r).forEach(src=>
-      load(src.url + (src.url.indexOf('?')<0 ? `?v=${ASSETV}` : ''))); }
+  //
+  // The FIRST source only. This used to warm all of them, which meant every
+  // open pulled the whole-page book scan -- a quarter of a megabyte, four times
+  // the size of the crop -- and the Commons scan besides, for panes nobody had
+  // asked to see. Measured on the live site, opening one image fetched 1.48 MiB
+  // of reference material and showed 66 KiB of it. The rest was not merely
+  // wasted: it was in the same queue as the crop being waited on.
+  { const r=REF[im.n], s=sourcesFor(r)[0];
+    if(s) load(refUrl(s), 'high'); }
   fillText(im);
   fillRef(im);
   loadDecoded(im);
@@ -1251,6 +1326,17 @@ function openLB(i, opts){
   // Peaks for the neighbours, so stepping never shows an empty strip.
   [VIEW[(LB.idx+1)%n], VIEW[(LB.idx-1+n)%n]].forEach(x=>x&&waveOf(x.frames[0]));
   prefetchNeighbours();
+
+  // THE SOUND, LAST AND ONLY FOR THIS FRAME. Opening an image is the point at
+  // which playing it becomes plausible, and there is a whole human reaction
+  // time between the picture appearing and a hand reaching the Play button --
+  // which is exactly long enough to fetch half a megabyte and exactly the wrong
+  // time to be competing with the picture. So it goes after everything visible,
+  // behind a delay, at low priority, and only for the frame in front of you.
+  // Never for neighbours: eight speculative frames is four megabytes of sound
+  // to save a click that may not come.
+  const wantAudio=LB.frameId;
+  setTimeout(()=>{ if(LB.frameId===wantAudio) warmAudio(wantAudio); }, 400);
 }
 
 // Arrow keys were slow because each new image fetched and composited its PNGs
@@ -1271,12 +1357,13 @@ function prefetchNeighbours(){
   order.forEach((raw,k)=>{
     const im=VIEW[((raw%n)+n)%n]; if(!im) return;
     setTimeout(()=>{
-      // The tier being viewed first, the other one after: if someone is
-      // stepping fast, the picture they are about to see matters more than the
-      // comparison they might make later.
-      for(const t of [TIER, ...TIER_ORDER.filter(x=>x!==TIER)]){
-        composite(im.frames.map(x=>`data/${TIER_DIR[t]}/${x}.png?v=${ASSETV}`), im.color);
-      }
+      // THE TIER BEING VIEWED, AND ONLY THAT ONE. Warming both across eight
+      // neighbours is sixteen composites and up to forty-eight PNGs per step,
+      // which on a fast walk never finishes and only crowds the picture being
+      // waited on. You flip the tier on the image in front of you, not on one
+      // you have not reached yet -- so the other tier is warmed for the CURRENT
+      // image, in openLB, and not for its neighbours.
+      composite(im.frames.map(x=>`data/${TIER_DIR[TIER]}/${x}.png?v=${ASSETV}`), im.color, 'low');
       waveOf(im.frames[0]);
 
       // AND THE REFERENCE. This was the whole latency complaint and it was a
@@ -1285,12 +1372,13 @@ function prefetchNeighbours(){
       // after a round trip. Half a comparison arriving first is worse than both
       // arriving together, because the eye starts on the wrong thing.
       //
-      // sourcesFor() is the same list setSource() will ask for, so this warms
-      // exactly what is about to be needed rather than guessing at a filename.
-      const r=REF[im.n];
-      if(r) sourcesFor(r).forEach(src=>{
-        load(src.url + (src.url.indexOf('?')<0 ? `?v=${ASSETV}` : ''));
-      });
+      // sourcesFor()[0] is exactly what setSource(0) will show, so this warms
+      // what is about to be needed rather than guessing at a filename -- and
+      // only that one, at low priority. The other sources are a click away and
+      // fetch then; warming them here put a quarter-megabyte page scan in front
+      // of every crop somebody was actually waiting for.
+      const s=sourcesFor(REF[im.n])[0];
+      if(s) load(refUrl(s), 'low');
     }, k*40);
   });
 }
@@ -1405,7 +1493,15 @@ function selectSep(k){
 
 function loadDecoded(im){
   const cv=$('lbCanvas');
-  composite(thumbs(im), im.color).then(off=>{
+  // The other tier for THIS image, once the one being shown has arrived: T is
+  // pressed on the picture in front of you, so this is the only place warming
+  // it actually pays. 'low', and after, so it cannot delay what is on screen.
+  const warmOther=()=>{
+    for(const t of TIER_ORDER) if(t!==TIER)
+      composite(im.frames.map(x=>`data/${TIER_DIR[t]}/${x}.png?v=${ASSETV}`), im.color, 'low');
+  };
+  composite(thumbs(im), im.color, 'high').then(off=>{
+    setTimeout(warmOther, 250);
     if(LB.im!==im||!off) return;
     LB.off=off;
     $('lbDecBody').classList.add('can-zoom');
@@ -1501,7 +1597,7 @@ function setSource(k){
   unzoom($('lbRefBody'));
   renderRefFoot();
   const img=$('lbRef'), cvs=$('lbRefCrop');
-  const url=s.url+(s.url.indexOf('?')<0?`?v=${ASSETV}`:'');
+  const url=refUrl(s);
   // DO NOT BLANK THE PANE FIRST. Hiding the old reference before the new one
   // has decoded shows an empty box for exactly as long as the swap takes, which
   // reads as lag even when the file is already in cache -- and next to a decode
@@ -1512,7 +1608,7 @@ function setSource(k){
   if(s.box){
     // A normalised rectangle on the page scan: cut it here rather than shipping
     // a second copy of the same JPEG.
-    load(url).then(i=>{
+    load(url,'high').then(i=>{
       if(LB.srcIdx!==k||!i) return;
       const W=i.naturalWidth, H=i.naturalHeight;
       const x=Math.round(s.box[0]*W), y=Math.round(s.box[1]*H);
@@ -1525,7 +1621,7 @@ function setSource(k){
     // Same discipline for a whole-page source: decode it off-screen first, then
     // point the visible <img> at a URL the browser already holds, so assigning
     // src cannot produce a frame of blank.
-    load(url).then(i=>{
+    load(url,'high').then(i=>{
       if(LB.srcIdx!==k) return;
       img.src=url; img.hidden=false; cvs.hidden=true;
     });
@@ -2107,9 +2203,53 @@ let PLAYRATE=1;
 const BUFFERS=new Map();
 let OFFCTX=null, ACTX=null, SRCNODE=null, PLAYING=null, PENDING_DONE=null;
 
+const flacUrl=id=>`web/public/data/frames/${id}.flac?v=${ASSETV}`;
+
+// ---- warming the sound ----------------------------------------------------
+// The audio is the largest thing here by a distance -- 156 FLACs, about 523 KiB
+// each, 79 MiB for the record -- and it is also the thing this page is really
+// about. Both facts have to be respected at once, so: NOTHING is fetched
+// speculatively at page load, and the frame in front of you is warmed the
+// moment playing it becomes plausible rather than at the moment you ask.
+//
+// Only the BYTES are warmed, never the decode. A decoded frame is 96 kHz of
+// float32 -- about 1.6 MiB each -- so decoding ahead would cost far more memory
+// than it saves time, and the decode is fast once the bytes are local. This
+// leaves the file in the browser's own HTTP cache, where frameBuffer() will
+// find it with no round trip.
+//
+// 'low' priority throughout: half a megabyte of sound must never arrive ahead
+// of the picture it belongs to. It has a whole human reaction time to get here.
+const WARMED=new Set();
+function warmAudio(id){
+  if(!id || WARMED.has(id) || BUFFERS.has(id)) return;
+  const c=navigator.connection;
+  if(c && (c.saveData || /(^|-)2g$/.test(c.effectiveType||''))) return;
+  WARMED.add(id);
+  try{ fetch(flacUrl(id), {priority:'low'}).catch(()=>WARMED.delete(id)); }
+  catch(e){ fetch(flacUrl(id)).catch(()=>WARMED.delete(id)); }   // no priority option
+}
+
+// A decoded buffer is ~1.6 MiB; without a bound, listening across the gallery
+// would hold a quarter of a gigabyte of PCM. Keep the recent handful, which is
+// what a step back and forth needs, and let the rest be re-decoded from the
+// bytes that are still cached.
+const BUFORDER=[];
+function inUse(id){
+  return id===LB.frameId || (CARDSCAN && CARDSCAN.frames.indexOf(id)>=0);
+}
+function rememberBuffer(id, buf){
+  BUFFERS.set(id, buf);
+  BUFORDER.push(id);
+  while(BUFORDER.length>8){
+    const old=BUFORDER.shift();
+    if(old!==id && !inUse(old)) BUFFERS.delete(old);
+  }
+}
+
 async function frameBuffer(id){
   if(BUFFERS.has(id)) return BUFFERS.get(id);
-  const url=`web/public/data/frames/${id}.flac?v=${ASSETV}`;
+  const url=flacUrl(id);
   const res=await fetch(url);
   if(!res.ok) throw new Error(`HTTP ${res.status}`);
   const bytes=await res.arrayBuffer();
@@ -2122,7 +2262,7 @@ async function frameBuffer(id){
     if(r&&r.then) r.then(ok,no);
   });
   if(buf.sampleRate!==96000) throw new Error(`decoded at ${buf.sampleRate} Hz`);
-  BUFFERS.set(id,buf);
+  rememberBuffer(id,buf);
   return buf;
 }
 
@@ -2287,19 +2427,57 @@ function setTier(t){
 // Warm the other tier in the background once the page is idle, so the first
 // press is as fast as the second. Cheap: the images are already on disk and the
 // browser caches them; this just gets the fetch and the composite done early.
+// WHAT YOU HAVE SEEN, NOT ALL 116. This walked the entire catalogue, which is
+// the whole 13 MiB of the other tier, three requests deep, starting 400 ms
+// after the catalogue landed -- downloading image 116's alternate while you
+// were still looking at image 3, in the same queue as the thumbnails you were
+// scrolling toward and the reference you were waiting on. Bandwidth is free
+// here in the sense that it costs GitHub nothing, but it is not free to the
+// person waiting, and that is the only meter that matters.
+//
+// The tier switch is global, so what is worth warming is what is on screen:
+// the cards that have actually been painted. Scroll further and the ones you
+// reach are warmed too. Every request is 'low', so it yields to anything the
+// page is drawing now.
+const TIERWARM=new Set();
+let tierWarmTimer=0;
+
 function prefetchOtherTier(){
-  const others = TIER_ORDER.filter(t=>t!==TIER);
+  // A metered or explicitly data-saving connection should not be spending
+  // megabytes on a comparison that has not been asked for.
+  const c=navigator.connection;
+  if(c && (c.saveData || /(^|-)2g$/.test(c.effectiveType||''))) return;
+
+  const others=TIER_ORDER.filter(t=>t!==TIER);
+  const queue=[];
+  for(const f of GRID.children){
+    if(!f.dataset.painted) continue;
+    const im=JSON.parse(f.dataset.im);
+    for(const t of others){
+      const key=t+':'+im.frames.join(',');
+      if(TIERWARM.has(key)) continue;
+      TIERWARM.add(key);
+      queue.push([im,t]);
+    }
+  }
   let i=0;
   const step=()=>{
-    if(i>=images.length) return;
-    const im=images[i++];
-    Promise.all(others.map(t =>
-      composite(im.frames.map(x=>`data/${TIER_DIR[t]}/${x}.png?v=${ASSETV}`), im.color)
-    )).then(()=>setTimeout(step, 0));
+    if(i>=queue.length) return;
+    const [im,t]=queue[i++];
+    composite(im.frames.map(x=>`data/${TIER_DIR[t]}/${x}.png?v=${ASSETV}`), im.color, 'low')
+      .then(()=>setTimeout(step,0), ()=>setTimeout(step,0));
   };
-  // A few in flight, not all 116 at once: the point is to be ready, not to
-  // saturate the connection while someone is still looking at the first screen.
-  for(let k=0;k<3;k++) setTimeout(step, 400+k*120);
+  for(let k=0;k<2;k++) setTimeout(step, k*120);
+}
+
+// Re-run as you scroll, so the warm set follows you. Debounced hard: this is
+// the lowest-value work the page does and it must never compete with painting.
+function scheduleTierWarm(){
+  clearTimeout(tierWarmTimer);
+  tierWarmTimer=setTimeout(()=>{
+    if('requestIdleCallback' in window) requestIdleCallback(prefetchOtherTier,{timeout:2000});
+    else prefetchOtherTier();
+  }, 600);
 }
 
 // Cycles rather than toggles, so T walks all three in a fixed order and you
@@ -2345,10 +2523,29 @@ addEventListener('keydown',e=>{
 
 // --------------------------------------------------------------------------
 
-fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).then(m=>{REF=m;})
- .catch(()=>{})
- .then(()=>fetch(`web/public/data/catalog.json?v=${ASSETV}`))
- .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
+// The catalogue is what the grid needs; the reference map is only wanted once
+// a lightbox opens. They are awaited SEPARATELY so the pictures do not wait on
+// the map -- whichever lands first gets used first.
+// Counted from the map that actually loaded, never written into the prose by
+// hand: the reference set grows, and a stale number is a false claim. Either
+// fetch may land first, so it is computed when both are in and not before.
+let REFIN=false;
+function countNoRef(){
+  if(!REFIN || !images.length) return;
+  const missing=images.filter(im=>!REF[im.n]).length;
+  $('norefCount').textContent=missing?String(missing):'no';
+}
+
+BOOT.refmap.then(m=>{
+  REF=m||{}; REFIN=true;
+  countNoRef();
+  // A deep link opens the lightbox the moment the catalogue lands, which can be
+  // before the map. Without this the reference pane would settle on "no
+  // reference held" and stay there -- a wrong answer, not a slow one.
+  if(LB.im && !LB.el.hidden) fillRef(LB.im);
+});
+
+BOOT.catalog
  .then(cat=>{
   const orient={}; for(const fr of cat.frames) orient[fr.id]=fr.orientation??0;
   images=cat.images.map(im=>({...im, orientation:orient[im.frames[0]]??0}));
@@ -2356,14 +2553,10 @@ fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).then(m=>{
   // Honour a deep link, once the catalogue is in. replace:true so the link that
   // was followed stays the first history entry rather than becoming two.
   if(location.hash) openByHash(location.hash, true);
-  if('requestIdleCallback' in window) requestIdleCallback(prefetchOtherTier);
-  else setTimeout(prefetchOtherTier, 1200);
-  // Counted from the map that actually loaded, never written into the prose by
-  // hand: the reference set grows, and a stale number is a false claim.
-  const missing=images.filter(im=>!REF[im.n]).length;
-  $('norefCount').textContent=missing?String(missing):'no';
+  scheduleTierWarm();
+  countNoRef();
 }).catch(e=>{
-  GRID.innerHTML=`<p class="err">Could not load the catalog (${e.message}).</p>`;
+  GRID.innerHTML=`<p class="err">Could not load the catalog (${e&&e.message||e}).</p>`;
 });
 </script>
 </body>
