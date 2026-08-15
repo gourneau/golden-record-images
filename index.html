@@ -25,7 +25,15 @@
      exactly or the browser quietly fetches twice; issuing the real request is
      simpler and cannot mismatch itself. -->
 <script>
-const ASSETV='56';
+// Marked so "does the head start actually start early" stays a measurement
+// rather than an assumption. Compare it against the navigation entry:
+//   performance.getEntriesByName('boot')[0].startTime
+//   performance.getEntriesByType('navigation')[0].responseEnd
+// If those are far apart, something ahead of this script is holding the main
+// thread -- a browser extension injecting at document_start will do it -- and
+// no amount of reordering inside the page will help.
+try{ performance.mark('boot'); }catch(e){}
+const ASSETV='57';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
