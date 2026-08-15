@@ -33,7 +33,7 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='59';
+const ASSETV='60';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -150,9 +150,10 @@ figure:hover .scanbtn,.scanbtn:focus-visible,.scanbtn[aria-pressed="true"]{opaci
    margin trick that kept it in view is not needed and would only confuse.
    It takes clicks, because a minimap you can steer with is worth more than one
    you can only read. */
-.mini{position:absolute;left:8px;top:8px;z-index:3;cursor:pointer;
+.mini{position:absolute;left:8px;top:8px;z-index:3;cursor:grab;touch-action:none;
   border:1px solid rgba(255,255,255,.34);border-radius:4px;background:#000;
   box-shadow:0 3px 14px rgba(0,0,0,.7);image-rendering:auto}
+.mini.grabbing{cursor:grabbing}
 .mini[hidden]{display:none}
 @media(hover:none){.scanbtn{opacity:1}}
 .tag.cmp.none{background:rgba(0,0,0,.72);color:var(--dim);font-weight:400}
@@ -1954,9 +1955,14 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
     if(!V.stage || e.button!==0 || e.target.closest('.zoomctl,.mini')) return;
     V.pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
     if(V.pts.size===2){ V.pinch=pinchState(); V.drag=null; return; }
-    V.body.setPointerCapture(e.pointerId);
+    // State first, capture second, and the capture may fail. setPointerCapture
+    // throws NotFoundError for a pointer the browser does not consider active,
+    // and doing it first meant the throw jumped over the line below -- so the
+    // drag never began and a press did nothing at all. Capture is an
+    // improvement to a drag, not a precondition for one.
     V.drag={id:e.pointerId, x:e.clientX, y:e.clientY, moved:0,
             sx:e.clientX, sy:e.clientY, alt:e.altKey||e.shiftKey};
+    try{ V.body.setPointerCapture(e.pointerId); }catch(err){}
     if(zoomed()) V.body.classList.add('grabbing');
   });
 
@@ -2003,17 +2009,60 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
   V.body.addEventListener('pointerup', endPointer);
   V.body.addEventListener('pointercancel', endPointer);
 
-  // The inset takes clicks: press a spot on the little picture and the big one
-  // centres there. A map's overview is a control, not a decoration.
-  if(V.mini) V.mini.addEventListener('pointerdown', e=>{
-    e.stopPropagation();
-    const s=V.stage; if(!s || !zoomed()) return;
-    const r=V.mini.getBoundingClientRect();
-    const fx=(e.clientX-r.left)/r.width, fy=(e.clientY-r.top)/r.height;
-    V.x = V.W/2 - fx*s.width*V.scale;
-    V.y = V.H/2 - fy*s.height*V.scale;
-    clamp(); draw();
-  });
+  // THE INSET IS A HANDLE, NOT A BUTTON. It took a click and jumped, which
+  // meant crossing the picture was a series of little teleports; the box should
+  // follow the pointer for as long as it is held, the same way the big picture
+  // does when you drag it.
+  //
+  // Where you take hold of it matters. Press INSIDE the box and it is grabbed
+  // where you grabbed it -- the offset from its centre is kept, so it does not
+  // snap out from under your finger before it starts moving. Press outside and
+  // there is nothing to grab, so it centres where you pressed, which is the
+  // jump-there behaviour this had before, still available as a plain click.
+  if(V.mini){
+    let hold=null;
+    const at=e=>{
+      const r=V.mini.getBoundingClientRect();
+      return {fx:(e.clientX-r.left)/r.width, fy:(e.clientY-r.top)/r.height};
+    };
+    // Centre the view on a point given as a fraction of the whole picture.
+    // clamp() does the rest, and because the offset is stored rather than
+    // accumulated, running into an edge and coming back does not drift.
+    const centreOn=(fx,fy)=>{
+      const s=V.stage; if(!s) return;
+      V.x = V.W/2 - fx*s.width*V.scale;
+      V.y = V.H/2 - fy*s.height*V.scale;
+      clamp(); draw();
+    };
+    V.mini.addEventListener('pointerdown', e=>{
+      e.stopPropagation(); e.preventDefault();
+      const s=V.stage; if(!s || !zoomed()) return;
+      const {fx,fy}=at(e);
+      // The box, in the same 0..1 space the pointer is measured in.
+      const cx=(-V.x + V.W/2)/(s.width*V.scale), cy=(-V.y + V.H/2)/(s.height*V.scale);
+      const hw=V.W/(2*s.width*V.scale),          hh=V.H/(2*s.height*V.scale);
+      const inside = Math.abs(fx-cx)<=hw && Math.abs(fy-cy)<=hh;
+      hold = inside ? {dx:cx-fx, dy:cy-fy} : {dx:0, dy:0};
+      try{ V.mini.setPointerCapture(e.pointerId); }catch(err){}
+      V.mini.classList.add('grabbing');
+      centreOn(fx+hold.dx, fy+hold.dy);
+    });
+    V.mini.addEventListener('pointermove', e=>{
+      if(!hold) return;
+      e.stopPropagation(); e.preventDefault();
+      const {fx,fy}=at(e);
+      centreOn(fx+hold.dx, fy+hold.dy);
+    });
+    const letGo=e=>{
+      if(!hold) return;
+      hold=null;
+      V.mini.classList.remove('grabbing');
+      try{ V.mini.releasePointerCapture(e.pointerId); }catch(err){}
+      e.stopPropagation();
+    };
+    V.mini.addEventListener('pointerup', letGo);
+    V.mini.addEventListener('pointercancel', letGo);
+  }
 
   if(V.ctl) V.ctl.addEventListener('click', e=>{
     const b=e.target.closest('button'); if(!b) return;
