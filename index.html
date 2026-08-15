@@ -33,7 +33,7 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='57';
+const ASSETV='58';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -145,18 +145,51 @@ figure:hover .scanbtn,.scanbtn:focus-visible,.scanbtn[aria-pressed="true"]{opaci
 .prov .sep{color:#5a5340}
 .tag.tier{right:8px;left:auto;top:auto;bottom:8px;background:rgba(201,162,39,.9);
   color:#0a0b0d;font-weight:700}
-/* The overview inset. position:sticky rather than absolute so it stays put while
-   the zoomed pane scrolls underneath it -- an absolutely-positioned child of a
-   scrolling box scrolls away with the content, which defeats the point. */
-#lbMini{position:sticky;left:8px;top:8px;z-index:3;margin:8px 0 -100% 8px;
+/* The overview inset -- the little map in the corner. Plain absolute
+   positioning now: the pane no longer scrolls, so the sticky-with-negative-
+   margin trick that kept it in view is not needed and would only confuse.
+   It takes clicks, because a minimap you can steer with is worth more than one
+   you can only read. */
+.mini{position:absolute;left:8px;top:8px;z-index:3;cursor:pointer;
   border:1px solid rgba(255,255,255,.34);border-radius:4px;background:#000;
-  box-shadow:0 3px 14px rgba(0,0,0,.7);image-rendering:auto;pointer-events:none}
-#lbMini[hidden]{display:none}
+  box-shadow:0 3px 14px rgba(0,0,0,.7);image-rendering:auto}
+.mini[hidden]{display:none}
 @media(hover:none){.scanbtn{opacity:1}}
 .tag.cmp.none{background:rgba(0,0,0,.72);color:var(--dim);font-weight:400}
 figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
 .ttl{font-size:13.5px;line-height:1.35;color:var(--ink)}
 .sub{font-family:var(--mono);font-size:10.5px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
+
+/* ---- the two views ----------------------------------------------------- */
+/* The writing used to sit under the gallery, so reaching it meant scrolling
+   past 116 pictures -- and it reads as a different page because it IS one: it
+   is about the work rather than the result. So it is a view you switch to,
+   not a place you fall into, and the toolbar changes with it instead of
+   growing: the filters, the tier and the speed control belong to the gallery
+   and mean nothing while you are reading, so they go, and the section links
+   take their place. */
+/* Every one of these sets `display`, which beats the UA stylesheet's rule for
+   [hidden] and would leave them all on screen in the wrong view. The lightbox
+   hit exactly this once already. */
+#about[hidden],#gallery[hidden],.anav[hidden],.readon[hidden],.speed[hidden]{display:none}
+/* The toolbar is sticky, so a heading scrolled to the top of the document sits
+   underneath it. Clear it by the bar's own height plus a little air. */
+#about h2{scroll-margin-top:72px}
+.anav{display:flex;gap:6px;flex-wrap:wrap;min-width:0}
+.anav button{font-size:12.5px;padding:5px 10px}
+.anav button[aria-current="true"]{border-color:#5a4a1e;color:var(--gold)}
+/* One line and a door, at the end of the pictures, for anyone who scrolls
+   rather than reads the toolbar. */
+.readon{display:block;width:100%;text-align:left;margin:26px 0 8px;padding:16px 18px;
+  border:1px solid var(--line);border-radius:10px;background:var(--panel);cursor:pointer}
+.readon:hover{border-color:#5a4a1e;background:#141720}
+.readon b{display:block;color:var(--gold);font-size:15px;font-weight:600;margin-bottom:3px}
+.readon span{display:block;color:var(--dim);font-size:13.5px;line-height:1.5;max-width:74ch}
+.readon.back{margin:40px 0 0}
+@media(max-width:760px){
+  .anav{order:3;width:100%}
+  .anav button{font-size:11.5px;padding:4px 8px}
+}
 
 section{border-top:1px solid var(--line);padding:56px 0}
 h2{font-size:23px;margin:0 0 20px;letter-spacing:-.012em;font-weight:600}
@@ -199,31 +232,50 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .pane-head .srcs{display:flex;gap:6px;flex-wrap:wrap}
 .pane-head button{font-size:10px;padding:3px 8px;border-radius:5px;letter-spacing:.03em;
   text-transform:none;font-family:var(--mono)}
-.pane-body{flex:1;min-height:0;display:flex;background:#000;border:1px solid var(--line);
-  border-radius:8px;overflow:auto;position:relative}
+/* A VIEWPORT, NOT A SCROLL BOX. The canvas is the size of the pane and the
+   picture is drawn into it through a scale-and-offset, the way a map viewer
+   works -- rather than the canvas being the size of the picture and the pane
+   scrolling over it. Three things follow, all of which the old way could not do:
+   zoom is continuous and anchored under the pointer instead of one fixed step;
+   memory is constant instead of growing with the square of the zoom (at 8x a
+   512x377 decode would have needed a 27-megapixel backing store); and the
+   redraw controls its own interpolation, so a decode magnified far past 1:1
+   shows its actual samples instead of the browser's guess at them. */
+.pane-body{flex:1;min-height:0;display:block;background:#000;border:1px solid var(--line);
+  border-radius:8px;overflow:hidden;position:relative;touch-action:pan-y}
+.pane-body.zoomed{touch-action:none}
 /* FILL the pane, do not merely fit inside it. max-width/max-height only ever
    SHRINK: a 512x377 canvas in a 700x620 pane rendered at exactly 512x377, small
    and ringed with black, using about half the space it had. That is also why
    clicking to zoom did nothing sensible -- zoom set the size to 512x377, which
    is what it already was. object-fit:contain scales up as well as down and
    keeps the aspect ratio, so the picture uses the whole pane. */
-.pane-body>canvas,.pane-body>img{margin:auto;display:block;
-  width:100%;height:100%;object-fit:contain}
-/* The overview inset sizes itself and must not be caught by the rule above. */
-.pane-body>#lbMini{width:auto;height:auto;object-fit:fill}
-/* The rule above sets display on the very elements we hide with [hidden], and
-   would otherwise win against the UA stylesheet -- which showed the empty crop
-   canvas at its default 300x150 and put a scrollbar in the pane. */
+/* The canvas IS the pane. Its backing store is the pane in device pixels, so
+   every pixel it draws is a real one -- no CSS scaling of a small bitmap.
+   Positioned rather than in the flow: `height:100%` inside a flex item needs
+   the parent's height to be definite, which it is on the desktop grid and is
+   not on the narrow layout where the panes column scrolls. inset:0 cannot
+   collapse either way. */
+.pane-canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
 .lb [hidden]{display:none}
 .pane-body.can-zoom{cursor:zoom-in}
-.pane-body.zoomed{cursor:zoom-out}
-.pane-body.zoomed>canvas,.pane-body.zoomed>img{max-width:none;max-height:none;
-  width:auto;height:auto;object-fit:fill}
-/* Smooth, not pixelated. At 512x377 zoomed to 1:1 the scale factor is barely
-   above 1, so `pixelated` did not reveal structure -- it just added hard edges
-   to a photograph and made it look broken. The decode has no more detail at 1:1
-   than it does fitted; zoom is for looking closely, not for seeing pixels. */
-.pane-body.zoomed>canvas{image-rendering:auto}
+.pane-body.zoomed{cursor:grab}
+.pane-body.grabbing{cursor:grabbing}
+
+/* Map-style controls, bottom right, where every map viewer puts them. Visible
+   on hover and whenever the picture is zoomed, because at that point they are
+   the way back. Always visible on touch, which has no hover to offer. */
+.zoomctl{position:absolute;right:8px;bottom:8px;z-index:3;display:flex;
+  flex-direction:column;gap:1px;opacity:0;transition:opacity .12s;
+  border-radius:7px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.6)}
+.pane-body:hover .zoomctl,.pane-body.zoomed .zoomctl,.zoomctl:focus-within{opacity:1}
+.zoomctl[hidden]{display:none}
+.zoomctl button{width:28px;height:28px;padding:0;border-radius:0;border:none;
+  background:rgba(16,18,22,.94);color:var(--ink);font-size:15px;line-height:1;
+  font-family:var(--mono);cursor:pointer}
+.zoomctl button:hover{background:rgba(40,44,52,.98);color:var(--gold)}
+.zoomctl button:disabled{opacity:.35;cursor:default;color:var(--dimmer)}
+@media(hover:none){.zoomctl{opacity:1}}
 /* The panes have NO footer at all now. They are a flex column with the picture
    on flex:1, so every pixel of caption was a pixel off the picture -- on every
    image, permanently, for text that is reference material. It lives in a
@@ -252,7 +304,11 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .warn{border-left:2px solid #4a4326;padding:1px 0 1px 10px;color:var(--dimmer);
   font-size:12px;line-height:1.45;margin:0 0 7px}
 .warn b{color:#b9a86e;font-weight:600}
-.noref{margin:auto;color:var(--dimmer);font-size:13px;text-align:center;padding:24px;max-width:46ch}
+/* Centred over the pane rather than laid out in it: the pane is a single
+   full-size canvas now, so anything in the flow after it lands off the bottom
+   edge and is clipped away. */
+.noref{position:absolute;inset:0;margin:auto;height:max-content;
+  color:var(--dimmer);font-size:13px;text-align:center;padding:24px;max-width:46ch}
 
 .lb-wave{border-top:1px solid var(--line);padding:7px 16px 9px;position:relative}
 /* This row may wrap; it sits BELOW the picture, so growing it costs the
@@ -331,17 +387,21 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 </div></header>
 
 <div class="bar"><div class="wrap">
-  <button data-f="all" aria-pressed="true">All 116</button>
-  <button data-f="color">Colour only</button>
-  <button data-f="mono">Monochrome</button>
+  <button id="backBtn" hidden title="Back to the gallery">← The 116 images</button>
+  <span class="gonly">
+    <button data-f="all" aria-pressed="true">All 116</button>
+    <button data-f="color">Colour only</button>
+    <button data-f="mono">Monochrome</button>
+  </span>
+  <nav class="anav" id="aboutNav" hidden aria-label="sections">
+    <button data-s="a-found">What it found</button>
+    <button data-s="a-knew">What it was allowed to know</button>
+    <button data-s="a-ml">The machine learning</button>
+    <button data-s="a-status">Honest status</button>
+  </nav>
   <span class="grow"></span>
-  <a class="ghlink" href="https://github.com/gourneau/golden-record-images" target="_blank" rel="noopener"
-     title="Source, method, and everything that did not work">
-    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-    Source
-  </a>
-  <button id="tier" aria-pressed="true" title="Physics-only decode, or the same decode with a denoiser trained on the record's own colour repeats">Tier: <span id="tierv">Denoised</span></button>
-  <label class="speed" for="rate">Speed
+  <button id="tier" class="gonly" aria-pressed="true" title="Physics-only decode, or the same decode with a denoiser trained on the record's own colour repeats">Tier: <span id="tierv">Denoised</span></button>
+  <label class="speed gonly" for="rate">Speed
     <select id="rate">
       <option value="0.005">0.005× · 14 min</option>
       <option value="0.01">0.01× · 7 min</option>
@@ -357,10 +417,26 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <option value="4">4×</option>
     </select>
   </label>
-  <span class="count" id="count"></span>
+  <span class="count gonly" id="count"></span>
+  <a class="ghlink" href="https://github.com/gourneau/golden-record-images" target="_blank" rel="noopener"
+     title="Source, method, and everything that did not work">
+    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+    Source
+  </a>
+  <button id="aboutBtn" title="How this was decoded, what it was allowed to know, and what did not work">About this decoding</button>
 </div></div>
 
-<div class="wrap"><div class="grid" id="grid"></div></div>
+<div id="gallery">
+  <div class="wrap"><div class="grid" id="grid"></div></div>
+  <!-- The way in, at the end of the pictures, for anyone who scrolled rather
+       than looked at the toolbar. It used to BE the wall of text; now it is one
+       line and a door. -->
+  <div class="wrap"><button class="readon" id="readOn">
+    <b>How this was decoded</b>
+    <span>The sampled trace, the accumulating error, what the decoder was allowed to know,
+    and the nine things that did not work.</span>
+  </button></div>
+</div>
 
 <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="image comparison">
   <div class="lb-top">
@@ -381,8 +457,16 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
         <button id="lbTierBtn" class="tipbtn" aria-pressed="true"
                 title="Switch between the physics-only decode and the same decode denoised (T)">tier: denoised</button>
         <button class="tipbtn" data-tip="dec" aria-describedby="tip">notes</button></div>
-      <div class="pane-body" id="lbDecBody"><canvas id="lbCanvas"></canvas>
-        <canvas id="lbMini" hidden title="The whole picture. The box is what you are looking at."></canvas>
+      <div class="pane-body" id="lbDecBody">
+        <canvas id="lbCanvas" class="pane-canvas" role="img"
+                aria-label="the decoded picture"></canvas>
+        <canvas id="lbMini" class="mini" hidden
+                title="The whole picture. The box is what you are looking at — click to move there."></canvas>
+        <div class="zoomctl" id="lbDecCtl" hidden>
+          <button data-z="in"  title="Zoom in (scroll, or click the picture)">+</button>
+          <button data-z="out" title="Zoom out (scroll down)">−</button>
+          <button data-z="fit" title="Fit the whole picture (0)">⤢</button>
+        </div>
       </div>
 
       <div id="lbDecFootBody" hidden></div>
@@ -392,8 +476,15 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
         <span class="grow"></span>
         <button class="tipbtn" data-tip="ref" aria-describedby="tip">notes</button></div>
       <div class="pane-body" id="lbRefBody">
-        <img id="lbRef" alt="the original photograph this frame was scanned from" hidden>
-        <canvas id="lbRefCrop" hidden></canvas>
+        <canvas id="lbRefCanvas" class="pane-canvas" role="img"
+                aria-label="the original photograph this frame was scanned from"></canvas>
+        <canvas id="lbRefMini" class="mini" hidden
+                title="The whole picture. The box is what you are looking at — click to move there."></canvas>
+        <div class="zoomctl" id="lbRefCtl" hidden>
+          <button data-z="in"  title="Zoom in (scroll, or click the picture)">+</button>
+          <button data-z="out" title="Zoom out (scroll down)">−</button>
+          <button data-z="fit" title="Fit the whole picture (0)">⤢</button>
+        </div>
         <div class="noref" id="lbNoRef" hidden></div>
       </div>
       <div id="lbRefFootBody" hidden></div>
@@ -437,8 +528,9 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   </div>
 </div>
 
+<div id="about" hidden>
 <section><div class="wrap">
-  <h2>What this decoder found</h2>
+  <h2 id="a-found">What this decoder found</h2>
 
   <h3>The trace is sampled, not swept</h3>
   <p>Every decoder written for this record treats each stripe as a continuous brightness sweep,
@@ -516,7 +608,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 </div></section>
 
 <section><div class="wrap">
-  <h2>What the decoder was allowed to know</h2>
+  <h2 id="a-knew">What the decoder was allowed to know</h2>
   <p>This project wants two things that pull against each other: a <strong>clean-room decode</strong>,
   recovering the pictures from the artifact alone the way a recipient who has never heard of Earth
   would have to — and the <strong>best pictures we can get</strong>, which means using the original
@@ -558,7 +650,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   the decode against the engraving pins the handedness of the whole raster at a stroke. The circle
   checks your timing; the pulsar map checks your handedness. Neither needs a word of language.</p>
 
-  <h2>The machine learning, and what it earned</h2>
+  <h2 id="a-ml">The machine learning, and what it earned</h2>
   <p class="note"><b>A note on the word.</b> These two tiers were briefly labelled
   <em>recovered</em> and <em>reconstructed</em>, and the second was the wrong word.
   Reconstruction implies filling in what is not there. The denoiser here never sees anything but
@@ -606,7 +698,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   stays the default and the thing to cite, and the regression is published rather than buried: a
   tier that only ever reports its wins is not evidence of anything.</p>
 
-  <h2>Honest status</h2>
+  <h2 id="a-status">Honest status</h2>
   <p>This page is a <strong>gallery</strong>. The decoder itself is Python, it lives in
   <a href="https://github.com/gourneau/golden-record-images">the repository</a>, and you can run
   it on the master tape in about ten minutes — the README says how, and the first thing it hands
@@ -654,6 +746,9 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   is a coin flip — which is precisely why humans disagreed about it.
   <strong>A key that its own designers' species cannot read is not yet a key.</strong></p>
 </div></section>
+
+<div class="wrap"><button class="readon back" id="backBottom"><b>← Back to the 116 images</b><span>The gallery, where every claim above can be looked at.</span></button></div>
+</div>
 
 <footer><div class="wrap">
   <p>Decoded from the <a href="https://archive.org/details/voyager.decode">384&nbsp;kHz master
@@ -1180,6 +1275,78 @@ document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{
 });
 
 // --------------------------------------------------------------------------
+// gallery, or the writing about it
+// --------------------------------------------------------------------------
+// One document, two views. Not a second page: it is all one file, the gallery
+// keeps its scroll and its state, and switching costs no request. The writing
+// used to sit under the 116 pictures, which meant reaching it by scrolling past
+// all of them -- and it reads as a different page because it IS one: it is
+// about the work rather than the result.
+//
+// The hash carries the view (#about, or #about/a-ml for a section), so a piece
+// of the writing is a thing you can send somebody. The bottom of a long page
+// never was.
+
+let VIEWMODE='gallery';
+
+function setView(mode, opts){
+  opts=opts||{};
+  const about = mode==='about';
+  VIEWMODE = about?'about':'gallery';
+  $('about').hidden=!about;
+  $('gallery').hidden=about;
+  document.querySelector('header').hidden=about;
+  $('aboutNav').hidden=!about;
+  $('backBtn').hidden=!about;
+  // The gallery's own controls mean nothing while reading, so they leave rather
+  // than sit there greyed out.
+  document.querySelectorAll('.gonly').forEach(el=>el.hidden=about);
+  $('aboutBtn').hidden=about;
+  if(about) closeLB();
+  if(!opts.fromHash){
+    const h = about ? ('#about' + (opts.section?'/'+opts.section:'')) : ' ';
+    try{ history[opts.replace?'replaceState':'pushState'](null,'',h); }catch(e){}
+  }
+  // Smooth when moving by hand, instant when following a link -- a shared link
+  // should arrive where it points, not animate there from the top. And never
+  // smooth for a reader who has asked the system for less motion.
+  const still = opts.instant ||
+    matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const how = still ? 'auto' : 'smooth';
+  const el = about && opts.section ? $(opts.section) : null;
+  if(el) el.scrollIntoView({block:'start', behavior:how});
+  else scrollTo({top:0, behavior:how});
+  markSection(el?opts.section:null);
+}
+
+function markSection(id){
+  $('aboutNav').querySelectorAll('button').forEach(b=>
+    b.setAttribute('aria-current', String(b.dataset.s===id)));
+}
+
+$('aboutBtn').onclick=()=>setView('about');
+$('backBtn').onclick=()=>setView('gallery');
+$('readOn').onclick=()=>setView('about');
+$('backBottom').onclick=()=>setView('gallery');
+$('aboutNav').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  setView('about',{section:b.dataset.s});
+});
+
+// While reading, the toolbar says which section you are in -- the same job the
+// filter buttons do in the gallery. On scroll rather than through an observer,
+// for the reason the grid's paint sweep is: it cannot latch off.
+addEventListener('scroll',()=>{
+  if(VIEWMODE!=='about') return;
+  let cur=null;
+  for(const b of $('aboutNav').querySelectorAll('button')){
+    const el=$(b.dataset.s);
+    if(el && el.getBoundingClientRect().top<=140) cur=b.dataset.s;
+  }
+  markSection(cur);
+},{passive:true});
+
+// --------------------------------------------------------------------------
 // waveform peaks, precomputed by pipeline/waveform.py
 // --------------------------------------------------------------------------
 // Each frame ships ~8 KiB of min/max over 1200 buckets, so the strip is drawn
@@ -1310,7 +1477,9 @@ function openLB(i, opts){
     LB.el.hidden=false;
     document.body.style.overflow='hidden';
   }
-  unzoom($('lbDecBody')); unzoom($('lbRefBody'));
+  // Back to the whole picture on both sides. A new image at the previous one's
+  // magnification would drop you into an arbitrary corner of it.
+  DECVP.fitView(); REFVP.fitView();
   syncHash(!!(opts && opts.replace));
   // Kick the reference fetch off BEFORE fillText does its work, so the two
   // panes race rather than queue. load() is cached by URL, so fillRef asking
@@ -1404,10 +1573,18 @@ function closeLB(){
 }
 const stepLB=d=>{ if(!LB.el.hidden) openLB(LB.idx+d, {replace:true}); };
 
-// Back and forward move through images and finally out of the lightbox.
-addEventListener('popstate', () => {
-  if(!openByHash(location.hash)) closeLB();
-});
+// Back and forward move through images, between the two views, and finally out
+// of the lightbox. One router, so the button always does the obvious thing.
+addEventListener('popstate', () => { routeHash(location.hash); });
+
+// #about, #about/a-ml, #31, #12/2, or nothing.
+function routeHash(h){
+  const m=/^#about(?:\/([\w-]+))?$/.exec(h||'');
+  if(m){ setView('about',{section:m[1]||null, fromHash:true, instant:true}); return true; }
+  if(VIEWMODE==='about') setView('gallery',{fromHash:true, instant:true});
+  if(!openByHash(h)) closeLB();
+  return false;
+}
 
 function fillText(im){
   $('lbNum').textContent=String(im.n).padStart(3,'0');
@@ -1499,8 +1676,10 @@ function selectSep(k){
   waveOf(LB.frameId).then(()=>drawWave());
 }
 
-function loadDecoded(im){
-  const cv=$('lbCanvas');
+// keepView: a tier switch is the SAME picture with a different treatment, and
+// the reason anyone flips it is to compare a detail they are already looking
+// at. Resetting the zoom there would throw away the thing being compared.
+function loadDecoded(im, keepView){
   // The other tier for THIS image, once the one being shown has arrived: T is
   // pressed on the picture in front of you, so this is the only place warming
   // it actually pays. 'low', and after, so it cannot delay what is on screen.
@@ -1512,9 +1691,8 @@ function loadDecoded(im){
     setTimeout(warmOther, 250);
     if(LB.im!==im||!off) return;
     LB.off=off;
-    $('lbDecBody').classList.add('can-zoom');
-    showTrace();                       // sizes the canvas, so read it after
-    $('lbDecDim').textContent=`${cv.width}×${cv.height} as shown`;
+    showTrace();                       // builds the stage the viewer shows
+    if(!keepView) DECVP.fitView();
   });
 }
 
@@ -1533,16 +1711,14 @@ function fillRef(im){
 
   const noref=$('lbNoRef');
   if(!LB.sources.length){
-    $('lbRef').hidden=true; $('lbRefCrop').hidden=true;
+    LB.refStage=null; REFVP.setStage(null);
     noref.hidden=false;
     noref.innerHTML=`No reference image is held for image ${im.n}.<br>` +
       `<a href="${ARCHIVE}" target="_blank" rel="noopener">The Ozma Records book</a> is where ` +
       `the originals live; this one has not been located in it yet.`;
-    $('lbRefBody').classList.remove('can-zoom');
     renderRefFoot();
   } else {
     noref.hidden=true;
-    $('lbRefBody').classList.add('can-zoom');
     setSource(0);
   }
 }
@@ -1602,104 +1778,300 @@ function setSource(k){
   LB.srcIdx=k;
   $('lbSrcBtns').querySelectorAll('button')
     .forEach((b,j)=>b.setAttribute('aria-pressed', String(j===k)));
-  unzoom($('lbRefBody'));
   renderRefFoot();
-  const img=$('lbRef'), cvs=$('lbRefCrop');
   const url=refUrl(s);
-  // DO NOT BLANK THE PANE FIRST. Hiding the old reference before the new one
+  // DO NOT BLANK THE PANE FIRST. Clearing the old reference before the new one
   // has decoded shows an empty box for exactly as long as the swap takes, which
   // reads as lag even when the file is already in cache -- and next to a decode
   // pane that repaints instantly it reads as the reference being slow. The old
-  // picture stays up until the new one is ready to replace it, and only then do
-  // the two elements swap. The srcIdx guard makes that safe: a stale load that
-  // arrives after you have moved on is discarded rather than shown.
-  if(s.box){
-    // A normalised rectangle on the page scan: cut it here rather than shipping
-    // a second copy of the same JPEG.
-    load(url,'high').then(i=>{
-      if(LB.srcIdx!==k||!i) return;
-      const W=i.naturalWidth, H=i.naturalHeight;
-      const x=Math.round(s.box[0]*W), y=Math.round(s.box[1]*H);
-      const w=Math.max(1,Math.round(s.box[2]*W)), h=Math.max(1,Math.round(s.box[3]*H));
-      cvs.width=w; cvs.height=h;
-      cvs.getContext('2d').drawImage(i,x,y,w,h,0,0,w,h);
-      cvs.hidden=false; img.hidden=true;      // swap only now
-    });
-  } else {
-    // Same discipline for a whole-page source: decode it off-screen first, then
-    // point the visible <img> at a URL the browser already holds, so assigning
-    // src cannot produce a frame of blank.
-    load(url,'high').then(i=>{
-      if(LB.srcIdx!==k) return;
-      img.src=url; img.hidden=false; cvs.hidden=true;
-    });
-  }
+  // picture stays up until the new one is built, and only then is it replaced.
+  // The srcIdx guard makes that safe: a stale load that arrives after you have
+  // moved on is discarded rather than shown.
+  //
+  // Both kinds -- a whole page and a normalised rectangle cut out of one -- end
+  // as the same thing, a canvas at the source's own resolution, so the viewer
+  // below has one case to handle and the crop costs no second JPEG.
+  load(url,'high').then(i=>{
+    if(LB.srcIdx!==k||!i) return;
+    const W=i.naturalWidth, H=i.naturalHeight;
+    const box=s.box;
+    const x=box?Math.round(box[0]*W):0, y=box?Math.round(box[1]*H):0;
+    const w=box?Math.max(1,Math.round(box[2]*W)):W;
+    const h=box?Math.max(1,Math.round(box[3]*H)):H;
+    const st=document.createElement('canvas');
+    st.width=w; st.height=h;
+    st.getContext('2d').drawImage(i,x,y,w,h,0,0,w,h);
+    LB.refStage=st;
+    REFVP.setStage(st);                       // swap only now
+  });
 }
 
-// ---- 1:1 zoom -------------------------------------------------------------
+// ---- the viewer -----------------------------------------------------------
+//
+// Pan and zoom the way a map does: scroll to zoom about the pointer, drag to
+// move, an overview inset showing where you are, and one control to get back.
+//
+// WHY NOT A LIBRARY. This is a solved problem and there are good components for
+// it -- OpenSeadragon is the one everybody reaches for, and it ships a
+// navigator inset and zoom controls out of the box. It takes an IMAGE, though,
+// and the left pane is not an image: it is a canvas being repainted thirty
+// times a second while the audio plays, with a trace line tracking the sound
+// and, in paint mode, a picture arriving one line at a time. Handing that to a
+// viewer that owns its own render loop means rebuilding its tile source every
+// frame. Panzoom is the other candidate and would work -- it CSS-transforms any
+// element, canvases included, in under 4 KiB -- but a CSS transform scales the
+// 512x377 bitmap the browser already has, so a magnified decode is the
+// browser's interpolation of it and nothing can be done about that.
+//
+// Drawing it here costs about 150 lines and buys the thing that matters for
+// this particular page: at high magnification the decode is redrawn from the
+// source at device resolution with interpolation OFF, so what you are looking
+// at is the actual decoded samples rather than a smoothed guess at them. On a
+// page whose whole subject is what those samples do, that is not a detail.
 
-// At 1:1 the picture is bigger than the pane, so zooming loses the thing you
-// were watching: the scan front, and where in the frame it is. The inset puts
-// the whole picture back -- painting and playing in step with the big one --
-// with a box showing which part you are looking at.
+const MAX_ZOOM=8;        // times the fitted view, both panes
+const STEP=1.7;          // one click, or one press of + / -
+const SHARP_AT=2.5;      // CSS px per source px above which smoothing is off
 
-function drawMini(){
-  const mini=$('lbMini'), body=$('lbDecBody'), big=$('lbCanvas');
+function makeViewport(bodyId, cvId, miniId, ctlId){
+  const V={
+    body:$(bodyId), cv:$(cvId), mini:$(miniId), ctl:$(ctlId),
+    stage:null,            // the picture being shown, at its own resolution
+    scale:1, x:0, y:0,     // source px -> CSS px, and the origin within the pane
+    fit:1, W:0, H:0, dpr:1,
+    drag:null, pts:new Map(), pinch:null, onDraw:null, need:true, wasZoomed:null
+  };
+
+  // Reading the pane's size forces a layout flush, and draw() runs thirty times
+  // a second while the audio plays. So it is measured on the events that can
+  // actually change it -- opening, resizing, a new picture -- and cached.
+  function measure(){
+    const r=V.body.getBoundingClientRect();
+    if(!r.width||!r.height) return;          // hidden, or not laid out yet
+    V.W=r.width; V.H=r.height;
+    V.dpr=Math.min(2, devicePixelRatio||1);
+    const w=Math.max(1,Math.round(V.W*V.dpr)), h=Math.max(1,Math.round(V.H*V.dpr));
+    if(V.cv.width!==w||V.cv.height!==h){ V.cv.width=w; V.cv.height=h; }
+    V.need=false;
+    refit();
+  }
+  // The fitted scale depends on the picture, which changes far more often than
+  // the pane does -- a rotation, a tier, a different image -- so it is its own
+  // step and costs no layout.
+  function refit(){
+    const s=V.stage;
+    V.fit=(s&&s.width&&s.height&&V.W&&V.H)?Math.min(V.W/s.width, V.H/s.height):1;
+  }
+
+  // The picture may not leave the pane. Smaller than the pane on an axis and it
+  // is centred there; larger and it is held so no edge comes inside -- which is
+  // what stops a zoomed picture from being flung into a corner.
+  function clamp(){
+    const s=V.stage; if(!s) return;
+    const iw=s.width*V.scale, ih=s.height*V.scale;
+    V.x = iw<=V.W ? (V.W-iw)/2 : Math.min(0, Math.max(V.W-iw, V.x));
+    V.y = ih<=V.H ? (V.H-ih)/2 : Math.min(0, Math.max(V.H-ih, V.y));
+  }
+
+  const zoomed=()=>V.stage && V.scale > V.fit*1.005;
+
+  function zoomAt(cx, cy, f){
+    if(!V.stage) return false;
+    const s2=Math.max(V.fit, Math.min(V.fit*MAX_ZOOM, V.scale*f));
+    if(Math.abs(s2-V.scale)<1e-9) return false;
+    V.x = cx - (cx-V.x)*(s2/V.scale);
+    V.y = cy - (cy-V.y)*(s2/V.scale);
+    V.scale=s2; clamp(); draw(); return true;
+  }
+
+  function fitView(){ V.need=true; measure(); V.scale=V.fit; clamp(); draw(); }
+
+  function draw(){
+    if(V.need||!V.W) measure();
+    refit();                                  // the picture may have changed size
+    if(V.scale<V.fit) V.scale=V.fit;          // a pane resize can strand it below fit
+    clamp();
+    const c=V.cv.getContext('2d'), s=V.stage;
+    c.setTransform(1,0,0,1,0,0);
+    c.clearRect(0,0,V.cv.width,V.cv.height);
+    const on=!!zoomed();
+    // Only when it changes: writing a class every frame dirties style and makes
+    // the next frame's layout read expensive, which is the cost just avoided.
+    if(on!==V.wasZoomed){
+      V.body.classList.toggle('zoomed', on);
+      V.body.classList.toggle('can-zoom', !!V.stage && !on);
+      V.wasZoomed=on;
+    }
+    if(V.ctl && V.ctl.hidden===!!V.stage) V.ctl.hidden=!V.stage;
+    if(!s||!s.width){ if(V.mini) V.mini.hidden=true; return; }
+    // Interpolation off once one source pixel covers more than a couple of
+    // screen pixels. Below that a photograph wants smoothing; above it,
+    // smoothing is inventing detail that is not in the file, and on the decode
+    // side the samples themselves are the thing worth seeing.
+    c.imageSmoothingEnabled = V.scale < SHARP_AT;
+    c.imageSmoothingQuality = 'high';
+    const d=V.dpr;
+    c.setTransform(V.scale*d, 0, 0, V.scale*d, V.x*d, V.y*d);
+    c.drawImage(s, 0, 0);
+    c.setTransform(1,0,0,1,0,0);
+    drawMiniOf(V);
+    if(V.ctl){
+      V.ctl.children[0].disabled = V.scale >= V.fit*MAX_ZOOM-1e-6;
+      V.ctl.children[1].disabled = !on;
+      V.ctl.children[2].disabled = !on;
+    }
+    if(V.onDraw) V.onDraw(V);
+  }
+
+  // ---- events
+  // The wheel is the zoom, so the page must not also scroll: passive:false.
+  V.body.addEventListener('wheel', e=>{
+    if(!V.stage) return;
+    e.preventDefault();
+    const r=V.body.getBoundingClientRect();
+    // deltaMode 1 is lines and 2 is pages; normalise or a Firefox notch jumps.
+    const dy = e.deltaMode===1 ? e.deltaY*16 : e.deltaMode===2 ? e.deltaY*Math.max(1,V.H) : e.deltaY;
+    // ctrlKey on a wheel event is a trackpad pinch, which arrives finer-grained.
+    zoomAt(e.clientX-r.left, e.clientY-r.top, Math.exp(-dy*(e.ctrlKey?0.010:0.0022)));
+  }, {passive:false});
+
+  V.body.addEventListener('pointerdown', e=>{
+    if(!V.stage || e.button!==0 || e.target.closest('.zoomctl,.mini')) return;
+    V.pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(V.pts.size===2){ V.pinch=pinchState(); V.drag=null; return; }
+    V.body.setPointerCapture(e.pointerId);
+    V.drag={id:e.pointerId, x:e.clientX, y:e.clientY, moved:0,
+            sx:e.clientX, sy:e.clientY, alt:e.altKey||e.shiftKey};
+    if(zoomed()) V.body.classList.add('grabbing');
+  });
+
+  function pinchState(){
+    const p=[...V.pts.values()];
+    const dx=p[1].x-p[0].x, dy=p[1].y-p[0].y;
+    const r=V.body.getBoundingClientRect();
+    return {d:Math.hypot(dx,dy)||1,
+            cx:(p[0].x+p[1].x)/2-r.left, cy:(p[0].y+p[1].y)/2-r.top};
+  }
+
+  V.body.addEventListener('pointermove', e=>{
+    if(!V.pts.has(e.pointerId)) return;
+    V.pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(V.pts.size===2 && V.pinch){
+      const now=pinchState();
+      zoomAt(now.cx, now.cy, now.d/V.pinch.d);
+      V.pinch=now;
+      return;
+    }
+    const D=V.drag; if(!D || D.id!==e.pointerId) return;
+    const dx=e.clientX-D.x, dy=e.clientY-D.y;
+    D.moved+=Math.abs(dx)+Math.abs(dy);
+    D.x=e.clientX; D.y=e.clientY;
+    if(!zoomed()) return;                     // nothing to pan at fit
+    V.x+=dx; V.y+=dy; clamp(); draw();
+  });
+
+  function endPointer(e){
+    V.pts.delete(e.pointerId);
+    if(V.pts.size<2) V.pinch=null;
+    const D=V.drag; if(!D || D.id!==e.pointerId) return;
+    V.drag=null;
+    V.body.classList.remove('grabbing');
+    try{ V.body.releasePointerCapture(e.pointerId); }catch(err){}
+    // A press that did not travel is a click, and a click zooms in one step
+    // where you clicked -- the affordance this pane has always had. Alt or
+    // shift zooms back out, so the mouse alone can go both ways.
+    if(D.moved<5 && e.type==='pointerup'){
+      const r=V.body.getBoundingClientRect();
+      zoomAt(e.clientX-r.left, e.clientY-r.top, (e.altKey||e.shiftKey)?1/STEP:STEP);
+    }
+  }
+  V.body.addEventListener('pointerup', endPointer);
+  V.body.addEventListener('pointercancel', endPointer);
+
+  // The inset takes clicks: press a spot on the little picture and the big one
+  // centres there. A map's overview is a control, not a decoration.
+  if(V.mini) V.mini.addEventListener('pointerdown', e=>{
+    e.stopPropagation();
+    const s=V.stage; if(!s || !zoomed()) return;
+    const r=V.mini.getBoundingClientRect();
+    const fx=(e.clientX-r.left)/r.width, fy=(e.clientY-r.top)/r.height;
+    V.x = V.W/2 - fx*s.width*V.scale;
+    V.y = V.H/2 - fy*s.height*V.scale;
+    clamp(); draw();
+  });
+
+  if(V.ctl) V.ctl.addEventListener('click', e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    e.stopPropagation();
+    const z=b.dataset.z;
+    if(z==='fit') fitView();
+    else zoomAt(V.W/2, V.H/2, z==='in'?STEP:1/STEP);
+  });
+
+  V.setStage=st=>{ V.stage=st; V.need=true; fitView(); };
+  V.redraw=draw;
+  V.fitView=fitView;
+  V.zoomed=zoomed;
+  V.step=f=>zoomAt(V.W/2, V.H/2, f);
+  return V;
+}
+
+// The inset. It draws the STAGE, not the visible canvas, so it shows the whole
+// picture however far in the big one is -- and because the stage is the same
+// object the big pane draws, it cannot disagree with it: mid-scan it carries
+// the paint front and the trace line too.
+function drawMiniOf(V){
+  const mini=V.mini, s=V.stage;
   if(!mini) return;
-  if(!body.classList.contains('zoomed') || !big.width){ mini.hidden=true; return; }
-  const MAXW=176;
-  const sc=Math.min(1, MAXW/big.width);
-  const w=Math.max(1,Math.round(big.width*sc)), h=Math.max(1,Math.round(big.height*sc));
-  if(mini.width!==w||mini.height!==h){ mini.width=w; mini.height=h; }
+  if(!s || V.scale<=V.fit*1.005){ mini.hidden=true; return; }
+  const k=Math.min(150/s.width, 110/s.height);
+  const w=Math.max(1,Math.round(s.width*k)), h=Math.max(1,Math.round(s.height*k));
+  const d=V.dpr;
+  if(mini.width!==Math.round(w*d)||mini.height!==Math.round(h*d)){
+    mini.width=Math.round(w*d); mini.height=Math.round(h*d);
+  }
+  mini.style.width=w+'px'; mini.style.height=h+'px';
   mini.hidden=false;
   const c=mini.getContext('2d');
+  c.setTransform(d,0,0,d,0,0);
   c.clearRect(0,0,w,h);
-  // Draw the BIG canvas, not the source image: it already carries whatever is
-  // current -- the paint front mid-scan, the trace line, the finished picture.
-  // Copying it means the inset can never disagree with what it is an inset of.
-  c.drawImage(big,0,0,w,h);
-  const vx=body.scrollLeft/big.width*w, vy=body.scrollTop/big.height*h;
-  const vw=Math.min(w, body.clientWidth/big.width*w), vh=Math.min(h, body.clientHeight/big.height*h);
-  c.strokeStyle='rgba(201,162,39,.95)'; c.lineWidth=1;
-  c.strokeRect(Math.round(vx)+0.5, Math.round(vy)+0.5, Math.max(2,Math.round(vw)), Math.max(2,Math.round(vh)));
-  c.strokeStyle='rgba(0,0,0,.55)';
+  c.drawImage(s,0,0,w,h);
+  const vx=(-V.x/V.scale)*k, vy=(-V.y/V.scale)*k;
+  const vw=Math.min(w,(V.W/V.scale)*k), vh=Math.min(h,(V.H/V.scale)*k);
+  c.fillStyle='rgba(0,0,0,.42)';
+  c.fillRect(0,0,w,h);
+  c.save();
+  c.beginPath(); c.rect(vx,vy,vw,vh); c.clip();
+  c.clearRect(0,0,w,h); c.drawImage(s,0,0,w,h);
+  c.restore();
+  c.strokeStyle='rgba(0,0,0,.6)'; c.lineWidth=1;
   c.strokeRect(Math.round(vx)-0.5, Math.round(vy)-0.5, Math.max(2,Math.round(vw))+2, Math.max(2,Math.round(vh))+2);
+  c.strokeStyle='rgba(201,162,39,.98)';
+  c.strokeRect(Math.round(vx)+0.5, Math.round(vy)+0.5, Math.max(2,Math.round(vw)), Math.max(2,Math.round(vh)));
 }
 
-// Zoom is a MAGNIFICATION of what you are looking at, not a jump to the file's
-// pixel dimensions. The old version went to the canvas's natural size, which for
-// a 512x377 decode in a large pane is SMALLER than the fitted view -- so
-// "zooming in" zoomed out, which is exactly the weirdness people reported.
-// Relative to what is on screen, it always enlarges, by the same factor, for
-// every image.
-const ZOOM_FACTOR=2.5;
+const DECVP=makeViewport('lbDecBody','lbCanvas','lbMini','lbDecCtl');
+const REFVP=makeViewport('lbRefBody','lbRefCanvas','lbRefMini','lbRefCtl');
 
-function zoomToggle(body,ev){
-  const el=[...body.children].find(c=>!c.hidden && c.id!=='lbMini' &&
-                                      (c.tagName==='IMG'||c.tagName==='CANVAS'));
-  if(!el) return;
-  if(body.classList.contains('zoomed')){ unzoom(body); return; }
-  const r=el.getBoundingClientRect();
-  if(!r.width||!r.height) return;
-  const fx=(ev.clientX-r.left)/r.width, fy=(ev.clientY-r.top)/r.height;
-  const w=Math.round(r.width*ZOOM_FACTOR), h=Math.round(r.height*ZOOM_FACTOR);
-  body.classList.add('zoomed');
-  el.style.width=w+'px'; el.style.height=h+'px';
-  // Keep the point under the pointer under the pointer.
-  body.scrollLeft=fx*w-body.clientWidth/2;
-  body.scrollTop =fy*h-body.clientHeight/2;
-  if(body===$('lbDecBody')) drawMini();
-}
-function unzoom(body){
-  body.classList.remove('zoomed');
-  // Not querySelectorAll('canvas'): that would also reset the inset, which is
-  // not the zoomed thing and sizes itself.
-  const el=[...body.children].find(c=>c.id!=='lbMini'&&(c.tagName==='IMG'||c.tagName==='CANVAS'));
-  if(el){ el.style.width=''; el.style.height=''; }
-  if(body===$('lbDecBody')) drawMini();
-}
-$('lbDecBody').addEventListener('click',e=>zoomToggle($('lbDecBody'),e));
-$('lbDecBody').addEventListener('scroll',()=>drawMini(),{passive:true});
+// The readout says what you are looking at, in the picture's own pixels, and
+// how far in you are. It was `512x377 as shown`, which stopped being true the
+// moment the pane could magnify.
+DECVP.onDraw=V=>{
+  const s=V.stage; if(!s) return;
+  const z=V.fit?V.scale/V.fit:1;
+  $('lbDecDim').textContent = `${s.width}×${s.height}` + (z>1.005?` · ${z.toFixed(1)}× in`:' · fitted');
+};
+
+// Both panes follow the window. Debounced: a drag-resize fires continuously and
+// each one is a full redraw of two canvases.
+let vpResizeTimer=0;
+addEventListener('resize',()=>{
+  if(LB.el.hidden) return;
+  clearTimeout(vpResizeTimer);
+  vpResizeTimer=setTimeout(()=>{ DECVP.redraw(); REFVP.redraw(); }, 90);
+},{passive:true});
+
+function drawMini(){ DECVP.redraw(); }        // the old name, still called from the paint loop
 
 // The notes as a tooltip. The content is still rendered into hidden divs by the
 // same code as before -- fillText and fillRef do not know or care that nobody
@@ -1767,9 +2139,6 @@ addEventListener('keydown',e=>{
     },0);
   }
 },true);
-$('lbRefBody').addEventListener('click',e=>{
-  if(LB.sources.length) zoomToggle($('lbRefBody'),e);
-});
 
 // ---- the waveform strip ---------------------------------------------------
 
@@ -2018,8 +2387,13 @@ function showTrace(){
   let t=null;
   if(LB.playSample!=null && d) t=traceAt(d,LB.playSample);
   else if(LB.hoverTrace!=null) t=LB.hoverTrace;
-  blit($('lbCanvas'), LB.off, LB.im, t);
-  drawMini();
+  // Into the STAGE, at the picture's own resolution, then the viewer puts it on
+  // screen at whatever magnification you are at. Same canvas object every time,
+  // so zooming and playing do not fight over it.
+  if(!LB.stage) LB.stage=document.createElement('canvas');
+  blit(LB.stage, LB.off, LB.im, t);
+  DECVP.stage=LB.stage;
+  DECVP.redraw();
 }
 
 // ---- paint mode -----------------------------------------------------------
@@ -2062,8 +2436,13 @@ function revealRect(w,h,orientation,t){
 
 function paintFrame(){
   const P=LB.paint; if(!P) return;
-  paintInto($('lbCanvas'), LB.im, P.planes, P.pass, P.trace);
-  drawMini();
+  // The stage again, so the picture can be painted from blank WHILE zoomed in:
+  // the scan front arrives at whatever magnification you were watching at, and
+  // the inset shows the whole frame filling in beside it.
+  if(!LB.stage) LB.stage=document.createElement('canvas');
+  paintInto(LB.stage, LB.im, P.planes, P.pass, P.trace);
+  DECVP.stage=LB.stage;
+  DECVP.redraw();
 }
 
 // Shared by the lightbox and the grid cards, so a thumbnail and a full view
@@ -2158,7 +2537,7 @@ function endPaint(keepPicture){
     fillText(LB.im);
     waveOf(LB.frameId).then(()=>{ if(!LB.el.hidden) drawWave(); });
   }
-  if(keepPicture && LB.im) loadDecoded(LB.im); else showTrace();
+  if(keepPicture && LB.im) loadDecoded(LB.im, true); else showTrace();
 }
 
 function waveSampleAt(ev){
@@ -2430,7 +2809,7 @@ function setTier(t){
   // thumbnail and no strip -- for the rest of the session, since the loader
   // then skipped them all. That is the bug that was reported.
   GRID.querySelectorAll('figure').forEach(f=>{ f.dataset.painted=''; paint(f); });
-  if(!LB.el.hidden && LB.im){ loadDecoded(LB.im); fillText(LB.im); }
+  if(!LB.el.hidden && LB.im){ loadDecoded(LB.im, true); fillText(LB.im); }
 }
 // Warm the other tier in the background once the page is idle, so the first
 // press is as fast as the second. Cheap: the images are already on disk and the
@@ -2527,7 +2906,18 @@ addEventListener('keydown',e=>{
   // Space pauses and resumes; it is the one control people reach for without
   // looking, so it must never be the one that throws the scan away.
 
+  // Zoom keys act on the pane under the pointer, falling back to the decode.
+  // Arrows are already the way to the next image, so panning by keyboard would
+  // have to steal them, and stepping matters more.
+  else if(e.key==='0'){ DECVP.fitView(); REFVP.fitView(); e.preventDefault(); }
+  else if(e.key==='+'||e.key==='='){ hoveredVP().step(STEP); e.preventDefault(); }
+  else if(e.key==='-'||e.key==='_'){ hoveredVP().step(1/STEP); e.preventDefault(); }
 });
+
+let HOVERVP=null;
+$('lbRefBody').addEventListener('pointerenter',()=>HOVERVP=REFVP);
+$('lbDecBody').addEventListener('pointerenter',()=>HOVERVP=DECVP);
+const hoveredVP=()=>HOVERVP||DECVP;
 
 // --------------------------------------------------------------------------
 
@@ -2560,7 +2950,7 @@ BOOT.catalog
   render();
   // Honour a deep link, once the catalogue is in. replace:true so the link that
   // was followed stays the first history entry rather than becoming two.
-  if(location.hash) openByHash(location.hash, true);
+  if(location.hash) routeHash(location.hash);
   scheduleTierWarm();
   countNoRef();
 }).catch(e=>{
