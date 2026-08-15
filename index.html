@@ -33,7 +33,7 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='58';
+const ASSETV='59';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -1887,7 +1887,22 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
   function fitView(){ V.need=true; measure(); V.scale=V.fit; clamp(); draw(); }
 
   function draw(){
-    if(V.need||!V.W) measure();
+    // MEASURED EVERY TIME, not from a cache invalidated by an observer.
+    // The cache was the first design and a stacked-layout test caught it stale:
+    // the pane was 1730x381 while the viewport still believed 748x748, so the
+    // picture drew at the wrong scale in the wrong place. The ResizeObserver
+    // meant to catch that is delivered in the rendering step, and this codebase
+    // has twice learned what that means -- it does not arrive in a throttled or
+    // backgrounded tab, which is why the grid's sweep is synchronous and the
+    // playhead runs on setInterval. A correctness guarantee cannot rest on it.
+    //
+    // The cost is one getBoundingClientRect per frame. It is only expensive
+    // when it has to flush a pending layout, and draw() touches canvas pixels
+    // and nothing else -- the class toggles below are conditional for exactly
+    // this reason -- so during playback the layout is already clean. Measured:
+    // 0.209 ms for a WHOLE draw, rect read and drawImage together, against a
+    // 33 ms frame. The thing being protected against was never the real cost.
+    measure();
     refit();                                  // the picture may have changed size
     if(V.scale<V.fit) V.scale=V.fit;          // a pane resize can strand it below fit
     clamp();
@@ -2008,6 +2023,19 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
     else zoomAt(V.W/2, V.H/2, z==='in'?STEP:1/STEP);
   });
 
+  // The pane can change size with no window resize -- the panes stack at 860px,
+  // a phone shows and hides its toolbars, the header rewraps. draw() measures
+  // every time so it can never be WRONG; this is what makes something draw at
+  // all when nothing else would, which matters while the picture sits idle.
+  // The two cover each other: the observer supplies the trigger, the measure
+  // supplies the correctness, and neither is trusted for the other's job.
+  //
+  // Safe against a feedback loop: the canvas is positioned inset:0, so resizing
+  // its backing store cannot change the box being observed.
+  if(window.ResizeObserver){
+    new ResizeObserver(()=>draw()).observe(V.body);
+  }
+
   V.setStage=st=>{ V.stage=st; V.need=true; fitView(); };
   V.redraw=draw;
   V.fitView=fitView;
@@ -2062,14 +2090,9 @@ DECVP.onDraw=V=>{
   $('lbDecDim').textContent = `${s.width}×${s.height}` + (z>1.005?` · ${z.toFixed(1)}× in`:' · fitted');
 };
 
-// Both panes follow the window. Debounced: a drag-resize fires continuously and
-// each one is a full redraw of two canvases.
-let vpResizeTimer=0;
-addEventListener('resize',()=>{
-  if(LB.el.hidden) return;
-  clearTimeout(vpResizeTimer);
-  vpResizeTimer=setTimeout(()=>{ DECVP.redraw(); REFVP.redraw(); }, 90);
-},{passive:true});
+// The panes follow their own boxes through a ResizeObserver, which covers the
+// window resizing and everything else that moves them, so there is no window
+// handler here to fall out of step with it.
 
 function drawMini(){ DECVP.redraw(); }        // the old name, still called from the paint loop
 
