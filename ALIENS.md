@@ -105,7 +105,7 @@ one — there is no internal evidence, because the recipient has never seen the 
 is silent and permanent.
 
 It is also not hypothetical among *humans who have the originals*. Aligning our decodes against
-published reproductions turned up **fifteen plates printed backwards** — the Thai elephant, the
+published reproductions turned up **fourteen plates printed backwards** (a fifteenth was a tie) — the Thai elephant, the
 Cameroon house, the Bali dancer, the Guatemalan women, the Japanese school, the Greek fishermen,
 the Cappadocia farmer, the Australian grape picker, Bangkok's traffic, the whistling swans, and
 the solar spectrum. If publishers on the source planet flip one plate in eight, a recipient with

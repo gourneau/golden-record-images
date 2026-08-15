@@ -3,8 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Golden Record · 116 images decoded from audio</title>
-<meta name="description" content="The 116 images encoded as audio on the Voyager Golden Record, decoded from the 384 kHz master tape digitisation.">
+<title>The 116 pictures on the Voyager Golden Record</title>
+<meta name="description" content="Every photograph stored as sound on the Voyager Golden Record, decoded from a 384 kHz digitisation of the original 1977 master tapes. Hear each one, and watch it paint line by line as it plays.">
+<link rel="canonical" href="https://gourneau.github.io/golden-record-images/">
+<meta name="author" content="Joshua Gourneau">
+<meta name="theme-color" content="#0a0b0d">
+
+<!-- WHAT THE LINK LOOKS LIKE BEFORE ANYONE CLICKS IT. Without these a paste into
+     a timeline or a chat window is a grey box and a URL, which for a gallery is
+     the worst possible first impression. The card is generated from the shipped
+     frames by pipeline/figures.py, so it cannot show something the page does
+     not, and og:image must be absolute -- a relative one is silently ignored by
+     every scraper. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Voyager Golden Record, decoded">
+<meta property="og:url" content="https://gourneau.github.io/golden-record-images/">
+<meta property="og:title" content="The 116 pictures on the Voyager Golden Record">
+<meta property="og:description" content="Every photograph stored as sound on the Golden Record, decoded from the original 1977 master tapes. Hear each one, and watch it paint line by line as it plays.">
+<meta property="og:image" content="https://gourneau.github.io/golden-record-images/docs/img/social-card.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A grid showing ten of the 116 decoded pictures: the calibration circle, Earth, Jupiter, an astronaut on a spacewalk, the Taj Mahal, a dancer from Bali, the Golden Gate Bridge, a diver, swans at sunset, and a diagram of continental drift.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@gourneau">
+<meta name="twitter:creator" content="@gourneau">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%230a0b0d'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%23c9a227' stroke-width='1.3'/%3E%3C/svg%3E">
 
 <!-- THE THREE FILES NOTHING CAN BE DRAWN WITHOUT, STARTED HERE.
@@ -33,7 +56,7 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='61';
+const ASSETV='63';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -43,7 +66,7 @@ const BOOT={
 <style>
 :root{
   --bg:#0a0b0d; --panel:#101216; --line:#20242b; --line2:#2c323b;
-  --ink:#e8eaed; --dim:#9aa3ad; --dimmer:#6b737d;
+  --ink:#e8eaed; --dim:#9aa3ad; --dimmer:#7b838d;
   --gold:#c9a227; --cyan:#5fd3c4;
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
 }
@@ -124,6 +147,7 @@ figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radi
    it. The border and a soft gold halo carry the same "this one" signal without
    touching the contents. */
 figure{--halo:0 0 0 0 rgba(201,162,39,0)}
+figure:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 figure:hover,figure:focus-within{border-color:#5a4a1e;
   box-shadow:0 0 0 1px rgba(201,162,39,.30), 0 6px 26px -8px rgba(201,162,39,.38)}
 .shot{position:relative;background:#000;aspect-ratio:512/377;display:block;width:100%}
@@ -206,6 +230,8 @@ td.n{font-family:var(--mono);color:var(--gold)}
 .note b{color:var(--dim)}
 footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);font-size:13.5px}
 .sig{color:var(--dim);font-size:15px;margin-bottom:18px}
+/* Available to a screen reader, absent to everyone else. */
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .sig strong{color:var(--ink);font-weight:600}
 .err{color:#e6a2a2;font-family:var(--mono);font-size:13px;padding:20px 0}
 @media(max-width:640px){.grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}}
@@ -382,8 +408,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   decoded here from a <a href="https://archive.org/details/voyager.decode">384&nbsp;kHz
   digitisation of the original master tapes</a>.</p>
   <p class="lede">The colour images below are composited in your browser, right now, from their
-  three separate monochrome scans. Open any one to put the decode beside the original slide, and
-  to hear the 4.3 seconds of sound it came out of.</p>
+  three separate monochrome scans. Open any one to put the decode beside the published reproduction
+  of the same photograph, and to hear the 4.3 seconds of sound it came out of.</p>
   <div class="stats">
     <div class="stat"><b>116</b><span>images</span></div>
     <div class="stat"><b>156</b><span>audio frames</span></div>
@@ -470,16 +496,16 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
         <canvas id="lbMini" class="mini" hidden
                 title="The whole picture. The box is what you are looking at — click to move there."></canvas>
         <div class="zoomctl" id="lbDecCtl" hidden>
-          <button data-z="in"  title="Zoom in (scroll, or click the picture)">+</button>
-          <button data-z="out" title="Zoom out (scroll down)">−</button>
-          <button data-z="fit" title="Fit the whole picture (0)">⤢</button>
+          <button data-z="in"  aria-label="Zoom in" title="Zoom in (scroll up, or click the picture)"><span aria-hidden="true">+</span></button>
+          <button data-z="out" aria-label="Zoom out" title="Zoom out (scroll down)"><span aria-hidden="true">−</span></button>
+          <button data-z="fit" aria-label="Fit the whole picture" title="Fit the whole picture (0)"><span aria-hidden="true">⤢</span></button>
         </div>
       </div>
 
       <div id="lbDecFootBody" hidden></div>
     </section>
     <section class="pane">
-      <div class="pane-head"><span>Original slide</span><span class="srcs" id="lbSrcBtns"></span>
+      <div class="pane-head"><span>Published plate</span><span class="srcs" id="lbSrcBtns"></span>
         <span class="grow"></span>
         <button class="tipbtn" data-tip="ref" aria-describedby="tip">notes</button></div>
       <div class="pane-body" id="lbRefBody">
@@ -488,9 +514,9 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
         <canvas id="lbRefMini" class="mini" hidden
                 title="The whole picture. The box is what you are looking at — click to move there."></canvas>
         <div class="zoomctl" id="lbRefCtl" hidden>
-          <button data-z="in"  title="Zoom in (scroll, or click the picture)">+</button>
-          <button data-z="out" title="Zoom out (scroll down)">−</button>
-          <button data-z="fit" title="Fit the whole picture (0)">⤢</button>
+          <button data-z="in"  aria-label="Zoom in" title="Zoom in (scroll up, or click the picture)"><span aria-hidden="true">+</span></button>
+          <button data-z="out" aria-label="Zoom out" title="Zoom out (scroll down)"><span aria-hidden="true">−</span></button>
+          <button data-z="fit" aria-label="Fit the whole picture" title="Fit the whole picture (0)"><span aria-hidden="true">⤢</span></button>
         </div>
         <div class="noref" id="lbNoRef" hidden></div>
       </div>
@@ -536,6 +562,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 </div>
 
 <div id="about" hidden>
+<h1 class="vh">About this decoding</h1>
 <section><div class="wrap">
   <h2 id="a-found">How a picture is stored as sound</h2>
   <p>Each photograph on the record is 512 vertical stripes, played one after another. A stylus
@@ -559,7 +586,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   </table>
   <p>It also explains a fudge that had sat unexplained for years. The 2017 decoder carried a
   hardcoded nudge of “−12 samples on even stripes” that its own author called a brainless
-  heuristic. Twelve samples is <strong>exactly one step</strong>. It was the 1977 sampling clock
+  heuristic. Twelve samples is <strong>one step</strong>. It was the 1977 sampling clock
   showing through, and once you know the staircase is there, the nudge stops being a fudge and
   becomes a measurement.</p>
 
@@ -578,7 +605,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   straight across the boundary from one stripe into the next, because that is how time ran on the
   tape; doing it stripe by stripe is a different operation and a bug, and it shipped here once
   before it was caught. And the drift rate is <strong>measured from the record's own signal</strong>,
-  from a stretch that carries no picture at all — 530 samples on one channel, 295 on the other.
+  from a stretch that carries no picture at all — a time constant of 530 samples on one channel and
+  295 on the other, at the master tape's 384&nbsp;kHz.
   Nothing about what the photographs should look like is assumed anywhere in it.</p>
 
   <h3>Fourteen of the published plates are printed backwards</h3>
@@ -631,8 +659,9 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   fails if any part of it can so much as reach a reference file. The decoder reads exactly one
   input, the WAV.</p>
   <p class="note"><b>Rotation is cheating, and always will be.</b> The record never says which edge
-  is the top, and we tested whether it at least says which slides were <em>turned</em> — it does
-  not, because the 1977 operators reframed each slide to fill the frame. This gallery rotates the
+  is the top. We tested whether it at least says which slides were laid on their <em>side</em> — a
+  quarter turn leaves no trace, because the 1977 operators reframed each slide to fill the frame.
+  (A half turn it can catch, as above; a quarter turn it cannot.) This gallery rotates the
   pictures anyway, so you needn't tilt your head. That turn is presentation rather than decoding,
   though it is currently baked into the thumbnail files instead of applied when they are drawn,
   which is logged as a defect rather than glossed over.</p>
@@ -642,8 +671,10 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   inside the pictures to catch it. But <strong>image 2 is the pulsar map, and the pulsar map is
   also engraved on the cover</strong> that is bolted to the record. Fourteen lines radiating at
   fourteen different angles is strongly handed, so holding the decode against the engraving settles
-  the handedness of all 116 at a stroke. The calibration circle checks your timing; the pulsar map
-  checks your handedness. Neither needs a word of language.</p>
+  the handedness of all 116 at a stroke. We have not cashed that check ourselves — it needs a
+  rectified scan of the engraving, which we do not hold — so it is a check the record offers rather
+  than a result of ours. The calibration circle checks your timing; the pulsar map checks your
+  handedness. Neither needs a word of language.</p>
 </div></section>
 
 <section><div class="wrap">
@@ -665,11 +696,13 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   else: no photographs from anywhere, no outside image collection. Nothing is invented, which is
   why the word here is <em>denoised</em> and not <em>enhanced</em> or <em>reconstructed</em>.</p>
   <p>Scored on nineteen scenes it had never seen, it beats the raw decode every time, and beats a
-  simple blur every time. But it costs something, which is why both versions ship and you can flip
-  between them with the tier button. Run it past the calibration circle — the one check a denoiser
-  cannot game — and it slightly <em>regresses</em>, because the ring is a line one or two pixels
-  wide and softening lines is exactly what a denoiser does. On a photograph that trade is a good
-  one; on a test pattern it is a bad one. And the 96 black-and-white images have no third scan to
+  simple blur every time. But it costs something, so the button also offers the decode with no
+  brightness correction at all, and the whole pipeline can be judged by eye. Run it past the calibration circle — the one check a denoiser
+  cannot game — and it slightly <em>regresses</em>: radial rms 0.836&nbsp;→&nbsp;0.849&nbsp;px, with
+  the axis ratio essentially unmoved at 1.005. <strong>We are not going to tell you why.</strong>
+  The last time a regression like this was explained confidently — the denoiser softening a ring
+  a pixel wide — the explanation was wrong, and the real cause turned out to be 8-bit quantisation
+  in the input. A plausible mechanism is not evidence. And the 96 black-and-white images have no third scan to
   check against, so using the denoiser there is an extrapolation rather than a measurement.</p>
 
   <h3>The record carries its own colour key, and it is not quite readable</h3>
@@ -985,6 +1018,7 @@ const thumbs=im=>im.frames.map(x=>`data/${TIER_DIR[TIER]}/${x}.png?v=${ASSETV}`)
 // --------------------------------------------------------------------------
 
 function render(){
+  stopCardScan();          // the grid is about to be rebuilt under its button
   VIEW=images.filter(im=> filter==='all' || (filter==='color')===!!im.color);
   COUNT.textContent=`${VIEW.length} shown`;
   GRID.innerHTML='';
@@ -999,7 +1033,7 @@ function render(){
     f.innerHTML=`<div class="shot"><canvas></canvas>
         <span class="tag">${String(im.n).padStart(3,'0')}</span>
         ${im.color?'<span class="tag rgb">RGB</span>':''}
-        <button class="scanbtn" title="Play this image's audio and paint it from blank">▶</button>
+        <button class="scanbtn" aria-label="Play the audio and paint image ${im.n} from blank" title="Play this image's audio and paint it from blank"><span aria-hidden="true">▶</span></button>
         </div>
       <canvas class="cardwave" height="26"></canvas>
       <figcaption><div class="ttl">${esc(im.title??'—')}</div>
@@ -1016,6 +1050,15 @@ function render(){
     // file, and only for cards a pointer has actually visited.
     scan.addEventListener('pointerenter',()=>warmAudio(im.frames[0]),{once:true});
     f.addEventListener('click',()=>openLB(i));
+    // A card was a bare <figure> with a click handler, so the lightbox -- and
+    // with it the comparison, the audio and the waveform -- could not be
+    // reached from the keyboard at all. Only a typed #n URL got you in.
+    f.tabIndex=0;
+    f.setAttribute('role','button');
+    f.setAttribute('aria-label',`Image ${im.n}: ${im.title??'untitled'} — open the comparison`);
+    f.addEventListener('keydown',ev=>{
+      if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); openLB(i); }
+    });
     f.addEventListener('mouseenter',()=>waveOf(im.frames[0]),{once:true});
     GRID.appendChild(f); io.observe(f);
   });
@@ -1156,7 +1199,7 @@ function stopCardScan(restore){
   CARDSCAN=null;
   if(S.timer) clearInterval(S.timer);
   if(S.src){ try{ S.src.onended=null; S.src.stop(); }catch(e){} }
-  S.btn.textContent='▶'; S.btn.setAttribute('aria-pressed','false');
+  S.btn.firstElementChild.textContent='▶'; S.btn.setAttribute('aria-pressed','false');
   if(restore!==false){ S.fig.dataset.painted=''; paint(S.fig); }
 }
 
@@ -1164,9 +1207,9 @@ async function toggleCardScan(fig, im){
   if(CARDSCAN && CARDSCAN.fig===fig){ stopCardScan(); return; }
   stopCardScan();
   const btn=fig.querySelector('.scanbtn'), cv=fig.querySelector('canvas');
-  btn.textContent='…';
+  btn.firstElementChild.textContent='…';
   const imgs=(await Promise.all(thumbs(im).map(load))).filter(Boolean);
-  if(!imgs.length){ btn.textContent='▶'; return; }
+  if(!imgs.length){ btn.firstElementChild.textContent='▶'; return; }
   const colour=im.color&&imgs.length===3;
   const order=rgbOrder?[0,1,2]:[2,1,0];
   const planes=colour
@@ -1174,7 +1217,7 @@ async function toggleCardScan(fig, im){
     : [tintPlane(imgs[0],'#fff')];
   const frames=im.frames.slice(0,planes.length);
   CARDSCAN={fig, im, btn, cv, planes, frames, pass:0, trace:-1, src:null, timer:0};
-  btn.textContent='■'; btn.setAttribute('aria-pressed','true');
+  btn.firstElementChild.textContent='■'; btn.setAttribute('aria-pressed','true');
   drawCardScan();
   cardPass(0);
 }
@@ -1227,6 +1270,12 @@ async function cardPass(k){
 }
 
 function sweep(){
+  // NOT WHILE THE GALLERY IS HIDDEN. #gallery gets display:none in the About
+  // view, so every figure reports a 0,0,0,0 rect -- which passes the
+  // on-or-near-screen test below for all 116 at once. One scroll while reading
+  // therefore painted the entire grid and pulled the whole 11 MiB thumbnail
+  // tier, and scheduleTierWarm() then queued the other 13 MiB behind it.
+  if(VIEWMODE!=='gallery') return;
   // Deliberately synchronous. An earlier version deferred the work to
   // requestAnimationFrame behind a `pending` flag -- but rAF does not fire in a
   // throttled or backgrounded tab, so the flag latched true and every
@@ -1438,6 +1487,7 @@ function openByHash(h, replace){
 
 function openLB(i, opts){
   if(!VIEW.length) return;
+  stopCardScan();          // its audio would otherwise play on behind the overlay
   const n=VIEW.length;
   LB.idx=((i%n)+n)%n;
   const im=VIEW[LB.idx];
@@ -1450,6 +1500,7 @@ function openLB(i, opts){
     LB.restoreFocus=document.activeElement;
     LB.el.hidden=false;
     document.body.style.overflow='hidden';
+    $('lbClose').focus();       // on OPEN only: stepping must not move focus
   }
   // Back to the whole picture on both sides. A new image at the previous one's
   // magnification would drop you into an arbitrary corner of it.
@@ -1470,7 +1521,6 @@ function openLB(i, opts){
   fillText(im);
   fillRef(im);
   loadDecoded(im);
-  $('lbClose').focus();
 
   drawWave();                                   // whatever is cached, now
   waveOf(LB.frameId).then(()=>{ if(LB.frameId) drawWave(); });
@@ -1536,6 +1586,7 @@ function prefetchNeighbours(){
 
 function closeLB(){
   if(LB.el.hidden) return;
+  hideTip();               // a pinned note otherwise reappears on the next open
   stopAudio();
   LB.el.hidden=true; LB.im=null; LB.off=null; LB.frameId=null;
   document.body.style.overflow='';
@@ -1765,8 +1816,12 @@ function setSource(k){
   // Both kinds -- a whole page and a normalised rectangle cut out of one -- end
   // as the same thing, a canvas at the source's own resolution, so the viewer
   // below has one case to handle and the crop costs no second JPEG.
+  const forIm=LB.im;
   load(url,'high').then(i=>{
-    if(LB.srcIdx!==k||!i) return;
+    // The index alone is not enough: source 0 of the previous image and source
+    // 0 of this one are both k=0, so a slow load from the image you just left
+    // would draw itself into the pane of the image now on screen.
+    if(LB.im!==forIm||LB.srcIdx!==k||!i) return;
     const W=i.naturalWidth, H=i.naturalHeight;
     const box=s.box;
     const x=box?Math.round(box[0]*W):0, y=box?Math.round(box[1]*H):0;
@@ -2157,7 +2212,7 @@ $('tip').addEventListener('mouseenter',keepTip);
 $('tip').addEventListener('mouseleave',hideTipSoon);
 $('tip').addEventListener('click',e=>e.stopPropagation());   // select text freely
 
-document.querySelectorAll('.tipbtn').forEach(b=>{
+document.querySelectorAll('.tipbtn[data-tip]').forEach(b=>{
   b.setAttribute('aria-expanded','false');
   b.addEventListener('mouseenter',()=>{ if(!TIP_PIN) showTip(b); keepTip(); });
   b.addEventListener('focus',()=>showTip(b));
@@ -2209,7 +2264,7 @@ function buildWaveLayer(){
   if(!d){
     c.strokeStyle='#20242b'; c.beginPath();
     c.moveTo(0,cssH/2); c.lineTo(cssW,cssH/2); c.stroke();
-    c.fillStyle='#6b737d'; c.font='11px ui-monospace,Menlo,monospace';
+    c.fillStyle='#7b838d'; c.font='11px ui-monospace,Menlo,monospace';
     c.fillText(WAVE.has(LB.frameId)?'no precomputed peaks for this frame':'reading peaks…',10,cssH/2-6);
   } else {
     const xOf=s=>s/d.samples*cssW;
@@ -2353,7 +2408,7 @@ function drawZoom(){
     // place in the layout so that pressing play never moves anything.
     c.strokeStyle='rgba(201,162,39,.16)'; c.lineWidth=1;
     c.beginPath(); c.moveTo(0,cssH/2+.5); c.lineTo(cssW,cssH/2+.5); c.stroke();
-    c.fillStyle='#6b737d'; c.font='11px ui-monospace,Menlo,monospace';
+    c.fillStyle='#7b838d'; c.font='11px ui-monospace,Menlo,monospace';
     c.fillText('the real samples appear here — press play, or hover the strip above',
                12, cssH/2 - 8);
     return;
@@ -2785,7 +2840,7 @@ function tick(){
   const d=WAVE.get(LB.frameId), t=d?traceAt(d,LB.playSample):null;
   const pass=LB.paint ? `painting ${['red','green','blue'][LB.paint.pass]||'scan'} · ` : '';
   setWStat(`${pass}${el.toFixed(2)} / ${PLAYING.dur.toFixed(2)} s · ` +
-           (t==null?'lead-in/tail':`trace ${t}`) + ' · 96 kHz, not resampled');
+           (t==null?'lead-in/tail':`trace ${t}`) + ' · 96 kHz playback copy, played without resampling');
 }
 
 const togglePlay=()=>{
@@ -2825,7 +2880,7 @@ $('lbWHelp').textContent=
   '1200 precomputed peaks per frame · hover the strip to point at a trace · click it to play '+
   'from there · shaded ends are the lead-in and the tail lines, not picture · '+
   'P paints the picture from a blank screen as the audio plays, colour images one separation '+
-  'at a time · T flips between the physics decode and the denoised tier · '+
+  'at a time · T flips between the uncorrected decode and the corrected, denoised one · '+
   'the lower strip is the real samples, two traces of them: shaded blanking, '+
   'then the brightness profile that becomes one column of the photograph';
 
@@ -2944,6 +2999,13 @@ LB.el.addEventListener('click',e=>{ if(e.target===LB.el) closeLB(); });
 
 addEventListener('keydown',e=>{
   if(LB.el.hidden) return;
+  // NOT WHEN A CONTROL OWNS THE KEY. This is a window listener, so without a
+  // target test Space played the audio instead of pressing whichever button had
+  // focus, and the arrows stepped to the next image instead of changing the
+  // speed <select>. Both are the standard keys for those controls.
+  const t=e.target;
+  if(t && t.closest && t.closest('select,input,textarea,[contenteditable]')) return;
+  if(e.key===' ' && t && t.closest && t.closest('button')) return;
   if(e.key==='Escape'){ if(!$('tip').hidden){ hideTip(); } else closeLB(); e.preventDefault(); }
   else if(e.key==='ArrowRight'){ stepLB(1); e.preventDefault(); }
   else if(e.key==='ArrowLeft'){ stepLB(-1); e.preventDefault(); }
@@ -3006,7 +3068,7 @@ BOOT.catalog
   scheduleTierWarm();
   countNoRef();
 }).catch(e=>{
-  GRID.innerHTML=`<p class="err">Could not load the catalog (${e&&e.message||e}).</p>`;
+  GRID.innerHTML=`<p class="err">Could not load the catalogue (${e&&e.message||e}).</p>`;
 });
 </script>
 </body>

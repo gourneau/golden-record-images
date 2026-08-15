@@ -137,11 +137,11 @@ These matter as much as the wins; several look like successes from the outside.
 
 ## Outstanding
 
-1. **The Noise2Noise re-evaluation is running and is the blocking item.** Retraining on the
-   corrected decodes **invalidated the 19/19 result and every dB figure in `n2n.py`** — those were
-   earned on the old decodes and do not describe the shipped model. Command:
-   `python -m pipeline.n2n --report --steps 3000 --json <out>`. Until it lands, **do not quote
-   quality figures for the denoiser.**
+1. **The Noise2Noise re-evaluation has landed.** Retraining on the corrected decodes invalidated
+   the figures earned on the old ones; the current numbers are in `docs/n2n_after_correction.json`
+   and they are what the page and the README quote: **19 of 19 unseen scenes beat the raw decode,
+   and 19 of 19 beat the blur control** (m_id 0.04411, m_n2n1 0.04136, m_blur 0.05065 over 19
+   scenes). The §2 figures below are still labelled as the OLD decodes and should stay that way.
 2. **The (k, origin) degeneracy.** The mount and the flat field disagree about where the
    accumulator's zero sits — sweeping origin improves the mount (17.6 → 13.7 grey) and worsens the
    field (0.0367 → 0.0441). The two are algebraically coupled (`k·origin` is a linear ramp), so a

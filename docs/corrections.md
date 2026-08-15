@@ -33,11 +33,12 @@ Maine*, credited to Dick Smith.
 - **Suggested action:** rename or re-caption the file, and check whether the error has
   propagated to the numbering of neighbouring files.
 
-### A2. Fifteen reproductions are laterally inverted *(solid for the set, per-file review needed)*
+### A2. Fourteen reproductions are laterally inverted, and a fifteenth is a tie *(solid for the set, per-file review needed)*
 
 Aligning our decodes against published reproductions required a transform that can mirror.
-Once it could, fifteen plates matched that had never matched before, several
-overwhelmingly:
+Once it could, fourteen plates matched that had never matched before, several
+overwhelmingly. A fifteenth, the solar spectrum, came out a 37-to-36 tie and was settled on
+physics instead (see C2); `docs/reference/mirrored.json` lists the fourteen that were flipped:
 
 | Image | Subject | Inliers direct → mirrored |
 |---|---|---|
