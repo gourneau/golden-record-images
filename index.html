@@ -56,7 +56,7 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='67';
+const ASSETV='70';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -71,6 +71,13 @@ const BOOT={
   --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
 }
 *{box-sizing:border-box}
+/* DOUBLE-TAP MUST NOT ZOOM THE PAGE. A quick double tap on the toolbar -- which
+   is what happens when somebody taps twice in a hurry -- fires the browser's
+   own double-tap zoom, and browsers REMEMBER that zoom per site, so the next
+   visit opens zoomed and looks broken. `manipulation` keeps scrolling and
+   keeps pinch, and drops only the double-tap gesture. The pane sets its own
+   touch-action and is unaffected. */
+html,body{touch-action:manipulation}
 html,body{margin:0;background:var(--bg);color:var(--ink);
   font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
   -webkit-font-smoothing:antialiased}
@@ -178,6 +185,15 @@ figure:hover .scanbtn,.scanbtn:focus-visible,.scanbtn[aria-pressed="true"]{opaci
   border:1px solid rgba(255,255,255,.34);border-radius:4px;background:#000;
   box-shadow:0 3px 14px rgba(0,0,0,.7);image-rendering:auto}
 .mini.grabbing{cursor:grabbing}
+/* Sits on the corner of the overview inset, so it appears exactly when there is
+   a zoom to leave and vanishes when there is not. */
+.minireset{position:absolute;z-index:4;left:8px;top:8px;transform:translate(-38%,-38%);
+  width:24px;height:24px;padding:0;border-radius:50%;line-height:1;font-size:12px;
+  background:#14161b;color:var(--ink);border:1px solid var(--line2);cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.7)}
+.minireset:hover{background:#232730;color:var(--gold);border-color:#5a4a1e}
+.minireset[hidden]{display:none}
+@media(max-width:860px),(max-height:560px){.minireset{width:30px;height:30px;font-size:14px}}
 .mini[hidden]{display:none}
 @media(hover:none){.scanbtn{opacity:1}}
 .tag.cmp.none{background:rgba(0,0,0,.72);color:var(--dim);font-weight:400}
@@ -402,16 +418,28 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   /* THE HEADER. No width:100% on the counter -- that was the bug. The counter
      goes entirely (it is repeated under the picture), and the buttons keep
      their glyph and drop their word. */
-  .lb-top{gap:6px;padding:6px 10px;min-height:46px}
-  .lb-top .m{display:none}
-  .lb-top .t{font-size:15px}
-  .lb-top button{padding:9px 11px;min-width:40px;min-height:40px;line-height:1}
+  /* THE TITLE BAR HOLDS THE TITLE AND THE WAY OUT, AND NOTHING ELSE. Stepping
+     and the pane switch moved to their own row below, where there is room for
+     targets you can actually hit; the counter is redundant beside the number,
+     and Copy link is desktop work. */
+  .lb-top{gap:8px;padding:6px 10px;min-height:46px}
+  .lb-top .m,#lbLink,#lbPrev,#lbNext{display:none}
+  .lb-top .t{font-size:16px}
+  .lb-top button{padding:9px 11px;min-width:44px;min-height:44px;line-height:1}
   .lb-top .lbl{display:none}
-  #lbLink span[aria-hidden]{font-size:15px}
+  #lbClose span[aria-hidden]{font-size:17px}
 
-  /* ONE PANE AT A TIME. */
-  .pane-tabs{display:flex;gap:6px;padding:6px 10px 0}
-  .pane-tabs button{flex:1 1 0;min-height:36px;font-size:12.5px;padding:6px 8px}
+  /* STEP AND SWITCH, ON ONE ROW ABOVE THE PICTURE. */
+  .lb-nav{display:flex;gap:6px;align-items:stretch;padding:6px 10px 0}
+  .navarrow{flex:0 0 auto;width:46px;min-height:40px;padding:0;font-size:22px;line-height:1}
+  .pane-tabs{display:flex;gap:6px;flex:1 1 auto;min-width:0;padding:0}
+  .pane-tabs button{flex:1 1 0;min-height:40px;font-size:12.5px;padding:6px 6px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* THE SPEED CONTROL, NARROW. The JS shortens the option text to just the
+     multiplier on these widths; this stops the box being sized for the words
+     that are no longer in it. */
+  .lb-wave .speed select{min-width:0;width:auto;padding:8px 22px 8px 8px}
   .pane-tabs button[aria-pressed="true"]{border-color:#5a4a1e;color:var(--gold);
     background:rgba(201,162,39,.09)}
   .lb-panes{grid-template-columns:1fr;overflow:hidden;padding:6px 10px 2px}
@@ -445,6 +473,17 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
      and for keys -- neither of which a touchscreen has. Together they were
      228 of the 874 pixels, spent on things that cannot be done here. */
   #lbZoom,.whelp{display:none}
+
+  /* THE OVERVIEW INSET, OUT OF THE WAY. At desktop size it sits over the
+     top-left of the picture and costs nothing; on a phone that is prime area.
+     It moves to the bottom-left, where a fitted picture almost always has
+     letterbox black, and shrinks by a third. Its size cap is also in the JS. */
+  .mini{top:auto;bottom:8px;left:8px}
+
+  /* AND THE +/- CLUSTER GOES. Zoom here is a pinch, and the way back is the
+     badge on the inset, so a permanent three-button stack over the picture is
+     three buttons of picture spent on nothing. */
+  .zoomctl{display:none}
 }
 /* SHORT, NOT NARROW. A phone on its side is about 874 x 402 -- WIDER than the
    860px breakpoint above, so none of it applied and the desktop layout ran in
@@ -469,8 +508,13 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   .pane-head .srcs button{flex:0 0 auto}
   /* ONE PANE HERE TOO. Two side by side in 402px of height gave each picture
      109px. One of them across the full width is worth more than both. */
-  .pane-tabs{display:flex;gap:6px;padding:4px 10px 0}
-  .pane-tabs button{flex:1 1 0;min-height:30px;font-size:12px;padding:4px 8px}
+  .lb-nav{display:flex;gap:6px;align-items:stretch;padding:4px 10px 0}
+  .navarrow{flex:0 0 auto;width:42px;min-height:30px;padding:0;font-size:19px;line-height:1}
+  .pane-tabs{display:flex;gap:6px;flex:1 1 auto;min-width:0;padding:0}
+  .pane-tabs button{flex:1 1 0;min-height:30px;font-size:12px;padding:4px 8px;white-space:nowrap}
+  .lb-top .m,#lbLink,#lbPrev,#lbNext,.lb-top .lbl{display:none}
+  .lb-top button{min-width:40px;min-height:34px}
+  .lb-wave .speed select{min-width:0;width:auto;padding:6px 20px 6px 8px}
   .pane-tabs button[aria-pressed="true"]{border-color:#5a4a1e;color:var(--gold);
     background:rgba(201,162,39,.09)}
   .lb-panes{grid-template-columns:1fr;overflow:hidden}
@@ -487,6 +531,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
      and turning the phone back gets it straight back. */
   .lb-wave{padding:4px 10px 5px}
   #lbWave{display:none}
+  .mini{top:auto;bottom:6px;left:6px}
+  .zoomctl{display:none}
 }
 </style>
 </head>
@@ -580,9 +626,13 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
        desktop and impossible on a phone: at 402px each got a 170px-tall sliver
        inside a scrolling column and neither was legible. One at a time, with a
        switch, and the picture gets the whole width. -->
-  <div class="pane-tabs" id="lbPaneTabs" hidden>
-    <button data-pane="dec" aria-pressed="true">Decoded</button>
-    <button data-pane="ref" aria-pressed="false">Published plate</button>
+  <div class="lb-nav" id="lbNav" hidden>
+    <button class="navarrow" id="lbPrev2" aria-label="Previous image"><span aria-hidden="true">‹</span></button>
+    <div class="pane-tabs" id="lbPaneTabs">
+      <button data-pane="dec" aria-pressed="true">Decoded</button>
+      <button data-pane="ref" aria-pressed="false">Published plate</button>
+    </div>
+    <button class="navarrow" id="lbNext2" aria-label="Next image"><span aria-hidden="true">›</span></button>
   </div>
   <div class="lb-panes" id="lbPanes" data-pane="dec">
     <section class="pane">
@@ -594,6 +644,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <div class="pane-body" id="lbDecBody">
         <canvas id="lbCanvas" class="pane-canvas" role="img"
                 aria-label="the decoded picture"></canvas>
+        <button class="minireset" data-for="lbMini" hidden aria-label="Reset the zoom"><span aria-hidden="true">✕</span></button>
         <canvas id="lbMini" class="mini" hidden
                 title="The whole picture. The box is what you are looking at — click to move there."></canvas>
         <div class="zoomctl" id="lbDecCtl" hidden>
@@ -612,6 +663,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
       <div class="pane-body" id="lbRefBody">
         <canvas id="lbRefCanvas" class="pane-canvas" role="img"
                 aria-label="the original photograph this frame was scanned from"></canvas>
+        <button class="minireset" data-for="lbRefMini" hidden aria-label="Reset the zoom"><span aria-hidden="true">✕</span></button>
         <canvas id="lbRefMini" class="mini" hidden
                 title="The whole picture. The box is what you are looking at — click to move there."></canvas>
         <div class="zoomctl" id="lbRefCtl" hidden>
@@ -1625,7 +1677,7 @@ function openLB(i, opts){
   // Back to the whole picture on both sides. A new image at the previous one's
   // magnification would drop you into an arbitrary corner of it.
   DECVP.fitView(); REFVP.fitView();
-  syncPaneTabs(); setPane('dec');    // the decode is what you came for
+  syncPaneTabs(); setPane(PANE);     // whichever side you were comparing on, kept
   syncHash(!!(opts && opts.replace));
   // Kick the reference fetch off BEFORE fillText does its work, so the two
   // panes race rather than queue. load() is cached by URL, so fillRef asking
@@ -1726,13 +1778,20 @@ const stepLB=d=>{ if(!LB.el.hidden) openLB(LB.idx+d, {replace:true}); };
 // above 860px, so the desktop side-by-side is untouched. The viewport has to be
 // told to redraw, because a pane coming back from display:none has been
 // measuring a zero-sized box.
+let PANE='dec';        // remembered across images: pick a side and step through it
 function setPane(which){
   const p=$('lbPanes'); if(!p) return;
-  p.dataset.pane = which==='ref' ? 'ref' : 'dec';
+  PANE = which==='ref' ? 'ref' : 'dec';
+  p.dataset.pane = PANE;
   $('lbPaneTabs').querySelectorAll('button').forEach(b=>
     b.setAttribute('aria-pressed', String(b.dataset.pane===p.dataset.pane)));
-  (p.dataset.pane==='ref' ? REFVP : DECVP).redraw();
+  // The pane being shown has been display:none, so it has no valid measurement
+  // and cannot be redrawn at a trustworthy scale -- it re-fits instead.
+  const V=(PANE==='ref' ? REFVP : DECVP);
+  V.fitView(); V.redraw();
 }
+$('lbPrev2').onclick=e=>{ e.stopPropagation(); stepLB(-1); };
+$('lbNext2').onclick=e=>{ e.stopPropagation(); stepLB(1); };
 $('lbPaneTabs').addEventListener('click',e=>{
   const b=e.target.closest('button'); if(!b) return;
   e.stopPropagation(); setPane(b.dataset.pane);
@@ -1742,8 +1801,23 @@ $('lbPaneTabs').addEventListener('click',e=>{
 const NARROW='(max-width:860px),(max-height:560px)';
 function syncPaneTabs(){
   const narrow = matchMedia(NARROW).matches;
-  $('lbPaneTabs').hidden = !narrow;
-  if(!narrow) $('lbPanes').dataset.pane='dec';
+  $('lbNav').hidden = !narrow;
+  // Desktop shows both, so the switch means nothing there -- but the CHOICE is
+  // kept, so turning a phone back to portrait returns you to the side you were on.
+  $('lbPanes').dataset.pane = narrow ? PANE : 'dec';
+  shortenSpeeds(narrow);
+}
+
+// The speed menu says "0.05x . 86 s" on a desktop, which is genuinely useful and
+// far too wide for a phone. The multiplier alone is what fits.
+function shortenSpeeds(narrow){
+  for(const sel of [$('rate'), $('lbRate')]){
+    if(!sel) continue;
+    for(const o of sel.options){
+      if(!o.dataset.full) o.dataset.full = o.textContent;
+      o.textContent = narrow ? o.dataset.full.split('·')[0].trim() : o.dataset.full;
+    }
+  }
 }
 matchMedia(NARROW).addEventListener('change', ()=>{
   syncPaneTabs();
@@ -2020,7 +2094,7 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
     stage:null,            // the picture being shown, at its own resolution
     scale:1, x:0, y:0,     // source px -> CSS px, and the origin within the pane
     fit:1, W:0, H:0, dpr:1,
-    drag:null, pts:new Map(), pinch:null, onDraw:null, need:true, wasZoomed:null
+    drag:null, pts:new Map(), pinch:null, onDraw:null, need:true, wasZoomed:null, owedFit:true
   };
 
   // Reading the pane's size forces a layout flush, and draw() runs thirty times
@@ -2028,7 +2102,18 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
   // actually change it -- opening, resizing, a new picture -- and cached.
   function measure(){
     const r=V.body.getBoundingClientRect();
-    if(!r.width||!r.height) return;          // hidden, or not laid out yet
+    // A HIDDEN PANE HAS NO SIZE, AND KEEPING THE OLD ONE IS WHY PICTURES
+    // SOMETIMES OPENED ZOOMED IN. This used to return quietly, leaving W and H
+    // at whatever the pane measured last time -- a desktop-width pane, or the
+    // other pane before the phone switched away from it. `fit` was then
+    // computed from a box that no longer existed, and since fit is the scale a
+    // fresh image is set to, the picture opened magnified and cropped. It
+    // depended on load order, which is why it happened on some images and not
+    // others and was hard to reproduce.
+    //
+    // So an unmeasurable pane is recorded as unmeasured, and the fit is owed
+    // until a real box turns up.
+    if(!r.width||!r.height){ V.W=0; V.H=0; V.need=true; return; }
     V.W=r.width; V.H=r.height;
     V.dpr=Math.min(2, devicePixelRatio||1);
     const w=Math.max(1,Math.round(V.W*V.dpr)), h=Math.max(1,Math.round(V.H*V.dpr));
@@ -2065,7 +2150,14 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
     V.scale=s2; clamp(); draw(); return true;
   }
 
-  function fitView(){ V.need=true; measure(); V.scale=V.fit; clamp(); draw(); }
+  // If the pane cannot be measured yet, the fit is remembered and applied by
+  // the first draw that has a real box -- so "opens fitted" does not depend on
+  // whether the image arrived before or after layout.
+  function fitView(){
+    V.need=true; measure();
+    if(!V.W){ V.owedFit=true; return; }
+    V.owedFit=false; V.scale=V.fit; clamp(); draw();
+  }
 
   function draw(){
     // MEASURED EVERY TIME, not from a cache invalidated by an observer.
@@ -2084,7 +2176,9 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
     // 0.209 ms for a WHOLE draw, rect read and drawImage together, against a
     // 33 ms frame. The thing being protected against was never the real cost.
     measure();
+    if(!V.W) return;                          // nothing is visible; nothing to draw
     refit();                                  // the picture may have changed size
+    if(V.owedFit){ V.owedFit=false; V.scale=V.fit; }
     if(V.scale<V.fit) V.scale=V.fit;          // a pane resize can strand it below fit
     clamp();
     const c=V.cv.getContext('2d'), s=V.stage;
@@ -2111,6 +2205,7 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
     c.drawImage(s, 0, 0);
     c.setTransform(1,0,0,1,0,0);
     drawMiniOf(V);
+    syncMiniReset(V);
     if(V.ctl){
       V.ctl.children[0].disabled = V.scale >= V.fit*MAX_ZOOM-1e-6;
       V.ctl.children[1].disabled = !on;
@@ -2167,7 +2262,16 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
     const dx=e.clientX-D.x, dy=e.clientY-D.y;
     D.moved+=Math.abs(dx)+Math.abs(dy);
     D.x=e.clientX; D.y=e.clientY;
-    if(!zoomed()) return;                     // nothing to pan at fit
+    if(!zoomed()){
+      // Not pannable, so the drag is a swipe: nudge the whole pane with it so
+      // the gesture reads as moving the picture rather than doing nothing.
+      if(D.id===e.pointerId && e.pointerType!=='mouse'){
+        const off=e.clientX-D.sx;
+        V.body.style.transform = `translateX(${Math.sign(off)*Math.min(46,Math.abs(off)*0.35)}px)`;
+      }
+      return;
+    }
+    V.body.style.transform='';
     V.x+=dx; V.y+=dy; clamp(); draw();
   });
 
@@ -2181,10 +2285,23 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
     // A press that did not travel is a click, and a click zooms in one step
     // where you clicked -- the affordance this pane has always had. Alt or
     // shift zooms back out, so the mouse alone can go both ways.
-    if(D.moved<5 && e.type==='pointerup'){
+    // MOUSE ONLY. On a touchscreen the conventional zoom is a pinch, and a tap
+    // that zooms goes off constantly by accident -- while swiping, while
+    // reaching for a control -- which is what made the pane feel wrong. Touch
+    // gets pinch and the +/- buttons; a tap does nothing.
+    if(D.moved<5 && e.type==='pointerup' && e.pointerType==='mouse'){
       const r=V.body.getBoundingClientRect();
       zoomAt(e.clientX-r.left, e.clientY-r.top, (e.altKey||e.shiftKey)?1/STEP:STEP);
     }
+    // SWIPE TO THE NEXT PICTURE, but only when there is nowhere to pan. Zoomed
+    // in, a horizontal drag is a pan and must stay one; at fit it is the
+    // gesture everybody already uses to flick through photographs. touch-action
+    // is pan-y here, so the browser keeps vertical scrolling and hands us this.
+    else if(e.pointerType!=='mouse' && !zoomed() && D.moved>=5){
+      const dx=e.clientX-D.sx, dy=e.clientY-D.sy;
+      if(Math.abs(dx)>44 && Math.abs(dx)>Math.abs(dy)*1.4) stepLB(dx<0?1:-1);
+    }
+    V.body.style.transform='';
   }
   V.body.addEventListener('pointerup', endPointer);
   V.body.addEventListener('pointercancel', endPointer);
@@ -2244,6 +2361,8 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
     V.mini.addEventListener('pointercancel', letGo);
   }
 
+  const reset=V.body.querySelector('.minireset');
+  if(reset) reset.addEventListener('click', e=>{ e.stopPropagation(); fitView(); });
   if(V.ctl) V.ctl.addEventListener('click', e=>{
     const b=e.target.closest('button'); if(!b) return;
     e.stopPropagation();
@@ -2281,7 +2400,10 @@ function drawMiniOf(V){
   const mini=V.mini, s=V.stage;
   if(!mini) return;
   if(!s || V.scale<=V.fit*1.005){ mini.hidden=true; return; }
-  const k=Math.min(150/s.width, 110/s.height);
+  // Smaller where the picture is small. Matches the placement rules in the
+  // stylesheet, which move it out of the middle of the frame on a phone.
+  const small=matchMedia(NARROW).matches;
+  const k=Math.min((small?96:150)/s.width, (small?72:110)/s.height);
   const w=Math.max(1,Math.round(s.width*k)), h=Math.max(1,Math.round(s.height*k));
   const d=V.dpr;
   if(mini.width!==Math.round(w*d)||mini.height!==Math.round(h*d)){
@@ -2305,6 +2427,21 @@ function drawMiniOf(V){
   c.strokeRect(Math.round(vx)-0.5, Math.round(vy)-0.5, Math.max(2,Math.round(vw))+2, Math.max(2,Math.round(vh))+2);
   c.strokeStyle='rgba(201,162,39,.98)';
   c.strokeRect(Math.round(vx)+0.5, Math.round(vy)+0.5, Math.max(2,Math.round(vw)), Math.max(2,Math.round(vh)));
+}
+
+// The inset appears only while zoomed, so its reset badge does too -- the way
+// out is attached to the thing that tells you you are in.
+function syncMiniReset(V){
+  if(!V.mini) return;
+  const b=V.body.querySelector('.minireset');
+  if(!b) return;
+  b.hidden = V.mini.hidden;
+  // Pinned to the inset's own corner rather than to a fixed spot, because the
+  // inset is top-left on a desktop and bottom-left on a phone.
+  if(!b.hidden){
+    b.style.left = V.mini.offsetLeft + 'px';
+    b.style.top  = V.mini.offsetTop  + 'px';
+  }
 }
 
 const DECVP=makeViewport('lbDecBody','lbCanvas','lbMini','lbDecCtl');
