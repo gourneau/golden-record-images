@@ -56,7 +56,7 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='70';
+const ASSETV='71';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -439,7 +439,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   /* THE SPEED CONTROL, NARROW. The JS shortens the option text to just the
      multiplier on these widths; this stops the box being sized for the words
      that are no longer in it. */
-  .lb-wave .speed select{min-width:0;width:auto;padding:8px 22px 8px 8px}
+  .speed select{min-width:0;width:auto;padding:8px 22px 8px 8px}
+  .bar .speed{font-size:12px;gap:5px}
   .pane-tabs button[aria-pressed="true"]{border-color:#5a4a1e;color:var(--gold);
     background:rgba(201,162,39,.09)}
   .lb-panes{grid-template-columns:1fr;overflow:hidden;padding:6px 10px 2px}
@@ -514,7 +515,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   .pane-tabs button{flex:1 1 0;min-height:30px;font-size:12px;padding:4px 8px;white-space:nowrap}
   .lb-top .m,#lbLink,#lbPrev,#lbNext,.lb-top .lbl{display:none}
   .lb-top button{min-width:40px;min-height:34px}
-  .lb-wave .speed select{min-width:0;width:auto;padding:6px 20px 6px 8px}
+  .speed select{min-width:0;width:auto;padding:6px 20px 6px 8px}
   .pane-tabs button[aria-pressed="true"]{border-color:#5a4a1e;color:var(--gold);
     background:rgba(201,162,39,.09)}
   .lb-panes{grid-template-columns:1fr;overflow:hidden}
@@ -1810,6 +1811,11 @@ function syncPaneTabs(){
 
 // The speed menu says "0.05x . 86 s" on a desktop, which is genuinely useful and
 // far too wide for a phone. The multiplier alone is what fits.
+//
+// BOTH menus, and from page load. This used to be reached only through
+// syncPaneTabs, which runs when a lightbox opens -- so the toolbar's own
+// dropdown kept its full-width labels until you had opened an image and come
+// back, which is to say it was wrong exactly when the toolbar is all there is.
 function shortenSpeeds(narrow){
   for(const sel of [$('rate'), $('lbRate')]){
     if(!sel) continue;
@@ -1819,6 +1825,7 @@ function shortenSpeeds(narrow){
     }
   }
 }
+shortenSpeeds(matchMedia(NARROW).matches);   // the toolbar exists before any lightbox does
 matchMedia(NARROW).addEventListener('change', ()=>{
   syncPaneTabs();
   if(!LB.el.hidden){ DECVP.redraw(); REFVP.redraw(); }
