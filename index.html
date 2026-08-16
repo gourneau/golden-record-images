@@ -56,7 +56,7 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='63';
+const ASSETV='67';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -387,13 +387,106 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 #lbZoom{display:block;width:100%;height:112px;border:1px solid var(--line);
   border-radius:6px;background:#0c0e12;margin-top:6px}
 .whelp{font-family:var(--mono);font-size:10px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
+/* ---- the lightbox on a phone --------------------------------------------
+   Measured before this block existed, on a 402x874 screen: the chrome took
+   519 of the 874 pixels and the two panes shared the 355 that were left, so
+   each picture got a 170px sliver inside a scrolling column. Worse, `.lb-top
+   .m{width:100%}` made the position counter claim the entire 358px content
+   box with flex-shrink:0, which pushed Copy link, Prev, Next AND Close past
+   the right edge -- Close laid out at x=701 in a 402px viewport. The modal
+   had no reachable dismiss control at all.
+
+   So: one pane at a time, a header that always ends in a close button, and
+   the parts that only work with a mouse are gone rather than shrunk. */
 @media(max-width:860px){
-  .lb-panes{grid-template-columns:1fr;overflow:auto}
-  .pane-body{min-height:36vh}
-  #lbWave{height:60px}
-  #lbZoom{height:84px}
+  /* THE HEADER. No width:100% on the counter -- that was the bug. The counter
+     goes entirely (it is repeated under the picture), and the buttons keep
+     their glyph and drop their word. */
+  .lb-top{gap:6px;padding:6px 10px;min-height:46px}
+  .lb-top .m{display:none}
   .lb-top .t{font-size:15px}
-  .lb-top .m{width:100%}
+  .lb-top button{padding:9px 11px;min-width:40px;min-height:40px;line-height:1}
+  .lb-top .lbl{display:none}
+  #lbLink span[aria-hidden]{font-size:15px}
+
+  /* ONE PANE AT A TIME. */
+  .pane-tabs{display:flex;gap:6px;padding:6px 10px 0}
+  .pane-tabs button{flex:1 1 0;min-height:36px;font-size:12.5px;padding:6px 8px}
+  .pane-tabs button[aria-pressed="true"]{border-color:#5a4a1e;color:var(--gold);
+    background:rgba(201,162,39,.09)}
+  .lb-panes{grid-template-columns:1fr;overflow:hidden;padding:6px 10px 2px}
+  .lb-panes[data-pane="dec"] .pane:nth-of-type(2),
+  .lb-panes[data-pane="ref"] .pane:nth-of-type(1){display:none}
+  .pane-body{min-height:0}          /* let flex:1 give it everything going spare */
+  .pane-head{font-size:9.5px;padding-bottom:3px}
+  .pane-head>span:first-child{display:none}   /* the tab above already says it */
+  /* THE SOURCE PICKER WAS EATING THE PICTURE. `.srcs` wraps, so in a narrow
+     pane "book p.34 · detail" and "book p.34 · whole page" stacked three rows
+     deep -- 131px of head, of which `overflow:hidden` showed 26, while the
+     picture below was pushed down to 109px. One scrolling row instead. */
+  .pane-head .srcs{flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  .pane-head .srcs::-webkit-scrollbar{display:none}
+  .pane-head .srcs button{flex:0 0 auto}
+
+  /* THE CONTROLS. They were 3 and 4 lines tall because the labels wrapped
+     inside a nowrap row that then hid its own overflow. */
+  .lb-wave{padding:6px 10px 8px}
+  .wrow{flex-wrap:wrap;gap:6px;margin-bottom:6px}
+  .wrow>button{white-space:nowrap;min-height:40px;padding:8px 12px;font-size:13px}
+  .wrow .wstat{display:none}         /* duplicated by the strip under the picture */
+  .speed{font-size:12px;gap:5px}
+  .speed select{padding:8px 26px 8px 9px;min-height:40px}
+  #lbWave{height:42px}
+  .lb-strip{height:auto;padding:2px 10px;white-space:normal}
+  .lb{padding-bottom:env(safe-area-inset-bottom)}   /* clear of the home indicator */
+
+  /* GONE, NOT SHRUNK. The sample-level canvas has nothing to show until you
+     hover, and the help line below it is 144px of instructions for hovering
+     and for keys -- neither of which a touchscreen has. Together they were
+     228 of the 874 pixels, spent on things that cannot be done here. */
+  #lbZoom,.whelp{display:none}
+}
+/* SHORT, NOT NARROW. A phone on its side is about 874 x 402 -- WIDER than the
+   860px breakpoint above, so none of it applied and the desktop layout ran in
+   402px of height, where the header overlapped the picture. Height is the real
+   constraint in landscape, so it gets its own query and no width test. Two
+   panes side by side are fine when there is width; it is the vertical chrome
+   that has to go. */
+@media(max-height:560px){
+  .lb-top{min-height:38px;padding:4px 10px}
+  .lb-top button{padding:6px 9px}
+  .lb-panes{padding:4px 10px 2px}
+  .pane-head{font-size:9px;padding-bottom:2px}
+  .lb-wave{padding:4px 10px 6px}
+  .wrow{margin-bottom:4px}
+  .wrow>button{min-height:34px;padding:6px 10px;white-space:nowrap}
+  .speed select{min-height:34px}
+  #lbWave{height:34px}
+  #lbZoom,.whelp,.wrow .wstat{display:none}
+  .lb-strip{height:auto;padding:1px 10px}
+  .pane-head .srcs{flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  .pane-head .srcs::-webkit-scrollbar{display:none}
+  .pane-head .srcs button{flex:0 0 auto}
+  /* ONE PANE HERE TOO. Two side by side in 402px of height gave each picture
+     109px. One of them across the full width is worth more than both. */
+  .pane-tabs{display:flex;gap:6px;padding:4px 10px 0}
+  .pane-tabs button{flex:1 1 0;min-height:30px;font-size:12px;padding:4px 8px}
+  .pane-tabs button[aria-pressed="true"]{border-color:#5a4a1e;color:var(--gold);
+    background:rgba(201,162,39,.09)}
+  .lb-panes{grid-template-columns:1fr;overflow:hidden}
+  .lb-panes[data-pane="dec"] .pane:nth-of-type(2),
+  .lb-panes[data-pane="ref"] .pane:nth-of-type(1){display:none}
+  .pane-head>span:first-child{display:none}
+  /* Pinned rather than inherited: measured here, the pane was 214px tall with
+     26 of head and 75 of picture and 113 unaccounted for, so the picture was
+     smaller than the space it had been given. */
+  .pane{min-height:0}
+  .pane-head{flex:0 0 auto}
+  .pane-body{flex:1 1 0;min-height:0}
+  /* The waveform is the thing to spend in landscape: the picture is the point,
+     and turning the phone back gets it straight back. */
+  .lb-wave{padding:4px 10px 5px}
+  #lbWave{display:none}
 }
 </style>
 </head>
@@ -477,13 +570,21 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
     <span class="t" id="lbTitle"></span>
     <span class="grow"></span>
     <span class="m" id="lbPos"></span>
-    <button id="lbLink" title="Copy a link straight to this image">Copy link</button>
-    <button id="lbPrev" title="Previous image (left arrow)">← Prev</button>
-    <button id="lbNext" title="Next image (right arrow)">Next →</button>
-    <button id="lbClose" title="Close (Esc)">Close ✕</button>
+    <button id="lbLink" aria-label="Copy a link to this image" title="Copy a link straight to this image"><span aria-hidden="true">⧉</span><span class="lbl"> Copy link</span></button>
+    <button id="lbPrev" aria-label="Previous image" title="Previous image (left arrow)"><span aria-hidden="true">←</span><span class="lbl"> Prev</span></button>
+    <button id="lbNext" aria-label="Next image" title="Next image (right arrow)"><span class="lbl">Next </span><span aria-hidden="true">→</span></button>
+    <button id="lbClose" aria-label="Close" title="Close (Esc)"><span class="lbl">Close </span><span aria-hidden="true">✕</span></button>
   </div>
 
-  <div class="lb-panes">
+  <!-- Narrow screens only. Two panes side by side is the whole point on a
+       desktop and impossible on a phone: at 402px each got a 170px-tall sliver
+       inside a scrolling column and neither was legible. One at a time, with a
+       switch, and the picture gets the whole width. -->
+  <div class="pane-tabs" id="lbPaneTabs" hidden>
+    <button data-pane="dec" aria-pressed="true">Decoded</button>
+    <button data-pane="ref" aria-pressed="false">Published plate</button>
+  </div>
+  <div class="lb-panes" id="lbPanes" data-pane="dec">
     <section class="pane">
       <div class="pane-head"><span id="lbTier">Decoded from the audio</span>
         <span class="grow"></span>
@@ -1452,6 +1553,9 @@ function sourcesFor(r){
 // images would bury whatever the person was looking at before under 116 history
 // entries.
 
+// Whether the gallery exists as a history entry beneath the lightbox yet.
+let HISTORY_ROOTED = false;
+
 function hashFor(im, sep){
   return '#' + im.n + ((im.color && sep) ? '/' + (sep + 1) : '');
 }
@@ -1462,7 +1566,23 @@ function parseHash(h){
 function syncHash(replace){
   if(!LB.im) return;
   const h = hashFor(LB.im, LB.sep);
-  if(location.hash === h) return;
+  // ARRIVING ON A DEEP LINK LEFT NO WAY BACK. The hash already matched, so this
+  // returned early having pushed nothing -- the lightbox lived on the same
+  // history entry as the page load, and a phone's back gesture left the site
+  // instead of closing the picture. With the close button also laid out off the
+  // right edge, that is the "I cannot get rid of it" the report describes.
+  // Put the gallery underneath it first, so back always has somewhere to go.
+  if(location.hash === h){
+    if(!HISTORY_ROOTED){
+      HISTORY_ROOTED = true;
+      try{
+        history.replaceState(null,'',location.pathname+location.search);
+        history.pushState(null,'',h);
+      }catch(e){}
+    }
+    return;
+  }
+  HISTORY_ROOTED = true;
   try{ history[replace ? 'replaceState' : 'pushState'](null, '', h); }
   catch(e){ location.hash = h; }        // file:// and the like
 }
@@ -1505,6 +1625,7 @@ function openLB(i, opts){
   // Back to the whole picture on both sides. A new image at the previous one's
   // magnification would drop you into an arbitrary corner of it.
   DECVP.fitView(); REFVP.fitView();
+  syncPaneTabs(); setPane('dec');    // the decode is what you came for
   syncHash(!!(opts && opts.replace));
   // Kick the reference fetch off BEFORE fillText does its work, so the two
   // panes race rather than queue. load() is cached by URL, so fillRef asking
@@ -1590,13 +1711,44 @@ function closeLB(){
   stopAudio();
   LB.el.hidden=true; LB.im=null; LB.off=null; LB.frameId=null;
   document.body.style.overflow='';
+  // replaceState, not pushState: pushing meant the next back gesture landed on
+  // the hash again and re-opened the picture that had just been dismissed.
   if(location.hash){
-    try{ history.pushState(null, '', location.pathname + location.search); }
+    try{ history.replaceState(null, '', location.pathname + location.search); }
     catch(e){}
   }
   if(LB.restoreFocus&&LB.restoreFocus.focus) LB.restoreFocus.focus();
 }
 const stepLB=d=>{ if(!LB.el.hidden) openLB(LB.idx+d, {replace:true}); };
+
+// ---- one pane at a time, on a phone ---------------------------------------
+// Purely a narrow-screen affair: the CSS hides the tabs and ignores data-pane
+// above 860px, so the desktop side-by-side is untouched. The viewport has to be
+// told to redraw, because a pane coming back from display:none has been
+// measuring a zero-sized box.
+function setPane(which){
+  const p=$('lbPanes'); if(!p) return;
+  p.dataset.pane = which==='ref' ? 'ref' : 'dec';
+  $('lbPaneTabs').querySelectorAll('button').forEach(b=>
+    b.setAttribute('aria-pressed', String(b.dataset.pane===p.dataset.pane)));
+  (p.dataset.pane==='ref' ? REFVP : DECVP).redraw();
+}
+$('lbPaneTabs').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  e.stopPropagation(); setPane(b.dataset.pane);
+});
+// The tabs exist only where they are usable, so nothing tabs into a hidden
+// control on a desktop.
+const NARROW='(max-width:860px),(max-height:560px)';
+function syncPaneTabs(){
+  const narrow = matchMedia(NARROW).matches;
+  $('lbPaneTabs').hidden = !narrow;
+  if(!narrow) $('lbPanes').dataset.pane='dec';
+}
+matchMedia(NARROW).addEventListener('change', ()=>{
+  syncPaneTabs();
+  if(!LB.el.hidden){ DECVP.redraw(); REFVP.redraw(); }
+});
 
 // Back and forward move through images, between the two views, and finally out
 // of the lightbox. One router, so the button always does the obvious thing.
