@@ -56,7 +56,7 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='71';
+const ASSETV='73';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -98,11 +98,6 @@ h1 em{font-style:normal;color:var(--gold)}
 .lede{font-size:clamp(16px,2vw,19px);color:var(--dim);max-width:66ch;margin:0 0 26px}
 .lede strong{color:var(--ink);font-weight:600}
 
-.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
-.stat{border:1px solid var(--line2);border-radius:8px;padding:9px 14px;background:var(--panel)}
-.stat b{font-family:var(--mono);color:var(--gold);font-size:15px}
-.stat span{color:var(--dimmer);font-size:12px;text-transform:uppercase;letter-spacing:.09em;
-  display:block;margin-top:1px}
 
 .bar{position:sticky;top:0;z-index:20;background:rgba(10,11,13,.93);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:12px 0}
@@ -273,6 +268,16 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .lb-top button{padding:5px 10px}
 .lb-panes{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 16px 2px}
 .pane{display:flex;flex-direction:column;min-width:0;min-height:0}
+/* THE PANES ARE <section> ELEMENTS, AND section CARRIES THE PROSE PADDING.
+   `section{border-top:1px solid;padding:56px 0}` is written for the long-form
+   sections further down the document, and it was landing on both lightbox
+   panes as well -- 112px of padding inside every pane, at every screen size,
+   since the day the panes were written. It read as a gap above the pane
+   heading and below the picture, and it was measurable: a landscape pane 249px
+   tall holding a 26px head and a 110px picture, with 57px of nothing at each
+   end. Undone here rather than by renaming the elements, because a pane really
+   is a section of the dialog. */
+.pane{padding:0;border-top:0}
 .pane-head{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;overflow:hidden;
   font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--dimmer);padding-bottom:4px}
@@ -446,7 +451,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   .lb-panes{grid-template-columns:1fr;overflow:hidden;padding:6px 10px 2px}
   .lb-panes[data-pane="dec"] .pane:nth-of-type(2),
   .lb-panes[data-pane="ref"] .pane:nth-of-type(1){display:none}
-  .pane-body{min-height:0}          /* let flex:1 give it everything going spare */
+  .pane{flex-wrap:nowrap;justify-content:flex-start;align-content:stretch}
+  .pane-body{flex:1 1 auto;min-height:0}   /* everything going spare */
   .pane-head{font-size:9.5px;padding-bottom:3px}
   .pane-head>span:first-child{display:none}   /* the tab above already says it */
   /* THE SOURCE PICKER WAS EATING THE PICTURE. `.srcs` wraps, so in a narrow
@@ -525,9 +531,9 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   /* Pinned rather than inherited: measured here, the pane was 214px tall with
      26 of head and 75 of picture and 113 unaccounted for, so the picture was
      smaller than the space it had been given. */
-  .pane{min-height:0}
+  .pane{min-height:0;flex-wrap:nowrap;justify-content:flex-start;align-content:stretch}
   .pane-head{flex:0 0 auto}
-  .pane-body{flex:1 1 0;min-height:0}
+  .pane-body{flex:1 1 auto;min-height:0}
   /* The waveform is the thing to spend in landscape: the picture is the point,
      and turning the phone back gets it straight back. */
   .lb-wave{padding:4px 10px 5px}
@@ -547,16 +553,11 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   116 photographs are stored on it — not as pictures, but as <strong>sound</strong>. These were
   decoded here from a <a href="https://archive.org/details/voyager.decode">384&nbsp;kHz
   digitisation of the original master tapes</a>.</p>
-  <p class="lede">The colour images below are composited in your browser, right now, from their
-  three separate monochrome scans. Open any one to put the decode beside the published reproduction
-  of the same photograph, and to hear the 4.3 seconds of sound it came out of.</p>
-  <div class="stats">
-    <div class="stat"><b>116</b><span>images</span></div>
-    <div class="stat"><b>156</b><span>audio frames</span></div>
-    <div class="stat"><b>20</b><span>in colour</span></div>
-    <div class="stat"><b>262.5</b><span>dots per trace</span></div>
-    <div class="stat"><b>8.326 ms</b><span>per trace</span></div>
-  </div>
+  <p class="lede"><strong>Twenty of them are in colour</strong> — scanned three times through red,
+  green and blue filters, which is why the record carries 156 pieces of audio for 116 pictures. The
+  colour ones are composited in your browser, right now, from those three separate monochrome
+  scans. Open any one to put the decode beside the published reproduction of the same photograph,
+  and to hear the 4.3 seconds of sound it came out of.</p>
 </div></header>
 
 <div class="bar"><div class="wrap">
@@ -1590,7 +1591,9 @@ function sourcesFor(r){
   const boxOk=Array.isArray(box)&&box.length===4&&box.every(v=>v>=0&&v<=1);
   if(r.crop)                 out.push({url:r.crop, kind:'crop', label:`book p.${page} · detail`});
   else if(r.book && boxOk)   out.push({url:r.book, box, kind:'crop', label:`book p.${page} · detail`});
-  if(r.book)                 out.push({url:r.book, kind:'page', label:`book p.${page} · whole page`});
+  // The whole page scan is not offered. It is the plate you want, and the page
+  // it came from is printed in the notes below either way -- a second button
+  // showing three unrelated photographs beside it was more detail than help.
   if(r.file && !r.mislabelled) out.push({url:r.file, kind:'commons', label:'Commons scan'});
   return out;
 }
@@ -2234,7 +2237,7 @@ function makeViewport(bodyId, cvId, miniId, ctlId){
   }, {passive:false});
 
   V.body.addEventListener('pointerdown', e=>{
-    if(!V.stage || e.button!==0 || e.target.closest('.zoomctl,.mini')) return;
+    if(!V.stage || e.button!==0 || e.target.closest('.zoomctl,.mini,.minireset')) return;
     V.pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
     if(V.pts.size===2){ V.pinch=pinchState(); V.drag=null; return; }
     // State first, capture second, and the capture may fail. setPointerCapture
