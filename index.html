@@ -56,7 +56,7 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='73';
+const ASSETV='74';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -612,7 +612,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   </button></div>
 </div>
 
-<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="image comparison">
+<div class="lb" id="lb" hidden tabindex="-1" role="dialog" aria-modal="true" aria-label="image comparison">
   <div class="lb-top">
     <span class="n" id="lbNum"></span>
     <span class="t" id="lbTitle"></span>
@@ -1584,6 +1584,41 @@ function refUrl(s){
   return s.url + (s.url.indexOf('?')<0 ? `?v=${ASSETV}` : '');
 }
 
+// A phone shows ONE pane, and PANE remembers which. Fetching the plate at high
+// priority for a pane that is display:none puts 66 KiB in front of the picture
+// that IS on screen. It is still fetched -- tapping across to it has to be
+// instant, and a hand takes a moment to get there -- just not ahead of the
+// thing being looked at.
+const refPriority = () =>
+  (!matchMedia(NARROW).matches || PANE === 'ref') ? 'high' : 'low';
+
+// Speculative work asks this first. Third copy of the test in this file, so it
+// gets a name.
+const metered = () => { const c = navigator.connection;
+  return !!c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || '')); };
+
+// ONE place that warms the plate setSource(0) is about to want.
+//
+// REFWARM is a DE-DUPLICATOR, never an authoritative cache. setSource() always
+// calls load() regardless of what is in here, so a warm that 404s or dies on a
+// dropped connection costs nothing later. That distinction matters: the
+// waveform strips once cached a failed fetch as a null and never retried, and
+// every card that lost one request lost its strip for the session.
+//
+// Through refUrl(), like every other caller -- build the URL by hand here and
+// the warm and the real load ask for two different URLs and share no cache
+// entry, which is the exact bug refUrl() exists to prevent.
+const REFWARM = new Set();
+function warmRef(im, priority){
+  const s = im && sourcesFor(REF[im.n])[0];
+  if(!s) return false;
+  const url = refUrl(s);
+  if(REFWARM.has(url)) return false;
+  REFWARM.add(url);
+  load(url, priority || 'low');
+  return true;
+}
+
 function sourcesFor(r){
   if(!r) return [];
   const out=[], page=r.bookPage;
@@ -1667,6 +1702,17 @@ function openLB(i, opts){
   const n=VIEW.length;
   LB.idx=((i%n)+n)%n;
   const im=VIEW[LB.idx];
+  // THE FIRST THING, before the overlay is unhidden and before two viewports
+  // re-fit. Measured on the live site the request left 80 ms after the click,
+  // and every one of those milliseconds went on layout the fetch does not
+  // depend on -- it needs `im` and nothing else. The decoded pane needs no
+  // network at all, since the grid already drew it, so the plate is the only
+  // thing in this function that has to be on the wire early.
+  //
+  // Only the FIRST source. This once warmed all of them, so every open pulled
+  // the whole-page book scan and the Commons scan too: 1.48 MiB fetched to show
+  // 66 KiB, with the rest sitting in the same queue as the crop being waited on.
+  warmRef(im, refPriority());
   const sep=(opts&&opts.sep&&im.color&&opts.sep<im.frames.length)?opts.sep:0;
   LB.im=im; LB.sep=sep; LB.frameId=im.frames[sep];
   LB.off=null; LB.hoverTrace=null; LB.playSample=null;
@@ -1676,7 +1722,15 @@ function openLB(i, opts){
     LB.restoreFocus=document.activeElement;
     LB.el.hidden=false;
     document.body.style.overflow='hidden';
-    $('lbClose').focus();       // on OPEN only: stepping must not move focus
+    // THE DIALOG, NOT THE CLOSE BUTTON. Focus used to land on #lbClose, and the
+    // keydown handler returns early for Space when a button has focus -- so that
+    // the space bar presses the button you deliberately tabbed to, rather than
+    // playing audio. With Close focused by default that guard fired on the
+    // DEFAULT state: the handler returned without preventDefault, the browser
+    // activated the focused button on keyup, and the space bar closed the
+    // lightbox. Focusing the container leaves Space to reach togglePlay, keeps
+    // Escape working, and is better dialog practice anyway.
+    LB.el.focus();              // on OPEN only: stepping must not move focus
   }
   // Back to the whole picture on both sides. A new image at the previous one's
   // magnification would drop you into an arbitrary corner of it.
@@ -1687,14 +1741,6 @@ function openLB(i, opts){
   // panes race rather than queue. load() is cached by URL, so fillRef asking
   // again a moment later is free.
   //
-  // The FIRST source only. This used to warm all of them, which meant every
-  // open pulled the whole-page book scan -- a quarter of a megabyte, four times
-  // the size of the crop -- and the Commons scan besides, for panes nobody had
-  // asked to see. Measured on the live site, opening one image fetched 1.48 MiB
-  // of reference material and showed 66 KiB of it. The rest was not merely
-  // wasted: it was in the same queue as the crop being waited on.
-  { const r=REF[im.n], s=sourcesFor(r)[0];
-    if(s) load(refUrl(s), 'high'); }
   fillText(im);
   fillRef(im);
   loadDecoded(im);
@@ -1755,8 +1801,7 @@ function prefetchNeighbours(){
       // only that one, at low priority. The other sources are a click away and
       // fetch then; warming them here put a quarter-megabyte page scan in front
       // of every crop somebody was actually waiting for.
-      const s=sourcesFor(REF[im.n])[0];
-      if(s) load(refUrl(s), 'low');
+      warmRef(im, 'low');
     }, k*40);
   });
 }
@@ -2053,7 +2098,7 @@ function setSource(k){
   // as the same thing, a canvas at the source's own resolution, so the viewer
   // below has one case to handle and the crop costs no second JPEG.
   const forIm=LB.im;
-  load(url,'high').then(i=>{
+  load(url, refPriority()).then(i=>{
     // The index alone is not enough: source 0 of the previous image and source
     // 0 of this one are both k=0, so a slow load from the image you just left
     // would draw itself into the pane of the image now on screen.
@@ -3258,6 +3303,35 @@ function prefetchOtherTier(){
   for(let k=0;k<2;k++) setTimeout(step, k*120);
 }
 
+// EVERY PLATE, ONCE THE PAGE IS QUIET. The decoded picture is already in cache
+// when you open a card -- the grid drew it -- while the plate beside it has
+// never been requested, so it arrives a quarter of a second late and the
+// comparison assembles itself in front of you. 116 crops is 8.3 MiB, against
+// the 11.5 MiB of thumbnails this page already ships, and at 'low' every byte
+// of it yields to whatever is on screen.
+//
+// NOT hung off paint() or scheduleTierWarm(). Those walk the cards that have
+// been PAINTED, and that is precisely the hook that once painted all 116 at
+// once when the grid was hidden behind the writing -- a display:none grid
+// reports 0x0 rects, which passed the on-screen test for every card. An
+// independent walk cannot inherit that failure.
+//
+// Three in flight: enough to keep the connection busy, few enough that the
+// browser's own priority ordering still has something to order.
+let REFPRELOADED = false;
+function preloadRefs(){
+  if(REFPRELOADED || metered() || !images.length) return;
+  REFPRELOADED = true;
+  let i = 0;
+  const step = () => {
+    while(i < images.length){
+      const im = images[i++];
+      if(warmRef(im, 'low')){ setTimeout(step, 0); return; }   // one at a time per chain
+    }
+  };
+  for(let k = 0; k < 3; k++) setTimeout(step, 500 + k * 120);
+}
+
 // Re-run as you scroll, so the warm set follows you. Debounced hard: this is
 // the lowest-value work the page does and it must never compete with painting.
 function scheduleTierWarm(){
@@ -3365,6 +3439,10 @@ BOOT.catalog
   // was followed stays the first history entry rather than becoming two.
   if(location.hash) routeHash(location.hash);
   scheduleTierWarm();
+  // After the grid has had its turn. The plates are wanted only once something
+  // is opened, so they queue behind the pictures that are on screen now.
+  if('requestIdleCallback' in window) requestIdleCallback(preloadRefs, {timeout:4000});
+  else setTimeout(preloadRefs, 1500);
   countNoRef();
 }).catch(e=>{
   GRID.innerHTML=`<p class="err">Could not load the catalogue (${e&&e.message||e}).</p>`;
