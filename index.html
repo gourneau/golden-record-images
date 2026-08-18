@@ -56,7 +56,7 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='74';
+const ASSETV='75';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
@@ -1713,6 +1713,7 @@ function openLB(i, opts){
   // the whole-page book scan and the Commons scan too: 1.48 MiB fetched to show
   // 66 KiB, with the rest sitting in the same queue as the crop being waited on.
   warmRef(im, refPriority());
+  pauseRefPreload();          // a click outranks a guess about one
   const sep=(opts&&opts.sep&&im.color&&opts.sep<im.frames.length)?opts.sep:0;
   LB.im=im; LB.sep=sep; LB.frameId=im.frames[sep];
   LB.off=null; LB.hoverTrace=null; LB.playSample=null;
@@ -3316,20 +3317,35 @@ function prefetchOtherTier(){
 // reports 0x0 rects, which passed the on-screen test for every card. An
 // independent walk cannot inherit that failure.
 //
-// Three in flight: enough to keep the connection busy, few enough that the
-// browser's own priority ordering still has something to order.
+// IT TRICKLES, AND IT GETS OUT OF THE WAY. The first version of this ran three
+// chains flat out from 500 ms, and measured on the live site it put 66 crops on
+// the wire inside the first 1.2 seconds -- while the grid was still loading.
+// The slowest thumbnail went from about 100 ms to 1218, and opening an image
+// took 996 ms instead of 142. That is bug two of this page's three bandwidth
+// bugs, recurring: speculative work in front of the thing being waited for.
+// fetchpriority='low' is necessary and it is plainly not sufficient, because
+// two chains deep there is nothing much for the browser left to reorder.
+//
+// So: two chains rather than three, a 70 ms gap between requests so the
+// connection is never saturated, and -- the part that actually matters -- it
+// stands down for a second whenever a lightbox opens, because a click is a
+// person waiting and this is a guess about one.
 let REFPRELOADED = false;
+let REFPAUSE = 0;                      // preloading is suspended until this time
+const pauseRefPreload = () => { REFPAUSE = performance.now() + 1000; };
+
 function preloadRefs(){
   if(REFPRELOADED || metered() || !images.length) return;
   REFPRELOADED = true;
   let i = 0;
   const step = () => {
+    if(performance.now() < REFPAUSE){ setTimeout(step, 300); return; }
     while(i < images.length){
       const im = images[i++];
-      if(warmRef(im, 'low')){ setTimeout(step, 0); return; }   // one at a time per chain
+      if(warmRef(im, 'low')){ setTimeout(step, 70); return; }
     }
   };
-  for(let k = 0; k < 3; k++) setTimeout(step, 500 + k * 120);
+  for(let k = 0; k < 2; k++) setTimeout(step, k * 200);
 }
 
 // Re-run as you scroll, so the warm set follows you. Debounced hard: this is
@@ -3441,8 +3457,14 @@ BOOT.catalog
   scheduleTierWarm();
   // After the grid has had its turn. The plates are wanted only once something
   // is opened, so they queue behind the pictures that are on screen now.
-  if('requestIdleCallback' in window) requestIdleCallback(preloadRefs, {timeout:4000});
-  else setTimeout(preloadRefs, 1500);
+  // Late, and only when the browser says it is idle. The grid's thumbnails are
+  // what somebody is looking at; the plates are for a click that has not
+  // happened yet.
+  const startPreload = () => {
+    if('requestIdleCallback' in window) requestIdleCallback(preloadRefs, {timeout:6000});
+    else preloadRefs();
+  };
+  setTimeout(startPreload, 2500);
   countNoRef();
 }).catch(e=>{
   GRID.innerHTML=`<p class="err">Could not load the catalogue (${e&&e.message||e}).</p>`;
