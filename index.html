@@ -56,19 +56,39 @@
 // thread -- a browser extension injecting at document_start will do it -- and
 // no amount of reordering inside the page will help.
 try{ performance.mark('boot'); }catch(e){}
-const ASSETV='75';
+const ASSETV='76';
 const BOOT={
   catalog: fetch(`web/public/data/catalog.json?v=${ASSETV}`).then(r=>r.ok?r.json():Promise.reject(r.status)),
   refmap:  fetch(`docs/reference/map.json?v=${ASSETV}`).then(r=>r.ok?r.json():{}).catch(()=>({})),
   cards:   fetch(`web/public/data/waves/cards.json?v=${ASSETV}`).then(r=>r.ok?r.json():null).catch(()=>null),
+  scope:   fetch(`web/public/data/waves/scope.json?v=${ASSETV}`).then(r=>r.ok?r.json():null).catch(()=>null),
 };
 </script>
 <style>
+/* THE GOLDEN RECORD'S OWN TYPE AND METAL. This page and goldenrecord.voyage are
+   two views of one object, and they should look it: the same warm near-black
+   of the anodised cover, the same engraved gold, the same three faces. The
+   fonts are vendored in vendor/fonts/ under the SIL Open Font License
+   (vendor/fonts/OFL.txt) -- no third-party request stands between a visitor
+   and the first paint. */
+@font-face{font-family:'Marcellus';src:url('vendor/fonts/marcellus-latest-latin-400-normal.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'EB Garamond';src:url('vendor/fonts/eb-garamond-latest-latin-400-normal.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'EB Garamond';src:url('vendor/fonts/eb-garamond-latest-latin-400-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'EB Garamond';src:url('vendor/fonts/eb-garamond-latest-latin-600-normal.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('vendor/fonts/ibm-plex-mono-latest-latin-400-normal.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('vendor/fonts/ibm-plex-mono-latest-latin-500-normal.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
 :root{
-  --bg:#0a0b0d; --panel:#101216; --line:#20242b; --line2:#2c323b;
-  --ink:#e8eaed; --dim:#9aa3ad; --dimmer:#7b838d;
-  --gold:#c9a227; --cyan:#5fd3c4;
-  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+  /* The names are this page's; the values are the Golden Record site's. --cyan
+     keeps its name because forty rules use it, but it is that site's starlight
+     now, which there means the same thing it means here: modern, corrected,
+     not-as-engraved. */
+  --bg:#050403; --panel:#0d0a06; --line:#2b2210; --line2:#3a2f14;
+  --ink:#e8dcc0; --dim:#a89a7c; --dimmer:#85785d;
+  --gold:#c9a227; --gold-bright:#f2d478; --gold-dim:#6e5a1e; --copper:#b87333;
+  --cyan:#a9c3d4;
+  --display:'Marcellus','Times New Roman',serif;
+  --body:'EB Garamond',Georgia,serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 *{box-sizing:border-box}
 /* DOUBLE-TAP MUST NOT ZOOM THE PAGE. A quick double tap on the toolbar -- which
@@ -79,42 +99,66 @@ const BOOT={
    touch-action and is unaffected. */
 html,body{touch-action:manipulation}
 html,body{margin:0;background:var(--bg);color:var(--ink);
-  font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
+  font:17px/1.55 var(--body);
   -webkit-font-smoothing:antialiased}
 .wrap{max-width:1240px;margin:0 auto;padding:0 24px}
-a{color:var(--cyan)}
+a{color:var(--gold)}
+a:hover{color:var(--gold-bright)}
 
-header{border-bottom:1px solid var(--line);padding:72px 0 48px;position:relative;overflow:hidden;
-  background:radial-gradient(1100px 420px at 50% -180px,#15181e 0%,var(--bg) 70%)}
+header{border-bottom:1px solid var(--line);padding:64px 0 56px;position:relative;overflow:hidden;
+  background:radial-gradient(1100px 420px at 50% -180px,#17110a 0%,var(--bg) 70%)}
 /* The record's engraved cover, set behind the title. NASA artwork, public
    domain, vendored in docs/img/vendor/. Decorative -- aria-hidden -- and
    deliberately low contrast: it should be recognised, not read. */
-.disc{position:absolute;right:-90px;top:-70px;width:420px;height:420px;opacity:.13;
+.disc{position:absolute;right:-90px;top:-70px;width:420px;height:420px;opacity:.07;
   pointer-events:none;z-index:0}
 header .wrap>*:not(.disc){position:relative;z-index:1}
 @media(max-width:820px){.disc{right:-150px;top:-120px;width:340px;height:340px;opacity:.09}}
-h1{font-size:clamp(30px,5.2vw,52px);line-height:1.08;margin:0 0 18px;letter-spacing:-.022em;font-weight:600}
+h1{font:400 clamp(32px,5vw,56px)/1.06 var(--display);margin:0 0 18px;letter-spacing:.02em;color:var(--gold-bright)}
 h1 em{font-style:normal;color:var(--gold)}
-.lede{font-size:clamp(16px,2vw,19px);color:var(--dim);max-width:66ch;margin:0 0 26px}
+.eyebrow{display:block;font-family:var(--mono);font-size:.68rem;font-weight:500;letter-spacing:.32em;
+  text-transform:uppercase;color:var(--gold);margin:0 0 16px}
+.lede{font-size:clamp(17px,2vw,20px);line-height:1.5;color:var(--dim);max-width:62ch;margin:0 0 20px}
 .lede strong{color:var(--ink);font-weight:600}
 
+/* ---- the opening: a sound becoming a picture ------------------------------ */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.04fr);gap:44px;align-items:center}
+@media(max-width:980px){.hero{grid-template-columns:1fr;gap:30px}}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 0}
+.hero-cta button.primary{color:var(--bg);background:var(--gold);border-color:var(--gold);font-weight:600;padding:8px 18px}
+.hero-cta button.primary:hover{background:var(--gold-bright);border-color:var(--gold-bright);color:var(--bg)}
+.pill{display:inline-flex;align-items:center;font-size:14.5px;line-height:1.45;color:var(--dim);
+  text-decoration:none;border:1px solid var(--line2);border-radius:999px;padding:8px 18px;
+  background:color-mix(in srgb,var(--panel) 88%,transparent);transition:.14s}
+.pill:hover{color:var(--gold-bright);border-color:var(--gold-dim)}
+.scope{border:1px solid var(--line2);border-radius:14px;overflow:hidden;background:#000;
+  box-shadow:0 0 0 1px rgba(201,162,39,.06),0 24px 70px -30px rgba(201,162,39,.35)}
+.scope canvas{display:block;width:100%;height:auto}
+.scope-cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:9px 14px 10px;border-top:1px solid var(--line);font-size:14px;color:var(--dim);background:var(--panel)}
+.scope-cap .mono{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--gold);align-self:center}
 
-.bar{position:sticky;top:0;z-index:20;background:rgba(10,11,13,.93);
+
+.bar{position:sticky;top:0;z-index:20;background:rgba(5,4,3,.9);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:12px 0}
 .bar .wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-button{font:inherit;font-size:13px;color:var(--dim);background:transparent;
-  border:1px solid var(--line2);border-radius:7px;padding:7px 13px;cursor:pointer;transition:.14s}
-button:hover{color:var(--ink);border-color:#3d454f}
+/* Pills, as on the Golden Record site: a hairline of dark gold, a raised fill,
+   and on hover the text goes bright and the line goes warmer. */
+button{font:inherit;font-size:14.5px;line-height:1.45;color:var(--dim);
+  background:color-mix(in srgb,var(--panel) 88%,transparent);
+  border:1px solid var(--line2);border-radius:999px;padding:6px 14px;cursor:pointer;transition:.14s}
+button:hover{color:var(--gold-bright);border-color:var(--gold-dim)}
 button[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:var(--gold);font-weight:600}
+button[aria-pressed="true"]:hover{color:var(--bg);background:var(--gold-bright);border-color:var(--gold-bright)}
 .grow{flex:1}
 .count{font-family:var(--mono);font-size:12px;color:var(--dimmer)}
 .speed{font-size:13px;color:var(--dimmer);display:flex;align-items:center;gap:7px}
 /* In the toolbar, not the header: findable without competing with the pictures,
    which is what someone came for. */
 .ghlink{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--dim);
-  text-decoration:none;border:1px solid var(--line2);border-radius:7px;padding:6px 11px;
+  text-decoration:none;border:1px solid var(--line2);border-radius:999px;padding:6px 13px;
   transition:.14s;flex:0 0 auto}
-.ghlink:hover{color:var(--ink);border-color:#5a4a1e;background:var(--panel)}
+.ghlink:hover{color:var(--gold-bright);border-color:#5a4a1e;background:var(--panel)}
 /* A <select> does not size like a <button>. Browsers apply their own internal
    metrics -- line-height, an inner padding box, and room for the arrow -- and
    they win over `padding` alone, which is why matching the padding was not
@@ -125,9 +169,9 @@ button[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:
    The arrow is drawn back as a background, since removing the appearance
    removes that too. */
 .speed select{font:inherit;font-size:13px;font-family:var(--mono);color:var(--gold);
-  background:var(--panel);border:1px solid var(--line2);border-radius:7px;
+  background:var(--panel);border:1px solid var(--line2);border-radius:999px;
   cursor:pointer;appearance:none;-webkit-appearance:none;
-  height:36.8px;line-height:1.6;padding:0 28px 0 12px;
+  height:35.3px;line-height:1.6;padding:0 28px 0 12px;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c9a227' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 10px center}
 .speed select:hover{border-color:#5a4a1e}
@@ -141,7 +185,7 @@ button[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));
   gap:18px;padding:36px 0 64px}
-figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:14px;
   overflow:hidden;transition:.16s;cursor:zoom-in}
 /* Glow, not move. A transform on hover shifts the canvas underneath the
    pointer, which is merely fussy on a static thumbnail and genuinely bad while
@@ -156,21 +200,21 @@ figure:hover,figure:focus-within{border-color:#5a4a1e;
 .shot canvas{width:100%;height:100%;display:block;object-fit:contain;image-rendering:auto}
 .tag{position:absolute;top:8px;left:8px;font-family:var(--mono);font-size:10px;
   padding:2px 6px;border-radius:4px;background:rgba(0,0,0,.72);color:var(--dim);letter-spacing:.04em}
-.tag.rgb{right:8px;left:auto;color:#0a0b0d;background:var(--gold);font-weight:700}
-.tag.cmp{bottom:8px;top:auto;left:8px;color:#0a0b0d;background:var(--cyan);font-weight:700}
+.tag.rgb{right:8px;left:auto;color:#050403;background:var(--gold);font-weight:700}
+.tag.cmp{bottom:8px;top:auto;left:8px;color:#050403;background:var(--cyan);font-weight:700}
 .scanbtn{position:absolute;bottom:8px;right:8px;z-index:2;width:28px;height:28px;padding:0;
   border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.66);
   color:var(--gold);font-size:11px;line-height:1;display:flex;align-items:center;
   justify-content:center;opacity:0;transition:opacity .14s,background .14s}
 figure:hover .scanbtn,.scanbtn:focus-visible,.scanbtn[aria-pressed="true"]{opacity:1}
-.scanbtn[aria-pressed="true"]{background:var(--gold);color:#0a0b0d;border-color:var(--gold)}
-.cardwave{display:block;width:100%;height:26px;background:#07080a;border-top:1px solid var(--line)}
+.scanbtn[aria-pressed="true"]{background:var(--gold);color:#050403;border-color:var(--gold)}
+.cardwave{display:block;width:100%;height:26px;background:#070504;border-top:1px solid var(--line)}
 .prov{border-left:2px solid #4a4326;padding:1px 0 1px 10px;margin:7px 0 0;
   font-size:12px;line-height:1.5;color:var(--dimmer)}
 .prov b{color:#b9a86e;font-weight:600}
 .prov .sep{color:#5a5340}
 .tag.tier{right:8px;left:auto;top:auto;bottom:8px;background:rgba(201,162,39,.9);
-  color:#0a0b0d;font-weight:700}
+  color:#050403;font-weight:700}
 /* The overview inset -- the little map in the corner. Plain absolute
    positioning now: the pane no longer scrolls, so the sticky-with-negative-
    margin trick that kept it in view is not needed and would only confuse.
@@ -184,16 +228,16 @@ figure:hover .scanbtn,.scanbtn:focus-visible,.scanbtn[aria-pressed="true"]{opaci
    a zoom to leave and vanishes when there is not. */
 .minireset{position:absolute;z-index:4;left:8px;top:8px;transform:translate(-38%,-38%);
   width:24px;height:24px;padding:0;border-radius:50%;line-height:1;font-size:12px;
-  background:#14161b;color:var(--ink);border:1px solid var(--line2);cursor:pointer;
+  background:#120e08;color:var(--ink);border:1px solid var(--line2);cursor:pointer;
   box-shadow:0 2px 8px rgba(0,0,0,.7)}
-.minireset:hover{background:#232730;color:var(--gold);border-color:#5a4a1e}
+.minireset:hover{background:#1d160b;color:var(--gold);border-color:#5a4a1e}
 .minireset[hidden]{display:none}
 @media(max-width:860px),(max-height:560px){.minireset{width:30px;height:30px;font-size:14px}}
 .mini[hidden]{display:none}
 @media(hover:none){.scanbtn{opacity:1}}
 .tag.cmp.none{background:rgba(0,0,0,.72);color:var(--dim);font-weight:400}
 figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
-.ttl{font-size:13.5px;line-height:1.35;color:var(--ink)}
+.ttl{font-size:15.5px;line-height:1.3;color:var(--ink)}
 .sub{font-family:var(--mono);font-size:10.5px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
 
 /* ---- the two views ----------------------------------------------------- */
@@ -217,10 +261,10 @@ figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
 /* One line and a door, at the end of the pictures, for anyone who scrolls
    rather than reads the toolbar. */
 .readon{display:block;width:100%;text-align:left;margin:26px 0 8px;padding:16px 18px;
-  border:1px solid var(--line);border-radius:10px;background:var(--panel);cursor:pointer}
-.readon:hover{border-color:#5a4a1e;background:#141720}
-.readon b{display:block;color:var(--gold);font-size:15px;font-weight:600;margin-bottom:3px}
-.readon span{display:block;color:var(--dim);font-size:13.5px;line-height:1.5;max-width:74ch}
+  border:1px solid var(--line);border-radius:14px;background:var(--panel);cursor:pointer}
+.readon:hover{border-color:#5a4a1e;background:#140f08}
+.readon b{display:block;color:var(--gold-bright);font:400 19px/1.3 var(--display);letter-spacing:.02em;margin-bottom:4px}
+.readon span{display:block;color:var(--dim);font-size:15.5px;line-height:1.5;max-width:74ch}
 /* Air before the footer's rule. Flush against it, the card read as part of the
    footer rather than as the end of the writing. */
 .readon.back{margin:40px 0 56px}
@@ -230,8 +274,8 @@ figcaption{padding:11px 13px 13px;border-top:1px solid var(--line)}
 }
 
 section{border-top:1px solid var(--line);padding:56px 0}
-h2{font-size:23px;margin:0 0 20px;letter-spacing:-.012em;font-weight:600}
-h3{font-size:15px;margin:26px 0 8px;color:var(--gold);font-weight:600}
+h2{font:400 28px/1.2 var(--display);margin:0 0 20px;letter-spacing:.02em;color:var(--gold-bright)}
+h3{font:400 18px/1.3 var(--display);margin:28px 0 8px;color:var(--gold);letter-spacing:.02em}
 p{color:var(--dim);max-width:74ch}
 table{border-collapse:collapse;width:100%;max-width:680px;font-size:14px;margin:12px 0}
 th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line)}
@@ -243,12 +287,12 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .sig{color:var(--dim);font-size:15px;margin-bottom:18px}
 /* Available to a screen reader, absent to everyone else. */
 .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-.sig strong{color:var(--ink);font-weight:600}
-.err{color:#e6a2a2;font-family:var(--mono);font-size:13px;padding:20px 0}
+.sig strong{color:var(--gold-bright);font-weight:600}
+.err{color:#c96a4a;font-family:var(--mono);font-size:13px;padding:20px 0}
 @media(max-width:640px){.grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}}
 
 /* ---- lightbox --------------------------------------------------------- */
-.lb{position:fixed;inset:0;z-index:60;background:rgba(6,7,9,.975);
+.lb{position:fixed;inset:0;z-index:60;background:rgba(5,4,3,.975);
   backdrop-filter:blur(6px);display:flex;flex-direction:column;overscroll-behavior:contain}
 .lb[hidden]{display:none}
 /* ONE ROW, ALWAYS. flex-wrap let a long title -- image 116's is a full sentence
@@ -263,7 +307,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .lb-top .n{flex:0 0 auto}
 .lb-top button{flex:0 0 auto}
 .lb-top .n{font-family:var(--mono);color:var(--gold);font-size:13px}
-.lb-top .t{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.lb-top .t{font:400 19px/1.3 var(--display);letter-spacing:.02em;color:var(--gold-bright)}
 .lb-top .m{font-family:var(--mono);font-size:11px;color:var(--dimmer);flex:0 0 auto}
 .lb-top button{padding:5px 10px}
 .lb-panes{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 16px 2px}
@@ -282,7 +326,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--dimmer);padding-bottom:4px}
 .pane-head .srcs{display:flex;gap:6px;flex-wrap:wrap}
-.pane-head button{font-size:10px;padding:3px 8px;border-radius:5px;letter-spacing:.03em;
+.pane-head button{font-size:10px;padding:3px 8px;border-radius:999px;letter-spacing:.03em;
   text-transform:none;font-family:var(--mono)}
 /* A VIEWPORT, NOT A SCROLL BOX. The canvas is the size of the pane and the
    picture is drawn into it through a scale-and-offset, the way a map viewer
@@ -323,16 +367,16 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .pane-body:hover .zoomctl,.pane-body.zoomed .zoomctl,.zoomctl:focus-within{opacity:1}
 .zoomctl[hidden]{display:none}
 .zoomctl button{width:28px;height:28px;padding:0;border-radius:0;border:none;
-  background:rgba(16,18,22,.94);color:var(--ink);font-size:15px;line-height:1;
+  background:rgba(13,10,6,.94);color:var(--ink);font-size:15px;line-height:1;
   font-family:var(--mono);cursor:pointer}
-.zoomctl button:hover{background:rgba(40,44,52,.98);color:var(--gold)}
+.zoomctl button:hover{background:rgba(40,32,16,.98);color:var(--gold)}
 .zoomctl button:disabled{opacity:.35;cursor:default;color:var(--dimmer)}
 @media(hover:none){.zoomctl{opacity:1}}
 /* The panes have NO footer at all now. They are a flex column with the picture
    on flex:1, so every pixel of caption was a pixel off the picture -- on every
    image, permanently, for text that is reference material. It lives in a
    tooltip instead, which costs zero layout and appears where you ask for it. */
-.tipbtn{font-size:10px;font-family:var(--mono);padding:1px 7px;border-radius:5px;
+.tipbtn{font-size:10px;font-family:var(--mono);padding:1px 7px;border-radius:999px;
   letter-spacing:.03em;text-transform:none;line-height:1.6;flex:0 0 auto;white-space:nowrap}
 /* Fixed width on BOTH tier buttons. "Decoded" and "Denoised" differ in width, so
    the button resized every time it was pressed -- which
@@ -341,7 +385,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
    thing you were about to click. */
 #lbTierBtn{width:15.5em;text-align:center}
 #tier{min-width:14.5em;text-align:left}
-#tip{position:fixed;z-index:90;max-width:min(460px,72vw);background:#14161b;
+#tip{position:fixed;z-index:90;max-width:min(460px,72vw);background:#120e08;
   user-select:text;max-height:min(60vh,420px);overflow:auto;
   border:1px solid var(--line2);border-radius:8px;padding:10px 12px;
   font-size:12px;line-height:1.5;color:var(--dim);
@@ -389,7 +433,7 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
   padding:0 16px;overflow:hidden;white-space:nowrap;
   font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dimmer)}
 .lb-strip .seps{display:flex;gap:6px}
-.lb-strip button{font-size:10px;padding:1px 7px;border-radius:5px;line-height:1.6;
+.lb-strip button{font-size:10px;padding:1px 7px;border-radius:999px;line-height:1.6;
   font-family:var(--mono);letter-spacing:.03em}
 .lb-strip #lbFrames,.lb-strip #lbDecDim{flex:0 0 auto}
 /* The play row must not wrap either, for the same reason: it sits below the
@@ -399,14 +443,14 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 .wrow .seps{display:flex;gap:6px}
 .wrow .seps button{font-family:var(--mono);font-size:11px;padding:5px 9px}
 #lbWave{display:block;width:100%;height:64px;border:1px solid var(--line);border-radius:6px;
-  background:#0c0e12;cursor:crosshair;touch-action:pan-y}
+  background:#0a0805;cursor:crosshair;touch-action:pan-y}
 /* In the flow, below the overview, and ALWAYS PRESENT. The jarring part was
    never where it sat -- it was that it appeared on play and shoved the picture
    smaller mid-watch. Reserving the space permanently costs those pixels once
    instead of moving everything at the worst moment, and a stable layout is
    worth more than the pixels. It draws a placeholder until there is audio. */
 #lbZoom{display:block;width:100%;height:112px;border:1px solid var(--line);
-  border-radius:6px;background:#0c0e12;margin-top:6px}
+  border-radius:6px;background:#0a0805;margin-top:6px}
 .whelp{font-family:var(--mono);font-size:10px;color:var(--dimmer);margin-top:5px;letter-spacing:.03em}
 /* ---- the lightbox on a phone --------------------------------------------
    Measured before this block existed, on a 402x874 screen: the chrome took
@@ -547,17 +591,38 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 
 <header><div class="wrap">
   <img class="disc" src="docs/img/plaque.png" alt="" aria-hidden="true">
-  <h1>The 116 pictures on the <em>Voyager Golden Record</em></h1>
-  <p class="lede">Voyager 2 left Earth on 20 August 1977 and Voyager 1 on 5 September 1977, each
+  <div class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">Voyager · 1977 · decoded from the master tapes</span>
+      <h1>The 116 pictures on the <em>Voyager Golden Record</em></h1>
+      <p class="lede">Voyager 2 left Earth on 20 August 1977 and Voyager 1 on 5 September 1977, each
   carrying a gold-plated copper record bolted to its side. Alongside the music and the greetings,
   116 photographs are stored on it — not as pictures, but as <strong>sound</strong>. These were
   decoded here from a <a href="https://archive.org/details/voyager.decode">384&nbsp;kHz
   digitisation of the original master tapes</a>.</p>
-  <p class="lede"><strong>Twenty of them are in colour</strong> — scanned three times through red,
+      <p class="lede"><strong>Twenty of them are in colour</strong> — scanned three times through red,
   green and blue filters, which is why the record carries 156 pieces of audio for 116 pictures. The
   colour ones are composited in your browser, right now, from those three separate monochrome
   scans. Open any one to put the decode beside the published reproduction of the same photograph,
   and to hear the 4.3 seconds of sound it came out of.</p>
+      <p class="hero-cta">
+        <button id="heroPlay" class="primary" title="Open the Taj Mahal and paint it from blank as its audio plays">▶ Hear it and paint it</button>
+        <a class="pill" href="https://goldenrecord.voyage/" title="The record itself: the cover, the pulsar map and the music">The record itself&nbsp;→</a>
+      </p>
+    </div>
+    <!-- THE PAGE OPENS ON THE THING ITSELF. Everything below is a gallery of
+         results; this is the method, in eight seconds, with no clicks: the
+         actual samples of each trace of image 90, drawn the way an
+         oscilloscope would draw them, and the column of the picture that
+         trace becomes. Not a mock-up -- the trace table is computed from the
+         same FLAC the player decodes (pipeline/scope.py). -->
+    <div class="scope" id="scope">
+      <canvas id="scopeCv" width="960" height="907" role="img"
+        aria-label="Animation: the real audio of one trace of the Taj Mahal picture drawn as an oscilloscope line, above the picture being painted one trace at a time"></canvas>
+      <div class="scope-cap"><span>Above: the real samples of one trace. Below: the column of the picture it becomes.</span>
+        <span class="mono">Image 90 · Taj Mahal · R043</span></div>
+    </div>
+  </div>
 </div></header>
 
 <div class="bar"><div class="wrap">
@@ -894,7 +959,8 @@ footer{border-top:1px solid var(--line);padding:40px 0 64px;color:var(--dimmer);
 <footer><div class="wrap">
   <p class="sig">Decoded and built by <strong>Joshua Gourneau</strong> ·
   <a href="https://x.com/gourneau" target="_blank" rel="noopener">@gourneau</a> ·
-  <a href="https://github.com/gourneau/golden-record-images">source and method on GitHub</a></p>
+  <a href="https://github.com/gourneau/golden-record-images">source and method on GitHub</a> ·
+  <a href="https://goldenrecord.voyage/">the record itself, at goldenrecord.voyage</a></p>
   <p>Decoded from the <a href="https://archive.org/details/voyager.decode">384&nbsp;kHz master
   digitisation</a> made available by Ron Barry and David Pescovitz, and built on
   <a href="https://github.com/foodini/voyager">Ron Barry's 2017 decoder</a> and his essay
@@ -1291,9 +1357,73 @@ addEventListener('resize',()=>{
   waveResizeTimer=setTimeout(redrawCardWaves,150);
 },{passive:true});
 
+// ---- the strip as REAL SAMPLES ---------------------------------------------
+// The envelope strip below was what this used to draw, and it was reported --
+// fairly -- as "the waveforms aren't showing up anywhere". An envelope of the
+// whole frame is ~1.7 traces per bucket even at 300 buckets, so every bucket
+// holds a sync burst and every strip came out a near-solid gold bar.
+//
+// What a waveform of this signal actually looks like is the raw samples of a
+// trace or two: the sync burst, then one column of the photograph as a
+// voltage, then the next burst. pipeline/scope.py writes exactly that for
+// every card, two traces from the middle of its picture, in one 54 KiB file.
+// The envelope stays as the fallback, so an older deploy still draws.
+const b64i8=s=>{ const raw=atob(s), a=new Int8Array(raw.length);
+  for(let i=0;i<raw.length;i++) a[i]=raw.charCodeAt(i)<<24>>24; return a; };
+let CARDSCOPE=null;
+const scopeBundle=BOOT.scope
+  .then(b=>{
+    if(!b||!b.frames) return null;
+    CARDSCOPE=new Map(Object.entries(b.frames).map(([id,f])=>
+      [id, {traces:b.traces, trace:f.trace, min:b64i8(f.min), max:b64i8(f.max)}]));
+    return CARDSCOPE;
+  })
+  .catch(()=>null);
+
+function cardScope(cv, d){
+  const dpr=Math.min(2,devicePixelRatio||1);
+  const w=cv.clientWidth||220, h=26;
+  cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr);
+  const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
+  c.clearRect(0,0,w,h);
+  const n=d.min.length, T=d.traces, mid=h/2, a=(h/2-2)/127;
+  // blanking against picture, and a hairline where each trace starts
+  for(let k=0;k<T;k++){
+    const x0=k/T*w, x1=(k+1)/T*w;
+    c.fillStyle='rgba(232,220,192,.045)';
+    c.fillRect(x0,0,PIC_START*(x1-x0),h);
+    c.fillRect(x0+PIC_END*(x1-x0),0,(1-PIC_END)*(x1-x0),h);
+    if(k){ c.fillStyle='rgba(201,162,39,.22)'; c.fillRect(Math.round(x0),0,1,h); }
+  }
+  c.fillStyle=goldFill(c,0,h);
+  c.beginPath(); c.moveTo(0,mid);
+  for(let i=0;i<n;i++) c.lineTo((i+.5)/n*w, mid-d.max[i]*a);
+  for(let i=n-1;i>=0;i--) c.lineTo((i+.5)/n*w, mid-d.min[i]*a);
+  c.closePath(); c.fill();
+  c.strokeStyle=goldStroke(c,0,h); c.lineWidth=1.1; c.lineJoin='round';
+  for(const arr of [d.max,d.min]){
+    c.beginPath();
+    for(let i=0;i<n;i++){ const x=(i+.5)/n*w, y=mid-arr[i]*a; i?c.lineTo(x,y):c.moveTo(x,y); }
+    c.stroke();
+  }
+}
+
 function cardWave(fig, im){
   const cv=fig.querySelector('.cardwave'); if(!cv) return;
   const id=im.frames[0];
+  const sc=CARDSCOPE&&CARDSCOPE.get(id);
+  if(sc){ cardScope(cv, sc); return; }
+  if(!CARDSCOPE){
+    // Not here yet: wait for it once, then fall through to the envelope only if
+    // it truly is not coming.
+    scopeBundle.then(m=>{ if(m&&m.get(id)) { if(cv.isConnected) cardScope(cv, m.get(id)); }
+                          else cardEnvelope(cv, id); });
+    return;
+  }
+  cardEnvelope(cv, id);
+}
+
+function cardEnvelope(cv, id){
   // From the bundle if it is here, from this frame's own file if it is not --
   // so an older deployment, or a bundle that failed to load, still draws.
   const ready=(CARDWAVES&&CARDWAVES.has(id)) ? Promise.resolve(CARDWAVES.get(id))
@@ -1761,7 +1891,7 @@ function openLB(i, opts){
   // Never for neighbours: eight speculative frames is four megabytes of sound
   // to save a click that may not come.
   const wantAudio=LB.frameId;
-  setTimeout(()=>{ if(LB.frameId===wantAudio) warmAudio(wantAudio); }, 400);
+  setTimeout(()=>{ if(LB.frameId===wantAudio) restSamples(wantAudio); }, 400);
 }
 
 // Arrow keys were slow because each new image fetched and composited its PNGs
@@ -1981,6 +2111,7 @@ function selectSep(k){
   fillText(LB.im);
   drawWave();
   waveOf(LB.frameId).then(()=>drawWave());
+  restSamples(LB.frameId);
 }
 
 // keepView: a tier switch is the SAME picture with a different treatment, and
@@ -2604,12 +2735,12 @@ function buildWaveLayer(){
   const off=document.createElement('canvas');
   off.width=Math.round(cssW*dpr); off.height=Math.round(cssH*dpr);
   const c=off.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
-  c.fillStyle='#0c0e12'; c.fillRect(0,0,cssW,cssH);
+  c.fillStyle='#0a0805'; c.fillRect(0,0,cssW,cssH);
 
   if(!d){
-    c.strokeStyle='#20242b'; c.beginPath();
+    c.strokeStyle='#2b2210'; c.beginPath();
     c.moveTo(0,cssH/2); c.lineTo(cssW,cssH/2); c.stroke();
-    c.fillStyle='#7b838d'; c.font='11px ui-monospace,Menlo,monospace';
+    c.fillStyle='#85785d'; c.font='11px "IBM Plex Mono",ui-monospace,Menlo,monospace';
     c.fillText(WAVE.has(LB.frameId)?'no precomputed peaks for this frame':'reading peaks…',10,cssH/2-6);
   } else {
     const xOf=s=>s/d.samples*cssW;
@@ -2622,7 +2753,7 @@ function buildWaveLayer(){
     c.fillRect(xOf(endS),0,cssW-xOf(endS),cssH);
     // trace ruler
     c.strokeStyle='rgba(201,162,39,.14)'; c.fillStyle='#7d7048';
-    c.font='9px ui-monospace,Menlo,monospace'; c.lineWidth=1;
+    c.font='9px "IBM Plex Mono",ui-monospace,Menlo,monospace'; c.lineWidth=1;
     for(let t=0;t<=d.traces;t+=64){
       const x=Math.round(xOf(sampleOfTrace(d,t)))+.5;
       c.beginPath(); c.moveTo(x,0); c.lineTo(x,cssH); c.stroke();
@@ -2753,8 +2884,8 @@ function drawZoom(){
     // place in the layout so that pressing play never moves anything.
     c.strokeStyle='rgba(201,162,39,.16)'; c.lineWidth=1;
     c.beginPath(); c.moveTo(0,cssH/2+.5); c.lineTo(cssW,cssH/2+.5); c.stroke();
-    c.fillStyle='#7b838d'; c.font='11px ui-monospace,Menlo,monospace';
-    c.fillText('the real samples appear here — press play, or hover the strip above',
+    c.fillStyle='#85785d'; c.font='11px "IBM Plex Mono",ui-monospace,Menlo,monospace';
+    c.fillText('reading the real samples…',
                12, cssH/2 - 8);
     return;
   }
@@ -2782,7 +2913,7 @@ function drawZoom(){
     if(t>=0&&t<d.traces){
       const lx=xAt(s0+PIC_START*d.period)+4;
       if(lx>0&&lx<cssW-40){
-        c.fillStyle='rgba(201,162,39,.55)'; c.font='9px ui-monospace,monospace';
+        c.fillStyle='rgba(201,162,39,.55)'; c.font='9px "IBM Plex Mono",ui-monospace,monospace';
         c.fillText(`trace ${t} · picture`, lx, 11);
       }
     }
@@ -3053,6 +3184,21 @@ const flacUrl=id=>`web/public/data/frames/${id}.flac?v=${ASSETV}`;
 // 'low' priority throughout: half a megabyte of sound must never arrive ahead
 // of the picture it belongs to. It has a whole human reaction time to get here.
 const WARMED=new Set();
+// THE SAMPLE STRIP, FILLED AT REST. It used to say "press play, or hover the
+// strip above" until one of those happened, so an opened picture showed an
+// empty box where its waveform should be -- one of the things behind "the
+// waveforms aren't showing up anywhere". Where the strip is on screen (it is
+// hidden on a phone, which never pays for this), the same low-priority fetch
+// is decoded straight away and the middle of the picture is drawn. Where it is
+// not, this is the plain warm it always was.
+function restSamples(id){
+  const z=$('lbZoom');
+  if(!z || z.offsetParent===null){ warmAudio(id); return; }
+  const c=navigator.connection;
+  if(c && (c.saveData || /(^|-)2g$/.test(c.effectiveType||''))) return;
+  frameBuffer(id).then(()=>{ if(LB.frameId===id && !AUDIOSTATE.playing) drawZoom(); })
+                 .catch(()=>warmAudio(id));
+}
 function warmAudio(id){
   if(!id || WARMED.has(id) || BUFFERS.has(id)) return;
   const c=navigator.connection;
@@ -3469,6 +3615,152 @@ BOOT.catalog
 }).catch(e=>{
   GRID.innerHTML=`<p class="err">Could not load the catalogue (${e&&e.message||e}).</p>`;
 });
+</script>
+<script>
+// ---- the opening: one trace at a time --------------------------------------
+// The top of the page draws image 90 the way the record stores it. Each step
+// is ONE trace: its real samples above, as an oscilloscope would trace them,
+// and the column of the photograph it becomes below, with the scan front
+// moving across. The trace table is not a stylisation -- pipeline/scope.py
+// reads it out of the same FLAC the player decodes, 192 points per trace, all
+// 512 traces, one shared scale -- and the columns come from the same
+// thumbnail the grid shows. What is invented is only the pace: 64 traces a
+// second, so the whole picture takes eight seconds instead of 4.3, which is
+// the speed at which the eye can follow the line.
+//
+// A separate script, after the main one, because it is self-contained and
+// needs only three things from it: ASSETV, openByHash and the lightbox state.
+(function scope(){
+  const cv=document.getElementById('scopeCv'); if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const ID='R043', N=512, PW=512, PH=377;
+  const W=960, TOP=200, IH=Math.round(PH/PW*W);
+  cv.width=W; cv.height=TOP+IH;
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+
+  const out=document.createElement('canvas'); out.width=PW; out.height=PH;
+  const outx=out.getContext('2d');
+  let pic=null, rows=null, P=0, col=0, hold=0, last=0, raf=0, onscreen=false;
+
+  // crossOrigin so the trace table can be read back with getImageData even
+  // when a preview host or a CDN serves the PNG from another origin; without
+  // it the canvas is tainted and the read throws. Same-origin on Pages, where
+  // the attribute costs nothing.
+  const load=src=>new Promise((ok,no)=>{ const i=new Image(); i.decoding='async';
+    i.crossOrigin='anonymous'; i.onload=()=>ok(i); i.onerror=no; i.src=src; });
+
+  // The blanking either side of the picture, as a fraction of a trace -- the
+  // same constants the lightbox's sample strip shades by, from pipeline/geometry.py.
+  const PS=(typeof PIC_START==='number')?PIC_START:232/3200;
+  const PE=(typeof PIC_END==='number')?PIC_END:3040/3200;
+
+  function trace(t,alpha,glow){
+    const base=TOP/2+10, amp=TOP*0.40, o=t*P;
+    ctx.beginPath();
+    for(let i=0;i<P;i++){
+      const x=8+i/(P-1)*(W-16), y=base-(rows[o+i]-128)/128*amp;
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    }
+    ctx.lineJoin='round';
+    if(glow){ ctx.shadowColor='rgba(242,212,120,.85)'; ctx.shadowBlur=12; }
+    ctx.strokeStyle=glow?'#fff0bf':`rgba(201,162,39,${alpha})`;
+    ctx.lineWidth=glow?2:1.4;
+    ctx.stroke(); ctx.shadowBlur=0;
+  }
+
+  function drawScope(t){
+    ctx.fillStyle='#050403'; ctx.fillRect(0,0,W,TOP);
+    // blanking, so the sync burst reads as structure and not as noise
+    ctx.fillStyle='rgba(232,220,192,.035)';
+    ctx.fillRect(0,0,8+PS*(W-16),TOP);
+    ctx.fillRect(8+PE*(W-16),0,W,TOP);
+    ctx.strokeStyle='rgba(201,162,39,.08)'; ctx.lineWidth=1;
+    for(let x=0;x<=W;x+=60){ ctx.beginPath(); ctx.moveTo(x+.5,40); ctx.lineTo(x+.5,TOP-10); ctx.stroke(); }
+    for(let y=40;y<=TOP-10;y+=30){ ctx.beginPath(); ctx.moveTo(0,y+.5); ctx.lineTo(W,y+.5); ctx.stroke(); }
+    // A little phosphor: the last few traces fade behind the live one, which is
+    // what makes it read as a scope and lets you see the picture change.
+    for(let k=5;k>=1;k--) if(t-k>=0) trace(t-k, 0.05+0.05*(5-k), false);
+    trace(t, 1, true);
+    ctx.font='500 17px "IBM Plex Mono",ui-monospace,monospace';
+    ctx.fillStyle='rgba(242,212,120,.9)';
+    ctx.fillText(`TRACE ${String(t+1).padStart(3,'0')} / ${N}`, 16, 28);
+    ctx.textAlign='right'; ctx.fillStyle='rgba(168,154,124,.9)';
+    ctx.fillText('sync · picture · sync', W-16, 28); ctx.textAlign='left';
+  }
+
+  function drawPic(t, front){
+    ctx.fillStyle='#000'; ctx.fillRect(0,TOP,W,IH);
+    ctx.imageSmoothingEnabled=true; ctx.drawImage(out,0,TOP,W,IH);
+    ctx.strokeStyle='rgba(201,162,39,.35)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(0,TOP+.5); ctx.lineTo(W,TOP+.5); ctx.stroke();
+    if(!front) return;
+    const x=(t+1)/N*W;
+    const g=ctx.createLinearGradient(x-48,0,x+2,0);
+    g.addColorStop(0,'rgba(242,212,120,0)'); g.addColorStop(1,'rgba(242,212,120,.5)');
+    ctx.fillStyle=g; ctx.fillRect(x-48,TOP,50,IH);
+    ctx.fillStyle='#fff0bf'; ctx.fillRect(x-1,TOP,2,IH);
+  }
+
+  const paintTo=(a,b)=>{ for(let c=a;c<b;c++) outx.drawImage(pic,c,0,1,PH,c,0,1,PH); };
+
+  function frame(now){
+    raf=0;
+    const dt=Math.min(0.1,(now-(last||now))/1000); last=now;
+    if(hold>0){
+      hold-=dt;
+      if(hold<=0){ outx.clearRect(0,0,PW,PH); col=0; }
+    } else {
+      const next=Math.min(N,col+dt*64);
+      paintTo(Math.floor(col),Math.floor(next));
+      col=next;
+      const t=Math.min(N-1,Math.floor(col));
+      drawScope(t); drawPic(t,true);
+      if(col>=N){ hold=3.2; drawPic(N-1,false); }
+    }
+    wake();
+  }
+  // Runs only while it can be seen: off screen, in a background tab, or under
+  // an open picture, it stops asking for frames at all.
+  function wake(){
+    const lbOpen=typeof LB==='object'&&LB.el&&!LB.el.hidden;
+    if(raf||!onscreen||document.hidden||lbOpen||reduced.matches||!rows) return;
+    raf=requestAnimationFrame(frame);
+  }
+  function still(){ paintTo(0,N); drawScope(N>>1); drawPic(N-1,false); }
+
+  const ASV=(typeof ASSETV==='string')?ASSETV:'0';
+  Promise.all([load(`web/public/data/waves/${ID}.scope.png?v=${ASV}`),
+               load(`data/thumbs_ml/${ID}.png?v=${ASV}`)])
+    .then(([tab,img])=>{
+      const t=document.createElement('canvas'); t.width=tab.width; t.height=tab.height;
+      const tx=t.getContext('2d'); tx.drawImage(tab,0,0);
+      const d=tx.getImageData(0,0,tab.width,tab.height).data;
+      P=tab.width; rows=new Uint8Array(P*tab.height);
+      for(let i=0;i<rows.length;i++) rows[i]=d[i*4];
+      pic=img;
+      if(reduced.matches){ still(); return; }
+      paintTo(0,1); drawScope(0); drawPic(0,true);
+      wake();
+    })
+    .catch(()=>{ document.getElementById('scope').hidden=true; });
+
+  new IntersectionObserver(es=>{ onscreen=es[0].isIntersecting; last=0; wake(); }).observe(cv);
+  document.addEventListener('visibilitychange',()=>{ last=0; wake(); });
+  reduced.addEventListener('change',()=>{ if(reduced.matches&&rows) still(); else { last=0; wake(); } });
+  // The lightbox hides on close; nothing else announces it, so look again when
+  // it does. Cheap: one attribute.
+  if(typeof LB==='object'&&LB.el) new MutationObserver(()=>{ last=0; wake(); })
+    .observe(LB.el,{attributes:true,attributeFilter:['hidden']});
+
+  // The way in from here: open the same picture and paint it from its sound.
+  // If the catalogue has not landed yet, wait for it rather than doing nothing.
+  const btn=document.getElementById('heroPlay');
+  if(btn) btn.addEventListener('click',()=>{
+    const go=()=>{ if(openByHash('#90',false)) document.getElementById('lbPaint').click(); };
+    if(typeof images!=='undefined'&&images.length) go();
+    else BOOT.catalog.then(()=>setTimeout(go,0));
+  });
+})();
 </script>
 </body>
 </html>
