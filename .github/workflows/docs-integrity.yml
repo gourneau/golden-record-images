@@ -70,6 +70,12 @@ jobs:
       - name: the grid's waveform bundle matches the frames it was made from
         run: python -m pipeline.waveform --check-cards
 
+      # The grid strips and the opening animation read real samples written by
+      # pipeline/scope.py. A card with no entry falls back to the old envelope
+      # bar, which is the failure that started this file. Needs no audio.
+      - name: every card has its real-sample strip
+        run: python -m pipeline.scope --check
+
       - name: every internal link resolves
         run: |
           python - <<'PY'
