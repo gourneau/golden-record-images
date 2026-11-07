@@ -110,7 +110,7 @@ header{border-bottom:1px solid var(--line);padding:64px 0 56px;position:relative
 /* The record's engraved cover, set behind the title. NASA artwork, public
    domain, vendored in docs/img/vendor/. Decorative -- aria-hidden -- and
    deliberately low contrast: it should be recognised, not read. */
-.disc{position:absolute;right:-90px;top:-70px;width:420px;height:420px;opacity:.13;
+.disc{position:absolute;right:-90px;top:-70px;width:420px;height:420px;opacity:.07;
   pointer-events:none;z-index:0}
 header .wrap>*:not(.disc){position:relative;z-index:1}
 @media(max-width:820px){.disc{right:-150px;top:-120px;width:340px;height:340px;opacity:.09}}
@@ -3655,7 +3655,7 @@ BOOT.catalog
   const PE=(typeof PIC_END==='number')?PIC_END:3040/3200;
 
   function trace(t,alpha,glow){
-    const base=TOP/2+6, amp=TOP*0.36, o=t*P;
+    const base=TOP/2+10, amp=TOP*0.40, o=t*P;
     ctx.beginPath();
     for(let i=0;i<P;i++){
       const x=8+i/(P-1)*(W-16), y=base-(rows[o+i]-128)/128*amp;
