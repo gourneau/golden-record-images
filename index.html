@@ -3642,8 +3642,12 @@ BOOT.catalog
   const outx=out.getContext('2d');
   let pic=null, rows=null, P=0, col=0, hold=0, last=0, raf=0, onscreen=false;
 
+  // crossOrigin so the trace table can be read back with getImageData even
+  // when a preview host or a CDN serves the PNG from another origin; without
+  // it the canvas is tainted and the read throws. Same-origin on Pages, where
+  // the attribute costs nothing.
   const load=src=>new Promise((ok,no)=>{ const i=new Image(); i.decoding='async';
-    i.onload=()=>ok(i); i.onerror=no; i.src=src; });
+    i.crossOrigin='anonymous'; i.onload=()=>ok(i); i.onerror=no; i.src=src; });
 
   // The blanking either side of the picture, as a fraction of a trace -- the
   // same constants the lightbox's sample strip shades by, from pipeline/geometry.py.
